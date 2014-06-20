@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>my-extensions-to-packages/voice</title>
+</head>
+
+<body>
+<h1>my-extensions-to-packages/voice</h1>
+
+<p>This directory mostly contains adaptors to fit existing code into the
+voice system. These provide lists of command names which are to be
+voice-enabled.  There is also some code for recognising command
+phrases embedded in dictation. </p>
+
+<dl>
+  <dt> <a href="cachepad-preload.el">cachepad-preload.el</a>
+  <dd> Preload the <a href="">cachepad</a> with words from the region. 
+
+  <dt> <a href="command-phrases.el">command-phrases.el</a>
+  <dd> Support for embedded-commands.el, managing a tree of words
+      Which make up phrases to be recognised as commands embedded in dictation. 
+
+  <dt> <a href="dired-voice.el">dired-voice.el</a>
+  <dd> Voice commands for dired. 
+
+  <dt> <a href="emacs-lisp-voice.el">emacs-lisp-voice.el</a>
+  <dd> Voice commands for editing Emacs lisp. 
+
+  <dt> <a href="embedded-commands.el">embedded-commands.el</a>
+  <dd> This recognises command phrases embedded in dictation. 
+
+  <dt> <a href="flexi-choose-voice.el">flexi-choose-voice.el</a>
+  <dd> some extensions to my <a
+      href="http://emacs-versor.sourceforge.net/">flexible chooser</a>
+      system, for selecting choice tree nodes by line number, and for
+      taking text added at the end of the mini buffer (for example, by
+      speech) and using it to filter the current choice tree. This
+      allows you to make choices from a list of computerish things
+      without having to pronounce punctuation.  For example, to select
+      ``flexi-choose-voice.el'' from a list of filenames, it would
+      suffice to say ``choose'', producing a new choice tree
+      containing only those elements of the old one which contain
+      ``choose'', and, if that does not reduce it to a single file,
+      then say ``voice'', which is likely to trim the tree to a single
+      node -- all without having had to say `flexi'', ``-'', or
+      ``.el''.
+
+  <dt> <a href="general-voice.el">general-voice.el</a>
+  <dd> Some general voice commands. 
+
+  <dt> <a href="gentext-voice.el">gentext-voice.el</a>
+  <dd> Voice commands for inserting markup constructs, using <a
+      href="../../editing/generic-text.el">../../editing/generic-text.el</a>.
+      
+  <dt> <a href="insert-voice.el">insert-voice.el</a>
+  <dd> Voice commands to insert various small textual things. for
+      inserting larger textual things such as markup constructs, see
+      gentext-voice.el.
+      
+  <dt> <a href="misc-voice.el">misc-voice.el</a>
+  <dd> Some miscellaneous voice commands, that I would not really
+      call ``general''. 
+      
+  <dt> <a href="prefix-voice.el">prefix-voice.el</a>
+  <dd> Spoken forms of prefix arguments.  This doesn't work as I
+      expected it to, at least in early forms of the voice system, as
+      it replicates the first letter of the command, that is, it is
+      taken as the prefix argument to the first self-insert-char of
+      of entering M-x command. 
+
+  <dt> <a href="spoken-forms.el">spoken-forms.el</a>
+  <dd>At first, I put the spoken forms for all my new modules into the
+      modules themselves, but that made me load of them to have spoken
+      forms available, and as part of my move towards using autoload
+      more, I have now gathered them here.
+
+  <dt> <a href="type-break-voice.el">type-break-voice.el</a>
+  <dd> Voice commands for type-break. 
+
+  <dt> <a href="voice-assist-key.el">voice-assist-key.el</a>
+  <dd> Commands to be reached from a key or pedal, for use in close
+      connection with voice input.
+      
+  <dt> <a href="voice-command-generators.el">voice-command-generators.el</a>
+  <dd> an attempt, currently put aside, at generating commands
+      Automatically from keymaps. 
+
+  <dt> <a href="voicescript.el">voicescript.el</a>
+  <dd> The beginning of a voice-oriented scripting language. 
+
+</dl>
+
+<p><a href="../../editing/smart-space.el">smart-space.el</a> is also most useful with voice input.</p>
+
+<hr>
+<address><a href="../../../../../contact.html">Contact me</a>
+</address>
+<i><!-- timestamp -->Last modified: Tue Feb 08 21:00:44 GMT Standard Time 2005
+</i>
+</body> </html>

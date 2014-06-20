@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<link rel="StyleSheet"
+      href="../emacs.css"
+      type="text/css"
+      title="John's emacs style">
+<title>Editing</title>
+</head>
+
+<body>
+<h1>Editing</h1>
+
+<dl>
+  <dt> <a href="odf-mode.el">odf-mode.el</a>
+  <dd> Major mode for reading, and possibly editing, Open Document Format files.
+
+  <dt> <a href="delatex.el">delatex.el</a>
+  <dd> Expand and remove LaTeXery from a file.
+
+  <dt> <a href="diary-mode.el">diary-mode.el</a> <!-- checked -->
+  <dd> Simple major mode for editing diary files, with colouring by
+      day of week.
+
+  <dt> <a href="dwim-find.el">dwim-find.el</a>
+  <dd> Find the thing at point, making guesses as to whether it's a
+      filename, a function or whatever.
+
+  <dt> <a href="edit-tree.el">edit-tree.el</a> <!-- checked -->
+  <dd> Apply a command to all files in a directory tree. Goes nicely
+      with <a href="replace-regexp-list.el">replace-regexp-list.el</a>
+      which is also in this directory.
+
+  <dt> <a href="generic-text.el">generic-text.el</a> <!-- checked -->
+  <dd> Some generic text commands (needing modal-functions.el from
+      <a href="http://emacs-versor.sourceforge.net/">emacs-versor</a>) for inserting markup. The same commands are
+      defined for HTML, TeX, LaTeX etc. They provide similar
+      facilities to <a
+      href="http://www.santafe.edu/~nelson/tools/">html-helper-mode</a>
+      but consistently across several markup-language modes. I should
+      probably re-write this to integrate with <a
+      href="http://www.gnu.org/software/auctex/">AUCTeX</a>.
+
+      <p>It also needs <a
+      href="gentext-models.el">gentext-models.el</a> and <a
+      href="gentext-bindings.el">gentext-bindings.el</a>, and the
+      following mode-specific definition files:</p>
+
+      <dl>
+
+	<dt> <a href="gentext-html.el">gentext-html.el</a>
+	<dd> HTML definitions for generic-text.el; they build on <a
+	    href="http://www.santafe.edu/~nelson/tools/">html-helper-mode</a>
+
+	<dt> <a href="gentext-tex.el">gentext-tex.el</a>
+	<dd> TeX and LaTeX definitions for generic-text.el. Should add
+	    TeXinfo some time too.
+
+	<dt> <a href="gentext-tex.el">gentext-texinfo.el</a>
+	<dd> TeXinfo definitions for generic-text.el.
+
+	<dt> <a href="gentext-roff.el">gentext-roff.el</a>
+	<dd> groff/nroff/troff definitions for generic-text.el -- not yet written
+
+	<dt> <a href="gentext-plaintext.el">gentext-plaintext.el</a>
+	<dd> Plaintext definitions for generic-text.el -- not yet written
+
+      </dl>
+
+  <dt> <a href="goto-char-other-window.el">goto-char-other-window.el</a>
+  <dd> Take the number at point, and jump to that place in the other window.
+
+  <dt> <a href="hyphenate.el">hyphenate.el</a>
+  <dd> Hyphenate words before and after point. A fairly trivial
+      function, but giving it a name makes it a lot easier when using the
+      voice interface.
+
+  <dt> <a href="replace-regexp-list.el">replace-regexp-list.el</a> <!-- checked -->
+  <dd> Do all replacements in a list. Goes nicely with <a
+      href="edit-tree.el">edit-tree.el</a> which is also in this
+      directory. You might also like to see <a
+      href="http://www.wonderworks.com/download/mapreplace.el">http://www.wonderworks.com/download/mapreplace.el</a>,
+      which I think is probably by Kyle Jones (going by where it is stored).
+
+  <dt> <a href="skip-initial-comments.el">skip-initial-comments</a> <!-- checked -->
+  <dd> Set up find-file-hooks so that when you visit a file, point is
+      positioned at the first non-comment in the file. After all,
+      that's often what I first do by hand, if not looking
+      specifically for a point further down, so might as well automate
+      it.
+
+  <dt> <a href="compare-windows-interactively.el">compare-windows-interactively.el</a>
+  <dd> A difference browser, in the form of a command loop that calls
+      compare-windows repeatedly, letting you make adjustments (moving
+      point in one window or the other) each time it finds a
+      difference.
+
+  <dt> <a href="insertions.el">insertions.el</a>
+  <dd> Insert things in the current buffer.
+
+  <dt> <a href="ps-stack-comments.el">ps-stack-comments.el</a>
+  <dd> Update stack comments in a PostScript file
+
+  <dt> <a href="electric-space.el">electric-space.el</a>
+  <dd> Electric handling of the space key, which avoids putting in the
+      space when Dragon sends one when you don't really want it, such
+      as just inside an open-bracket or an open-quote.
+
+  <dt> <a href="strfile.el">strfile.el</a>
+  <dd> Simple major mode for ``fortune'' source files.
+
+  <dt> <a href="structure-edit.el">structure-edit.el</a>
+  <dd> Some simple structured editing -- remember a place, wander
+      round to pick something up (in a recursive edit), and yank it at
+      the remembered place.
+
+  <dt> <a href="unique.el">unique.el</a>
+  <dd> Remove duplicate successive lines in a region, like the Un*x
+      "uniq" utility.
+
+  <dt> <a href="yank-menu.el">yank-menu.el</a>
+  <dd> Inspired by browse-yank.el -- this package pops up a menu
+      buffer containing the contents of the kill ring, with one entry
+      per line. If you have a large kill ring, and save it between
+      sessions, you can find a lot of useful stuff in it this way!
+      I've meant to tidy this up a bit, for years now, but keep on
+      finding it usable as it is.
+
+  <dt> <a href="yank-whitespace.el">yank-whitespace.el</a>
+  <dd> Modify (``advise'') kill and yank (cut and paste) functions, to
+      remember the neighbouring whitespace status of things moved
+      around, so that if, for example, you yank something that, when
+      killed or saved, had been at the start of a line, it gets a
+      newline put in ``intelligently''.
+
+</dl>
+
+
+<hr>
+<p>
+[<a href="../index.html">My elisp index</a>]
+[<a href="../../index.html">My emacs index</a>]
+[<a href="../../../index.html">My computing index</a>]
+[<a href="../../../../index.html">My home page</a>]
+</p>
+<address><a href="../../../../contact.html">Contact me</a>
+</address>
+<i><!-- timestamp -->Last modified: Fri Oct 12 23:11:23 IST 2007
+</i>
+</body> </html>

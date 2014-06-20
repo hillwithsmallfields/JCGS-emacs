@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<link rel="StyleSheet"
+      href="../emacs.css"
+      type="text/css"
+      title="John's emacs style">
+<title>Natural language handling</title>
+</head>
+
+<body>
+<h1>Natural language handling</h1>
+
+<p>I am a (very amateur) enthusiast about <a
+href="http://www.cb1.com/~john/languages/index.html">natural
+languages</a>, and have started to write some software related to this
+interest. However, I'm not a computational linguist -- this is just at
+a hobby level as far as the natural language side goes.</p>
+
+<dl>
+  <dt> <a name="mulvo"></a>mulvo.el
+
+      This has become <a
+      href="http://mulvoc.sourceforge.net/">MuLVoc</a> on SourceForge.
+      
+  <dt> <a href="localized-source.el">localized-source.el</a>
+  <dd> Show localization for source files, e.g. translations of
+      comments and perhaps names. Intended for (typically open-source)
+      developers in countries where knowledge of English is not
+      typically good; particularly where there may be large
+      organizations who could have translators translating the
+      comments on open-source code that their programmers then work
+      on.
+
+  <dt> <a href="csv-vocab-mode.el">csv-vocab-mode.el</a>
+  <dd> Switches input modes according to which column of a spreadsheet
+      point is in. This requires a special row of the spreadsheet to
+      set up its input methods. Useful for entering data for use with
+      mulvo. Builds on <a href="http://centaur.maths.qmul.ac.uk/Emacs/">csv-mode.el</a> by Francis J. Wright.
+
+  <dt> <a href="pinyin-conversions.el">pinyin-conversions.el</a>
+  <dd> Convert pinyin data coming in from files.
+      
+  <dt> <a href="words-in-elisp-symbols.el">words-in-elisp-symbols.el</a>
+  <dd> List the words occurring in the symbols defined in the
+      currently running emacs. Meant to give an idea of what to
+      translate if preparing for emacs work using localized-source.el.
+      
+  <dt> <a href="language-codes.el">language-codes.el</a>
+  <dd> Look up language codes, using the data from <a
+      href="http://www.ethnologue.com/codes/LanguageCodes.tab">http://www.ethnologue.com/codes/LanguageCodes.tab</a> on <a href="http://www.ethnologue.com/">Ethnologue</a>.
+      
+  <dt> <a href="wiktionary-swadesh.el">wiktionary-swadesh.el</a>
+  <dd> Read a Swadesh list file from <a
+      href="http://www.wiktionary.org/">Wiktionary</a>, and convert it
+      into mulvo format data.
+
+      <p>Here is an extract from <a
+      href="http://en.wiktionary.org/wiki/Swadesh_List">wiktionary's
+      description of the Swadesh List</a>:</p>
+      
+      <blockquote>
+      The below list of words was devised by the linguist Morris Swadesh.
+      He used it as a means of determining the closeness of any pair of
+      languages. It is a useful list of the most common words, which are
+      essential to most languages and may be used in learning basic
+      communication in other languages and even multiple languages at once
+      since, for basic communication, vocabulary is generally more useful
+      than a knowledge of the target language syntax.  Sometimes it is even
+      possible to learn basic communication with no knowledge of the target
+      language syntax.
+      </blockquote>
+
+      <p>I think I'll have to produce a parts-of-speech table for the
+      Swadesh list for myself, and will put it in my languages web
+      pages when I've done it.</p>
+
+  <dt> <a href="swadesh-numbers.el">swadesh-numbers.el</a>
+  <dd> Add parts of speech to a Swadesh list.
+      
+  <dt> <a href="html-phrase-list.el">html-phrase-list.el</a>
+  <dd> Read a phrase list, such as the one in <a
+      href="http://en.wikipedia.org/wiki/Basque_language">Basque
+      language - Wikipedia</a>, and produce a CSV file from it, for
+      mulvo to use.
+
+  <dt> <a href="irish.el">irish.el</a>
+  <dd> Support for the Irish (Gaelic) language. Modifies
+      capitalization to understand uru (eclipsis).
+      
+  <dt> <a href="octal-chars.el">octal-chars.el</a>
+  <dd> Convert escape sequences to the characters they represent.
+      
+</dl>
+
+
+<hr>
+<p>
+[<a href="../../../../languages/index.html">My languages page</a>]
+[<a href="../index.html">My elisp index</a>]
+[<a href="../../index.html">My emacs index</a>]
+[<a href="../../../index.html">My computing index</a>]
+[<a href="../../../../index.html">My home page</a>]
+</p>
+<address><a href="../../../../contact.html">Contact me</a>
+</address>
+<i><!-- timestamp -->Last modified: Thu Sep  6 16:05:46 IST 2007
+</i>
+</body> </html>

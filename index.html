@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<link rel="StyleSheet"
+      href="emacs.css"
+      type="text/css"
+      title="John's emacs style">
+<title>My emacs lisp collection</title>
+</head>
+
+<body>
+<h1>My emacs lisp collection</h1>
+
+<p>This is a copy of my Emacs collection, with some HTML files added
+to document it. The collection is fairly extensive (the code I wrote
+myself is now 51k lines, about 1.9Mb) by now -- I started writing
+elisp around 1987 as far as I can remember; I think GNUemacs was on
+version 17 at the time.</p>
+
+<p>For many years, I gave up on Usenet because of the spam, and didn't
+pay much attention to any other forms of announcement; during this
+period, I re-invented many Emacs wheels.  I'm now working my way
+through the Emacs sources, finding out what's in there and removing my
+near-duplicates (except in a few cases where I really prefer my
+version) and I'm trying to keep up with what's being posted, to avoid
+future duplication (again, except where I really want something a bit
+different).</p>
+
+
+<h2>Highlights</h2>
+
+<dl>
+
+  <dt> <a href="http://emacs-versor.sourceforge.net/">emacs-versor</a>
+      on SourceForge (project page at <a href="http://sourceforge.net/projects/emacs-versor/">http://sourceforge.net/projects/emacs-versor/</a>)
+  <dd> <b>Vers</b>atile cur<b>sor</b>s, giving a wider variety of ways of moving
+      around files through a narrow interface such as just the arrow
+      keys, or pedals set up to imitate them.
+
+  <dt> <a href="email/majordomo.el">email/<b>majordomo</b>.el</a> <!-- checked -->
+  <dd> This package is meant for people who manage several majordomo lists.
+      It composes and sends majordomo commands, parses the replies, and
+      maintains a cache of the membership of each list. It could do
+      with a bit more work on it.
+
+  <dt> <a href="basics/use-package.el">basics/<b>use-package</b>.el</a>
+  <dd> Download and configure packages on demand.  Like a remote
+       version of <code>autoload</code> but with opportunities to set
+       variables, hooks etc at the same time as specifying where to get the
+       package from.  Particularly handy if you're a flashcard based nomad
+       and don't want to have to take all the big packages around with you.
+       
+       <!--
+  <dt> <a href="basics/load-directory.el">basics/<b>load-directory</b>.el</a> <!-- checked -->
+  <dd> Loads all the el / elc files in a directory.
+
+  <dt> <a href="editing/diary-mode.el">editing/<b>diary-mode</b>.el</a>	<!-- checked -->
+  <dd> Major mode for editing diary files. Colours days of the week differently.
+-->
+  <dt> <a href="editing/generic-text.el">editing/<b>generic-text</b>.el</a> <!-- checked -->
+      and friends
+  <dd> Mode-sensitive insertion of markup, using the same commands for
+      TeX, LaTeX, HTML, *roff, and plain text. (Not all implemented
+      yet -- *roff contributions would be welcome.) They provide similar
+      facilities to <a
+      href="http://www.santafe.edu/~nelson/tools/">html-helper-mode</a>
+      but consistently across several markup-language modes.
+
+  <dt> <a href="editing/replace-regexp-list.el">editing/<b>replace-regexp-list</b>.el</a> <!-- checked -->
+      and <a href="editing/edit-tree.el">editing/<b>edit-tree</b>.el</a> <!-- checked -->
+  <dd> Apply lots of edits systematically. These two are most useful
+      used together. I don't need them often, but when I do need them,
+      I really need them!
+
+  <dt> <a href="misc/banner.el">misc/<b>banner</b>.el</a> <!-- checked -->
+  <dd> Giant writing.
+
+  <dt> <a href="http://mulvoc.sourceforge.net/"><b>mulvoc</b> (on Sourceforge) </a> <!-- checked -->
+  <dd> <b>MU</b>lti-<b>L</b>ingual <b>VOC</b>abularies, read in from CSV (Comma-Separated
+      Value) files (a spreadsheet interchange format). I have great
+      expectations of this (there's early-stage enthusiasm for you),
+      but it is quite new. It now has quite a few source files, and
+      has now become a SourceForge project so people can share vocabularies there.
+
+  <dt> <a href="natural-language/localized-source.el">natural-language/<b>localized-source.el</b></a> <!-- checked -->
+  <dd> Show localization for source files, e.g. translations of
+      comments and perhaps names. Intended for (typically open-source)
+      developers in countries where knowledge of English is not
+      typically good; particularly where there may be large
+      organizations who could have translators translating the
+      comments on open-source code that their programmers then work
+      on.
+
+  <dt> <a href="http://sidebrain.sourceforge.net/">sidebrain</a>
+      (project page at <a href="http://sourceforge.net/projects/sidebrain/">http://sourceforge.net/projects/sidebrain/</a>)
+  <dd> A working memory tool for programmers: it maintains a stack of
+      your current tasks, and a queue or pool of pending tasks, and a
+      set of observations, to help to remind you what you're
+      doing. This is a fairly new project; for what I can tell so far,
+      it helps me to keep focused on what I'm doing. 
+
+  <dt> <a href="my-extensions-to-packages/voice/embedded-commands.el">my-extensions-to-packages/voice/<b>embedded-commands.el</b></a>
+  <dd> Allow commands embedded in dictated text, for voice
+      recognition. Needs my improved version of <a href="../open-projects/emacs-vr-mode/vrmode/vr.el">vr.el</a>.
+      
+</dl>
+
+<h2>Directory location and structure</h2>
+
+<p>Because I ship my emacs setup around between various machines, it
+all uses an environment <code>$COMMON</code> (which on a Unix-style
+system I set to <code>$HOME/common</code>) as its idea of where
+everything lives. This directory (the one in which this page resides)
+expects to be found at <code>$COMMON/emacs</code>. It also expects
+some companion directories, <code>$COMMON/open-projects</code>
+containing packages from sourceforge etc (including one which I
+manage), and <code>$COMMON/emacs-library</code> containing packages I
+have downloaded from elsewhere. (By the way, I can definitely
+recommend this way of working: <code>$COMMON</code> contains also my
+research papers, personal web site etc -- all the things I ship around
+all my machines -- and all fits handily onto a USB key. That way, I
+can keep my machines at home isolated from the Internet, and
+concentrate on getting things done there, without email interruptions
+and web distractions.)</p>
+
+<p><code>$COMMON</code> points to the things I wrote myself. All the
+things that I gathered from the net, rather than wrote myself, are
+pointed to by <code>$GATHERED</code>.</p>
+
+<p>Code related to this way of working is in <a
+href="file-handling/filenames-in-env.el">file-handling/filenames-in-env.el</a>
+and in <a
+href="file-handling/common-directory.el">file-handling/common-directory.el</a>.</p>
+
+<h2>My emacs startup structure</h2>
+
+<p>My <code>.emacs</code> sets up some environment variables
+representing where the rest of my emacs stuff is, then loads the
+contents of <code><a href="config/index.html">config</a></code>, which
+mostly uses <code><a
+href="basics/use-package.el">use-package</a></code> to find and
+configure packages.</p>
+
+<h2>My emacs directory contents</h2>
+
+<p>Some of this is acquired long ago from others, but I wrote most of
+it myself. (Stuff I downloaded from others goes in <a
+href="#emacs-library">a separate directory</a>.) I'm trying to update
+all files in it that I remember I wrote myself, to identify them as
+such. I also mean to GPL it all, although some files may yet have
+escaped getting a GPL notice in them.</p>
+
+<dl>
+  <dt> <a href=".emacs">.emacs</a>
+  <dd> This sets the rest of my Startup going. It makes extensive use
+      of <a href="basics/load-directory.el">basics/load-directory.el</a>.
+
+  <dt> <a href="appearance/index.html">appearance/</a>
+  <dd> Choosing fonts etc.
+
+  <dt> <a href="autoload/index.html">autoload/</a>
+  <dd> Autoload stubs. I probably ought to move more into here.
+
+  <dt> <a href="basics/index.html">basics/</a>
+  <dd> I load these early in my Startup sequence. It contains things
+      like <a href="basics/load-directory.el">basics/load-directory.el</a>
+      which is used heavily in the rest of my startup sequence.
+
+  <dt> <a href="persistence/contexts.el">contexts.el</a>
+  <dd> Some stuff for arranging the many buffers I use into groups,
+      and swapping them in and out; less important now that machines
+      are larger than they were when I wrote it.
+
+  <dt> <a href="ctl-x-7.el">ctl-x-7.el</a>
+  <dd> Some keyboard setup that ought to move elsewhere.
+
+  <dt> <a href="data-structures/index.html">data-structures</a>
+  <dd> Code for data structure handling.
+
+  <dt> <a href="editing/index.html">editing/</a>
+  <dd> General editing code.
+
+  <dt> <a href="elisp-dev-tools/index.html">elisp-dev-tools/</a>
+  <dd> Things for handling elisp. Some more stuff should probably move
+      into here.
+
+  <dt> <a href="email/index.html">email/</a>
+  <dd> e-mail handling, including a <a
+      href="email/majordomo.el">package for handling majordomo list
+      management messages</a>.
+
+  <dt> <a href="file-handling/index.html">file-handling/</a>
+  <dd> Using filenames found in buffers, synchronizing files and
+      buffers, and things like that.
+
+  <dt> <a href="games/index.html">games/</a>
+  <dd> Games and entertainments written in elisp; see also <a
+      href="well-being/index.html">well-being/</a> for relaxations.
+
+  <dt> <a href="graphics/index.html">graphics</a>
+  <dd> Includes a major mode for JPEG files, which displays the meta-data.
+
+  <dt> <a href="handsfree/index.html">handsfree/</a>
+  <dd> Setting things up for use by pedals that I used to augment the
+      keyboard because of my RSI. Most of this is moving over to <a
+      href="http://emacs-versor.sourceforge.net/">emacs-versor</a> on SourceForge.
+
+  <dt> <a href="hardware/index.html">hardware devices</a>
+  <dd> Interfaces for I/O devices not usually used for editing, such
+      as joysticks.
+
+      <!--
+  <dt> <a href="host-setup.el">host-setup.el</a>
+  <dd> This works out where I am running my emacs, and sets up various
+      things to be conditional on, for example, whether this is the
+      machine on which I habitually read my mail. For flexibility, it
+      has a function named after the short name of each machine for
+      which I want a specific setup, and calls that function
+      accordingly.
+
+  <dt> <a href="late-startup/index.html">late-startup/</a>
+  <dd> Stuff that has to be done after most of the rest of the startup.
+-->
+  <dt> <a href="misc/index.html">misc/</a>
+  <dd> Miscellaneous stuff.
+
+  <dt> <a href="mode-setups/index.html">mode-setups/</a>
+  <dd> Setting variables etc for various modes.
+
+  <dt> <a href="my-extensions-to-packages/index.html">my-extensions-to-packages/</a>
+  <dd> My extensions to emacs code which I have loaded from
+      elsewhere. Includes stuff
+      <a href="my-extensions-to-packages/vm/index.html">for VM</a> and
+      <a href="my-extensions-to-packages/bbdb/index.html">for BBDB</a>; and lots of
+      adapters for voice. Also, there are some
+      <a href="my-extensions-to-packages/type-break/index.html">extra
+      features for type-break</a> (and some setup for it).
+
+  <dt> <a href="natural-language/index.html">natural-language</a>
+  <dd> Natural language handling, starting with a package for handling
+      vocabulary lists.
+      
+  <dt> <a href="persistence/index.html">persistence/</a>
+  <dd> Saving and restoring state between Emacs sessions, done using
+      <code><a href="basics/load-directory.el">load-directory</a>.</code>
+
+  <dt> <a href="playpen/index.html">playpen/</a>
+  <dd> Things that I'm still playing around with, or that have yet to
+      grow to maturity.
+
+  <dt> <a href="http://www.csis.ul.ie/staff/JohnSturdy/research-elisp/index.html">research</a>
+      (on <a href="http://www.csis.ul.ie/">http://www.csis.ul.ie/</a>)
+  <dd> Code for doing research; includes (voluntary!) logging of emacs user
+      behaviour for empirical research, and organization of research papers
+      <dl>
+	<dt> <a href="unplugged/index.html">unplugged</a>
+	<dd> I find I'm much more productive off-line, shuttling my files
+	    around on USB mass storage devices. I'm not the only one who
+	    finds this, I know, and with the information (and
+	    distraction) overload that can so easily happen nowadays,
+	    and with the risk of large companies attempting to
+	    interfere with FLOSS development, I think it could be an
+	    important part of the way forward for software
+	    developments, so I'm starting a line of
+	    research into how to do ``unplugged'' distributed development.
+      </dl>
+  <dt> <a href="ringing/index.html">ringing</a>
+  <dd> Emacs software for
+      <a href="http://www.cb1.com/~john/ringing/index.html">change-ringing</a>,
+      mostly for learning methods.
+      
+  <dt> <a href="savers1/index.html">savers1/</a>
+  <dd> These are loaded as I quit emacs, and the code in them fills in
+      a directory which is loaded on start-up. See <a
+      href="persistence/index.html">persistence/*.el</a> for the
+      framework for this.
+
+  <dt> <a href="savers2/index.html">savers2/</a>
+  <dd> Like savers1, but loaded after it because of some order
+      dependencies. See <a
+      href="persistence/index.html">persistence/*.el</a> for the
+      framework for this.
+<!--
+  <dt> <a href="sc.el">sc.el</a>
+  <dd> 
+-->
+  <dt> <a href="shells-to-start.el">shells-to-start.el</a>
+  <dd> 
+
+  <dt> <a href="special-setups/index.html">special-setups/</a>
+  <dd> Not quite ``embedded emacs'', but Emacs setups for specific
+      purposes, separate from my main emacs Startup.
+
+  <dt> <a href="startup/index.html">startup/</a>
+  <dd> Everything in this directory is loaded at start-up. Some of it
+      should get moved to directories organized by what kind of thing
+      the code does, and some should be given autoloads etc rather
+      than being loaded at the start every time, so things may
+      disappear from here and resurface in other directories, over the
+      first few months of making my collection public.
+
+  <dt> <a href="sysadmin/index.html">sysadmin/</a>
+  <dd> Stuff relevant to system administration, such as looking at
+      <code>dmesg</code> results.
+
+  <dt> <a href="webstuff/index.html">webstuff/</a>
+  <dd> Web related functions, many of them for writing HTML.
+
+  <dt> <a href="well-being/index.html">well-being</a>
+  <dd> Stuff for looking after the user, such as breathing exercises.
+      
+</dl>
+
+<h2>Expected contents of <code><a name="emacs-library">../emacs-library</a></code></h2>
+
+<p>You have to fetch these from their respective homes.</p>
+
+<dl>
+  <dt> <a href="http://bbdb.sourceforge.net/">bbdb</a>
+  <dd> Big Brother Data Base -- an email address manager and much
+      more. I have some additional code for this in <a
+      href="my-extensions-to-packages/bbdb/index.html">my-extensions-to-packages/bbdb/</a>.
+  <dt> <a href="http://de.geocities.com/ulf_jasper/lisp/csv.el.txt">csv</a>
+  <dd> Reader for Comma Separated Value files from spreadsheets
+  <dt> <a href="http://www.santafe.edu/~nelson/tools/">html-helper-mode</a>
+  <dd> A major mode for editing html, which I prefer to the built-in html-mode
+  <dt> <a href="http://www.ipd.uka.de/mitarbeiter/muellerm/PSP/">pplog</a>
+  <dd> Personal Process logging -- I'm not yet using this but mean to sometime
+  <dt> <a href="http://www.wonderworks.com/vm/">vm</a>
+  <dd> View Mail -- my preferred mail reader. I have a little
+      additional code for this at <a
+      href="my-extensions-to-packages/vm/index.html">my-extensions-to-packages/vm</a>.
+  <dt> <a href="http://www.cs.indiana.edu/elisp/w3/docs.html">w3</a>
+  <dd> A web browser inside emacs (there are also some interfaces
+      available to get emacs to control external browsers)
+  <dt> <a href="http://www.gnu.org/software/auctex/">AUCTeX</a>
+  <dd> Improved facilities for editing LaTeX and other TeX-family
+      markup languages.
+</dl>
+
+<h2>Expected contents of <code>../open-projects</code></h2>
+
+<dl>
+  <dt> <a href="http://emacs-versor.sourceforge.net/">emacs-versor</a>
+  <dd> Versatile cursors, giving a wider variety of ways of moving
+      around files through a narrow interface such as just the arrow
+      keys, or pedals set up to imitate them.
+  <dt> <a href="http://emacs-vr-mode.sourceforge.net/">emacs-vr-mode</a>
+  <dd> Interface to Dragon Naturally Speaking. I have additional code
+      to go with this, at <a
+      href="my-extensions-to-packages/voice/index.html">my-extensions-to-packages/voice/</a>.
+</dl>
+
+<h2>Compatibility etc</h2>
+
+<p>I've not yet tried to unpick everything so each piece can be used
+by itself in a vanilla emacs. I might get round to some of that
+sometime (I hope I will, but then I hope all kinds of things).</p>
+
+<p>I've not tried any of these with Xemacs. I'd be interested to hear
+if you use any of my files successfully with it, and will mark them as
+such if you do, but I'm not planning to get into that myself for the
+time being.</p>
+
+<hr>
+<p>
+[<a href="../index.html">My emacs index</a>]
+[<a href="../../index.html">My computing index</a>]
+[<a href="../../../index.html">My home page</a>]
+</p>
+<address><a href="../../../contact.html">Contact me</a>
+</address>
+<i><!-- timestamp -->Last modified: Fri Oct 12 23:06:16 IST 2007
+</i>
+</body> </html>

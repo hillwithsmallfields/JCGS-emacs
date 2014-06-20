@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<link rel="StyleSheet"
+      href="../emacs.css"
+      type="text/css"
+      title="John's emacs style">
+<title>File-handling elisp</title>
+</head>
+
+<body>
+<h1>File-handling elisp</h1>
+
+<dl>
+  <dt> <a href="buffer-file-sync.el">buffer-file-sync.el</a>
+  <dd> Make sure that buffers match the file contents. Useful for
+      catching up with changes made outside emacs (or by another emacs).
+
+  <dt> <a href="copy-directory.el">copy-directory.el</a>
+  <dd> Copy the files in a directory, copying only those that were not
+      there already.
+      
+  <dt> <a href="filename-cases.el">filename-cases.el</a>
+  <dd> Try to fix up filename cases (when spoilt by case-insensitive OSes)
+      
+  <dt> <a href="filenames-in-buffers.el">filenames-in-buffers.el</a>
+  <dd> Find the file whose name point is on, and other things like that.
+
+  <dt> <a href="filenames-in-env.el">filenames-in-env.el</a>
+  <dd> Put environment variables into filenames where possible.
+      For a given set of environment variable names, this puts
+      $VARIABLE into the filename string -- the converse of
+      <code>substitute-in-file-name</code>.
+
+  <dt> <a href="common-directory.el">common-directory.el</a>
+  <dd> Special handling of files in a directory named by the
+      environment variable <code>COMMON</code>. This is the directory
+      that I shuttle between my machines, using a USB key. I put some
+      advice on the functions for renaming and deleting files, so the
+      other machines don't re-instate them. Also contains code for
+      spotting and deleting the "Copy of" files that Windows' copy
+      programs sometimes make (at least, I think that's what makes them).
+      
+  <dt> <a href="filenames-under-tags.el">filenames-under-tags.el</a>
+  <dd> Find a file of a given short name (last part of name) amongst
+      directories for which you have tag files. (Can be useful in
+      picking through compiler output when not enough of the pathname
+      is given.)
+
+  <dt> <a href="file-name-insertions.el">file-name-insertions.el</a>
+  <dd> Insert the name of the file in the other window, etc (often
+      useful in shell buffers)
+
+  <dt> <a href="multi-find-file.el">multi-find-file.el</a>
+  <dd> Find multiple files in one command.
+
+  <dt> <a href="pseudo-grep.el">pseudo-grep.el</a>
+  <dd> Does something a bit like grep, but entirely within emacs.
+      
+  <dt> <a href="removable-media.el">removable-media.el</a>
+  <dd> Intended for use with USB storage devices with WinEmacs, where
+      a file may appear on different drives on different
+      occasions.
+
+  <dt> <a href="with-file.el">with-file.el</a>
+  <dd> Perform an operation on a file, killing the buffer afterwards
+      if it was not being visited before, and doing other similar
+      tidying-up.
+      
+</dl>
+
+
+<hr>
+<p>
+[<a href="../index.html">My elisp index</a>]
+[<a href="../../index.html">My emacs index</a>]
+[<a href="../../../index.html">My computing index</a>]
+[<a href="../../../../index.html">My home page</a>]
+</p>
+<address><a href="../../../../contact.html">Contact me</a>
+</address>
+<i><!-- timestamp -->Last modified: Thu Sep  6 16:01:21 IST 2007
+</i>
+</body> </html>
