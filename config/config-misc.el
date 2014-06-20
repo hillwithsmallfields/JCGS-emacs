@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2014-01-23 14:33:07 johnstu>
+;;; Time-stamp: <2014-06-20 17:11:28 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -122,6 +122,8 @@ FWrite region to file: ")
 
 ;;;; source code annotation
 
+(message "about to load annotation")
+
 (add-to-list 'load-path
 	     (expand-file-name "information-management" user-emacs-directory))
 
@@ -132,6 +134,8 @@ FWrite region to file: ")
 (autoload 'annotation-decorate-file "annotation"
   "Find the annotations for the current file, and display them."
   t)
+
+(message "loaded annotation")
 
 ;; (add-hook 'c-mode-hook 'annotation-decorate-file)
 ;; (add-hook 'emacs-lisp-mode-hook 'annotation-decorate-file)
@@ -222,11 +226,15 @@ FWrite region to file: ")
 (global-set-key [ C-f2 ] 'other-window)
 (global-set-key [ M-f2 ] 'next-buffer)
 
+(message "loaded ratpoison")
+
 ;;;; compile with snapshotting
 
-(add-to-list 'load-path (expand-file-name "external-programs" user-emacs-directory))
-(require 'tracked-compile)
-(require 'laptop-tests)
+;; (add-to-list 'load-path (expand-file-name "external-programs" user-emacs-directory))
+;; (require 'tracked-compile)
+;; (require 'laptop-tests)
+
+;; (message "loaded tracked-compile")
 
 (setq pxe-handle "jcgs")
 
