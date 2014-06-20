@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-01-02 12:41:05 johnstu>
+;;; Time-stamp: <2014-06-20 14:38:54 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -596,12 +596,12 @@ Remaining SUB-DIRECTORIES are used to complete the filename."
 
 ;;;; Tags
 
-(add-lispdir "$COMMON/emacs/file-handling/")
+(add-lispdir "$EMACS/file-handling/")
 
 (autoload 'find-tag-with-hooks "tags-with-hooks")
 
 (setq tags-file-name nil
-      tags-table-list (list (substitute-in-file-name "$COMMON/emags/tags")
+      tags-table-list (list (substitute-in-file-name "$EMACS/tags")
 			    (substitute-in-file-name "$GATHERED/emacs/tags")
 			    (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/tags")))
 
