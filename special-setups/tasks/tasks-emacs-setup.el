@@ -1,7 +1,8 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2014-06-18 18:08:37 johstu01>
+;;; Time-stamp: <2014-06-20 15:39:15 johstu01>
 
-(load-file "$HOME/Dropbox/emacs/basics/jcgs-common-setup.el")
+(load-file "$EMACS/basics/jcgs-common-setup.el")
+(load-file "$EMACS/basics/host.el")
 
 (setq user-emacs-directory (expand-file-name
 			    (concat (getenv "EMACS")
@@ -38,7 +39,3 @@
 (org-agenda-list)
 
 ;;;; tasks-emacs-setup.el ends here
-
-
-
-
