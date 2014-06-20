@@ -1,4 +1,4 @@
-;;; Time-stamp: <2009-07-16 09:39:25 jcgs>
+;;; Time-stamp: <2014-06-20 15:44:00 johstu01>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -23,7 +23,9 @@
   "Make a shell called NAME, optionally cd it to DIRECTORY and give it COMMAND."
   (interactive "sShell name: 
 DDirectory to start %s in: ")
-  (if (not (get-buffer name))
+  (if (and (or (null directory)
+	       (file-directory-p directory))
+	   (not (get-buffer name)))
       (progn
 	(sleep-for 2)
 	(let ((new-shell-buffer (shell)))
