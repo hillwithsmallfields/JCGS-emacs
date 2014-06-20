@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2013-11-13 14:44:28 johnstu>
+;;; Time-stamp: <2014-06-20 16:13:51 johstu01>
 
-;; Copyright (C) 2007, 2008, 2013, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -33,6 +33,8 @@
       use-package-verbose t
       user-emacs-directory (substitute-in-file-name "$EMACS")
       )
+
+(message "user-emacs-directory is %S" user-emacs-directory)
 
 (random t)
 
@@ -101,20 +103,20 @@ This should be a list of three parts:
 	  nil)))))
 
 (find-main-directory
- '("COMMON" "emacs/.emacs" ("~/common"
-			    "/mnt/common/common"
-			    "/mnt/common"
-			    "/mnt/usbmem/common"
-			    "/media/disk/common"
-			    ;; one for oralux
-			    "/mnt/sdb1/common"
-			    "i:/common"
-			    "h:/common"
-			    "i:"
-			    "h:"
-			    "/common"
-			    ;; this one for Oralux on my home machine
-			    "/mnt/hda5/common")))
+ '("EMACS" "emacs/.emacs" ("~/common"
+			   "/mnt/common/common"
+			   "/mnt/common"
+			   "/mnt/usbmem/common"
+			   "/media/disk/common"
+			   ;; one for oralux
+			   "/mnt/sdb1/common"
+			   "i:/common"
+			   "h:/common"
+			   "i:"
+			   "h:"
+			   "/common"
+			   ;; this one for Oralux on my home machine
+			   "/mnt/hda5/common")))
 
 (unless
     (find-main-directory
@@ -144,7 +146,9 @@ This should be a list of three parts:
 ;;;; Load experimental patches (do them now, in case they patch the
 ;;;; loading of other things):
 
-(load-file (expand-file-name "tmp.el" user-emacs-directory))
+(let ((patches-file (expand-file-name "early-patches.el" user-emacs-directory)))
+  (when (file-exists-p patches-file)
+    (load-file patches-file)))
 
 ;; I would use load-directory here, except that here is where I load
 ;; load-directory
@@ -157,16 +161,19 @@ This should be a list of three parts:
 ;;;###if nil
 (let ((basics (expand-file-name "basics" user-emacs-directory)))
   (mapcar (function (lambda (basic)
+		      (message "before loading %s, load-path=%S and user-emacs-directory=%S" basic load-path user-emacs-directory)
 		      (load-file
-		       (expand-file-name basic
-					 basics))))
-          '(;; "version-patches.el"
-	    "host.el"
-            "add-lispdir.el"
-	    "use-package.el"
-            ;; "modes.el"
-            "load-directory.el"
-            ;; "startup-messages.el"
+		       (expand-file-name (concat basic ".el")
+					 basics))
+		      (message "after loading %s, load-path=%S and user-emacs-directory=%S" basic load-path user-emacs-directory)))
+          '( ;; "version-patches.el"
+	    "host"
+	    "jcgs-common-setup"
+            "add-lispdir"
+	    "use-package"
+            ;; "modes"
+            "load-directory"
+            ;; "startup-messages"
             )))
 ;;;###endif
 
@@ -184,7 +191,7 @@ This should be a list of three parts:
 (defvar work-log-file (expand-file-name "~/public/work.log")
   "The name of the file containing my work log.")
 
-(message "before loading config, load-path=%S" load-path)
+(message "before loading config, load-path=%S and user-emacs-directory=%S" load-path user-emacs-directory)
 
 ;;;###include config
 ;;;###if nil
@@ -243,5 +250,9 @@ This should be a list of three parts:
 (if (boundp 'org-agenda-files)
     (message "At end of .emacs, org-agenda-files is %S" org-agenda-files)
   (message "At end of .emacs, org-agenda-files is unbound"))
+
+(let ((patches-file (expand-file-name "late-patches.el" user-emacs-directory)))
+  (when (file-exists-p patches-file)
+    (load-file patches-file)))
 
 ;;; end of .emacs
