@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-05-27 12:02:34 jcgs>
+;;; Time-stamp: <2014-06-20 15:43:17 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -14,27 +14,14 @@
 
 (make-named-shell (format "=%s=" (system-name)) "~")
 
-(unless (or (string-match "ezra" (system-name))
-	    (string-match "xci-test" (system-name)))
-  (make-named-shell "-grevo-"
-		    "$OPEN_PROJECTS/GrEvo/trunk/"
-		    ;; "make clean; ./configure\n"
-		    )
-  (make-named-shell "-examples-for-grevo-"
-		    "$OPEN_PROJECTS/GrEvo/trunk/examples/")
-  (make-named-shell "-ulga-"
-		    "$OPEN_PROJECTS/ULGA/trunk/"
-		    ;; "make clean; ./configure; make\n"
-		    )
-  (make-named-shell "-libGE-"
-		    "$OPEN_PROJECTS/libGE/trunk/"
-		    ;; "make clean; ./configure; make\n"
-		    )
-
-  (make-named-shell "-rtl-"
-		    "$OPEN_PROJECTS/libRTL/trunk/"
-		    ;; "make clean; ./configure; make\n"
-		    )
+(unless (or (at-work)
+	    (on-small-machine))
+  (dolist (pair '(("-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/")
+		  ("-examples-for-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/examples/")
+		  ("-ulga-" . "$OPEN_PROJECTS/ULGA/trunk/")
+		  ("-libGE-" . "$OPEN_PROJECTS/libGE/trunk/")))
+    (make-named-shell (car pair) (cdr pair)))
+  ( "-rtl-" . "$OPEN_PROJECTS/libRTL/trunk/" )
   (when nil
     (make-named-shell "-ephemerals-"
 		      "$COMMON/research/bds/grevo/ephemerals/"
