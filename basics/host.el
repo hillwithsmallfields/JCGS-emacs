@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2010-11-30 08:14:23 jcgs>
+;; Time-stamp: <2014-06-20 15:39:15 johstu01>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -57,5 +57,14 @@
 			  "joel.csis.ul.ie"
 			  "glg.csisdmz.ul.ie"
 			  )))
+
+(defun at-work ()
+  "Return whether I'm on a work machine."
+  (string-match "arm.com"
+		(system-name)))
+
+(defun on-small-machine ()
+  "Whether I'm on some small machine, such as a laptop."
+  (string-match "ezra" (system-name)))
 
 ;;; host.el ends here
