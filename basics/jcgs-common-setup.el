@@ -1,20 +1,18 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2014-06-17 11:10:23 johstu01>
+;;; Time-stamp: <2014-06-20 16:16:01 johstu01>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
-
-(defun at-work ()
-  "Return whether I'm on a work machine."
-  (string-match "arm.com"
-		(system-name)))
 
 (global-font-lock-mode 1)
 (setq inhibit-startup-screen t
       kill-whole-line t
       display-time-day-and-date t
-      user-emacs-directory (if (getenv "DROPBOX")
-			       (substitute-in-file-name "$DROPBOX/emacs")
-			     (substitute-in-file-name "$HOME/Dropbox/emacs")))
+      user-emacs-directory
+      (cond ((file-directory-p (substitute-in-file-name "$HOME/JCGS-emacs"))
+	     (substitute-in-file-name "$HOME/JCGS-emacs"))
+	    ((getenv "DROPBOX")
+	     (substitute-in-file-name "$DROPBOX/emacs"))
+	    (t (substitute-in-file-name "$HOME/Dropbox/emacs"))))
 (display-time)
 (when (member (system-name)
 	      '("ezra"))
