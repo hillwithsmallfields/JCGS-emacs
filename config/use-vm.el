@@ -1,5 +1,5 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2013-12-11 10:21:44 johnstu>
+;;; Time-stamp: <2014-06-23 11:52:23 johstu01>
 
 (add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
 
@@ -120,7 +120,7 @@ Also shows diary and to-do list." t)
 		   vm-delete-after-bursting t
 		   vm-mail-header-from (cond
 					((string-match "xci-test\\|citrix" (system-name))
-					 "john.sturdy@citrix.com")
+					 "john.sturdy@arm.com")
 					(t
 					 "jcg.sturdy@gmail.com"))
 		   vm-mail-check-interval 900
