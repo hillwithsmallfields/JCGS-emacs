@@ -1,7 +1,7 @@
 ;;;; config-elisp-devel.el -- set up my emacs-lisp development
-;;; Time-stamp: <2013-10-15 12:22:12 johnstu>
+;;; Time-stamp: <2014-06-23 11:47:31 johstu01>
 
-;; Copyright (C) 2007, John C. G. Sturdy
+;; Copyright (C) 2007, 2014, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -110,5 +110,9 @@ It is meant for use as a find-file-hook, but can also be used interactively." t)
 
 (autoload 'llp-extract "llp-extract"
   "Extract Lisp code from FILE." t)
+
+;;;; Byte-compilation
+
+(setq byte-compile-generate-call-tree t)
 
 ;;; end of config-elisp-devel.el
