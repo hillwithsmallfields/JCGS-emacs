@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2014-06-20 15:39:15 johstu01>
+;;; Time-stamp: <2014-06-23 11:14:19 johstu01>
 
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")
@@ -9,7 +9,6 @@
 				    "/")))
 
 (load-file (substitute-in-file-name "$EMACS/config/config-org-mode.el"))
-(load-file (substitute-in-file-name "$EMACS/information-management/work-log.el"))
 (message "org-agenda-files is %S" org-agenda-files)
 (load-file (substitute-in-file-name "$EMACS/config/config-calendar-diary.el"))
 
