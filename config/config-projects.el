@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-06-20 15:43:17 johstu01>
+;;; Time-stamp: <2014-06-23 11:11:40 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -47,15 +47,5 @@
 		      ;; "latex last-khan.tex\n"
 		      ))
   )
-
-;; (make-variable-buffer-local 'tracking-org-file)
-
-;; (defun jcgs-select-work-log ()
-;;   "This function is meant to go on `find-file-hook'."
-;;   (cond
-;;    ((string-match (substitute-in-file-name "$COMMON/Marmalade") default-directory)
-;;     (setq tracking-org-file (substitute-in-file-name "$COMMON/Marmalade/Marmalade-work.log")))))
-
-;; (add-hook 'find-file-hook 'jcgs-select-work-log)
 
 ;;; config-projects.el ends here
