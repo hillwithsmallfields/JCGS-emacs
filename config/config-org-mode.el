@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-06-03 08:57:54 jcgs>
+;;; Time-stamp: <2014-06-23 11:11:40 johstu01>
 
 (require 'org)
 
@@ -14,6 +14,8 @@
 (message "At start of config-org-mode.el, org-agenda-files is %S" org-agenda-files)
 
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
+(require 'work-tasks)
+(require 'work-log)
 (add-to-list 'auto-mode-alist (cons "\\.org\\.txt" 'org-mode))
 
 (message "Near start of config-org-mode.el, org-agenda-files is %S" org-agenda-files)
@@ -591,6 +593,20 @@ Unless optional NO-MOVE, move to the next entry."
     (forward-line)))
 
 (define-key org-mode-map [ f6 ] 'jcgs/org-task-today)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; separate log files ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (make-variable-buffer-local 'tracking-org-file)
+
+;; (defun jcgs-select-work-log ()
+;;   "This function is meant to go on `find-file-hook'."
+;;   (cond
+;;    ((string-match (substitute-in-file-name "$COMMON/Marmalade") default-directory)
+;;     (setq tracking-org-file (substitute-in-file-name "$COMMON/Marmalade/Marmalade-work.log")))))
+
+;; (add-hook 'find-file-hook 'jcgs-select-work-log)
 
 ;;; some debugging
 
