@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-06-23 11:47:31 johstu01>
+;;; Time-stamp: <2014-06-23 11:51:53 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -511,7 +511,7 @@ Remaining SUB-DIRECTORIES are used to complete the filename."
 ;;;; Mail
 
 (setq mail-self-blind t
-      user-mail-address "john.sturdy@citrix.com")
+      user-mail-address "john.sturdy@arm.com")
 
 ;;;; Shell
 
