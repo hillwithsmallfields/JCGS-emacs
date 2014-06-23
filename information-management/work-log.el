@@ -1,7 +1,7 @@
 ;;; work-log.el --- keep track of things I've done
 ;; Based on my earlier tracked-compile.el
 
-;; Copyright (C) 2011, 2012, 2013  John Sturdy
+;; Copyright (C) 2011, 2012, 2013, 2014  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-(defvar work-log-file (expand-file-name "~/Dropbox/notes/hackery.log")
+(defvar work-log-file (expand-file-name "~/Dropbox/notes/hackery.org-log")
   "The file into which you log your work.
 You could set this per-buffer for local logs.")
 
@@ -43,9 +43,8 @@ You could set this per-buffer for local logs.")
   ;; we must be in something based on org-mode for some org-mode
   ;; functions we use to work; we mustn't call the mode setup
   ;; function each time, because it kills all local variables
-  ;; TODO: a mode of our own?
-  (unless (eq 'major-mode 'org-mode)	; todo: isn't there a hierarchical test?
-    (org-mode))
+  (unless (eq major-mode 'work-log-mode)
+    (work-log-mode))
   (jcgs/org-open-hierarchical-date date))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -88,3 +87,18 @@ For use from the comint (shell) buffer."
 
 (require 'shell)			; for shell-mode-map
 (define-key shell-mode-map (kbd "C-<return>") 'work-log-recent-shell-command)
+
+;;;;;;;;;;;;;;;;
+;; Major mode ;;
+;;;;;;;;;;;;;;;;
+
+(define-derived-mode work-log-mode org-mode
+  "Work log"
+  "Major mode for making notes on what I've done while developing software.
+Organizes the log hierarchically by date (day, month, year).")
+
+(define-key work-log-mode-map "\C-c\C-d" 'work-log-open-date)
+
+(add-to-list 'auto-mode-alist (cons "work.org-log" 'work-log-mode))
+
+;;; work-log.el ends here
