@@ -95,10 +95,13 @@ For use from the comint (shell) buffer."
 (define-derived-mode work-log-mode org-mode
   "Work log"
   "Major mode for making notes on what I've done while developing software.
-Organizes the log hierarchically by date (day, month, year).")
+Organizes the log hierarchically by date (day, month, year)."
+  (make-local-variable 'org-archive-location)
+  (setq org-archive-location "~/work-org/archive/%s::"))
 
 (define-key work-log-mode-map "\C-c\C-d" 'work-log-open-date)
 
 (add-to-list 'auto-mode-alist (cons "work.org-log" 'work-log-mode))
 
+(provide 'work-log)
 ;;; work-log.el ends here
