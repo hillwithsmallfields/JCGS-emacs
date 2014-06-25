@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-06-23 11:11:40 johstu01>
+;;; Time-stamp: <2014-06-25 17:23:42 johstu01>
 
 (require 'org)
 
@@ -30,6 +30,7 @@ changed." t)
       '((sequence "TODO(t)" "CURRENT(c)" "OPEN(o)"
 		  "|"
 		  "DONE(d)" "CANCELLED(x)"))
+      org-clock-in-switch-to-state "CURRENT"
       org-use-fast-todo-selection nil
       org-log-done 'time
       org-log-into-drawer t
@@ -77,6 +78,17 @@ changed." t)
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
       org-M-RET-may-split-line nil)
+
+(defun jcgs/org-clock-in-prepare-function ()
+  "My customization of task clock-in."
+  (save-excursion
+    (outline-up-heading 1)
+    (when (looking-at org-complex-heading-regexp)
+      (let ((state (match-string-no-properties 2)))
+	(when (equal state "TODO")
+	  (org-todo "OPEN"))))))
+
+(add-hook 'org-clock-in-prepare-hook 'jcgs/org-clock-in-prepare-function)
 
 (global-set-key "\C-cn" 'org-capture)
 
