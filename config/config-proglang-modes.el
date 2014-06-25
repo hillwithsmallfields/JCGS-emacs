@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2014-06-23 11:47:31 johstu01>
+;;; Time-stamp: <2014-06-24 12:11:01 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -102,7 +102,21 @@
           (goto-line (cdr location)))
       (message "Could not find a place description"))))
 
-;;;; Tags
+;;;;;;;;;;;;;
+;; go-mode ;;
+;;;;;;;;;;;;;
+
+(when (file-directory-p "/usr/local/go")
+  (add-to-list 'load-path "/usr/local/go/misc/emacs/")
+  (require 'go-mode-load))
+
+(add-hook 'go-mode-hook (lambda ()
+                          (local-set-key "\M-." 'godef-jump)))
+
+
+;;;;;;;;;;
+;; Tags ;;
+;;;;;;;;;;
 
 (add-lispdir "$EMACS/file-handling/")
 
@@ -119,6 +133,10 @@
     (if (file-readable-p (expand-file-name "tags" source-directory))
 	(push (expand-file-name "tags" source-directory) tags-table-list))))
 
-;;;; Change logs
+;;;;;;;;;;;;;;;;;
+;; Change logs ;;
+;;;;;;;;;;;;;;;;;
 
 (setq change-log-default-name "../ChangeLog")
+
+;;;; config-proglang-modes.el ends here
