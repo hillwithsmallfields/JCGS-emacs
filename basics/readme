@@ -1,0 +1,6 @@
+~/common/emacs/basics is for files I load early in my startup.
+
+I put them in a directory for ease of finding them,
+rather than with a view to using load-directory on them --
+in fact, load-directory is amongst them.
+

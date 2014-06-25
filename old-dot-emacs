@@ -1,0 +1,205 @@
+;;; Time-stamp: <2007-11-12 15:40:26 jcgs>
+
+;;; By John C G Sturdy <john@cb1.com>
+;;; My emacs startup file
+
+;;;; First things first:
+(setq stack-trace-on-error t
+      message-log-max t
+      max-lisp-eval-depth 4096
+      print-length 2048 eval-expression-print-length 2048
+      print-level 128 eval-expression-print-level 128)
+
+(random t)
+
+;;; The environment variable COMMON is used in substitute-in-file-name
+;;; in lots of my elisp, it points to the stuff I have in common (and
+;;; try to keep synchronized) on all the machines I use regularly. For
+;;; simplicity, I just copy everything in a directory called "common".
+;;; The master copy lives on a USB flash drive. To reduce the number
+;;; of writes to flash memory, I copy it onto each host, rather than
+;;; using it in-place.
+
+(defun find-main-directory (dirdesc)
+  "Find a directory matching DIRDESC.
+This should be a list of three parts:
+  An environment variable
+    that might be pointing to the directory already, and should be
+    left pointing to it the directory when found;
+  A filename
+    that is known to be in the directory, by which the directory
+    can be recognized when found;
+  A list of places
+    where the directory might be."
+  (let ((dirname (car dirdesc)))
+    (if (stringp (getenv dirname))
+	(message "%s already defined as %s" dirname (getenv dirname))
+      (let* ((distinctive-file (cadr dirdesc))
+	     (possibles (cadr (cdr dirdesc)))
+	     (this-try (expand-file-name (car possibles))))
+	(message "Trying %s for %s" this-try dirname)
+	(while (and (not (null possibles))
+		    (or (not (stringp this-try))
+			(not (file-exists-p
+			      (expand-file-name distinctive-file
+						this-try)))))
+	  (setq this-try (expand-file-name (car possibles))
+		possibles (cdr possibles))
+	  (message "Trying %s for %s" this-try dirname))
+	(if (stringp this-try)
+	    (progn
+	      (message "Using %s as %s directory" this-try dirname)
+	      (setenv dirname this-try)
+	      t)
+	  (message "Could not find directory for %S" dirname)
+	  nil)))))
+
+(find-main-directory
+ '("COMMON" "emacs/.emacs" ("/mnt/common/common"
+			    "/mnt/common"
+			    "/mnt/usbmem/common"
+			    ;; one for oralux
+			    "/mnt/sdb1/common"
+			    "i:/common"
+			    "h:/common"
+			    "i:"
+			    "h:"
+			    "~/common"
+			    "/common"
+			    ;; this one for Oralux on my home machine
+			    "/mnt/hda5/common")))
+
+(unless
+    (find-main-directory
+     '("GATHERED" "library-files.el" ("/mnt/library"
+				      "/mnt/library/library"
+				      "/mnt/common/library"
+				      "h:/library"
+				      "i:/library"
+				      "j:/users/jcgs/library"
+				      "i:"
+				      "h:"
+				      "~/library"
+				      "/library"
+				      ;; this one for Oralux on my home machine
+				      "/mnt/hda6/users/jcgs/library"
+				      ;; this one for Fedora on my home machine
+				      "/mnt/share1/users/jcgs/library"
+				      )))
+  (unless (file-directory-p "~/library")
+    (make-directory "~/library"))
+  (setenv "GATHERED" (expand-file-name "~/library")))
+
+(setq source-directory (substitute-in-file-name "$GATHERED/source/emacs/emacs"))
+
+(defvar startup-load-directories
+  '("$COMMON/emacs/autoload"		; just lots of autoload stubs
+    "$COMMON/emacs/general-setups"
+    "$COMMON/emacs/mode-setups"	; these will typically trigger autoloads
+    "$COMMON/emacs/startup"	; assorted things to start
+    ;; vr works OK this far
+    "$COMMON/emacs/patches"	; functions I replace
+    "$COMMON/var/emacsrestore"	; re-load saved state
+    )
+  "Directories to load on startup.")
+
+(defvar jcgs-load-path-directories
+  '("$COMMON/emacs"		     ; general "stuff", some of it for
+					; autoloading, will come in from here
+    "$COMMON/emacs/editing"
+    "$COMMON/emacs/elisp-dev-tools"
+    "$COMMON/emacs/requirable-setups"
+    "$COMMON/emacs/file-handling"
+    "$COMMON/emacs/misc"
+    "$COMMON/emacs/data-structures"
+    "$COMMON/emacs/email"
+    "$COMMON/emacs/playpen"	      ; stuff I'm still tinkering with
+    "$COMMON/emacs/persistence"
+    "$COMMON/emacs/appearance"
+    "$COMMON/emacs/well-being"
+    "$COMMON/csis-www/research-elisp"
+    "$COMMON/open-projects/emacs-versor/lisp/"
+    "$COMMON/projects/focloir"
+    "$COMMON/emacs/my-extensions-to-packages/emacspeak"
+    "$COMMON/emacs/games"
+    "$COMMON/emacs/graphics"
+    ;; This one has people's names for email sorting etc, that I
+    ;; don't want to publish as part of my emacs collection!
+    ;; ($COMMON/emacs and $COMMON/csis-www get copied onto my
+    ;; web site at intervals)
+    "$COMMON/emacs-non-public-setup" 
+    )
+  "Directories to put on my load path.")
+
+;; I would use load-directory here, except that here is where I load load-directory
+
+(let ((basics (substitute-in-file-name "$COMMON/emacs/basics")))
+  (mapcar (function (lambda (basic) (load-file (expand-file-name basic basics))))
+          '("version-patches.el"
+	    "host.el"
+            "add-lispdir.el"
+	    "use-package.el" ; aimed at mostly replacing add-lispdir and tidying up my config!
+            "modes.el"
+            "load-directory.el"
+            "startup-messages.el"
+            )))
+
+;; All these go onto my load-path for loading on demand either by autoload or by require
+
+(mapcar 'add-lispdir
+        (nreverse			; put the major ones at the top
+	 jcgs-load-path-directories))
+
+(load-file "$COMMON/emacs/host-setup.el")       ; further setup may depend on what this finds
+
+;; (defvar debug-arrow-setup-data nil)
+
+;; (defun debug-arrow-setup  (file)
+;;   (let ((keys (mapcar (lambda (key) (cons key (key-binding key)))
+;; 		      '([ backspace ] [ kp-left ] [ kp-right ] [ S-kp-right ] [ S-kp-left ] ))))
+;;     (if (not (equal keys debug-arrow-setup-data))
+;; 	(progn  (message "After loading file %S, arrows are %S"
+;; 			 file
+;; 			 keys)
+;; 		(setq debug-arrow-setup-data keys)))))
+
+;; (add-hook 'load-directory-post-load-file-hooks 'debug-arrow-setup)
+
+;; (defun save-messages (filename when)
+;;   (interactive)
+;;   (message "Saving *Messages* %s loading %s" filename when)
+;;   (save-excursion
+;;     (set-buffer "*Messages*")
+;;     (write-region (point-min) (point-max) "~/.messages")))
+
+;; (defun save-messages-before (filename) (save-messages filename "before"))
+;; (defun save-messages-after (filename) (save-messages filename "after"))
+
+;; (add-hook 'load-directory-pre-load-file-hooks 'save-messages-before)
+;; (add-hook 'load-directory-post-load-file-hooks 'save-messages-after)
+;; (add-hook 'restorebuffer-pre-restore-hooks 'save-messages-before)
+
+;;;; This is the main part of my initialization:
+
+(mapcar 'load-directory startup-load-directories)
+
+(when nil
+  (save-excursion
+    (mapcar (lambda (buffer)
+	      (set-buffer buffer)
+	      (if (eq major-mode 'emacs-lisp-mode)
+		  (message "checking buffer variables for %s(%s), default-directory=%s, set generated-autoload-file to %s" 
+			   (buffer-name) (buffer-file-name) default-directory generated-autoload-file)))
+	    (buffer-list))))
+
+(preserve-startup-messages)
+
+(setq stack-trace-on-error nil
+      message-log-max 2048)
+  
+(switch-to-buffer "*scratch*")
+(delete-other-windows)
+
+(message "Emacs is ready")
+
+;;; end of $COMMON/emacs/.emacs

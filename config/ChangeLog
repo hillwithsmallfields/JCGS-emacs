@@ -1,0 +1,10 @@
+2008-12-02  John Sturdy  <john.sturdy@ul.ie>
+
+	* config-international.el (quail-show-keyboard-layout-compactly):
+	colour in the keys for each hand differently
+
+2008-01-23  John Sturdy  <jcgs@ezekiel.csis.ul.ie>
+
+	* use-vm.el (vm): add autoload for js-vm-get-mail
+	
+

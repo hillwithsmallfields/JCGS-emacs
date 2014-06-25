@@ -1,0 +1,7 @@
+2007-07-15  John C G Sturdy  <jcgs@hosea>
+
+	* use-package.el (do-autofetch): wrote beginnings of an autofetch
+	(like autoload, but will eventually fetch stuff across the
+	internet).
+	
+

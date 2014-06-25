@@ -1,0 +1,278 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename use-package.info
+@settitle use-package manual
+@direntry
+* use-package::			Install and configure packages
+@end direntry
+@iftex
+@finalout
+@afourpaper
+@end iftex
+@c %**end of header
+@titlepage
+@sp 10
+@title{use-package}
+@subtitle{Package downloading and configuration}
+@author{by J. C. G. Sturdy}
+@c The following two commands start the copyright page.
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2005, 2006, 2007 John C. G. Sturdy
+
+Published by John C. G. Sturdy.
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+@end titlepage
+
+@node Top, Usage, (dir), (dir)
+@top use-package
+
+use-package is an Emacs-Lisp package for installing and configuring
+other Emacs-Lisp packages.  It lets you specify in one place:
+@itemize
+@item
+How to get and install the package
+@item
+How to configure the package
+@end itemize
+
+use-package will check whether you have the specified package installed,
+and if not, will arrange for it to be fetched and installed on demand
+(like a remote version of `autoload' -- we call it `autofetch').  If it
+is already installed, use-package arranges for it to be loaded by
+`autoload' -- or immediately if wanted.
+
+When the package is loaded, the specified configuration for it is run.
+
+@menu
+* Usage::                   Parameters etc
+* Variables::               Configuration use-package itself
+* Hints::                   Suggestions for use
+* Examples::                Examples for commonly-downloaded packages
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Usage
+
+* Package Name::                The `package' argument
+* Lisp Directory::              The `lisp-directory' argument
+* Getter::                      The `getter' argument
+* Configuration::               The `configuration' argument
+* Init Forms::                  The init forms
+
+Configuration
+
+
+@end detailmenu
+@end menu
+
+@node Usage, Variables, Top, Top
+@comment  node-name,  next,  previous,  up
+@chapter Usage
+
+@lisp
+use-package (package
+             lisp-directory
+             getter
+             configuration
+             &rest init-forms)
+@end lisp
+Arrange use of PACKAGE in LISP-DIRECTORY. Get it with GETTER if needed.
+
+@menu
+* Package Name::                The `package' argument
+* Lisp Directory::              The `lisp-directory' argument
+* Getter::                      The `getter' argument
+* Configuration::               The `configuration' argument
+* Init Forms::                  The init forms
+@end menu
+
+
+@node Package Name, Lisp Directory, Usage, Usage
+@comment  node-name,  next,  previous,  up
+@section Package Name
+
+PACKAGE should be the name of a feature (as in `provide' and `require').
+@c todo: xref provide and require to emacs manual
+
+@node Lisp Directory, Getter, Package Name, Usage
+@comment  node-name,  next,  previous,  up
+@section Lisp Directory
+
+LISP-DIRECTORY should be the directory in which the package is expected
+to be found, and into which it should be downloaded if not found.
+
+Alternatively, it may be `t', indicating that it is part of the Emacs
+distribution.  If it is a directory, it is processed using
+`substitute-in-file-name', allowing you to set up an area for downloaded
+Lisp, that is different on different machines you use.  It may also be
+`nil', in which case `downloaded-emacs-directory' is used if non-nil,
+otherwise `user-emacs-directory' (by default @file{~/emacs.d/}) is used.
+@c todo: xrefs
+
+The files may be in a subdirectory of LISP-DIRECTORY, and use-package
+will find them for you.  This is necessary because when you unpack a
+tarball, the files you need will not necessarily be at the top level.
+
+You can redefine the function 'use-package-preferable-subdirectory' to
+control how it chooses the subdirectory if there are several containing
+the file.
+
+@node Getter, Configuration, Lisp Directory, Usage
+@comment  node-name,  next,  previous,  up
+@section Getter
+
+If the package is not present, GETTER describes how to get it.
+
+GETTER can be any one of:
+@itemize
+@item
+a URL
+@item
+a function to run
+@item
+
+a list of:
+
+a URL (or a list of URLs to try in that order)
+
+and
+
+a function to run with that URL and LISP-DIRECTORY as its arguments
+
+An optional third element is a form to evaluated after unpacking; if you
+want to give this, but no getter function, give nil for the getter
+function; this form is run with `default-directory' bound to the
+directory in which the file was unpacked
+
+@item
+
+`nil', indicating that the package is not expected to be fetched; for
+example, it might be part of the Emacs distribution
+
+@end itemize
+  
+See `use-package-download-path' for more about getting the file.
+
+@node Configuration, Init Forms, Getter, Usage
+@comment  node-name,  next,  previous,  up
+@section Configuration
+
+CONFIGURATION indicates the use of the package: it is a list of
+various types of element, many of them lists or pairs. The types
+of these elements determine what is done with them.
+
+@menu
+* Auto-Modes::                Adding to auto-mode-alist
+* Autoloads::                 Creating autoloads
+* Load-path directories::     Adding to the load-path
+* Immediate loading::         Loading now rather than on demand
+* Requiring other packages::  Getting auxiliary packages loaded
+* Hooks::                     Setting up hooks
+* Key bindings::              Binding keys
+@end menu
+
+@node Auto-Modes, Autoloads, Configuration, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Auto-Modes
+
+If an element is a pair of string and a function symbol whose name ends
+in \"-mode\", it is added to `auto-mode-alist'. This is done
+immediately.
+
+@node Autoloads, Load-path directories, Auto-Modes, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Autoloads
+
+If an element is a list beginning with a symbol and a string, it is used
+as an autoload definition if the package is already in the specified
+directory, and an autofetch definition otherwise. This is done
+immediately.
+
+If the package has not been fetched yet, `autofetch' is used instead of
+autoload.
+
+@node Load-path directories, Immediate loading, Autoloads, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Load-path directories
+
+If an element is a string, it is passed through
+`substitute-in-file-name' and added to `load-path'. This is done
+immediately.  It is also passed through `expand-file-name' with the
+actual Lisp directory as the directory argument, so if the name is
+relative, it is taken relative to that directory.
+
+@node Immediate loading,  Requiring other packages, Load-path directories, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Immediate loading
+
+If an element is `t', the package will be loaded immediately, rather
+than autoloaded.
+
+@node Requiring other packages, Hooks, Immediate loading, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Requiring other packages
+
+If an element is a list of symbols, and the first is `require', the rest
+of the symbols are required. This is done when the package is loaded, or
+immediately if it has already been loaded (see `eval-after-load').
+
+@node Hooks, Key bindings, Requiring other packages, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Hooks
+
+If an element is a pair of two symbols, the first is taken as the name
+of a hook, and the second as a function to put on that hook. This is
+done immediately; you may want to make that function also be autoloaded,
+which you can do from this configuration list (see above).
+
+@node Key bindings,  , Hooks, Configuration
+@comment  node-name,  next,  previous,  up
+
+@subsection Key bindings
+
+If an element is a pair of a vector and a symbol (which should name a
+command, that is, an interactive function), `global-set-key' is done on
+them. This is done immediately. You may want to make that function also
+be autoloaded, which you can do from this configuration list (see
+above).
+
+@node Init Forms,  , Configuration, Usage
+@comment  node-name,  next,  previous,  up
+@section Init Forms
+  
+Remaining arguments INIT-FORMS are used as initialization forms
+by passing them to `eval-after-load'. These are done when the
+package is loaded, or immediately if it has already been
+loaded (see `eval-after-load').
+
+See `use-package-only-these', `use-package-skip-these' and
+`use-package-check-function' for ways to load packages
+selectively.
+
+@node Variables, Hints, Usage, Top
+@comment  node-name,  next,  previous,  up
+@chapter Variables
+
+Variables, customization
+
+@node Hints, Examples, Variables, Top
+@comment  node-name,  next,  previous,  up
+@chapter Hints
+
+Hints on effective use
+
+@node Examples,  , Hints, Top
+@comment  node-name,  next,  previous,  up
+
+@chapter Examples
