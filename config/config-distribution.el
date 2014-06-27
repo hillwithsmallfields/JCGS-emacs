@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-06-23 11:51:53 johstu01>
+;;; Time-stamp: <2014-06-26 15:18:17 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -542,9 +542,10 @@ Remaining SUB-DIRECTORIES are used to complete the filename."
 	      "\r"
 	      (function
 	       (lambda ()
-		 (interactive)
-		 (let ((inhibit-read-only t))
-		   (comint-send-input)))))))
+	    	 (interactive)
+	    	 (let ((inhibit-read-only t))
+	    	   (comint-send-input)))))
+	    ))
 
 ;;;; Comint
 
@@ -554,6 +555,8 @@ Remaining SUB-DIRECTORIES are used to complete the filename."
       shell-prompt-pattern "^[a-z0-9]+@[.a-z0-9]+:.+\\$"
       comint-prompt-read-only t
       )
+
+;; (unless (string-match "Password for" comint-password-prompt-regexp))
 
 (defun comint-fix-ssh-known-hosts ()
   "Look for an \"offending key\" message, and fix the file, and retry."
