@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-06-25 17:23:42 johstu01>
+;;; Time-stamp: <2014-06-26 10:51:16 johstu01>
 
 (require 'org)
 
@@ -73,7 +73,7 @@ changed." t)
       org-refile-use-outline-path 'full-file-path
       org-outline-path-complete-in-steps t
       org-timer-default-timer 25
-      org-clock-idle-time 5
+      org-clock-idle-time 26
       org-enforce-todo-dependencies t
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
@@ -89,6 +89,14 @@ changed." t)
 	  (org-todo "OPEN"))))))
 
 (add-hook 'org-clock-in-prepare-hook 'jcgs/org-clock-in-prepare-function)
+
+;; TODO: make this stop my pomodoro timer
+;; TODO: probably it should be in the pomodoro code rather than this hook
+;; (defun jcgs/org-clock-out-function ()
+;;   "My customization of task clock-out."
+;;   (org-timer-stop))
+
+;; (add-hook 'org-clock-out-hook 'jcgs/org-clock-out-function)
 
 (global-set-key "\C-cn" 'org-capture)
 
