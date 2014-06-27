@@ -118,12 +118,12 @@
 ;; Tags ;;
 ;;;;;;;;;;
 
-(add-lispdir "$EMACS/file-handling/")
+(add-lispdir (expand-file-name "file-handling" user-emacs-directory))
 
 (autoload 'find-tag-with-hooks "tags-with-hooks")
 
 (setq tags-file-name nil
-      tags-table-list (list (substitute-in-file-name "$EMACS/tags")
+      tags-table-list (list (substitute-in-file-name (expand-file-name "tags" user-emacs-directory))
 			    (substitute-in-file-name "$GATHERED/emacs/tags")
 			    (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/tags")))
 

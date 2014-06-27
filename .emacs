@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-06-23 10:40:45 johstu01>
+;;; Time-stamp: <2014-06-27 15:49:34 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
@@ -30,9 +30,23 @@
       print-length 2048 eval-expression-print-length 2048
       print-level 128 eval-expression-print-level 128
       inhibit-startup-message t
-      use-package-verbose t
-      user-emacs-directory (substitute-in-file-name "$EMACS")
-      )
+      use-package-verbose t)
+
+(when (or (not (stringp user-emacs-directory))
+	  (not (file-directory-p user-emacs-directory))
+	  (not (file-directory-p
+		(expand-file-name "basics" user-emacs-directory))))
+  (message "user-emacs-directory was initially %s, trying expanding $EMACS"
+	   user-emacs-directory)
+  (setq user-emacs-directory (substitute-in-file-name "$EMACS/")))
+
+(when (or (not (stringp user-emacs-directory))
+	  (not (file-directory-p user-emacs-directory))
+	  (not (file-directory-p
+		(expand-file-name "basics" user-emacs-directory))))
+  (message "user-emacs-directory from $EMACS not satisfactory (%S), trying $HOME/JCGS-emacs/"
+	   user-emacs-directory)
+  (setq user-emacs-directory (substitute-in-file-name "$HOME/JCGS-emacs/")))
 
 (message "user-emacs-directory is %S" user-emacs-directory)
 
@@ -102,22 +116,6 @@ This should be a list of three parts:
 	  (message "Could not find directory for %S" dirname)
 	  nil)))))
 
-(find-main-directory
- '("EMACS" "emacs/.emacs" ("~/common"
-			   "/mnt/common/common"
-			   "/mnt/common"
-			   "/mnt/usbmem/common"
-			   "/media/disk/common"
-			   ;; one for oralux
-			   "/mnt/sdb1/common"
-			   "i:/common"
-			   "h:/common"
-			   "i:"
-			   "h:"
-			   "/common"
-			   ;; this one for Oralux on my home machine
-			   "/mnt/hda5/common")))
-
 (unless
     (find-main-directory
      '("GATHERED" "library-files.el" ("~/library"
@@ -140,8 +138,8 @@ This should be a list of three parts:
     (make-directory "~/library"))
   (setenv "GATHERED" (expand-file-name "~/library")))
 
-(setq source-directory (substitute-in-file-name "$GATHERED/source/emacs/emacs")
-      downloaded-emacs-directory (substitute-in-file-name "~/downloaded/"))
+;; (setq source-directory (substitute-in-file-name "~/build/emacs/source/emacs/emacs")
+;;       downloaded-emacs-directory (substitute-in-file-name "~/downloaded/"))
 
 ;;;; Load experimental patches (do them now, in case they patch the
 ;;;; loading of other things):
@@ -197,44 +195,59 @@ This should be a list of three parts:
 
 ;;;###include config
 ;;;###if nil
-(if t
+(if nil
     (load-directory (expand-file-name "config" user-emacs-directory) t)
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-distribution.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-calendar-diary.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-elisp-devel.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-gud.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-international.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-misc.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/config-windows.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/jcgs-bindings.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/new-files.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-auctex.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-bbdb.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-color-theme.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-contexts.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-csv.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-doremi.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-duinnin.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-emms.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-generic-text.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-html-helper-mode.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-http-get.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-icicles.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-journal.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-misc.el")
-  ;; (load-file "/home/jcgs/Dropbox/emacs/config/use-mulvoc.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-muse.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-planner.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-psgml.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-ratpoison.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-removable-media.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-timeclock.el")
-  (load-file "/home/jcgs/Dropbox/emacs/config/use-type-break.el")
-  ;; (load-file "/home/jcgs/Dropbox/emacs/config/use-versor.el")
-  ;; (load-file "/home/jcgs/Dropbox/emacs/config/use-vm.el")
-  ;; (load-file "/home/jcgs/Dropbox/emacs/config/use-voice-input.el")
-  ;; (load-file "/home/jcgs/Dropbox/emacs/config/use-w3.el")
-  )
+  (let ((config-dir (expand-file-name "config" user-emacs-directory)))
+    (dolist (elfile '("config-calendar-diary"
+		    "config-distribution"
+		    "config-elisp-devel"
+		    "config-from-emacswiki"
+		    "config-gud"
+		    "config-international"
+		    "config-laptop"
+		    "config-misc"
+		    "config-org-mode"
+		    "config-personal"
+		    "config-proglang-modes"
+		    "config-projects"
+		    "config-ps-print"
+		    "config-ratpoison"
+		    "config-slime"
+		    "config-windows"
+		    "jcgs-bindings"
+		    "new-files"
+		    "use-auctex"
+		    "use-bbdb"
+		    "use-color-theme"
+		    "use-contexts"
+		    "use-csv"
+		    "use-doremi"
+		    ;; "use-duinnin"
+		    ;; "use-emms"
+		    "use-flashcard"
+		    "use-generic-text"
+		    "use-html-helper-mode"
+		    "use-http-get"
+		    "use-icicles"
+		    "use-journal"
+		    "use-magit"
+		    "use-misc"
+		    "use-mulvoc"
+		    "use-muse"
+		    "use-planner"
+		    "use-psgml"
+		    "use-ratpoison"
+		    "use-removable-media"
+		    "use-timeclock"
+		    "use-type-break"
+		    "use-versor"
+		    "use-vm"
+		    "use-voice-input"
+		    "use-w3"
+		    "values-vm-archive"))
+    (load-file (expand-file-name (format "%s.el" elfile)
+				 config-dir))
+  )))
 ;;;###endif
 
 (message "after loading config, load-path=%S" load-path)

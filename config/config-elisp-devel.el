@@ -10,8 +10,7 @@
 
 ;; This file is NOT part of GNU Emacs.
 
-(setq user-emacs-directory (substitute-in-file-name "$EMACS/")
-      downloaded-emacs-directory (substitute-in-file-name "~/downloaded/emacs/")
+(setq downloaded-emacs-directory (substitute-in-file-name "~/downloaded/emacs/")
       source-annotations-directory (file-truename
 				    (substitute-in-file-name "$COMMON/www/computing/emacs")))
 

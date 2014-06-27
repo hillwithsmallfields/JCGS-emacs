@@ -8,11 +8,11 @@
 			    (concat (getenv "EMACS")
 				    "/")))
 
-(load-file (substitute-in-file-name "$EMACS/config/config-org-mode.el"))
+(load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
 (message "org-agenda-files is %S" org-agenda-files)
-(load-file (substitute-in-file-name "$EMACS/config/config-calendar-diary.el"))
+(load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
 
-(find-file (substitute-in-file-name "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
+(find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
 (if (at-work)
     (progn
