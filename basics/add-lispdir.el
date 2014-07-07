@@ -1,4 +1,4 @@
-;;; Time-stamp: <2006-01-26 11:48:38 john>
+;;; Time-stamp: <2014-07-07 11:16:40 johstu01>
 ;; add a directory to the emacs load path
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -18,13 +18,14 @@
 (provide 'add-lispdir)
 
 (defun add-lispdir (lispdir &optional url unpacker)
-  "If it exists, add lisp directory LISPDIR to load-path.
+  "If it exists, add Lisp directory LISPDIR to `load-path'.
 If the directory contains any .info files, add it to Info-directory-list too.
 
 If it does not exist, and an optional second argument URL is given and
 names a reachable resource, create the directory and populate it from
-the URL target (and then add it to load-path). A further optional
-argument is a form or function to run to do the unpacking."
+the URL target (and then add it to `load-path').  A further optional
+argument is a form or function to run to do the unpacking.
+Optional argument UNPACKER is how to unpack it."
   (interactive "DAdd directory to path: ")
   (setq lispdir (expand-file-name (substitute-in-file-name lispdir)))
   (if (file-directory-p lispdir)
@@ -35,7 +36,7 @@ argument is a form or function to run to do the unpacking."
 	      (add-to-list 'Info-directory-list lispdir)))
     (if (and (stringp url))
 	(let* (file host protocol)
-	  (message "Setting up %s from %s" lispdir url) 
+	  (message "Setting up %s from %s" lispdir url)
 	  (cond
 	   ((string-match "^/\\([-.a-z0-9]+\\):\\(.+\\)$" url)
 	    (setq file (match-string 3 url)
@@ -50,5 +51,14 @@ argument is a form or function to run to do the unpacking."
 	    (message "Don't know how to fetch %s" url)))
 	  )
       (message "Warning: %s is not a directory; not adding to load-path" lispdir))))
+
+(defun add-tree-to-load-path (dir)
+  "Add DIR and any directories below it to `load-path'."
+  (message "Recursively adding %S to load-path" dir)
+  (add-to-list 'load-path dir)
+  (dolist (file (directory-files dir))
+    (when (and (file-directory-p file)
+	       (not (member file '("." ".." ".git"))))
+      (add-tree-to-load-path (expand-file-name file dir)))))
 
 ;;; end of add-lispdir.el
