@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2014-06-24 12:11:01 johstu01>
+;;; Time-stamp: <2014-07-01 10:47:28 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -13,6 +13,8 @@
 ;;;;;;;;;;;;
 ;; c-mode ;;
 ;;;;;;;;;;;;
+
+(message "Setting up c-mode")
 
 (defun jcgs-c-mode-hook ()
   "My hook for setting up C mode."
@@ -33,6 +35,8 @@
 ;;;;;;;;;;;;;;;
 ;; perl-mode ;;
 ;;;;;;;;;;;;;;;
+
+(message "Setting up perl-mode")
 
 (defun jcgs/perl-mode-hook ()
   "My hook for setting up perl mode."
@@ -59,6 +63,8 @@
 ;;;;;;;;;;;;;;;;;
 ;; python-mode ;;
 ;;;;;;;;;;;;;;;;;
+
+(message "Setting up python-mode")
 
 (defun jcgs/python-mode-hook ()
   "My hook for setting up python mode."
@@ -106,6 +112,8 @@
 ;; go-mode ;;
 ;;;;;;;;;;;;;
 
+(message "Setting up go-mode")
+
 (when (file-directory-p "/usr/local/go")
   (add-to-list 'load-path "/usr/local/go/misc/emacs/")
   (require 'go-mode-load))
@@ -117,6 +125,8 @@
 ;;;;;;;;;;
 ;; Tags ;;
 ;;;;;;;;;;
+
+(message "Setting up tags")
 
 (add-lispdir (expand-file-name "file-handling" user-emacs-directory))
 
@@ -136,6 +146,8 @@
 ;;;;;;;;;;;;;;;;;
 ;; Change logs ;;
 ;;;;;;;;;;;;;;;;;
+
+(message "Setting up change logs")
 
 (setq change-log-default-name "../ChangeLog")
 
