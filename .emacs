@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-06-27 15:49:34 johstu01>
+;;; Time-stamp: <2014-07-07 11:10:09 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
@@ -23,6 +23,8 @@
 ;;; you can carry around a single file which will haul the rest of
 ;;; your setup over the net on demand.
 
+(message "Loading setup from %S" load-file-name)
+
 ;;;; First things first:
 (setq stack-trace-on-error t
       message-log-max t
@@ -32,21 +34,21 @@
       inhibit-startup-message t
       use-package-verbose t)
 
-(when (or (not (stringp user-emacs-directory))
-	  (not (file-directory-p user-emacs-directory))
-	  (not (file-directory-p
-		(expand-file-name "basics" user-emacs-directory))))
-  (message "user-emacs-directory was initially %s, trying expanding $EMACS"
-	   user-emacs-directory)
-  (setq user-emacs-directory (substitute-in-file-name "$EMACS/")))
+(unless (and (stringp user-emacs-directory)
+	     (file-directory-p user-emacs-directory)
+	     (file-directory-p
+	      (expand-file-name "basics" user-emacs-directory)))
+  (setq user-emacs-directory
+	(catch 'found
+	  (dolist (raw-dir '("$HOME/JCGS-emacs" "/work/johstu01/JCGS-emacs"))
+	    (let ((dir (substitute-in-file-name raw-dir)))
+	      (when (and (stringp dir)
+			 (file-directory-p dir)
+			 (file-directory-p
+			  (expand-file-name "basics" dir)))
+		(throw 'found dir)))))))
 
-(when (or (not (stringp user-emacs-directory))
-	  (not (file-directory-p user-emacs-directory))
-	  (not (file-directory-p
-		(expand-file-name "basics" user-emacs-directory))))
-  (message "user-emacs-directory from $EMACS not satisfactory (%S), trying $HOME/JCGS-emacs/"
-	   user-emacs-directory)
-  (setq user-emacs-directory (substitute-in-file-name "$HOME/JCGS-emacs/")))
+(add-to-list 'load-path user-emacs-directory)
 
 (message "user-emacs-directory is %S" user-emacs-directory)
 
@@ -120,8 +122,7 @@ This should be a list of three parts:
     (find-main-directory
      '("GATHERED" "library-files.el" ("~/library"
 				      "/mnt/library"
-				      "/mnt/library/library"
-				      "/mnt/common/library"
+				      "/work/johstu01/library"
 				      "/media/disk/library"
 				      "h:/library"
 				      "i:/library"
@@ -175,6 +176,8 @@ This should be a list of three parts:
             )))
 ;;;###endif
 
+(add-tree-to-load-path user-emacs-directory)
+
 (setq use-package-skip-these nil)
 
 ;; (add-to-list 'use-package-skip-these 'vr-mode)
@@ -199,55 +202,57 @@ This should be a list of three parts:
     (load-directory (expand-file-name "config" user-emacs-directory) t)
   (let ((config-dir (expand-file-name "config" user-emacs-directory)))
     (dolist (elfile '("config-calendar-diary"
-		    "config-distribution"
-		    "config-elisp-devel"
-		    "config-from-emacswiki"
-		    "config-gud"
-		    "config-international"
-		    "config-laptop"
-		    "config-misc"
-		    "config-org-mode"
-		    "config-personal"
-		    "config-proglang-modes"
-		    "config-projects"
-		    "config-ps-print"
-		    "config-ratpoison"
-		    "config-slime"
-		    "config-windows"
-		    "jcgs-bindings"
-		    "new-files"
-		    "use-auctex"
-		    "use-bbdb"
-		    "use-color-theme"
-		    "use-contexts"
-		    "use-csv"
-		    "use-doremi"
-		    ;; "use-duinnin"
-		    ;; "use-emms"
-		    "use-flashcard"
-		    "use-generic-text"
-		    "use-html-helper-mode"
-		    "use-http-get"
-		    "use-icicles"
-		    "use-journal"
-		    "use-magit"
-		    "use-misc"
-		    "use-mulvoc"
-		    "use-muse"
-		    "use-planner"
-		    "use-psgml"
-		    "use-ratpoison"
-		    "use-removable-media"
-		    "use-timeclock"
-		    "use-type-break"
-		    "use-versor"
-		    "use-vm"
-		    "use-voice-input"
-		    "use-w3"
-		    "values-vm-archive"))
-    (load-file (expand-file-name (format "%s.el" elfile)
-				 config-dir))
-  )))
+		      "config-distribution"
+		      "config-elisp-devel"
+		      "config-from-emacswiki"
+		      "config-gud"
+		      "config-international"
+		      "config-laptop"
+		      "config-misc"
+		      "config-org-mode"
+		      "config-personal"
+		      "config-proglang-modes"
+		      "config-projects"
+		      "config-ps-print"
+		      "config-ratpoison"
+		      "config-slime"
+		      "config-windows"
+		      "jcgs-bindings"
+		      "new-files"
+		      "use-auctex"
+		      "use-bbdb"
+		      "use-color-theme"
+		      "use-contexts"
+		      "use-csv"
+		      "use-doremi"
+		      ;; "use-duinnin"
+		      "use-emms"
+		      "use-flashcard"
+		      "use-generic-text"
+		      "use-html-helper-mode"
+		      "use-http-get"
+		      "use-icicles"
+		      "use-journal"
+		      "use-magit"
+		      "use-misc"
+		      "use-mulvoc"
+		      "use-muse"
+		      "use-planner"
+		      "use-psgml"
+		      "use-ratpoison"
+		      "use-removable-media"
+		      "use-timeclock"
+		      "use-type-break"
+		      "use-versor"
+		      "use-vm"
+		      "use-voice-input"
+		      "use-w3"
+		      "values-vm-archive"))
+      (message "Loading config files individually: %s" elfile)
+      (load-file (expand-file-name (format "%s.el" elfile)
+				   config-dir))
+      (message "Loaded config file %s individually" elfile)
+      )))
 ;;;###endif
 
 (message "after loading config, load-path=%S" load-path)
