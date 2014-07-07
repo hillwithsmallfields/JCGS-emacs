@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2014-01-27 12:21:44 johnstu>
+;;; Time-stamp: <2014-07-04 16:19:40 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -157,6 +157,8 @@ Returns how many buffers it brought up." t)
   (global-set-key [   C-f3 ] 'kill-region)
   (global-set-key [   M-f3 ] 'yank)
   (global-set-key [ C-M-f3 ] 'delete-region)
+
+  (global-set-key [     f4 ] 'other-frame)
 
   (global-set-key [     f5 ] 'find-file-at-point)
   (global-set-key [   C-f5 ] 'find-file-at-point)
