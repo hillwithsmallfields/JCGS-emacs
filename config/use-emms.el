@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;;; Time-stamp: <2014-07-03 10:27:23 johstu01>
 
 (use-package emms
 	     "~/library/emacs/emms/emms-3.0/"
@@ -19,8 +19,7 @@ playlist."
 	     (emms-all)
 	     (emms-default-players)
 
-	     (setq emms-source-file-default-directory "~/music"
-		   emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find
+	     (setq emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find
 		   ;; emms-player-ogg123-parameters (if (file-exists-p "/dev/audio1")
 		   ;; 						     (list "-o" "dev:plughw:1,0")
 		   ;; 						   nil)
@@ -30,8 +29,16 @@ playlist."
 
 	     (when (file-directory-p emms-source-file-default-directory)
 	       (emms-add-directory-tree emms-source-file-default-directory))
-	     (when (file-directory-p "~/language-audio/")
+	     (cond
+	      ((file-directory-p "~/music")
+	       (emms-add-directory-tree "~/music"))
+	      ((file-directory-p "/work/johstu01/music")
+	       (emms-add-directory-tree "~/music")))
+	     (cond
+	      ((file-directory-p "~/language-audio/")
 	       (emms-add-directory-tree "~/language-audio/"))
+	      ((file-directory-p "/work/johstu01/language-audio/")
+	       (emms-add-directory-tree "~/language-audio/")))
 	     (emms-mode-line 1)
 	     (emms-lyrics 1)
 	     (setq emms-lyrics-display-on-minibuffer t
