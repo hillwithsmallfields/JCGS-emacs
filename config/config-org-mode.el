@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-06-30 12:19:45 johstu01>
+;;; Time-stamp: <2014-07-15 14:46:52 johstu01>
 
 (require 'org)
 
@@ -82,13 +82,35 @@ changed." t)
 (defun jcgs/org-clock-in-prepare-function ()
   "My customization of task clock-in."
   (save-excursion
-    (outline-up-heading 1)
-    (when (looking-at org-complex-heading-regexp)
-      (let ((state (match-string-no-properties 2)))
-	(when (equal state "TODO")
-	  (org-todo "OPEN"))))))
+    (while (> (funcall outline-level) 1)
+      (outline-up-heading 1)
+      (when (looking-at org-complex-heading-regexp)
+	(let ((state (match-string-no-properties 2)))
+	  (when (equal state "TODO")
+	    (org-todo "OPEN")))))))
 
 (add-hook 'org-clock-in-prepare-hook 'jcgs/org-clock-in-prepare-function)
+
+(defun jcgs/org-after-todo-state-change-function ()
+  "My customizations for state change.
+When the last of a set of sibling tasks is marked as DONE,
+mark the ancestral tasks as DONE."
+  (while (> (funcall outline-level) 1)
+    (outline-up-heading 1)
+    (let ((not-all-done nil)
+	  (on-first t))
+      (org-map-entries
+       (lambda ()
+	 (when (and (not on-first)
+		    (org-entry-is-todo-p))
+	   (setq not-all-done t))
+	 (setq on-first nil))
+       nil
+       'tree)
+      (unless not-all-done
+	(org-todo "DONE")))))
+
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-function t)
 
 ;; TODO: make this stop my pomodoro timer
 ;; TODO: probably it should be in the pomodoro code rather than this hook
