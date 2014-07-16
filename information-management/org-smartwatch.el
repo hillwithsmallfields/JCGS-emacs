@@ -27,15 +27,21 @@
 
 (defun org-smartwatch-extra-headings (a b)
   "Return a list of headings that have to be added to get to A from B."
-  (cond
-   ((> (length a) (length b))
-    ;; todo: put depth numbers on them
-    (last a (- (length a) (length b))))
-   ((= (length a) (length b))
-    ;; todo: perhaps this should add all the elements that are different --- what user-visible results do we want?
-    ;; todo: put depth numbers on them
-    (last a))
-   ))
+  (if (>= (length a) (length b))
+      (let ((d 1)
+	    (r nil))
+	(while (and a b (equal (car a) (car b)))
+	  (setq a (cdr a)
+		b (cdr b)
+		d (1+ d)))
+	(message "extra headings: %S" a)
+	(while a
+	  (push (format "%d %s" d (car a)) r)
+	  (message "extra step: %S" (car r))
+	  (setq d (1+ d)
+		a (cdr a)))
+	r)
+    nil))
 
 (defun org-smartwatch-today ()
   "Create a smartwatch-friendly buffer for today."
@@ -68,7 +74,9 @@
 	(message "placing %S" entry)
 	(push (format "%d %s"
 		      (length (cdr entry))
-		      (car entry)) lines)
+		      (car entry))
+	      lines)
+	(message "old path %S, new path %S" prev-path (cdr entry))
 	(unless (equal (cdr entry) prev-path)
 	  (setq lines (append (org-smartwatch-extra-headings (cdr entry) prev-path)
 			      lines)))
