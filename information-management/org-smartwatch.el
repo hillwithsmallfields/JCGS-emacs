@@ -34,55 +34,76 @@
 	  (setq a (cdr a)
 		b (cdr b)
 		d (1+ d)))
-	(message "extra headings: %S" a)
+	;; (message "extra headings: %S" a)
 	(while a
-	  (push (format "%d %s" d (car a)) r)
-	  (message "extra step: %S" (car r))
+	  (push (format "%d. %s" d (car a)) r)
+	  ;; (message "extra step: %S" (car r))
 	  (setq d (1+ d)
 		a (cdr a)))
 	r)
     nil))
 
-(defun org-smartwatch-today ()
-  "Create a smartwatch-friendly buffer for today."
+(defun org-smartwatch-today (&optional buffer)
+  "Create a smartwatch-friendly BUFFER for today."
   (interactive)
-  (let ((entries (apply 'append
-			(mapcar
-			 (lambda (file)
-			   (org-check-agenda-file file)
-			   (when (file-exists-p file)
-			     (let ((entries (org-agenda-get-day-entries file (calendar-current-date))))
-			       (if entries
-				   (mapcar (lambda (e)
-					     (let* ((location  (get-text-property 0 'org-hd-marker e))
-						    (path (save-excursion
-							    (set-buffer (marker-buffer location))
-							    (goto-char (marker-position location))
-							    (org-get-outline-path))))
-					       (message "%s is at %s and has path %S" e location path)
-					       ;; todo: strip down to just the state and the action text
-					       (set-text-properties 0 (length e) nil e)
-					       (cons e
-						     (cons (file-name-sans-extension (file-name-nondirectory file))
-							   path))))
-					   entries)
-				 nil))))
-			 org-agenda-files))))
+  ;; Make the list of entries, representing each entry as a list of
+  ;; strings, of which the first is the entry itself, and the rest the
+  ;; path of the entry, starting with the filename base and continuing
+  ;; with the headings from the top level down.
+  (let ((entries
+	 (apply 'append
+		(mapcar
+		 (lambda (file)
+		   (org-check-agenda-file file)
+		   (when (file-exists-p file)
+		     (let ((entries (org-agenda-get-day-entries
+				     file
+				     (calendar-current-date))))
+		       (mapcar (lambda (e)
+				 (let* ((location (get-text-property
+						   0 'org-hd-marker
+						   e))
+					(path (save-excursion
+						(set-buffer
+						 (marker-buffer location))
+						(goto-char
+						 (marker-position location))
+						(org-get-outline-path))))
+				   ;; (message "%s is at %s and has path %S" e location path)
+				   ;; todo: strip down to just the state and the action text
+				   (set-text-properties 0 (length e) nil e)
+				   (cons e
+					 (cons (file-name-sans-extension
+						(file-name-nondirectory file))
+					       path))))
+			       entries))))
+		 org-agenda-files))))
+    ;; Run through the list of entries, putting in headings whenever
+    ;; the current heading changes.  The result is a buffer of lines
+    ;; where each line begins with a depth number, followed by a colon
+    ;; (if an entry) or a dot (if a heading), then a space, then the
+    ;; entry or heading itself.
     (let ((lines nil)
 	  (prev-path nil))
       (dolist (entry entries)
-	(message "placing %S" entry)
-	(push (format "%d %s"
-		      (length (cdr entry))
+	;; (message "placing %S" entry)
+	;; (message "old path %S, new path %S" prev-path (cdr entry))
+	(unless (equal (cdr entry) prev-path)
+	  (let ((extra  (org-smartwatch-extra-headings (cdr entry) prev-path)))
+	    ;; (message "extra is %S" extra)
+	    (setq lines (append extra
+			      lines))))
+	;; (message "adding text of %S" (car entry))
+	(push (format "%d: %s"
+		      (1+ (length (cdr entry)))
 		      (car entry))
 	      lines)
-	(message "old path %S, new path %S" prev-path (cdr entry))
-	(unless (equal (cdr entry) prev-path)
-	  (setq lines (append (org-smartwatch-extra-headings (cdr entry) prev-path)
-			      lines)))
+
 	(setq prev-path (cdr entry)))
+      ;; (message "Unreversed lines is %S" lines)
       (setq lines (nreverse lines))
-      (set-buffer (get-buffer-create "*Today's agenda outline*"))
+      ;; (message "Reversed lines is %S" lines)
+      (set-buffer (get-buffer-create (or buffer "*Today's agenda outline*")))
       (erase-buffer)
       (dolist (line lines)
 	(insert line "\n"))
