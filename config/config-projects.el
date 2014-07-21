@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-06-23 11:11:40 johstu01>
+;;; Time-stamp: <2014-07-17 11:00:43 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -32,7 +32,7 @@
 		  ;; "make clean; ./configure; make\n"
 		  )
 
-(when (string-match "hosea\\|ezra" (system-name))
+(unless (at-work)
   (make-named-shell "-gos-"
 		    "$OPEN_PROJECTS/gos/"
 		    ;; "make clean; ./configure; make\n"
@@ -47,5 +47,11 @@
 		      ;; "latex last-khan.tex\n"
 		      ))
   )
+
+(when (at-work)
+  (let ((login-host (format "login%d.euhpc.arm.com" (1+ (random 7)))))
+    (make-named-shell (format "=%s=" login-host)
+		      "~"
+		      (format "echo ssh %s" login-host))))
 
 ;;; config-projects.el ends here
