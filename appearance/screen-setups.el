@@ -1,5 +1,5 @@
 ;;;; use bundled sets of font and dimensions
-;;; Time-stamp: <2012-11-16 13:46:23 johnstu>
+;;; Time-stamp: <2014-07-15 16:57:34 johstu01>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -65,6 +65,8 @@
     ("small lucida" "-*-lucidatypewriter-*-*-*-*-8-*-*-*-*-*-*-*" 249 102)
     ("small fixed" "-*-fixed-*-r-*-*-8-*-*-*-*-*-*-*" 249 127)
     ("largish lucida" "-*-lucidatypewriter-medium-r-*-*-18-*-*-*-m-*-*-*" 113 53)
+    (clean "-*-clean-medium-r-*-*-12-*-*-*-*-*-iso8859-*" 303 105)
+    ("courier etc" "-*-*-medium-r-*-*-17-*-*-*-m-*-iso8859-*" 181 36)
     )
   "Some bundled named lists of font, frame width, frame height.
 These are meant as pre-packaged frame setups, to be set appropriately
