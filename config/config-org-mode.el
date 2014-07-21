@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-07-15 14:46:52 johstu01>
+;;; Time-stamp: <2014-07-16 11:08:29 johstu01>
 
 (require 'org)
 
@@ -35,6 +35,7 @@ changed." t)
       org-log-done 'time
       org-log-into-drawer t
       org-agenda-include-diary t
+      org-agenda-compact-blocks t
       org-agenda-start-with-follow-mode t
       org-agenda-start-with-clockreport-mode t
       org-agenda-start-on-weekday 0
