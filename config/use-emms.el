@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2014-07-03 10:27:23 johstu01>
+;;; Time-stamp: <2014-07-08 09:52:00 johstu01>
 
 (use-package emms
 	     "~/library/emacs/emms/emms-3.0/"
@@ -27,18 +27,19 @@ playlist."
 		   ;; emms-playlist-default-major-mode 'emms-mark-mode
 		   )
 
-	     (when (file-directory-p emms-source-file-default-directory)
+	     (when (and (stringp emms-source-file-default-directory)
+			(file-directory-p emms-source-file-default-directory))
 	       (emms-add-directory-tree emms-source-file-default-directory))
 	     (cond
 	      ((file-directory-p "~/music")
 	       (emms-add-directory-tree "~/music"))
 	      ((file-directory-p "/work/johstu01/music")
-	       (emms-add-directory-tree "~/music")))
+	       (emms-add-directory-tree "/work/johstu01/music")))
 	     (cond
 	      ((file-directory-p "~/language-audio/")
 	       (emms-add-directory-tree "~/language-audio/"))
 	      ((file-directory-p "/work/johstu01/language-audio/")
-	       (emms-add-directory-tree "~/language-audio/")))
+	       (emms-add-directory-tree "/work/johstu01/language-audio/")))
 	     (emms-mode-line 1)
 	     (emms-lyrics 1)
 	     (setq emms-lyrics-display-on-minibuffer t
