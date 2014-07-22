@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-07-22 13:38:43 johstu01>
+;;; Time-stamp: <2014-07-22 16:25:48 johstu01>
 
 (require 'org)
 
@@ -43,7 +43,7 @@ changed." t)
       org-agenda-default-appointment-duration 60 ; minutes
       ;; org-agenda-overriding-columns-format ; should probably set this
       org-directory (substitute-in-file-name "$ORG/")
-      foo (message "org dir is %s" org-directory) 
+      foo (message "org dir is %s" org-directory)
       org-default-notes-file (expand-file-name "new.org" org-directory)
       org-archive-location (substitute-in-file-name "$ORG/archive/%s::")
       org-agenda-files (append (mapcar (function
@@ -114,7 +114,7 @@ mark the ancestral tasks as DONE."
        nil
        'tree)
       (unless not-all-done
-	(org-todo "DONE"))))))
+	(org-todo "DONE")))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-function t)
 
