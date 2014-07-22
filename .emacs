@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-07-07 11:10:09 johstu01>
+;;; Time-stamp: <2014-07-22 13:32:04 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
@@ -186,11 +186,11 @@ This should be a list of three parts:
 
 ;; set some variables used from several of the config files
 
-(defvar work-agenda-file (expand-file-name "~/work-org/work-tasks.org")
+(defvar work-agenda-file (expand-file-name "/work/johstu01/work-org/work-tasks.org")
   "The name of the file containing my work agenda.")
 
 (defvar work-log-file (if (at-work)
-			  (expand-file-name "~/work-org/work.org-log")
+			  (expand-file-name "/work/johstu01/work-org/work.org-log")
 			(expand-file-name "~/Dropbox/notes/hackery.org-log"))
   "The name of the file containing my work log.")
 
