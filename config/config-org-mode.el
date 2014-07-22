@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-07-16 11:08:29 johstu01>
+;;; Time-stamp: <2014-07-22 13:38:43 johstu01>
 
 (require 'org)
 
@@ -64,9 +64,6 @@ changed." t)
 				(substitute-in-file-name "$ORG/general.org")
 				"Incoming"
 				"** TODO"))
-			      ("w" "Work todo" entry
-			       (file+headline work-agenda-file "Incoming"
-					      "** TODO"))
 			      ("b" "Buy" entry (file+headline
 						(substitute-in-file-name "$ORG/shopping.org")
 						"Incoming"
@@ -79,6 +76,14 @@ changed." t)
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
       org-M-RET-may-split-line nil)
+
+(when (and (boundp 'work-agenda-file)
+	   (stringp work-agenda-file)
+	   (file-exists-p work-agenda-file))
+  (setq org-capture-templates (cons '("w" "Work todo" entry
+				      (file+headline work-agenda-file "Incoming"
+						     "** TODO"))
+				    org-capture-templates)))
 
 (defun jcgs/org-clock-in-prepare-function ()
   "My customization of task clock-in."
@@ -109,7 +114,7 @@ mark the ancestral tasks as DONE."
        nil
        'tree)
       (unless not-all-done
-	(org-todo "DONE")))))
+	(org-todo "DONE"))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-function t)
 
@@ -388,6 +393,7 @@ You may want to turn voice input off at this point; and suspend task timers.")
     (insert "*** Date " date "\n\n")))
 
 (when (and (boundp 'work-agenda-file)
+	   (stringp work-agenda-file)
 	   (file-readable-p work-agenda-file)
 	   (not (member work-agenda-file org-agenda-files)))
   (push work-agenda-file org-agenda-files))
