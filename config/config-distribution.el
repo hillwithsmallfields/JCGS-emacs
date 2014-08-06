@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-06-26 15:18:17 johstu01>
+;;; Time-stamp: <2014-07-28 17:01:29 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -285,6 +285,10 @@ Top and bottom destinations are actually `scroll-margin' lines
 
 (when (= emacs-major-version 22)
   (add-hook 'shell-mode-hook 'add-mode-line-dirtrack))
+
+;;;; file changes
+
+(setq revert-without-query '("\\.log"))
 
 ;;;; image-dired
 
