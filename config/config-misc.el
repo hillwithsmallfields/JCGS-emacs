@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2014-06-20 17:11:28 johstu01>
+;;; Time-stamp: <2014-07-22 13:34:36 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -192,19 +192,22 @@ FWrite region to file: ")
 		      nil
 		      frame-for-work-log))
 
-    (let ((frame-name (file-name-nondirectory
-		       (file-name-sans-extension work-agenda-file))))
-      (message "setting up work.org frame")
-      (ratpoison-fselect 2)
-      (find-file work-agenda-file)
-      (setq frame-for-work-org
-	    (or (get-frame frame-name)
-		(make-frame-on-display ":0.1"
-				       '((title . "Tasks")
-					 (name . "Work agenda")))))
-      (display-buffer (find-buffer-visiting work-agenda-file)
-		      nil
-		      frame-for-work-org))
+    (when (and (boundp 'work-agenda-file)
+	       (stringp work-agenda-file)
+	       (file-exists-p work-agenda-file))
+      (let ((frame-name (file-name-nondirectory
+			 (file-name-sans-extension work-agenda-file))))
+	(message "setting up work.org frame")
+	(ratpoison-fselect 2)
+	(find-file work-agenda-file)
+	(setq frame-for-work-org
+	      (or (get-frame frame-name)
+		  (make-frame-on-display ":0.1"
+					 '((title . "Tasks")
+					   (name . "Work agenda")))))
+	(display-buffer (find-buffer-visiting work-agenda-file)
+			nil
+			frame-for-work-org)))
     
     (message "setting up erc frame")
     (ratpoison-fselect 3)
