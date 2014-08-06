@@ -1,8 +1,8 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2014-07-08 09:52:00 johstu01>
+;;; Time-stamp: <2014-07-24 13:25:28 johstu01>
 
 (use-package emms
-	     "~/library/emacs/emms/emms-3.0/"
+	     "$GATHERED/emacs/emms/emms-3.0/"
 	     nil
 	     ((emms "emms-playlist-mode"
 		    "Switch to the current emms-playlist buffer, use
