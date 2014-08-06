@@ -84,7 +84,7 @@ with the headings from the top level down."
 	      (save-excursion
 		(find-file file)
 		(org-scan-tags 'agenda matcher t))))
-	  org-agenda-files)))o
+	  org-agenda-files)))
 
 (defun org-smartwatch-fill-buffer (entries &optional buffer)
   "Run through the list of ENTRIES, putting in headings.
