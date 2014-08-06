@@ -65,7 +65,7 @@ with the headings from the top level down."
 					 (goto-char
 					  (marker-position location))
 					 (org-get-outline-path))))
-			    ;; todo: strip down to just the state and the action text
+			    ;; todo: strip down to just the state and the action text --- but probably do that somewhere else
 			    (set-text-properties 0 (length e) nil e)
 			    (cons e
 				  (cons (file-name-sans-extension
@@ -84,7 +84,7 @@ with the headings from the top level down."
 	      (save-excursion
 		(find-file file)
 		(org-scan-tags 'agenda matcher t))))
-	  org-agenda-files)))
+	  org-agenda-files)))o
 
 (defun org-smartwatch-fill-buffer (entries &optional buffer)
   "Run through the list of ENTRIES, putting in headings.
