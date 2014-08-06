@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2014-07-01 10:47:28 johstu01>
+;;; Time-stamp: <2014-07-29 15:12:34 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -116,11 +116,11 @@
 
 (when (file-directory-p "/usr/local/go")
   (add-to-list 'load-path "/usr/local/go/misc/emacs/")
+  (add-to-list 'auto-mode-alist (cons "\\.go" 'go-mode))
   (require 'go-mode-load))
 
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key "\M-." 'godef-jump)))
-
 
 ;;;;;;;;;;
 ;; Tags ;;
