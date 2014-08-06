@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-07-22 13:32:04 johstu01>
+;;; Time-stamp: <2014-07-22 16:35:02 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
@@ -251,6 +251,9 @@ This should be a list of three parts:
       (message "Loading config files individually: %s" elfile)
       (load-file (expand-file-name (format "%s.el" elfile)
 				   config-dir))
+      (if (boundp 'work-log-file)
+	  (message "work-log-file is now %S" work-log-file)
+	(message "work-log-file is not bound"))
       (message "Loaded config file %s individually" elfile)
       )))
 ;;;###endif
