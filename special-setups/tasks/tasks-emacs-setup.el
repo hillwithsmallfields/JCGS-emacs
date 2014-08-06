@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2014-06-23 11:14:19 johstu01>
+;;; Time-stamp: <2014-07-22 13:10:40 johstu01>
 
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")
@@ -18,10 +18,10 @@
     (progn
       (dolist (file '("work-tasks"))
 	(add-to-list 'org-agenda-files
-		     (substitute-in-file-name (format "~/work-org/%s.org"
+		     (substitute-in-file-name (format "/work/johstu01/work-org/%s.org"
 						      file))
 		     t))
-      (setq work-log-file "~/work-org/work-log.org"))
+      (setq work-log-file "/work/johstu01/work-org/work-log.org"))
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
