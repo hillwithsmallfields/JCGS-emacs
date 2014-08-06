@@ -1,12 +1,13 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2014-07-01 10:57:41 johstu01>
+;;; Time-stamp: <2014-08-06 22:40:06 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
 (global-font-lock-mode 1)
 (setq inhibit-startup-screen t
       kill-whole-line t
-      display-time-day-and-date t)
+      display-time-day-and-date t
+      parens-require-spaces nil)
 
 (unless (and (stringp user-emacs-directory)
 	     (file-directory-p user-emacs-directory)
