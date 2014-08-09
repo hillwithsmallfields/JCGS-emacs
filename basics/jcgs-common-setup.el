@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2014-08-06 22:40:06 jcgs>
+;;; Time-stamp: <2014-08-09 11:51:51 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -30,6 +30,9 @@
   (display-battery-mode))
 (require 'time-stamp)
 (add-hook 'before-save-hook 'time-stamp)
+
+(when (string-match "isaiah" (system-name))
+  (setq printer-name "JCGS_print_scan_1"))
 
 (defun save-all-buffers-no-ask ()
   "Save all buffers, without prompting for each one."
