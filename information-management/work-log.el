@@ -23,6 +23,8 @@
 
 ;; Experimental package for doing code experiments, in the XenClient (BB/OE) environment
 
+;; TODO: re-write to use org-datetree
+
 ;;; Code:
 
 (defvar work-log-file (expand-file-name "~/Dropbox/notes/hackery.org-log")
