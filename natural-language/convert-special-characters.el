@@ -1,5 +1,5 @@
 ;;;; convert-special-characters.el -- convert utf8 into HTML, TeX etc
-;;; Time-stamp: <2006-01-25 10:39:39 jcgs>
+;;; Time-stamp: <2014-08-02 17:17:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -32,16 +32,17 @@
     ("ó" "o acute" (TeX . "\oacute ") (html . "&oacute;"))
     ("ö" "o umlaut" (TeX . "\oumlaut ") (html . "&ouml;"))
     ("ø" "o slash" (TeX . "\oslash ") (html . "&oslash;"))
-    ("ù" "u grave" (TeX . "\ugrave ") (html . "&ugrave;"))
-    ("ú" "u acute" (TeX . "\uacute ") (html . "&uacute;"))
-    ("ü" "u umlaut" (TeX . "\uumlaut ") (html . "&uuml;"))
+    ;; ("ù" "u grave" (TeX . "\ugrave ") (html . "&ugrave;"))
+    ;; ("ú" "u acute" (TeX . "\uacute ") (html . "&uacute;"))
+    ;; ("ü" "u umlaut" (TeX . "\uumlaut ") (html . "&uuml;"))
     ;; ("l" "dark l" (TeX . "\darkl ") (html . "&darkl;"))
     ;; ("" "s caron" (TeX . "\scaron ") (html . "&scaron;"))
     ;; ("" "z acute" (TeX . "\zacute ") (html . "&zacute;"))
     ;; ("" "z dot" (TeX . "\zdot ") (html . "&zdot;"))
     ("þ" "thorn symbol" (TeX . "\thorn ") (html . "&thorn;"))
     ("ð" "biddap symbol" (TeX . "\biddap") (html . "&biddap;"))
-    ("æ" "ae lig" (TeX . "\aelig") (html . "&aelig;")))
+    ("æ" "ae lig" (TeX . "\aelig") (html . "&aelig;"))
+    )
   "Re-encodings of utf8 characters to markup.")
 
 (defun convert-special-characters (markup)
