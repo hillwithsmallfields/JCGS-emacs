@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2014-08-16 07:00:00 jcgs>
+;;; Time-stamp: <2014-09-18 21:28:39 jcgs>
 
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")
@@ -29,7 +29,11 @@
 						  file))
 		 t)))
 
-(find-file work-log-file) (goto-char (point-max))
+(find-file work-log-file)
+(if (fboundp 'work-log-mode)
+    (work-log-mode)
+  (org-mode))
+
 (mapc (lambda (file)
 	;; at work, I don't have all my non-work files readable
 	(when (file-readable-p file)
