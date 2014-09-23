@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-07-28 17:01:29 johstu01>
+;;; Time-stamp: <2014-09-23 21:55:24 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -336,9 +336,8 @@ Top and bottom destinations are actually `scroll-margin' lines
 
 ;;;; Ediff
 
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-(setq ediff-split-window-function (lambda (&optional arg)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-split-window-function (lambda (&optional arg)
 				    (if (> (frame-width) 150)
 					(split-window-horizontally arg)
 				      (split-window-vertically arg))))
