@@ -1,8 +1,9 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2014-09-18 21:28:39 jcgs>
+;;; Time-stamp: <2014-09-28 19:38:09 jcgs>
 
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")
+(load-file "$EMACS/basics/ediff-fix.el")
 (require 'cl)
 
 (setq user-emacs-directory (expand-file-name
