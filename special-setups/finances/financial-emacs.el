@@ -1,5 +1,5 @@
 ;;;; Emacs setup for scraping transactions from my online banking page
-;;; Time-stamp: <2014-02-22 07:35:04 jcgs>
+;;; Time-stamp: <2014-10-01 08:51:20 jcgs>
 
 (load-file "$HOME/Dropbox/emacs/basics/jcgs-common-setup.el")
 
@@ -51,6 +51,9 @@
 (load-file (expand-file-name "information-management/finances-columns.el" user-emacs-directory))
 
 (find-file (substitute-in-file-name "$HOME/finances/update.csv"))
+(goto-char (point-max))
+
+(find-file-other-window (substitute-in-file-name "$DROPBOX/transactions/Transactions.csv"))
 (goto-char (point-max))
 
 ;;; financial-emacs.el ends here
