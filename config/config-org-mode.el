@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-09-27 22:18:01 jcgs>
+;;; Time-stamp: <2014-10-01 21:28:03 jcgs>
 
 (require 'org)
 
@@ -8,6 +8,7 @@
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-drill)
+(add-to-list 'org-modules 'org-mobile)
 
 (org-load-modules-maybe t)
 
@@ -76,7 +77,9 @@ changed." t)
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
       org-M-RET-may-split-line nil
-      org-mobile-directory "~/Dropbox/MobileOrg")
+      org-mobile-directory "~/Dropbox/MobileOrg"
+      org-mobile-inbox-for-pull (expand-file-name org-mobile-directory "inbox.org")
+      )
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
