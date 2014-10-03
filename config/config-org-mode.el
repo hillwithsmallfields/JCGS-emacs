@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-01 21:28:03 jcgs>
+;;; Time-stamp: <2014-10-03 10:35:13 johstu01>
 
 (require 'org)
 
@@ -169,11 +169,13 @@ the end of a day.")
 
 (defvar jcgs/pomodoro-log-file
   (cond
+   ((file-directory-p "/work/johstu01/work-org")
+    (expand-file-name "pomodoro-log.org" "/work/johstu01/work-org/"))
    ((getenv "ORG")
-      (substitute-in-file-name "$ORG/pomodoro-log.org"))
-    ((file-directory-p "~/Dropbox")
-     (expand-file-name "~/Dropbox/pomodoro-log.org"))
-    (t (expand-file-name "~/pomodoro-log.org")))
+    (substitute-in-file-name "$ORG/pomodoro-log.org"))
+   ((file-directory-p "~/Dropbox")
+    (expand-file-name "~/Dropbox/pomodoro-log.org"))
+   (t (expand-file-name "~/pomodoro-log.org")))
   "Where I log my pomodoro completion.")
 
 (defun jcgs/pomodoro-log-show ()
