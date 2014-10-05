@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-07-22 16:35:02 johstu01>
+;;; Time-stamp: <2014-10-05 22:59:35 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
 
@@ -198,7 +198,7 @@ This should be a list of three parts:
 
 ;;;###include config
 ;;;###if nil
-(if nil
+(if t
     (load-directory (expand-file-name "config" user-emacs-directory) t)
   (let ((config-dir (expand-file-name "config" user-emacs-directory)))
     (dolist (elfile '("config-calendar-diary"
