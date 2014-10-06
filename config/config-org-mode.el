@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-03 21:28:56 jcgs>
+;;; Time-stamp: <2014-10-06 19:14:16 johstu01>
 
 (require 'org)
 
@@ -156,11 +156,12 @@ Should be nil unless bound in a typing break hook function.")
 	     (lambda ()
 	       (when org-timer-current-timer
 		 (org-timer-cancel-timer))
-	       (org-todo  (if jcgs/org-clocking-out-for-type-break
-			      "OPEN"
-			    (if (y-or-n-p "Finished task? ")
-				"DONE"
-			      "OPEN")))))))
+	       (org-timer-stop)
+	       (org-todo (if jcgs/org-clocking-out-for-type-break
+			     "OPEN"
+			   (if (y-or-n-p "Finished task? ")
+			       "DONE"
+			     "OPEN")))))))
 
 (defvar jcgs/org-timer-pomodoros-done-count 0
   "Count of the pomodoros I have done.
