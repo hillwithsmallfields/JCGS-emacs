@@ -1,5 +1,5 @@
 ;;;; Emacs setup for scraping transactions from my online banking page
-;;; Time-stamp: <2014-10-01 21:24:38 jcgs>
+;;; Time-stamp: <2014-10-18 21:53:44 jcgs>
 
 (load-file "$HOME/Dropbox/emacs/basics/jcgs-common-setup.el")
 
@@ -75,7 +75,7 @@
     ("Total payment" nil)
     ("Cash paid" Cash)
     ("VISA" Handelsbanken\ via\ VISA)
-    ("Paypal" Handelsbanken\ via \PayPal)
+    ("Paypal" Handelsbanken\ via\ PayPal)
     ("Direct" Handelsbanken)
     ("Withdrawal" nil)
     ("VISA" Co-op\ via\ VISA)
@@ -96,27 +96,35 @@
 	 (transactions (csv-parse-buffer)))
     (save-excursion
       (find-file cumulative-file)
-      (erase-buffer)
+      (erase-buffer)			; todo: should perhaps append rather than truncate
+      (dolist (heading finances-main-spreadsheet-columns-order)
+	(insert (car heading ) ","))
+      (insert "\n")
       (dolist (transaction transactions)
 	(let ((account (intern (cdr (assoc "Account" transaction))))
 	      (amount (cdr (assoc "Amount" transaction))))
 	  (setq amount (if (string-match "\\`-" amount)
 			   (substring amount 1)
 			 (concat "-" amount)))
-	  (dolist (cell finances-main-spreadsheet-columns-order)
-	    (let* ((origin (cadr cell))
-		   (output (cond
-			    ((stringp origin)
-			     (cdr (assoc origin transaction)))
-			    ((symbolp origin)
-			     (if (eq origin account)
-				 amount
-			       nil))
-			    (t nil))))
-	      (when output
-		(insert output))
-	      (insert ",")))
-	  (insert "\n")))
+	  (if (eq (intern (cdr (assoc "Category" transaction)))
+		  'Transfer)
+	      (let ()
+		;; todo: handle transfers
+		)
+	    (dolist (cell finances-main-spreadsheet-columns-order)
+	      (let* ((origin (cadr cell))
+		     (output (cond
+			      ((stringp origin)
+			       (cdr (assoc origin transaction)))
+			      ((symbolp origin)
+			       (if (eq origin account)
+				   amount
+				 nil))
+			      (t nil))))
+		(when output
+		  (insert output))
+		(insert ","))))
+	    (insert "\n")))
       (basic-save-buffer))))
 
 (let ((raw-file (substitute-in-file-name "$DROPBOX/transactions/Transactions.csv"))
