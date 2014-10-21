@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-21 14:41:51 johstu01>
+;;; Time-stamp: <2014-10-21 15:17:09 johstu01>
 
 (require 'org)
 
@@ -215,14 +215,18 @@ The task identifier is substituted in as a string.")
 (add-hook 'org-clock-in-hook
 	  (function
 	   (lambda ()
-	     (funcall (aref jcgs/org-task-color-themes
-			    (random (length jcgs/org-task-color-themes)))))))
+	     (let ((theme (aref jcgs/org-task-color-themes
+				(random (length jcgs/org-task-color-themes)))))
+	       (message "Using %s as clocked-in theme" theme)
+	       (funcall theme)))))
 
 (add-hook 'org-clock-out-hook
 	  (function
 	   (lambda ()
-	     (funcall (aref jcgs/org-task-color-themes
-			    (random (length jcgs/org-no-task-color-themes)))))))
+	     (let ((theme (aref jcgs/org-task-color-themes
+			    (random (length jcgs/org-no-task-color-themes)))))
+	       (message "Using %s as clocked-out theme" theme)
+	       (funcall theme)))))
 
 ;;;; Pomodoros
 
