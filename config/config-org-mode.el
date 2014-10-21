@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-21 12:47:16 johstu01>
+;;; Time-stamp: <2014-10-21 14:41:51 johstu01>
 
 (require 'org)
 
@@ -180,6 +180,8 @@ The task identifier is substituted in as a string.")
 
 ;;; Use nicer ones when I'm clocked in to some task, to encourage me
 ;;; to be clocked in more of the time.
+
+(add-lispdir "$GATHERED/emacs/color-theme")
 
 (require 'color-theme)
 
