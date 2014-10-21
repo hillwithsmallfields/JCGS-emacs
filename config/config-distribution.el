@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-09-23 21:55:24 jcgs>
+;;; Time-stamp: <2014-10-20 17:31:45 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -697,7 +697,7 @@ John Sturdy <john@cb1.com>"
 								 :width 2)))))
      (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
      (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
-     (font-lock-builtin-face ((t (:foreground "navy"))))
+     (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
      (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
      (font-lock-warning-face ((t (:foreground "orange" :bold t))))
      )))
