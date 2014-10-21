@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-06 19:14:16 johstu01>
+;;; Time-stamp: <2014-10-21 12:47:16 johstu01>
 
 (require 'org)
 
@@ -162,6 +162,67 @@ Should be nil unless bound in a typing break hook function.")
 			   (if (y-or-n-p "Finished task? ")
 			       "DONE"
 			     "OPEN")))))))
+
+;;;; JIRA links
+
+(defvar jcgs/org-jira-task-format "http://jira.arm.com/browse/EMUF-%s"
+  "Format of links for jira tasks.
+The task identifier is substituted in as a string.")
+
+(defun jcgs/org-follow-jira-link (task)
+  "Show jira TASK in a browser."
+  (interactive "sTask: ")
+  (browse-url (format jcgs/org-jira-task-format task)))
+
+(org-add-link-type "jira" 'jcgs/org-follow-jira-link)
+
+;;;; Switch colour themes
+
+;;; Use nicer ones when I'm clocked in to some task, to encourage me
+;;; to be clocked in more of the time.
+
+(require 'color-theme)
+
+(defvar jcgs/org-task-color-themes
+  [color-theme-wheat
+   color-theme-whateveryouwant 		; a bit odd
+   color-theme-katester
+   ;; color-theme-vellum ; todo: change the pale blue bit
+   color-theme-mistyday
+   color-theme-pierson
+   color-theme-robin-hood
+   color-theme-high-contrast
+   color-theme-emacs-nw
+   color-theme-scintilla
+   ]
+  "Colour themes I prefer.")
+
+(defvar jcgs/org-no-task-color-themes
+  [color-theme-euphoria
+   color-theme-calm-forest
+   color-theme-blue-mood
+   color-theme-billw
+   color-theme-jonadabian
+   color-theme-lethe
+   color-theme-retro-orange
+   color-theme-retro-green
+   color-theme-resolve
+   ]
+  "Colour themes I can endure but don't like much.")
+
+(add-hook 'org-clock-in-hook
+	  (function
+	   (lambda ()
+	     (funcall (aref jcgs/org-task-color-themes
+			    (random (length jcgs/org-task-color-themes)))))))
+
+(add-hook 'org-clock-out-hook
+	  (function
+	   (lambda ()
+	     (funcall (aref jcgs/org-task-color-themes
+			    (random (length jcgs/org-no-task-color-themes)))))))
+
+;;;; Pomodoros
 
 (defvar jcgs/org-timer-pomodoros-done-count 0
   "Count of the pomodoros I have done.
