@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-07-17 11:00:43 johstu01>
+;;; Time-stamp: <2014-10-21 16:06:00 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -32,6 +32,13 @@
 		  ;; "make clean; ./configure; make\n"
 		  )
 
+(make-named-shell "-emacs-"
+		  "$EMACS")
+
+(when (at-work)
+  (make-named-shell "-src-"
+		    "/work/johstu01/build/trunk/work/src"))
+
 (unless (at-work)
   (make-named-shell "-gos-"
 		    "$OPEN_PROJECTS/gos/"
@@ -48,7 +55,7 @@
 		      ))
   )
 
-(when (at-work)
+(when (and nil (at-work))
   (let ((login-host (format "login%d.euhpc.arm.com" (1+ (random 7)))))
     (make-named-shell (format "=%s=" login-host)
 		      "~"

@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-21 12:47:16 johstu01>
+;;; Time-stamp: <2014-10-24 17:48:32 johstu01>
 
 (require 'org)
 
@@ -181,28 +181,32 @@ The task identifier is substituted in as a string.")
 ;;; Use nicer ones when I'm clocked in to some task, to encourage me
 ;;; to be clocked in more of the time.
 
-(require 'color-theme)
+;; (add-lispdir "$GATHERED/emacs/color-theme")
+
+;; (require 'color-theme)
+
+(load-file (substitute-in-file-name "$GATHERED/emacs/color-theme/color-theme.el"))
 
 (defvar jcgs/org-task-color-themes
-  [color-theme-wheat
+  [color-theme-wheat			; quite nice
    color-theme-whateveryouwant 		; a bit odd
-   color-theme-katester
+   ;; color-theme-katester ; too pastel
    ;; color-theme-vellum ; todo: change the pale blue bit
-   color-theme-mistyday
+   ;; color-theme-mistyday ; doesn't cancel old dark theme well enough
    color-theme-pierson
-   color-theme-robin-hood
+   color-theme-robin-hood		; the dark green one
    color-theme-high-contrast
-   color-theme-emacs-nw
-   color-theme-scintilla
+   ;; color-theme-emacs-nw
+   ;; color-theme-scintilla
    ]
   "Colour themes I prefer.")
 
 (defvar jcgs/org-no-task-color-themes
   [color-theme-euphoria
-   color-theme-calm-forest
+   ;; color-theme-calm-forest
    color-theme-blue-mood
-   color-theme-billw
-   color-theme-jonadabian
+   ;; color-theme-billw
+   color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
    color-theme-lethe
    color-theme-retro-orange
    color-theme-retro-green
@@ -213,14 +217,22 @@ The task identifier is substituted in as a string.")
 (add-hook 'org-clock-in-hook
 	  (function
 	   (lambda ()
-	     (funcall (aref jcgs/org-task-color-themes
-			    (random (length jcgs/org-task-color-themes)))))))
+	     (condition-case problem
+		 (let ((theme (aref jcgs/org-task-color-themes
+				    (random (length jcgs/org-task-color-themes)))))
+		   (message "Using %s as clocked-in theme" theme)
+		   (funcall theme))
+	       (message "Got error %S in changing colour theme" problem)))))
 
 (add-hook 'org-clock-out-hook
 	  (function
 	   (lambda ()
-	     (funcall (aref jcgs/org-task-color-themes
-			    (random (length jcgs/org-no-task-color-themes)))))))
+	     (condition-case problem
+		 (let ((theme (aref jcgs/org-no-task-color-themes
+				    (random (length jcgs/org-no-task-color-themes)))))
+		   (message "Using %s as clocked-out theme" theme)
+		   (funcall theme))
+	       (message "Got error %S in changing colour theme" problem)))))
 
 ;;;; Pomodoros
 
