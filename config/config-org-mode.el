@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-31 08:29:14 jcgs>
+;;; Time-stamp: <2014-10-31 16:45:14 johstu01>
 
 (require 'org)
 
@@ -193,7 +193,7 @@ The task identifier is substituted in as a string.")
    ;; color-theme-katester ; too pastel
    ;; color-theme-vellum ; todo: change the pale blue bit
    ;; color-theme-mistyday ; doesn't cancel old dark theme well enough
-   color-theme-pierson
+   ;; color-theme-pierson
    color-theme-robin-hood		; the dark green one
    color-theme-high-contrast
    ;; color-theme-emacs-nw
@@ -207,7 +207,7 @@ The task identifier is substituted in as a string.")
    color-theme-blue-mood
    ;; color-theme-billw
    color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
-   color-theme-lethe
+   ;; color-theme-lethe
    color-theme-retro-orange
    color-theme-retro-green
    color-theme-resolve
