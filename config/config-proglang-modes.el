@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2014-10-15 10:55:16 johstu01>
+;;; Time-stamp: <2014-10-31 11:30:19 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -121,6 +121,7 @@
 
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key "\M-." 'godef-jump)
+			  (local-set-key "\C-c\C-c" 'compile)
 			  (when (string-match "unisched" default-directory)
 			    (set (make-local-variable 'compile-command)
 				 "pb_var_exec -- go install -v arm.com/uniSched..."))))
