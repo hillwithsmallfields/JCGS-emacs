@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-10-31 11:28:27 johstu01>
+;;; Time-stamp: <2014-10-31 11:28:57 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -357,7 +357,7 @@ Top and bottom destinations are actually `scroll-margin' lines
 (defvar voice-announce-compilation-finish nil
   "*Whether to make a voice announcement of compilation finishing.")
 
-(defvar browser-announce-compilation-finish t
+(defvar browser-announce-compilation-finish nil
   "*Whether to notify compilation finishing via the browser.")
 
 (defvar compilation-finish-count 0
