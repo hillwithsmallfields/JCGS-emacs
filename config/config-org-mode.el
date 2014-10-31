@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-24 17:48:32 johstu01>
+;;; Time-stamp: <2014-10-31 08:29:14 jcgs>
 
 (require 'org)
 
@@ -702,11 +702,16 @@ For use with `org-sort-entries'."
 
 ;;; change task dates
 
-(defun jcgs/org-task-today (&optional no-move)
+(defun jcgs/org-task-today (&optional no-move offset)
   "Mark the task on the current line as to be done today.
-Unless optional NO-MOVE, move to the next entry."
-  (interactive)
-  (let ((today-string (format-time-string "<%Y-%m-%d %a>"))
+Unless optional NO-MOVE, move to the next entry.
+With optional OFFSET, add that number of days."
+  (interactive "P")
+  (let ((today-string (format-time-string "<%Y-%m-%d %a>"
+					  (if offset
+					      (time-add (current-time)
+							(days-to-time offset))
+					    nil)))
 	(eol (line-end-position)))
     (save-excursion
       (beginning-of-line)
@@ -726,7 +731,37 @@ Unless optional NO-MOVE, move to the next entry."
     ;; todo: probably some org-mode or outline-mode command for this
     (forward-line)))
 
-(define-key org-mode-map [ f6 ] 'jcgs/org-task-today)
+(defun jcgs/org-task-tomorrow (&optional no-move)
+  "Mark the task on the current line as to be done tomorrow.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (jcgs/org-task-today no-move 1))
+
+(define-key org-mode-map [ f8 ] 'jcgs/org-task-today)
+(define-key org-mode-map [ f9 ] 'jcgs/org-task-tomorrow)
+
+(defun jcgs/org-agenda-task-today (&optional no-move)
+  "Like jcgs/org-task-today, but from the agenda buffer.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (save-window-excursion
+    (other-window 1)
+    (jcgs/org-task-today t))
+  (unless no-move
+    (org-agenda-next-line)))
+
+(defun jcgs/org-agenda-task-tomorrow (&optional no-move)
+  "Like jcgs/org-task-tomorrow, but from the agenda buffer.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (save-window-excursion
+    (other-window 1)
+    (jcgs/org-task-tomorrow t))
+  (unless no-move
+    (org-agenda-next-line)))
+
+(define-key org-agenda-mode-map [ f8 ] 'jcgs/org-agenda-task-today)
+(define-key org-agenda-mode-map [ f9 ] 'jcgs/org-agenda-task-tomorrow)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; separate log files ;;
