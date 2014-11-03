@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-11-03 15:05:07 johstu01>
+;;; Time-stamp: <2014-11-03 19:24:35 johstu01>
 
 (require 'org)
 
@@ -335,15 +335,48 @@ Argument STRING is the log entry."
 
 ;;;; Write clocked-in tasks into my work log file
 
+(defun jcgs/org-find-ancestral-jira-task ()
+  "Find the jira task covering the current task."
+  (save-excursion
+    (let* ((pattern "\\[jira:\\([0-9]+\\)\\]")
+	   (heading (nth 4 (org-heading-components))))
+      (if (string-match pattern heading)
+	  (match-string-no-properties 1 heading)
+	(catch 'found
+	  (while (> (funcall outline-level) 1)
+	    (outline-up-heading 1)
+	    (setq heading (nth 4 (org-heading-components)))
+	    (when (string-match pattern heading)
+	      (throw 'found (match-string-no-properties 1 heading))))
+	  nil)))))
+
+(defvar jcgs/org-last-clocked-task-added-to-log nil
+  "The last clocked task added to the log.")
+
+(defvar jcgs/org-last-clocked-task-date-added-to-log nil
+  "The date of the last clocked task added to the log.")
+
 (defun jcgs/org-add-clocked-task-to-log ()
-  "Add to your lg the task you're currently clocking in to.
+  "Add to your log the task you're currently clocking in to.
 For use in `org-clock-in-hook'."
-  (let ((task (nth 4 (org-heading-components))))
-    (save-window-excursion
-      (find-file work-log-file)
-      (goto-char (point-max))
-      (insert (format "\n\n    Clocked in to %s\n" task))
-      (basic-save-buffer))))
+  (let* ((task (nth 4 (org-heading-components)))
+	 (jira (if (string-match "\\[jira:[0-9]+\\]" task)
+		   nil
+		 (jcgs/org-find-ancestral-jira-task)))
+	 (date (format-time-string "%Y-%m-%d")))
+    (when (or (not (equal task jcgs/org-last-clocked-task-added-to-log))
+	      (not equal date jcgs/org-last-clocked-task-date-added-to-log))
+      (save-window-excursion
+	(find-file work-log-file)
+	(goto-char (point-max))
+	;; todo: regulate this to one blank line
+	(insert (format "\n\n**** Clocked in to \"%s%s\"\n" task
+			(if jira
+			    (format " (jira %s)" jira)
+			  "")))
+	(setq jcgs/org-last-clocked-task-added-to-log task
+	      jcgs/org-last-clocked-task-date-added-to-log date)
+	(basic-save-buffer)))))
 
 (add-hook 'org-clock-in-hook 'jcgs/org-add-clocked-task-to-log) 
 
