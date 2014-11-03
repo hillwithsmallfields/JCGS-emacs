@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-10-31 16:45:14 johstu01>
+;;; Time-stamp: <2014-11-03 15:05:07 johstu01>
 
 (require 'org)
 
@@ -332,6 +332,22 @@ Argument STRING is the log entry."
 	 ;; todo: put this in the mode line
 	 jcgs/org-timer-pomodoros-done-count (1+
 					      jcgs/org-timer-pomodoros-done-count))))))
+
+;;;; Write clocked-in tasks into my work log file
+
+(defun jcgs/org-add-clocked-task-to-log ()
+  "Add to your lg the task you're currently clocking in to.
+For use in `org-clock-in-hook'."
+  (let ((task (nth 4 (org-heading-components))))
+    (save-window-excursion
+      (find-file work-log-file)
+      (goto-char (point-max))
+      (insert (format "\n\n    Clocked in to %s\n" task))
+      (basic-save-buffer))))
+
+(add-hook 'org-clock-in-hook 'jcgs/org-add-clocked-task-to-log) 
+
+;;;; Timer notification
 
 (defvar jcgs/background-images-directory (substitute-in-file-name "$HOME/backgrounds")
   "My directory of background images.")
