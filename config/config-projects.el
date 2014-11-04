@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-10-21 16:06:00 johstu01>
+;;; Time-stamp: <2014-11-04 14:18:13 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -37,7 +37,11 @@
 
 (when (at-work)
   (make-named-shell "-src-"
-		    "/work/johstu01/build/trunk/work/src"))
+		    "/work/johstu01/build/trunk/work/src")
+  (make-named-shell "-monit-"
+		    "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer/")
+  (make-named-shell "-dripfeed-"
+		    "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun"))
 
 (unless (at-work)
   (make-named-shell "-gos-"
