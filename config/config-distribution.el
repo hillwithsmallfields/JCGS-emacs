@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-10-31 11:28:57 johstu01>
+;;; Time-stamp: <2014-11-07 11:00:44 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -671,5 +671,19 @@ John Sturdy <john@cb1.com>"
 ;;;; manual
 
 (setq Man-width 80)
+
+;;;; fix a problem I get on my ubuntu machine at work
+
+;;; The problem is it's easy to get rid of a frame accidentally, but I
+;;; can't recreate it with C-x 5 b sometimes.
+
+(defun suspend-frame-with-query ()
+  "Does `suspend-frame' but check first."
+  (when (yes-or-no-p "Suspend frame? ")
+      (suspend-frame)))
+
+(let ((case-fold-search t))
+  (when (string-match "ubuntu" (shell-command-to-string "uname -a"))
+    (global-set-key "\C-z" 'suspend-frame-with-query)))
 
 ;;; end of config-distribution.el
