@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-11-03 19:24:35 johstu01>
+;;; Time-stamp: <2014-11-11 17:03:00 johstu01>
 
 (require 'org)
 
@@ -208,6 +208,7 @@ The task identifier is substituted in as a string.")
    ;; color-theme-billw
    color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
    ;; color-theme-lethe
+   color-theme-kingsajz
    color-theme-retro-orange
    color-theme-retro-green
    color-theme-resolve
@@ -365,7 +366,7 @@ For use in `org-clock-in-hook'."
 		 (jcgs/org-find-ancestral-jira-task)))
 	 (date (format-time-string "%Y-%m-%d")))
     (when (or (not (equal task jcgs/org-last-clocked-task-added-to-log))
-	      (not equal date jcgs/org-last-clocked-task-date-added-to-log))
+	      (not (equal date jcgs/org-last-clocked-task-date-added-to-log)))
       (save-window-excursion
 	(find-file work-log-file)
 	(goto-char (point-max))
