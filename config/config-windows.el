@@ -60,22 +60,25 @@ Split horizontally if conditions suit."
     nil
     current-prefix-arg))
   (message "buffer=%S norecord=%S force-split=%S" buffer norecord force-split)
-  (if (or force-split
-	  (one-window-p t))
-      (if (or (< (window-width) 160)
-	      (> (let ((other-width (buffer-width buffer)))
-		   (+ other-width
-		      (buffer-width (current-buffer)
-				    (- other-width 160))))
-		 (frame-width)))
-	  (progn
-	    (split-window)
+  (let ((only-one (one-window-p t)))
+    (if (or force-split
+	    only-one)
+	(let* ((too-narrow-for-sideways (< (window-width) 160))
+	       (this-width (buffer-width (current-buffer)
+					 (- other-width 160)))
+	       (other-width (buffer-width buffer))
+	       (combined-too-wide (> (+ other-width this-width)
+				     (frame-width))))
+	  (if (or too-narrow-for-sideways combined-too-wide )
+	      (progn
+		(split-window)
+		(other-window 1)
+		(switch-to-buffer buffer norecord)
+		(message "too-narrow-for-sideways=%s combined-too-wide=%s" too-narrow-for-sideways combined-too-wide))
+	    (split-window-horizontally)
 	    (other-window 1)
-	    (switch-to-buffer buffer norecord))
-	(split-window-horizontally)
-	(other-window 1)
-	(switch-to-buffer buffer norecord))
-    (switch-to-buffer-other-window buffer norecord)))
+	    (switch-to-buffer buffer norecord)))
+      (switch-to-buffer-other-window buffer norecord))))
 
 (defun switch-to-buffer-other-window-ignore-case (buffer)
   "Like `switch-to-buffer-other-window' but ignoring case when reading name."
