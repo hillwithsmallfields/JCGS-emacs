@@ -64,9 +64,9 @@ Split horizontally if conditions suit."
     (if (or force-split
 	    only-one)
 	(let* ((too-narrow-for-sideways (< (window-width) 160))
+	       (other-width (buffer-width buffer))
 	       (this-width (buffer-width (current-buffer)
 					 (- other-width 160)))
-	       (other-width (buffer-width buffer))
 	       (combined-too-wide (> (+ other-width this-width)
 				     (frame-width))))
 	  (if (or too-narrow-for-sideways combined-too-wide )
