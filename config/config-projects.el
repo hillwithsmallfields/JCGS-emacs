@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-11-09 19:00:51 jcgs>
+;;; Time-stamp: <2014-11-12 16:12:31 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -35,13 +35,10 @@
 (make-shell-for-directory-if-present "-emacs-"
 				     "$EMACS")
 
-(when (at-work)
-  (make-shell-for-directory-if-present "-src-"
-				       "/work/johstu01/build/trunk/work/src")
-  (make-shell-for-directory-if-present "-monit-"
-				       "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer/")
-  (make-shell-for-directory-if-present "-dripfeed-"
-				       "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun"))
+ (when (at-work)
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src")
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer/" "-monit-")
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-"))
 
 (unless (at-work)
   (make-shell-for-directory-if-present "-gos-"
