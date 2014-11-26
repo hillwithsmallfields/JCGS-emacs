@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-07-22 16:25:48 johstu01>
+;;; Time-stamp: <2014-11-11 17:03:00 johstu01>
 
 (require 'org)
 
@@ -8,6 +8,7 @@
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-drill)
+(add-to-list 'org-modules 'org-mobile)
 
 (org-load-modules-maybe t)
 
@@ -75,7 +76,10 @@ changed." t)
       org-enforce-todo-dependencies t
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
-      org-M-RET-may-split-line nil)
+      org-M-RET-may-split-line nil
+      org-mobile-directory "~/Dropbox/MobileOrg"
+      org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory)
+      )
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -152,11 +156,86 @@ Should be nil unless bound in a typing break hook function.")
 	     (lambda ()
 	       (when org-timer-current-timer
 		 (org-timer-cancel-timer))
-	       (org-todo  (if jcgs/org-clocking-out-for-type-break
-			      "OPEN"
-			    (if (y-or-n-p "Finished task? ")
-				"DONE"
-			      "OPEN")))))))
+	       (org-timer-stop)
+	       (org-todo (if jcgs/org-clocking-out-for-type-break
+			     "OPEN"
+			   (if (y-or-n-p "Finished task? ")
+			       "DONE"
+			     "OPEN")))))))
+
+;;;; JIRA links
+
+(defvar jcgs/org-jira-task-format "http://jira.arm.com/browse/EMUF-%s"
+  "Format of links for jira tasks.
+The task identifier is substituted in as a string.")
+
+(defun jcgs/org-follow-jira-link (task)
+  "Show jira TASK in a browser."
+  (interactive "sTask: ")
+  (browse-url (format jcgs/org-jira-task-format task)))
+
+(org-add-link-type "jira" 'jcgs/org-follow-jira-link)
+
+;;;; Switch colour themes
+
+;;; Use nicer ones when I'm clocked in to some task, to encourage me
+;;; to be clocked in more of the time.
+
+;; (add-lispdir "$GATHERED/emacs/color-theme")
+
+;; (require 'color-theme)
+
+(load-file (substitute-in-file-name "$GATHERED/emacs/color-theme/color-theme.el"))
+
+(defvar jcgs/org-task-color-themes
+  [color-theme-wheat			; quite nice
+   color-theme-whateveryouwant 		; a bit odd
+   ;; color-theme-katester ; too pastel
+   ;; color-theme-vellum ; todo: change the pale blue bit
+   ;; color-theme-mistyday ; doesn't cancel old dark theme well enough
+   ;; color-theme-pierson
+   color-theme-robin-hood		; the dark green one
+   color-theme-high-contrast
+   ;; color-theme-emacs-nw
+   ;; color-theme-scintilla
+   ]
+  "Colour themes I prefer.")
+
+(defvar jcgs/org-no-task-color-themes
+  [color-theme-euphoria
+   ;; color-theme-calm-forest
+   color-theme-blue-mood
+   ;; color-theme-billw
+   color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
+   ;; color-theme-lethe
+   color-theme-kingsajz
+   color-theme-retro-orange
+   color-theme-retro-green
+   color-theme-resolve
+   ]
+  "Colour themes I can endure but don't like much.")
+
+(add-hook 'org-clock-in-hook
+	  (function
+	   (lambda ()
+	     (condition-case problem
+		 (let ((theme (aref jcgs/org-task-color-themes
+				    (random (length jcgs/org-task-color-themes)))))
+		   (message "Using %s as clocked-in theme" theme)
+		   (funcall theme))
+	       (message "Got error %S in changing colour theme" problem)))))
+
+(add-hook 'org-clock-out-hook
+	  (function
+	   (lambda ()
+	     (condition-case problem
+		 (let ((theme (aref jcgs/org-no-task-color-themes
+				    (random (length jcgs/org-no-task-color-themes)))))
+		   (message "Using %s as clocked-out theme" theme)
+		   (funcall theme))
+	       (message "Got error %S in changing colour theme" problem)))))
+
+;;;; Pomodoros
 
 (defvar jcgs/org-timer-pomodoros-done-count 0
   "Count of the pomodoros I have done.
@@ -165,11 +244,13 @@ the end of a day.")
 
 (defvar jcgs/pomodoro-log-file
   (cond
+   ((file-directory-p "/work/johstu01/work-org")
+    (expand-file-name "pomodoro-log.org" "/work/johstu01/work-org/"))
    ((getenv "ORG")
-      (substitute-in-file-name "$ORG/pomodoro-log.org"))
-    ((file-directory-p "~/Dropbox")
-     (expand-file-name "~/Dropbox/pomodoro-log.org"))
-    (t (expand-file-name "~/pomodoro-log.org")))
+    (substitute-in-file-name "$ORG/pomodoro-log.org"))
+   ((file-directory-p "~/Dropbox")
+    (expand-file-name "~/Dropbox/pomodoro-log.org"))
+   (t (expand-file-name "~/pomodoro-log.org")))
   "Where I log my pomodoro completion.")
 
 (defun jcgs/pomodoro-log-show ()
@@ -252,6 +333,55 @@ Argument STRING is the log entry."
 	 ;; todo: put this in the mode line
 	 jcgs/org-timer-pomodoros-done-count (1+
 					      jcgs/org-timer-pomodoros-done-count))))))
+
+;;;; Write clocked-in tasks into my work log file
+
+(defun jcgs/org-find-ancestral-jira-task ()
+  "Find the jira task covering the current task."
+  (save-excursion
+    (let* ((pattern "\\[jira:\\([0-9]+\\)\\]")
+	   (heading (nth 4 (org-heading-components))))
+      (if (string-match pattern heading)
+	  (match-string-no-properties 1 heading)
+	(catch 'found
+	  (while (> (funcall outline-level) 1)
+	    (outline-up-heading 1)
+	    (setq heading (nth 4 (org-heading-components)))
+	    (when (string-match pattern heading)
+	      (throw 'found (match-string-no-properties 1 heading))))
+	  nil)))))
+
+(defvar jcgs/org-last-clocked-task-added-to-log nil
+  "The last clocked task added to the log.")
+
+(defvar jcgs/org-last-clocked-task-date-added-to-log nil
+  "The date of the last clocked task added to the log.")
+
+(defun jcgs/org-add-clocked-task-to-log ()
+  "Add to your log the task you're currently clocking in to.
+For use in `org-clock-in-hook'."
+  (let* ((task (nth 4 (org-heading-components)))
+	 (jira (if (string-match "\\[jira:[0-9]+\\]" task)
+		   nil
+		 (jcgs/org-find-ancestral-jira-task)))
+	 (date (format-time-string "%Y-%m-%d")))
+    (when (or (not (equal task jcgs/org-last-clocked-task-added-to-log))
+	      (not (equal date jcgs/org-last-clocked-task-date-added-to-log)))
+      (save-window-excursion
+	(find-file work-log-file)
+	(goto-char (point-max))
+	;; todo: regulate this to one blank line
+	(insert (format "\n\n**** Clocked in to \"%s%s\"\n" task
+			(if jira
+			    (format " (jira %s)" jira)
+			  "")))
+	(setq jcgs/org-last-clocked-task-added-to-log task
+	      jcgs/org-last-clocked-task-date-added-to-log date)
+	(basic-save-buffer)))))
+
+(add-hook 'org-clock-in-hook 'jcgs/org-add-clocked-task-to-log) 
+
+;;;; Timer notification
 
 (defvar jcgs/background-images-directory (substitute-in-file-name "$HOME/backgrounds")
   "My directory of background images.")
@@ -622,11 +752,16 @@ For use with `org-sort-entries'."
 
 ;;; change task dates
 
-(defun jcgs/org-task-today (&optional no-move)
+(defun jcgs/org-task-today (&optional no-move offset)
   "Mark the task on the current line as to be done today.
-Unless optional NO-MOVE, move to the next entry."
-  (interactive)
-  (let ((today-string (format-time-string "<%Y-%m-%d %a>"))
+Unless optional NO-MOVE, move to the next entry.
+With optional OFFSET, add that number of days."
+  (interactive "P")
+  (let ((today-string (format-time-string "<%Y-%m-%d %a>"
+					  (if offset
+					      (time-add (current-time)
+							(days-to-time offset))
+					    nil)))
 	(eol (line-end-position)))
     (save-excursion
       (beginning-of-line)
@@ -646,7 +781,37 @@ Unless optional NO-MOVE, move to the next entry."
     ;; todo: probably some org-mode or outline-mode command for this
     (forward-line)))
 
-(define-key org-mode-map [ f6 ] 'jcgs/org-task-today)
+(defun jcgs/org-task-tomorrow (&optional no-move)
+  "Mark the task on the current line as to be done tomorrow.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (jcgs/org-task-today no-move 1))
+
+(define-key org-mode-map [ f8 ] 'jcgs/org-task-today)
+(define-key org-mode-map [ f9 ] 'jcgs/org-task-tomorrow)
+
+(defun jcgs/org-agenda-task-today (&optional no-move)
+  "Like jcgs/org-task-today, but from the agenda buffer.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (save-window-excursion
+    (other-window 1)
+    (jcgs/org-task-today t))
+  (unless no-move
+    (org-agenda-next-line)))
+
+(defun jcgs/org-agenda-task-tomorrow (&optional no-move)
+  "Like jcgs/org-task-tomorrow, but from the agenda buffer.
+Unless optional NO-MOVE, move to the next entry."
+  (interactive "P")
+  (save-window-excursion
+    (other-window 1)
+    (jcgs/org-task-tomorrow t))
+  (unless no-move
+    (org-agenda-next-line)))
+
+(define-key org-agenda-mode-map [ f8 ] 'jcgs/org-agenda-task-today)
+(define-key org-agenda-mode-map [ f9 ] 'jcgs/org-agenda-task-tomorrow)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; separate log files ;;

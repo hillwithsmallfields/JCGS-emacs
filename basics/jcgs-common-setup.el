@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2014-08-09 11:51:51 jcgs>
+;;; Time-stamp: <2014-11-22 20:40:59 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -41,5 +41,6 @@
   (message "Saved all buffers"))
 
 (global-set-key [ f11 ] 'save-all-buffers-no-ask)
+(global-set-key "\C-x\C-b" 'electric-buffer-list)
 
 ;;; jcgs-common-setup.el ends here

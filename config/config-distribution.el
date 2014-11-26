@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-07-28 17:01:29 johstu01>
+;;; Time-stamp: <2014-11-07 11:00:44 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -336,9 +336,8 @@ Top and bottom destinations are actually `scroll-margin' lines
 
 ;;;; Ediff
 
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-(setq ediff-split-window-function (lambda (&optional arg)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-split-window-function (lambda (&optional arg)
 				    (if (> (frame-width) 150)
 					(split-window-horizontally arg)
 				      (split-window-vertically arg))))
@@ -358,7 +357,7 @@ Top and bottom destinations are actually `scroll-margin' lines
 (defvar voice-announce-compilation-finish nil
   "*Whether to make a voice announcement of compilation finishing.")
 
-(defvar browser-announce-compilation-finish t
+(defvar browser-announce-compilation-finish nil
   "*Whether to notify compilation finishing via the browser.")
 
 (defvar compilation-finish-count 0
@@ -407,101 +406,6 @@ The nearest FILE is used."
   (find-file
    (expand-file-name file
 		     (ancestor-directory-containing default-directory file))))
-
-(defvar bb-git-directory nil
-  "The nearest ancestral directory containing a file (directory) called \"git\".")
-
-(defvar bb-bb-directory nil
-  "The nearest ancestral directory containing a file called \"bb\".")
-
-(defvar xc-test-laptop-name "crazy-harry"
-  "The name of the current test laptop.")
-
-(defun xc-change-test-laptop (new-laptop)
-  "Change to using NEW-LAPTOP."
-  (interactive "sNew laptop name: ")
-  (setq xc-test-laptop-name new-laptop)
-  (mapcar (lambda (buffer)
-	    (set-buffer buffer)
-	    (when (eq major-mode 'c-mode)
-	      (message "Moving builds done from %s to use %s" (buffer-name buffer) new-laptop)
-	      (jcgs-xc-build-setup)))
-	  (buffer-list)))
-
-(defun bb-build-target (directory)
-  "Find the build target for DIRECTORY."
-  (message "Getting build target for %s" directory)
-  (cond
-   ((string-match "dm-wrapper" directory)
-    (message "It's dm-wrapper")
-    "dm-wrapper_git")
-   ((string-match "i686core2-angstrom-linux/\\([-a-z]+\\)-git" directory)
-    (concat (match-string 1 directory) "_git"))
-   (t
-    (message "Warning: using default compilation target")
-    ;; try my commonest target:
-    "ioemu_git"
-    )))
-
-(defun bb-latest-image (pattern directory &rest sub-directories)
-  "Find the most recent image matching PATTERN in DIRECTORY.
-Remaining SUB-DIRECTORIES are used to complete the filename."
-  (while sub-directories
-    (setq directory (expand-file-name (car sub-directories)
-				      directory)
-	  sub-directories (cdr sub-directories)))
-  (car (nreverse (directory-files directory nil pattern t))))
-
-(defvar bb-compile-and-ship-command-format
-   "MACHINE=xenclient-dom0 ./bb -f -D -b %s -c compile && ./bb -f -D -b %s -c install && rsync -avzrP %s/image/ root@%s:/"
-;; "cd /home/johnstu/xcbuild/OE-20110504/build-scripts/build/oe/ ;  MACHINE=xenclient-dom0 ./bb -f -D -b ioemu_git -c compile && rsync /home/johnstu/xcbuild/OE-20110504/build-scripts/build/oe/build/work/i686core2-angstrom-linux/ioemu-git-r7945-xc.7430.485.30//git/i386-dm/qemu-dm root@timmy:/usr/lib/xen/bin/qemu-dm"
-  "String for `compile-command' for use when working with bitbake.")
-
-(defun jcgs-xc-build-setup ()
-  "Arrange my xenclient-specific build things for C files."
-  (cond
-   ( ;; XenClient using bitbake
-    (string-match "oe/build" default-directory)
-    (let* ((bb-dir (ancestor-directory-containing default-directory "bb"))
-	   (git-dir (ancestor-directory-containing default-directory "git"))
-	   (bb-build-target (bb-build-target default-directory))
-	   (md5command (format " && (find %s/image -type f | xargs md5sum > %s/md5sums)" git-dir git-dir))
-	   (install-command
-	    (if (stringp git-dir)
-		(cond
-		 ((string-match "xen-git" git-dir)
-		  (format " && cp %s /home/xc_tftpboot/pxe/jcgs/xen-debug.gz"
-			  (expand-file-name (bb-latest-image "xen-.+-pre-xc.gz" git-dir "image/boot")
-					    (expand-file-name "image/boot" git-dir))))
-		 ((string-match "dm-wrapper" git-dir)
-                  (format " && scp %sgit/src/.libs/qemu-dm-wrapper root@%s:/usr/bin/qemu-dm-wrapper" git-dir xc-test-laptop-name)
-		  )
-		 (t (format " && rsync -avzrP %s/image/ root@%s:/"
-			    git-dir xc-test-laptop-name)))
-	      "")))
-      (message "buffer %s, bb-dir %s, git-dir %s, build target %s" (current-buffer) bb-dir git-dir bb-build-target)
-      (when (and bb-dir git-dir)
-	(mapcar 'make-local-variable '(compile-command bb-git-directory bb-bb-directory tracking-org-file))
-	(require 'tracked-compile)
-	(define-key c-mode-map "\C-cc" 'tracked-compile)
-	(setq bb-git-directory git-dir
-	      bb-bb-directory bb-dir
-	      ;; tracking-org-file (expand-file-name "builds.org" git-dir)
-	      compile-command (format
-			       "cd %s; MACHINE=xenclient-dom0 ./bb -f -D -b %s -c compile && MACHINE=xenclient-dom0 ./bb -f -D -b %s -c install%s%s"
-			       bb-dir bb-build-target bb-build-target md5command install-command))))
-    (setq version-control t)
-    )
-   ( ;; linux kernel
-    (string-match "kernel" default-directory)
-    (c-set-style "linux")
-    (make-local-variable 'compile-command)
-    (setq compile-command "make -k ")
-    )
-   ( ;; generic using Makefile
-    (file-exists-p "../Makefile")
-    (make-local-variable 'compile-command)
-    (setq compile-command "cd ..; make -k "))))
 
 (setq compilation-ask-about-save nil
       compilation-read-command nil)
@@ -698,7 +602,7 @@ John Sturdy <john@cb1.com>"
 								 :width 2)))))
      (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
      (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
-     (font-lock-builtin-face ((t (:foreground "navy"))))
+     (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
      (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
      (font-lock-warning-face ((t (:foreground "orange" :bold t))))
      )))
@@ -767,5 +671,19 @@ John Sturdy <john@cb1.com>"
 ;;;; manual
 
 (setq Man-width 80)
+
+;;;; fix a problem I get on my ubuntu machine at work
+
+;;; The problem is it's easy to get rid of a frame accidentally, but I
+;;; can't recreate it with C-x 5 b sometimes.
+
+(defun suspend-frame-with-query ()
+  "Does `suspend-frame' but check first."
+  (when (yes-or-no-p "Suspend frame? ")
+      (suspend-frame)))
+
+(let ((case-fold-search t))
+  (when (string-match "ubuntu" (shell-command-to-string "uname -a"))
+    (global-set-key "\C-z" 'suspend-frame-with-query)))
 
 ;;; end of config-distribution.el

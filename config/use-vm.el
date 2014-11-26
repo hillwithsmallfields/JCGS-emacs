@@ -1,5 +1,5 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2014-06-23 11:52:23 johstu01>
+;;; Time-stamp: <2014-10-05 22:56:25 jcgs>
 
 (add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
 
@@ -36,13 +36,13 @@ Also shows diary and to-do list." t)
 		   my-summary-name (concat (file-name-nondirectory vm-primary-inbox) " Summary")
 		   vm-imap-messages-per-session 128
 		   vm-spool-files '( ;; "imap:staffexchange1.ul.ie:143:inbox:login:john.sturdy:*"
-				    "imap:localhost:143:inbox:login:johnstu:*" ; via a stunnel daemon that James set up
+				    ;; "imap:localhost:143:inbox:login:johnstu:*" ; via a stunnel daemon that James set up
 				    ;; "imap-ssl:lonpmail.citrite.net:993:inbox:login:johnstu:*" ; new one
 				    ;; "imap-ssl:lonpmailmx01.citrite.net:993:inbox:login:johnstu:*"
 				    ;; "imap:lonpmailmx01.citrite.net:143:inbox:login:citrite\\johnstu:*"
-				    "imap:localhost:11143:inbox:login:john.cb1.com:*"
+				    ;; "imap:localhost:11143:inbox:login:john.cb1.com:*"
 
-
+				    "imap-ssl:imap.cb1.com:993:inbox:login:john.cb1.com:*"
 				    ;; "imap-ssl:imap.gmail.com:993:inbox:jcg.sturdy@gmail.com:*"
 
 				    ;; SPOOLNAME can also be an IMAP maildrop.
@@ -155,7 +155,8 @@ Also shows diary and to-do list." t)
 					    vm-visible-headers
 					  (cons "X-Warning-Local" vm-visible-headers))))
 
-	     (define-key mail-mode-map "\C-j" 'mail-split-line)
+	     (eval-after-load "message" 
+	       '(define-key message-mode-map "\C-j" 'mail-split-line))
 	     (bbdb-insinuate-vm)
 
 	     (when (boundp 'vm-mode-map)

@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2014-07-17 11:00:43 johstu01>
+;;; Time-stamp: <2014-11-12 16:12:31 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, John C. G. Sturdy
 
@@ -21,37 +21,45 @@
 		  ("-ulga-" . "$OPEN_PROJECTS/ULGA/trunk/")
 		  ("-libGE-" . "$OPEN_PROJECTS/libGE/trunk/")))
     (make-named-shell (car pair) (cdr pair)))
-  ( "-rtl-" . "$OPEN_PROJECTS/libRTL/trunk/" )
+  ;; ( "-rtl-" . "$OPEN_PROJECTS/libRTL/trunk/" )
   (when nil
     (make-named-shell "-ephemerals-"
 		      "$COMMON/research/bds/grevo/ephemerals/"
 		      )))
 
-(make-named-shell "-muesli-"
-		  "$OPEN_PROJECTS/muesli/"
-		  ;; "make clean; ./configure; make\n"
-		  )
+(make-shell-for-directory-if-present "-muesli-"
+				     "$OPEN_PROJECTS/muesli/"
+				     ;; "make clean; ./configure; make\n"
+				     )
+
+(make-shell-for-directory-if-present "-emacs-"
+				     "$EMACS")
+
+ (when (at-work)
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src")
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer/" "-monit-")
+  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-"))
 
 (unless (at-work)
-  (make-named-shell "-gos-"
-		    "$OPEN_PROJECTS/gos/"
-		    ;; "make clean; ./configure; make\n"
-		    )
-  (make-named-shell "-mulvoc-"
-		    "$OPEN_PROJECTS/mulvoc/mulvoc/"
-		    ;; "make clean; ./configure; make\n"
-		    )
+  (make-shell-for-directory-if-present "-gos-"
+				       "$OPEN_PROJECTS/gos/"
+				       ;; "make clean; ./configure; make\n"
+				       )
+  (make-shell-for-directory-if-present "-mulvoc-"
+				       "$OPEN_PROJECTS/mulvoc/mulvoc/"
+				       ;; "make clean; ./configure; make\n"
+				       )
   (when t
-    (make-named-shell "-khanate-"
-		      "$WRITING/fiction/last-khan/"
-		      ;; "latex last-khan.tex\n"
-		      ))
+    (make-shell-for-directory-if-present "-khanate-"
+					 "$WRITING/fiction/last-khan/"
+					 ;; "latex last-khan.tex\n"
+					 ))
   )
 
-(when (at-work)
+(when (and nil (at-work))
   (let ((login-host (format "login%d.euhpc.arm.com" (1+ (random 7)))))
-    (make-named-shell (format "=%s=" login-host)
-		      "~"
-		      (format "echo ssh %s" login-host))))
+    (make-shell-for-directory-if-present (format "=%s=" login-host)
+					 "~"
+					 (format "echo ssh %s" login-host))))
 
 ;;; config-projects.el ends here
