@@ -1,9 +1,9 @@
 ;;;; JCGS's configuration for ps-print
-;;; Time-stamp: <2013-11-21 11:55:00 johnstu>
+;;; Time-stamp: <2014-09-06 11:20:35 jcgs>
 
 (setq ps-paper-type 'a4
       ;; ps-lpr-switches nil
-      ps-printer-name "Canon_PS"
+      ps-printer-name "JCGS_print_scan_1"
 
 
       ps-spool-duplex nil
