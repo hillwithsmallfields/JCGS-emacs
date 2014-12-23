@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-11-11 17:03:00 johstu01>
+;;; Time-stamp: <2014-12-23 17:08:54 jcgs>
 
 (require 'org)
 
@@ -777,7 +777,11 @@ With optional OFFSET, add that number of days."
 				(skip-syntax-backward "s")
 				(point)))))
 	  (goto-char (or text-end eol))
-	  (insert " " today-string))))
+	  (unless (looking-at " ")
+	    (insert " "))
+	  (insert today-string)
+	  (unless (eolp)
+	    (insert " ")))))
     ;; todo: probably some org-mode or outline-mode command for this
     (forward-line)))
 
