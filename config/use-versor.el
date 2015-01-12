@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2014-10-20 15:27:21 johstu01>
+;;; Time-stamp: <2015-01-12 19:58:51 jcgs>
 
 (setq joystick-graphical nil)
 
@@ -59,5 +59,9 @@
 						user-emacs-directory))
 		 ;; re-assigns one of the pedals, so do after versor etc
 		 (require 'voice-assist-key))))
+
+(unless (fboundp 'versor-save-research-data)
+  (defun versor-save-research-data ()
+    nil))
 
 ;;; end of use-versor.el
