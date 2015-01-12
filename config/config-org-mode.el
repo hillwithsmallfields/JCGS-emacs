@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-11-11 17:03:00 johstu01>
+;;; Time-stamp: <2015-01-09 12:43:24 johstu01>
 
 (require 'org)
 
@@ -206,7 +206,7 @@ The task identifier is substituted in as a string.")
    ;; color-theme-calm-forest
    color-theme-blue-mood
    ;; color-theme-billw
-   color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
+   ;; color-theme-jonadabian		; dark blue, I think it may leave traces afterwards
    ;; color-theme-lethe
    color-theme-kingsajz
    color-theme-retro-orange
