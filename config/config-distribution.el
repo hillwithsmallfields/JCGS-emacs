@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2014-11-07 11:00:44 johstu01>
+;;; Time-stamp: <2015-01-12 19:57:35 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -522,7 +522,8 @@ Argument STRING is the string to check."
   "`snapshot' any current `comint-last-prompt-overlay'.
 Freeze its attributes in place, even when more input comes along
 and moves the prompt overlay."
-  (when (and comint-last-prompt-overlay
+  (when (and (boundp 'comint-last-prompt-overlay)
+	     comint-last-prompt-overlay
 	     (>= (overlay-start comint-last-prompt-overlay) (point-min))
 	     (<= (overlay-end comint-last-prompt-overlay) (point-max)))
     (let ((inhibit-read-only t)
