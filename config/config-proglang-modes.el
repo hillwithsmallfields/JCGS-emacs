@@ -1,7 +1,7 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2014-10-31 11:30:19 johstu01>
+;;; Time-stamp: <2015-01-20 11:13:14 johstu01>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -114,10 +114,15 @@
 
 (message "Setting up go-mode")
 
-(when (file-directory-p "/usr/local/go")
-  (add-to-list 'load-path "/usr/local/go/misc/emacs/")
+(when (catch 'found-go
+	(dolist (dir (list "/usr/local/go/misc/emacs/"
+			   (substitute-in-file-name "$GATHERED/emacs/go-mode")))
+	  (when (file-directory-p dir)
+	    (add-to-list 'load-path dir)
+	    (throw 'found-go t)))
+	nil)
   (add-to-list 'auto-mode-alist (cons "\\.go" 'go-mode))
-  (require 'go-mode-load))
+  (require 'go-mode))
 
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key "\M-." 'godef-jump)
