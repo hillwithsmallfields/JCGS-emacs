@@ -1,6 +1,6 @@
 ;;; vellum-theme.el --- theme a bit like an old manuscript
 
-;; Copyright (C) 2013  John Sturdy
+;; Copyright (C) 2013, 2015  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: faces
@@ -24,6 +24,16 @@
 ;; perhaps just before I knew of one).
 
 ;;; Code:
+
+(defun color-theme-vellum ()
+  "Vellum manuscript-style color theme."
+  (interactive)
+  (color-theme-standard)
+  (color-theme-install
+   '(color-theme-vellum
+     ((background-color . "wheat")
+      (foreground-color . "brown")))))
+
 
 (deftheme vellum
   "Vellum theme."
