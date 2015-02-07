@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-01-20 11:13:14 johstu01>
+;;; Time-stamp: <2015-02-07 20:30:40 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -19,8 +19,7 @@
 (defun jcgs-c-mode-hook ()
   "My hook for setting up C mode."
   (define-key c-mode-map "\C-cc" 'compile)
-  (define-key c-mode-map "\C-cf" 'cflow-file)
-  (jcgs-xc-build-setup))
+  (define-key c-mode-map "\C-cf" 'cflow-file))
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
 
