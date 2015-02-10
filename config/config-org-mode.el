@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-01-23 21:31:57 jcgs>
+;;; Time-stamp: <2015-02-10 11:37:34 johstu01>
 
 (require 'org)
 
@@ -202,7 +202,7 @@ The task identifier is substituted in as a string.")
   "Colour themes I prefer.")
 
 (defvar jcgs/org-no-task-color-themes
-  [color-theme-euphoria
+  [;; color-theme-euphoria ; doesn't change correctly from some
    ;; color-theme-calm-forest
    color-theme-blue-mood
    ;; color-theme-billw
