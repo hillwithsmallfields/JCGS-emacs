@@ -1,11 +1,14 @@
 ;;;; isbn-lookup.el
 ;;; Initially written 2014-05-10 by JCG Sturdy
-;;; Time-stamp: <2015-02-03 23:01:46 jcgs>
+;;; Time-stamp: <2015-02-12 09:22:55 jcgs>
 
 (defun isbn-lookup (isbn &optional raw)
   "Look up ISBN.
 Process the result unless optional RAW is given."
-  (interactive "sLook up ISBN: ")
+  (interactive ;; "sLook up ISBN: "
+   (let* ((at-point (thing-at-point 'symbol))
+	  (plausibly-isbn (string-match "[-0-9]+" at-point)))
+     (list (read-from-minibuffer "Look up ISBN: " (if plausibly-isbn at-point "")))))
   (let ((fetcher (get-buffer-create "*ISBN fetch*"))
 	(result nil))
     (set-buffer fetcher)
@@ -64,7 +67,7 @@ Process the result unless optional RAW is given."
 (defun isbn-normalize-pair (pair)
   "Normalize PAIR.
 This will convert dates to iso format, and put the conventional hyphens into ISBNs."
-  (let ((fn (get (intern (car pair)) 'isbn-normalizer-function)))
+  (let ((fn (get (intern-soft (car pair)) 'isbn-normalizer-function)))
     (if fn
 	(funcall fn pair)
       pair)))
@@ -87,6 +90,11 @@ This will convert dates to iso format, and put the conventional hyphens into ISB
 					   (format "%s-%02d" year month)))))
 
 
+(def-isbn-normalizer "Title" (lambda (pair)
+			       (let ((title (cdr pair)))
+				 (cons (car pair)
+				       (replace-regexp-in-string "&amp;" "&" title)))))
+
 (defun org-table-headings ()
   "Get the headings of a table, as a vector."
   (save-excursion
@@ -105,10 +113,13 @@ This will convert dates to iso format, and put the conventional hyphens into ISB
 
 (defun org-table-column-number (column-name)
   "Return the column number for COLUMN-NAME."
-  (1+ (position column-name
+  (let ((raw (position column-name
 		(or (get-text-property (point) 'org-table-headings)
 		    (org-table-headings))
 		:test 'string=)))
+    (if (numberp raw) 
+	(1+ raw)
+      nil)))
 
 (defun org-table-goto-column-by-name (name)
   "Go to the column named NAME."
@@ -129,6 +140,20 @@ The return value is always the old value."
     ;; todo: trim whitespace from string
     str))
 
-;; todo: get details of a row, and fill in missing fields
+(defun isbn-fill-in-details ()
+  "Fill in the details of the current row."
+  (interactive)
+  (save-excursion
+    (beginning-of-line 1)
+    (if (re-search-forward "[-0-9]\\{10,20\\}" (point-at-eol) t)
+	(let* ((isbn (match-string-no-properties 0))
+	       (details (save-excursion (isbn-lookup isbn))))
+	  (if details
+	      (dolist (detail details)
+		(let ((colno (org-table-column-number (car detail))))
+		  (when (numberp colno)
+		    (org-table-get-field colno (cdr detail)))))
+	    (error "Could not get ISBN details")))
+      (error "Could not find ISBN number on this line"))))
 
 ;;; isbn-lookup.el ends here
