@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-01-20 11:13:14 johstu01>
+;;; Time-stamp: <2015-01-21 19:48:37 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -130,6 +130,18 @@
 			  (when (string-match "unisched" default-directory)
 			    (set (make-local-variable 'compile-command)
 				 "pb_var_exec -- go install -v arm.com/uniSched..."))))
+
+;;;;;;;;;;;;;;;;;;
+;; arduino-mode ;;
+;;;;;;;;;;;;;;;;;;
+
+(let ((dir (substitute-in-file-name "$GATHERED/emacs/arduino-mode")))
+  (when (file-directory-p dir)
+    (add-to-list 'load-path dir)
+    (autoload 'arduino-mode "arduino-mode"
+        "Major mode for editing Arduino code."
+	t)
+    (add-to-list 'auto-mode-alist (cons "\\.ino" 'arduino-mode)))))
 
 ;;;;;;;;;;
 ;; Tags ;;
