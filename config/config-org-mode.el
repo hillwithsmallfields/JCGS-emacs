@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2014-11-11 17:03:00 johstu01>
+;;; Time-stamp: <2015-02-10 11:37:34 johstu01>
 
 (require 'org)
 
@@ -202,7 +202,7 @@ The task identifier is substituted in as a string.")
   "Colour themes I prefer.")
 
 (defvar jcgs/org-no-task-color-themes
-  [color-theme-euphoria
+  [;; color-theme-euphoria ; doesn't change correctly from some
    ;; color-theme-calm-forest
    color-theme-blue-mood
    ;; color-theme-billw
@@ -777,7 +777,10 @@ With optional OFFSET, add that number of days."
 				(skip-syntax-backward "s")
 				(point)))))
 	  (goto-char (or text-end eol))
-	  (insert " " today-string))))
+	  (just-one-space)
+	  (insert today-string)
+	  (unless (eolp)
+	    (just-one-space)))))
     ;; todo: probably some org-mode or outline-mode command for this
     (forward-line)))
 
