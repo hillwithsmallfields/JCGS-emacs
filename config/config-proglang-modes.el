@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-02-07 20:30:40 jcgs>
+;;; Time-stamp: <2015-02-27 13:02:00 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
@@ -163,6 +163,17 @@
       (push build-dir tags-table-list)
     (if (file-readable-p (expand-file-name "tags" source-directory))
 	(push (expand-file-name "tags" source-directory) tags-table-list))))
+
+;;;;;;;;;;;;;;;;
+;; scala-mode ;;
+;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/scala-mode2"))
+(autoload 'scala-mode "scala-mode2"
+    "Major mode for editing scala code.
+
+When started, runs `scala-mode-hook'." t)
+(add-to-list 'auto-mode-alist (cons "\\.scala\\'" 'scala-mode))
 
 ;;;;;;;;;;;;;;;;;
 ;; Change logs ;;
