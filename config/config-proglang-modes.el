@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-02-27 13:02:00 johstu01>
+;;; Time-stamp: <2015-02-27 13:02:27 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
@@ -121,7 +121,7 @@
 	    (add-to-list 'load-path dir)
 	    (throw 'found-go t)))
 	nil)
-  (add-to-list 'auto-mode-alist (cons "\\.go" 'go-mode))
+  (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
   (require 'go-mode))
 
 (add-hook 'go-mode-hook (lambda ()
@@ -141,7 +141,7 @@
     (autoload 'arduino-mode "arduino-mode"
         "Major mode for editing Arduino code."
 	t)
-    (add-to-list 'auto-mode-alist (cons "\\.ino" 'arduino-mode)))))
+    (add-to-list 'auto-mode-alist (cons "\\.ino\\'" 'arduino-mode)))))
 
 ;;;;;;;;;;
 ;; Tags ;;
