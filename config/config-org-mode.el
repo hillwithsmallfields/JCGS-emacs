@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-02-10 11:37:34 johstu01>
+;;; Time-stamp: <2015-03-05 08:10:00 jcgs>
 
 (require 'org)
 
@@ -769,7 +769,7 @@ With optional OFFSET, add that number of days."
       (if (re-search-forward "<[0-9]+-[0-9]+-[0-9]+ [a-z]+>" eol t)
 	  (replace-match today-string)
 	(let* ((tag-start (save-excursion
-			    (and (re-search-forward "[:a-z0-9_]+:$" eol t)
+			    (and (re-search-forward "[:@a-z0-9_]+:$" eol t)
 				 (match-beginning 0))))
 	       (text-end (and tag-start
 			      (save-excursion
@@ -784,11 +784,12 @@ With optional OFFSET, add that number of days."
     ;; todo: probably some org-mode or outline-mode command for this
     (forward-line)))
 
-(defun jcgs/org-task-tomorrow (&optional no-move)
+(defun jcgs/org-task-tomorrow (&optional extra-days)
   "Mark the task on the current line as to be done tomorrow.
-Unless optional NO-MOVE, move to the next entry."
-  (interactive "P")
-  (jcgs/org-task-today no-move 1))
+Then move to the next entry.
+An argument can change the number of days ahead, 1 being tomorrow."
+  (interactive "p")
+  (jcgs/org-task-today nil extra-days))
 
 (define-key org-mode-map [ f8 ] 'jcgs/org-task-today)
 (define-key org-mode-map [ f9 ] 'jcgs/org-task-tomorrow)
@@ -803,15 +804,15 @@ Unless optional NO-MOVE, move to the next entry."
   (unless no-move
     (org-agenda-next-line)))
 
-(defun jcgs/org-agenda-task-tomorrow (&optional no-move)
+(defun jcgs/org-agenda-task-tomorrow (&optional extra-days)
   "Like jcgs/org-task-tomorrow, but from the agenda buffer.
-Unless optional NO-MOVE, move to the next entry."
-  (interactive "P")
+Then move to the next entry.
+An argument can change the number of days ahead, 1 being tomorrow."
+  (interactive "p")
   (save-window-excursion
     (other-window 1)
-    (jcgs/org-task-tomorrow t))
-  (unless no-move
-    (org-agenda-next-line)))
+    (jcgs/org-task-tomorrow extra-days))
+  (org-agenda-next-line))
 
 (define-key org-agenda-mode-map [ f8 ] 'jcgs/org-agenda-task-today)
 (define-key org-agenda-mode-map [ f9 ] 'jcgs/org-agenda-task-tomorrow)
