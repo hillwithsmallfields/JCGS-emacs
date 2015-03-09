@@ -1,6 +1,6 @@
 ;;; fasting.el --- Calculate fasting times
 
-;; Copyright (C) 2013  John Sturdy
+;; Copyright (C) 2013, 2015  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience, calendar
@@ -37,6 +37,7 @@
 (defun fasting-time (started)
   "Calculate fasting time.
 Argument STARTED is when the fast started."
+  ;; todo: use date/time reading code from org-mode?
   (interactive
    (let* ((completion-ignore-case t)
 	  (now (decode-time))
@@ -54,19 +55,19 @@ Argument STARTED is when the fast started."
      (list
       days-ago
       )))
-  (message "%S" started)
+  (message "Started %d days ago" started)
   )
 
 ;; a more primitive one, with fixed offset, to build up into the full function
 
 (defun hours (offset-hours offset-minutes)
   "Print hours table, with OFFSET-HOURS and OFFSET-MINUTES."
-  (interactive "nOffset hours:
-nOffset minutes: ")
+  (interactive "nOffset hours: \nnOffset minutes: ")
   (with-output-to-temp-buffer "*hours*"
-    (dotimes (hour 72)
+    (princ "Day   Time  Hours\n")
+    (dotimes (hour 133)
       (let ((hour-in-day (+ hour offset-hours)))
-    (princ (format "day %d %d:%02d %d\n" (/ hour-in-day 24) (% hour-in-day 24) offset-minutes hour))))))
+    (princ (format "day %d %02d:%02d %d\n" (/ hour-in-day 24) (% hour-in-day 24) offset-minutes hour))))))
 
 (provide 'fasting)
 ;;; fasting.el ends here
