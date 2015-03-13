@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2014-11-22 20:40:59 jcgs>
+;;; Time-stamp: <2015-03-13 19:33:24 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -42,5 +42,19 @@
 
 (global-set-key [ f11 ] 'save-all-buffers-no-ask)
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
+
+(defun enable-debug (arg)
+  "Switch debugging on.
+With ARG negative (or provided interactively) switch it off."
+  (interactive "P")
+  (message "arg is %S" arg)
+  (if (or (and (numberp arg)
+	       (< arg 0))
+	  (and arg (not (numberp arg))))
+      (progn
+	(message "disabling debug")
+	(setq debug-on-error nil))
+    (message "enabling debug")
+    (setq debug-on-error t)))
 
 ;;; jcgs-common-setup.el ends here
