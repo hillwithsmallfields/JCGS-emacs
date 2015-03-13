@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-05 08:10:00 jcgs>
+;;; Time-stamp: <2015-03-13 18:06:39 johstu01>
 
 (require 'org)
 
@@ -101,9 +101,8 @@ changed." t)
 
 (add-hook 'org-clock-in-prepare-hook 'jcgs/org-clock-in-prepare-function)
 
-(defun jcgs/org-after-todo-state-change-function ()
-  "My customizations for state change.
-When the last of a set of sibling tasks is marked as DONE,
+(defun jcgs/org-after-todo-state-change-propagate-upwards ()
+  "When the last of a set of sibling tasks is marked as DONE,
 mark the ancestral tasks as DONE."
   (while (> (funcall outline-level) 1)
     (outline-up-heading 1)
@@ -120,7 +119,23 @@ mark the ancestral tasks as DONE."
       (unless not-all-done
 	(org-todo "DONE")))))
 
-(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-function t)
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-propagate-upwards t)
+
+(defun jcgs/org-after-todo-state-change-move-next-marker ()
+  "If this task is being marked as done, and has a :next: tag, move the tag."
+  (when (and (org-entry-is-done-p)
+	     (member "next" (org-get-tags)))
+    (org-toggle-tag "next" 'off)
+    (let ((started-at (point)))
+      (org-forward-heading-same-level 1)
+      ;; todo: the request to move to the next subtree isn't happening
+      (if (/= (point) started-at)
+	  (org-toggle-tag "next" 'on)
+	(when (y-or-n-p "Move :next: marker to next subtree? ")
+	  (outline-next-heading)
+	  (org-toggle-tag "next" 'on))))))
+
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
 
 ;; TODO: make this stop my pomodoro timer
 ;; TODO: probably it should be in the pomodoro code rather than this hook
@@ -497,6 +512,7 @@ You may want to turn voice input off at this point; and suspend task timers.")
 
 (defun jcgs/org-open-hierarchical-date (date)
   "Ensure there is a hierarchical record for DATE."
+  ;; TODO: I think there is an existing library I could use for this
   ;; TODO: make this check whether the date is already there
   ;; TODO: make it find the right place in a file even if DATE is not the last date
   ;; TODO: make it use a common date format for the argument
