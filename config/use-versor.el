@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2015-01-12 19:58:51 jcgs>
+;;; Time-stamp: <2015-03-10 14:31:59 johstu01>
 
 (setq joystick-graphical nil)
 
@@ -13,7 +13,7 @@
 (use-package versor
 	     "$OPEN_PROJECTS/emacs-versor/lisp"
 	      "http://sourceforge.net/project/showfiles.php?group_id=97002"
-	     ((kill-emacs-hook . versor-save-research-data)
+	     (;; (kill-emacs-hook . versor-save-research-data)
 	      "$OPEN_PROJECTS/emacs-versor/joylisp" ; for joystick
 	      t)
 	     (versor-setup 'arrows
