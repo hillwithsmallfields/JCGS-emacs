@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-01-12 19:57:35 jcgs>
+;;; Time-stamp: <2015-03-13 11:47:58 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -577,36 +577,49 @@ and moves the prompt overlay."
   "Brightly illuminated vellum manuscript theme.
 John Sturdy <john@cb1.com>"
   (interactive)
-  (color-theme-install
-   '(color-theme-vellum
-     ;; frame parameters
-     ((foreground-color . "brown")
-      (background-color . "wheat")
-      (cursor-color . "red")
-      (mouse-color . "red")
-      )
-     ;; variable settings
-     (
-      )
-     ;; face definitions
-     (modeline ((t (:background "purple"
-				:foreground "dark red"
-				:height 0.9
-				:bold t))))
-     (font-lock-comment-face ((t (:foreground "purple" :italic t))))
-     (font-lock-function-name-face ((t (:background "gold"
-						    :foreground "red"
-						    :height 1.25
-						    :bold t
-						    :box (:color "dark green"
-								 :style released-button
-								 :width 2)))))
-     (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
-     (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
-     (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
-     (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
-     (font-lock-warning-face ((t (:foreground "orange" :bold t))))
-     )))
+  (color-theme-standard)
+  (let ((color-theme-is-cumulative t))
+    (color-theme-install
+     '(color-theme-vellum
+       ((background-color . "Wheat"))
+       (modeline ((t (:foreground "brown" :background "black"))))
+       (font-lock-keyword-face ((t (:foreground "purple4"))))
+       (font-lock-string-face ((t (:foreground "Brown"))))
+       )))
+
+
+  
+  ;; (color-theme-install
+  ;;  '(color-theme-vellum
+  ;;    ;; frame parameters
+  ;;    ((foreground-color . "brown")
+  ;;     (background-color . "wheat")
+  ;;     (cursor-color . "red")
+  ;;     (mouse-color . "red")
+  ;;     )
+  ;;    ;; variable settings
+  ;;    (
+  ;;     )
+  ;;    ;; face definitions
+  ;;    (modeline ((t (:background "purple"
+  ;; 				:foreground "dark red"
+  ;; 				:height 0.9
+  ;; 				:bold t))))
+  ;;    (font-lock-comment-face ((t (:foreground "purple" :italic t))))
+  ;;    (font-lock-function-name-face ((t (:background "gold"
+  ;; 						    :foreground "red"
+  ;; 						    :height 1.25
+  ;; 						    :bold t
+  ;; 						    :box (:color "dark green"
+  ;; 								 :style released-button
+  ;; 								 :width 2)))))
+  ;;    (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
+  ;;    (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
+  ;;    (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
+  ;;    (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
+  ;;    (font-lock-warning-face ((t (:foreground "orange" :bold t))))
+  ;;    ))
+  )
 
 ;;;; colour in the tty interface
 
