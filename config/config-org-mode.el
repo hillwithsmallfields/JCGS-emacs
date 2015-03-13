@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-13 18:06:39 johstu01>
+;;; Time-stamp: <2015-03-13 18:18:42 johstu01>
 
 (require 'org)
 
@@ -126,9 +126,9 @@ mark the ancestral tasks as DONE."
   (when (and (org-entry-is-done-p)
 	     (member "next" (org-get-tags)))
     (org-toggle-tag "next" 'off)
+    (beginning-of-line 1)
     (let ((started-at (point)))
       (org-forward-heading-same-level 1)
-      ;; todo: the request to move to the next subtree isn't happening
       (if (/= (point) started-at)
 	  (org-toggle-tag "next" 'on)
 	(when (y-or-n-p "Move :next: marker to next subtree? ")
