@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-14 20:08:53 jcgs>
+;;; Time-stamp: <2015-03-14 21:30:38 jcgs>
 
 (require 'org)
 
@@ -153,18 +153,27 @@ mark the ancestral tasks as DONE."
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-propagate-upwards t)
 
 (defun jcgs/org-after-todo-state-change-move-next-marker ()
-  "If this task is being marked as done, and has a :next: tag, move the tag."
-  (when (and (org-entry-is-done-p)
-	     (member "next" (org-get-tags)))
-    (org-toggle-tag "next" 'off)
-    (beginning-of-line 1)
-    (let ((started-at (point)))
-      (org-forward-heading-same-level 1)
-      (if (/= (point) started-at)
-	  (org-toggle-tag "next" 'on)
-	(when (y-or-n-p "Move :next: marker to next subtree? ")
-	  (outline-next-heading)
-	  (org-toggle-tag "next" 'on))))))
+  "If this task is being marked as done, and has a :next: tag, move the tag.
+Propagate :urgent: and :soon: tags as needed."
+  (let ((original-tags (org-get-tags)))
+    (when (and (org-entry-is-done-p)
+	       (member "next" original-tags))
+      (let ((is-urgent (member "urgent" original-tags))
+	    (is-soon (member "soon" original-tags)))
+	(org-toggle-tag "next" 'off)
+	(beginning-of-line 1)
+	(let ((started-at (point)))
+	  (org-forward-heading-same-level 1)
+	  (if (/= (point) started-at)
+	      (progn
+		(org-toggle-tag "next" 'on)
+		(when is-urgent (org-toggle-tag "urgent" 'on))
+		(when is-soon (org-toggle-tag "soon" 'on)))
+	    (when (y-or-n-p "Move :next: marker to next subtree? ")
+	      (outline-next-heading)
+	      (org-toggle-tag "next" 'on)
+	      (when is-urgent (org-toggle-tag "urgent" 'on))
+	      (when is-soon (org-toggle-tag "soon" 'on)))))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
 
