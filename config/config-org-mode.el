@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-14 19:54:53 jcgs>
+;;; Time-stamp: <2015-03-14 20:08:53 jcgs>
 
 (require 'org)
 
@@ -85,16 +85,21 @@ changed." t)
   "Make some extra matcher types for my custom agenda."
   (let ((result nil))
     (when (member (calendar-day-of-week
-	 (calendar-gregorian-from-absolute (org-today)))
-	org-agenda-weekend-days)
+		   (calendar-gregorian-from-absolute (org-today)))
+		  org-agenda-weekend-days)
       (push '(tags-todo "weekend") result))
     ;; todo: if I can get the location... add @home, @garden, @work, @Makespace accordingly
     ;;       This probably wants a package of its own!
+    (cond
+     ((eq (system-name) "isaiah.cam.xci-test.com")
+      (push '(tags-todo "@home") result)
+      (push '(tags-todo "@garden") result)))
     ;; todo: if I can get the weather... add dryday accordingly
     ;;       try http://www.metoffice.gov.uk/datapoint
     ;;           http://www.metoffice.gov.uk/datapoint/product/uk-daily-site-specific-forecast/detailed-documentation
     ;;           http://www.metoffice.gov.uk/datapoint/support/documentation/uk-locations-site-list-detailed-documentation
     ;;       This probably wants a package of its own!
+    ;;       Or there are some existing packages, according to emacswiki
     result))
 
 (setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
