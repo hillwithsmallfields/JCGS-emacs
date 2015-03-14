@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2014-10-20 15:27:21 johstu01>
+;; Time-stamp: <2015-03-14 18:37:37 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -35,6 +35,7 @@
     ;; "blasket.cam.xci-test.com"
     ;; "mayo"
     "e104804-lin.cambridge.arm.com"
+    "isaiah.cam.xci-test.com"
     )
   "List of system names on which Emacs should load the pedal software on startup.")
 
