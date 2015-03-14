@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-13 18:18:42 johstu01>
+;;; Time-stamp: <2015-03-14 19:54:53 jcgs>
 
 (require 'org)
 
@@ -80,6 +80,32 @@ changed." t)
       org-mobile-directory "~/Dropbox/MobileOrg"
       org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory)
       )
+
+(defun jcgs/org-agenda-make-extra-matcher ()
+  "Make some extra matcher types for my custom agenda."
+  (let ((result nil))
+    (when (member (calendar-day-of-week
+	 (calendar-gregorian-from-absolute (org-today)))
+	org-agenda-weekend-days)
+      (push '(tags-todo "weekend") result))
+    ;; todo: if I can get the location... add @home, @garden, @work, @Makespace accordingly
+    ;;       This probably wants a package of its own!
+    ;; todo: if I can get the weather... add dryday accordingly
+    ;;       try http://www.metoffice.gov.uk/datapoint
+    ;;           http://www.metoffice.gov.uk/datapoint/product/uk-daily-site-specific-forecast/detailed-documentation
+    ;;           http://www.metoffice.gov.uk/datapoint/support/documentation/uk-locations-site-list-detailed-documentation
+    ;;       This probably wants a package of its own!
+    result))
+
+(setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
+					((agenda "")
+					 (tags-todo "urgent")
+					 (tags-todo "soon")
+					 (tags-todo "next")
+					 ,@(jcgs/org-agenda-make-extra-matcher)
+					 )))
+
+(add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -581,6 +607,7 @@ You may want to turn voice input off at this point; and suspend task timers.")
 
 (define-key org-mode-map "\C-z" 'org-todo)
 (define-key org-mode-map "\C-cw" 'org-agenda-list)
+(global-set-key "\C-ca" 'org-agenda)
 (define-key org-agenda-mode-map "\C-z" 'org-agenda-todo)
 
 (defun org-global-close-property-drawers ()
