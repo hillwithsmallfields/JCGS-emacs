@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2015-03-14 21:00:28 jcgs>
+;;; Time-stamp: <2015-03-15 17:46:20 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -8,7 +8,9 @@
       kill-whole-line t
       display-time-day-and-date t
       parens-require-spaces nil
-      message-log-max t)
+      message-log-max t
+      eval-expression-print-length nil
+      eval-expression-print-level nil)
 
 (unless (and (stringp user-emacs-directory)
 	     (file-directory-p user-emacs-directory)
