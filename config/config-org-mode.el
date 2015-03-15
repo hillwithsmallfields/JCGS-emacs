@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-14 21:30:38 jcgs>
+;;; Time-stamp: <2015-03-15 16:38:47 jcgs>
 
 (require 'org)
 
@@ -81,6 +81,13 @@ changed." t)
       org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory)
       )
 
+(defvar jcgs/org-ssid-tag-alist
+  '(("BTHomeHub2-8GHW" . "@home|@garden")
+    ;; todo: add one for @office
+    ;; todo: add one for @makespace
+    )
+  "Alist mapping wireless networks to tags.")
+
 (defun jcgs/org-agenda-make-extra-matcher ()
   "Make some extra matcher types for my custom agenda."
   (let ((result nil))
@@ -88,12 +95,17 @@ changed." t)
 		   (calendar-gregorian-from-absolute (org-today)))
 		  org-agenda-weekend-days)
       (push '(tags-todo "weekend") result))
-    ;; todo: if I can get the location... add @home, @garden, @work, @Makespace accordingly
-    ;;       This probably wants a package of its own!
+    (let ((wifi-command "/sbin/iwgetid"))
+      (when (file-executable-p wifi-command)
+	(let* ((network (car (split-string
+			      (shell-command-to-string
+			       (concat wifi-command " --raw")))))
+	       (tag (cdr (assoc network jcgs/org-ssid-tag-alist))))
+	  (when (stringp tag)
+	    (push tag result)))))
     (cond
-     ((eq (system-name) "isaiah.cam.xci-test.com")
-      (push '(tags-todo "@home") result)
-      (push '(tags-todo "@garden") result)))
+     ((string-match "isaiah" (system-name))
+      (push '(tags-todo "@home|@garden") result)))
     ;; todo: if I can get the weather... add dryday accordingly
     ;;       try http://www.metoffice.gov.uk/datapoint
     ;;           http://www.metoffice.gov.uk/datapoint/product/uk-daily-site-specific-forecast/detailed-documentation
@@ -103,8 +115,8 @@ changed." t)
     result))
 
 (setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
-					((agenda "")
-					 (tags-todo "urgent")
+					((tags-todo "urgent")
+					 (agenda "")
 					 (tags-todo "soon")
 					 (tags-todo "next")
 					 ,@(jcgs/org-agenda-make-extra-matcher)
