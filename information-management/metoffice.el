@@ -1,5 +1,5 @@
 ;;;; metoffice.el --- handle data from the UK's Meteorological Office
-;;; Time-stamp: <2015-03-15 17:57:11 jcgs>
+;;; Time-stamp: <2015-03-15 22:31:24 jcgs>
 
 (require 'json)
 
@@ -10,14 +10,17 @@
   "The name of the file containing your metoffice config.
 This should set metoffice-api-key to the key you obtained from the web site.")
 
+(defvar metoffice-api-key nil
+  "The API key you got when you registered with the Met Office site.")
+
+(defvar metoffice-home-location nil
+  "The location name for reports.")
+
 (defun metoffice-setup ()
   "Ensure you have your metoffice data set up."
   (when (or (not (boundp 'metoffice-api-key))
 	    (not (stringp metoffice-api-key)))
     (load-file metoffice-config-file)))
-
-(defvar metoffice-api-key nil
-  "The API key you got when you registered with the Met Office site.")
 
 (defun metoffice-get-string-data (data-point &optional extra)
   "Get the data of DATA-POINT from the Met Office datapoint, as a string.
@@ -76,29 +79,65 @@ With optional DISPLAY-RESULT, show the result as a message."
 
 ;;; following instructions from http://www.metoffice.gov.uk/datapoint/product/uk-daily-site-specific-forecast/detailed-documentation
 
-(defun metoffice-get-site-weather (site)
+(defun metoffice-get-site-weather (&optional site)
   "Return an alist of forecasts for SITE.
-The car of each entry is a date, and the cdr is a cons of the day
-and night forecasts."
-  (map 'list
-       (function
-	(lambda (raw-data)
-	  (let ((day-night (cdr (assoc 'Rep raw-data))))
+SITE may be a site id or a name.
+If SITE is not given, the value of `metoffice-home-location' is used.
+
+The car of each entry is a date, and the cdr is an alist of the day
+and night forecasts, mapping 'day and 'night to alists of characteristics.
+
+The result list is in date order, the first entry being today, and five
+days of forecast being given including today."
+  (let* ((location (or site metoffice-home-location))
+	 (raw-site-data (cdr
+			 (assoc 'SiteRep (metoffice-get-json-data
+					  (if (string-match "\\`[0-9]+\\'" location)
+					      location
+					    (metoffice-get-site-id-by-name location))
+					  "res=daily&"))))
+	 (parameter-descriptions (map 'list
+				      (function 
+				       (lambda (param)
+					 (cons (intern (cdr (assoc 'name param)))
+					       (intern
+						(downcase 
+						 (replace-regexp-in-string
+						  " " "-"
+						  (cdr (assoc '$ param))))))))
+				      (cdr (assoc 'Param
+						  (cdr (assoc 'Wx raw-site-data))))))
+	 (forecast-data (cdr (assoc 'Period
+				    (cdr (assoc 'Location
+						(cdr (assoc 'DV raw-site-data))))))))
+    (map 'list
+	 (function
+	  (lambda (raw-data)
 	    (cons (cdr (assoc 'value raw-data))
-		  (cons (aref day-night 0)
-			(aref day-night 1))))))
-       (cdr
-	(assoc 'Period
-	       (cdr
-		(assoc 'Location
-		       (cdr
-			(assoc 'DV
-			       (cdr
-				(assoc 'SiteRep
-				       (metoffice-get-json-data
-					(if (string-match "\\`[0-9]+\\'" site)
-					    site
-					  (metoffice-get-site-id-by-name site))
-					"res=daily&")))))))))))
+		  (map 'list
+		       (function
+			(lambda (raw-array-entry)
+			  (cons (intern (downcase (cdr (assoc '$ raw-array-entry))))
+				(mapcar (function
+					 (lambda (raw-pair)
+					   (cons
+					    (or (cdr (assoc (car raw-pair)
+							    parameter-descriptions))
+						(car raw-pair))
+					    (let ((data-string (cdr raw-pair)))
+					      (if (string-match "\\`[-0-9]+\\'" data-string)
+						  (string-to-number data-string)
+						data-string)))))
+					raw-array-entry))))
+		       (cdr (assoc 'Rep raw-data))))))
+	 forecast-data)))
+
+(defun metoffice-get-site-period-weather (&optional site offset-days period)
+  "Get the weather for SITE (or the default) for OFFSET-DAYS ahead at PERIOD.
+SITE defaults as for `metoffice-get-site-weather'.  OFFSET-DAYS is 0 by default,
+meaning today, and PERIOD can be 'day or 'night, the default being 'day."
+  (cdr (assoc (or period 'day)
+	      (nth (or offset-days 0)
+		   (metoffice-get-site-weather site)))))
 
 ;;; metoffice.el ends here
