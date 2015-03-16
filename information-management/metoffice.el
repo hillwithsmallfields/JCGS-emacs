@@ -1,5 +1,5 @@
 ;;;; metoffice.el --- handle data from the UK's Meteorological Office
-;;; Time-stamp: <2015-03-15 22:57:31 jcgs>
+;;; Time-stamp: <2015-03-16 21:20:59 jcgs>
 
 (require 'json)
 
@@ -207,5 +207,9 @@ according to the time this function was called at."
 		      'night)))
 	      (nth (or offset-days 0)
 		   (metoffice-get-site-weather site)))))
+
+(defun metoffice-weather-aspect (weather aspect)
+  "From WEATHER get ASPECT."
+  (cdr (assoc weather aspect)))
 
 ;;; metoffice.el ends here
