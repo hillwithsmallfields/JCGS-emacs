@@ -1,9 +1,10 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-15 16:38:47 jcgs>
+;;; Time-stamp: <2015-03-16 21:26:24 jcgs>
 
 (require 'org)
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs"))
+(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/information-management"))
 
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
@@ -82,11 +83,15 @@ changed." t)
       )
 
 (defvar jcgs/org-ssid-tag-alist
-  '(("BTHomeHub2-8GHW" . "@home|@garden")
+  '(("BTHomeHub2-8GHW" . "@home")
     ;; todo: add one for @office
     ;; todo: add one for @makespace
     )
   "Alist mapping wireless networks to tags.")
+
+(require 'metoffice)
+
+(load-file metoffice-config-file)
 
 (defun jcgs/org-agenda-make-extra-matcher ()
   "Make some extra matcher types for my custom agenda."
@@ -105,19 +110,23 @@ changed." t)
 	    (push tag result)))))
     (cond
      ((string-match "isaiah" (system-name))
-      (push '(tags-todo "@home|@garden") result)))
-    ;; todo: if I can get the weather... add dryday accordingly
-    ;;       try http://www.metoffice.gov.uk/datapoint
-    ;;           http://www.metoffice.gov.uk/datapoint/product/uk-daily-site-specific-forecast/detailed-documentation
-    ;;           http://www.metoffice.gov.uk/datapoint/support/documentation/uk-locations-site-list-detailed-documentation
-    ;;       This probably wants a package of its own!
-    ;;       Or there are some existing packages, according to emacswiki
+      (push '(tags-todo "@home") result)))
+    (when (member "@home" result)	; could be there because of hostname, or ssid
+      (let* ((day-weather (metoffice-get-site-period-weather nil 0 'day))
+	     (temperature (metoffice-weather-aspect day-weather 'feels-like-day-maximum-temperature))
+	     (rain (metoffice-weather-aspect day-weather 'precipitation-probability-day))
+	     (wind (metoffice-weather-aspect day-weather wind-speed)))
+	(when (and (>= temperature 10)
+		   (<= rain 6)
+		   (<= wind 6))
+	  (push '(tags-todo "outdoor|@garden") result))))
     result))
 
 (setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
 					((tags-todo "urgent")
 					 (agenda "")
-					 (tags-todo "soon")
+					 (tags-todo "soon/OPEN")
+					 (tags-todo "soon/TODO")
 					 (tags-todo "next")
 					 ,@(jcgs/org-agenda-make-extra-matcher)
 					 )))
@@ -132,63 +141,6 @@ changed." t)
 						     "** TODO"))
 				    org-capture-templates)))
 
-(defun jcgs/org-clock-in-prepare-function ()
-  "My customization of task clock-in."
-  (save-excursion
-    (while (> (funcall outline-level) 1)
-      (outline-up-heading 1)
-      (when (looking-at org-complex-heading-regexp)
-	(let ((state (match-string-no-properties 2)))
-	  (when (equal state "TODO")
-	    (org-todo "OPEN")))))))
-
-(add-hook 'org-clock-in-prepare-hook 'jcgs/org-clock-in-prepare-function)
-
-(defun jcgs/org-after-todo-state-change-propagate-upwards ()
-  "When the last of a set of sibling tasks is marked as DONE,
-mark the ancestral tasks as DONE."
-  (while (> (funcall outline-level) 1)
-    (outline-up-heading 1)
-    (let ((not-all-done nil)
-	  (on-first t))
-      (org-map-entries
-       (lambda ()
-	 (when (and (not on-first)
-		    (org-entry-is-todo-p))
-	   (setq not-all-done t))
-	 (setq on-first nil))
-       nil
-       'tree)
-      (unless not-all-done
-	(org-todo "DONE")))))
-
-(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-propagate-upwards t)
-
-(defun jcgs/org-after-todo-state-change-move-next-marker ()
-  "If this task is being marked as done, and has a :next: tag, move the tag.
-Propagate :urgent: and :soon: tags as needed."
-  (let ((original-tags (org-get-tags)))
-    (when (and (org-entry-is-done-p)
-	       (member "next" original-tags))
-      (let ((is-urgent (member "urgent" original-tags))
-	    (is-soon (member "soon" original-tags)))
-	(org-toggle-tag "next" 'off)
-	(beginning-of-line 1)
-	(let ((started-at (point)))
-	  (org-forward-heading-same-level 1)
-	  (if (/= (point) started-at)
-	      (progn
-		(org-toggle-tag "next" 'on)
-		(when is-urgent (org-toggle-tag "urgent" 'on))
-		(when is-soon (org-toggle-tag "soon" 'on)))
-	    (when (y-or-n-p "Move :next: marker to next subtree? ")
-	      (outline-next-heading)
-	      (org-toggle-tag "next" 'on)
-	      (when is-urgent (org-toggle-tag "urgent" 'on))
-	      (when is-soon (org-toggle-tag "soon" 'on)))))))))
-
-(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
-
 ;; TODO: make this stop my pomodoro timer
 ;; TODO: probably it should be in the pomodoro code rather than this hook
 ;; (defun jcgs/org-clock-out-function ()
@@ -196,6 +148,8 @@ Propagate :urgent: and :soon: tags as needed."
 ;;   (org-timer-stop))
 
 ;; (add-hook 'org-clock-out-hook 'jcgs/org-clock-out-function)
+
+(require 'org-mode-linked-tasks)
 
 (global-set-key "\C-cn" 'org-capture)
 
@@ -596,7 +550,6 @@ You may want to turn voice input off at this point; and suspend task timers.")
 	   (not (member work-agenda-file org-agenda-files)))
   (push work-agenda-file org-agenda-files))
 
-(add-to-list 'load-path (expand-file-name "information-management/" user-emacs-directory))
 (require 'org-mouse-extras)
 (add-hook 'org-mode-hook 'jcgs-org-mouse-stuff)
 
