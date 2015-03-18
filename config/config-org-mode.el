@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-16 21:35:27 jcgs>
+;;; Time-stamp: <2015-03-18 20:02:47 jcgs>
 
 (require 'org)
 
@@ -91,7 +91,9 @@ changed." t)
 
 (require 'metoffice)
 
-(load-file metoffice-config-file)
+(defvar weather-loadable (and (file-readable-p metoffice-config-file)
+			      (load-file metoffice-config-file))
+  "Whether we have a chance of getting the weather data.")
 
 (defun jcgs/org-agenda-make-extra-matcher ()
   "Make some extra matcher types for my custom agenda."
@@ -111,7 +113,7 @@ changed." t)
     (cond
      ((string-match "isaiah" (system-name))
       (push '(tags-todo "@home") result)))
-    (when (member "@home" result)	; could be there because of hostname, or ssid
+    (when (and weather-loadable (member "@home" result))	; could be there because of hostname, or ssid
       (let* ((day-weather (metoffice-get-site-period-weather nil 0 'day))
 	     (temperature (metoffice-weather-aspect day-weather 'feels-like-day-maximum-temperature))
 	     (rain (metoffice-weather-aspect day-weather 'precipitation-probability-day))
