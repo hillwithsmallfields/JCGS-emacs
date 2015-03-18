@@ -1,5 +1,5 @@
 ;;;; metoffice.el --- handle data from the UK's Meteorological Office
-;;; Time-stamp: <2015-03-16 22:53:44 jcgs>
+;;; Time-stamp: <2015-03-18 19:59:31 jcgs>
 
 (require 'json)
 
@@ -17,31 +17,39 @@ This should set metoffice-api-key to the key you obtained from the web site.")
   "The location name for reports.")
 
 (defun metoffice-setup ()
-  "Ensure you have your metoffice data set up."
-  (when (or (not (boundp 'metoffice-api-key))
-	    (not (stringp metoffice-api-key)))
-    (load-file metoffice-config-file)))
+  "Ensure you have your metoffice data set up.
+Returns whether that has been done successfully."
+  (if (and (boundp 'metoffice-api-key)
+	   (stringp metoffice-api-key))
+      (if (file-readable-p metoffice-config-file)
+	  (progn
+	    (load-file metoffice-config-file)
+	    t)
+	nil)))
 
 (defun metoffice-get-string-data (data-point &optional extra)
   "Get the data of DATA-POINT from the Met Office datapoint, as a string.
 EXTRA is another piece of URL, to go after the question mark."
-  (metoffice-setup)
-  (let ((command (concat "curl"
-			 " --silent \""
-			 metoffice-base-url
-			 data-point
-			 "?"
-			 (or extra "")
-			 "key="
-			 metoffice-api-key "\"")))
-    (message "Using command %s" command)
-    (shell-command-to-string command)))
+  (if (metoffice-setup)
+      (let ((command (concat "curl"
+			     " --silent \""
+			     metoffice-base-url
+			     data-point
+			     "?"
+			     (or extra "")
+			     "key="
+			     metoffice-api-key "\"")))
+	(message "Using command %s" command)
+	(shell-command-to-string command))
+    nil))
 
 (defun metoffice-get-json-data (data-point &optional extra)
   "Get the data of DATA-POINT from the Met Office datapoint, as json.
 EXTRA is another piece of URL, to go after the question mark."
-  (json-read-from-string
-   (metoffice-get-string-data data-point extra)))
+  (let ((meto-string meto-string))
+    (if (stringp meto-string)
+	(json-read-from-string meto-string)
+      nil)))
 
 (defvar metoffice-site-list nil
   "The Met Office site list.")
