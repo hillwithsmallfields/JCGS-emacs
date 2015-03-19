@@ -177,6 +177,17 @@ When started, runs `scala-mode-hook'." t)
 
 (add-to-list 'auto-mode-alist (cons "\\.scala\\'" 'scala-mode))
 
+;;;;;;;;;;;;;;;;;;
+;; clojure-mode ;;
+;;;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/clojure-mode"))
+
+(autoload 'clojure-mode "clojure-mode"
+  "Major mode for editing Clojure code." t)
+
+(add-to-list 'auto-mode-alist (cons "\\.clj" 'clojure-mode))
+
 ;;;;;;;;;;;;;;;;;
 ;; Change logs ;;
 ;;;;;;;;;;;;;;;;;
