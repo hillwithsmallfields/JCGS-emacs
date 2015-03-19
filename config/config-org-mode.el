@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-18 20:04:20 jcgs>
+;;; Time-stamp: <2015-03-18 20:11:57 jcgs>
 
 (require 'org)
 
@@ -85,7 +85,7 @@ changed." t)
 (defvar jcgs/org-ssid-tag-alist
   '(("BTHomeHub2-8GHW" . "@home")
     ;; todo: add one for @office
-    ("Makespace" . "@makespace")
+    ("Makespace" . "@Makespace")
     )
   "Alist mapping wireless networks to tags.")
 
@@ -109,7 +109,7 @@ changed." t)
 			       (concat wifi-command " --raw")))))
 	       (tag (cdr (assoc network jcgs/org-ssid-tag-alist))))
 	  (when (stringp tag)
-	    (push tag result)))))
+	    (push `(tags-todo ,tag) result)))))
     (cond
      ((string-match "isaiah" (system-name))
       (push '(tags-todo "@home") result)))
