@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-18 20:04:20 jcgs>
+;;; Time-stamp: <2015-03-19 08:35:49 jcgs>
 
 (require 'org)
 
@@ -126,11 +126,11 @@ changed." t)
 
 (setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
 					((tags-todo "urgent")
+					 ,@(jcgs/org-agenda-make-extra-matcher)
 					 (agenda "")
 					 (tags-todo "soon/OPEN")
 					 (tags-todo "soon/TODO")
 					 (tags-todo "next")
-					 ,@(jcgs/org-agenda-make-extra-matcher)
 					 )))
 
 (add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
