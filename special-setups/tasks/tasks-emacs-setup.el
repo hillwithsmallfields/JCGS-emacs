@@ -1,6 +1,8 @@
 ;;;; Emacs setup for task management only
 ;;; Time-stamp: <2014-10-31 08:36:00 jcgs>
 
+(setq debug-on-error t)
+
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")
 (load-file "$EMACS/basics/ediff-fix.el")
@@ -49,5 +51,7 @@
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (org-mobile-pull)
 (org-agenda-list)
+
+(setq debug-on-error nil)
 
 ;;;; tasks-emacs-setup.el ends here
