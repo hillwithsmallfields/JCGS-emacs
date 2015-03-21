@@ -1,12 +1,15 @@
 ;;;; metoffice.el --- handle data from the UK's Meteorological Office
-;;; Time-stamp: <2015-03-18 19:59:31 jcgs>
+;;; Time-stamp: <2015-03-21 12:51:09 jcgs>
 
 (require 'json)
 
 (defvar metoffice-base-url "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/"
   "The base address of the Met Office data site.")
 
-(defvar metoffice-config-file "~/.metoffice-config.el"
+(defvar metoffice-config-file (if (getenv "CONFIG")
+				  (expand-file-name "metoffice-config.el"
+						    (getenv "CONFIG"))
+				  "~/.metoffice-config.el")
   "The name of the file containing your metoffice config.
 This should set metoffice-api-key to the key you obtained from the web site.")
 
@@ -46,7 +49,7 @@ EXTRA is another piece of URL, to go after the question mark."
 (defun metoffice-get-json-data (data-point &optional extra)
   "Get the data of DATA-POINT from the Met Office datapoint, as json.
 EXTRA is another piece of URL, to go after the question mark."
-  (let ((meto-string meto-string))
+  (let ((meto-string (metoffice-get-string-data data-point extra)))
     (if (stringp meto-string)
 	(json-read-from-string meto-string)
       nil)))
@@ -218,7 +221,7 @@ according to the time this function was called at."
 
 (defun metoffice-weather-aspect (weather aspect)
   "From WEATHER get ASPECT."
-  (cdr (assoc weather aspect)))
+  (cdr (assoc aspect weather)))
 
 (provide 'metoffice)
 
