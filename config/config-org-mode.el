@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-19 19:06:16 jcgs>
+;;; Time-stamp: <2015-03-21 12:51:49 jcgs>
 
 (require 'org)
 
@@ -95,8 +95,8 @@ changed." t)
 			      (load-file metoffice-config-file))
   "Whether we have a chance of getting the weather data.")
 
-(defun jcgs/org-agenda-make-extra-matcher ()
-  "Make some extra matcher types for my custom agenda."
+(defun jcgs/org-agenda-make-early-extra-matcher ()
+  "Make some extra matcher types for my custom agenda, to go early in the list."
   (let ((result nil))
     (when (member (calendar-day-of-week
 		   (calendar-gregorian-from-absolute (org-today)))
@@ -110,28 +110,39 @@ changed." t)
 	       (tag (cdr (assoc network jcgs/org-ssid-tag-alist))))
 	  (when (stringp tag)
 	    (push `(tags-todo ,tag) result)))))
-    (cond
-     ((string-match "isaiah" (system-name))
-      (push '(tags-todo "@home") result)))
-    (when (and weather-loadable (member "@home" result))	; could be there because of hostname, or ssid
+    result))
+
+(defun jcgs/org-agenda-make-late-extra-matcher (early-matches)
+  "Make some extra matcher types for my custom agenda, to go late in the list.
+EARLY-MATCHES shows what we've already found to go earlier in the list."
+  (let ((todo-home '(tags-todo "@home"))
+	(result nil))
+    (when (string-match "isaiah" (system-name))
+      (push todo-home result))
+    (when (and weather-loadable (or (member todo-home result)
+				    (member todo-home early-matches))) ; could be there because of hostname, or ssid
       (let* ((day-weather (metoffice-get-site-period-weather nil 0 'day))
 	     (temperature (metoffice-weather-aspect day-weather 'feels-like-day-maximum-temperature))
 	     (rain (metoffice-weather-aspect day-weather 'precipitation-probability-day))
-	     (wind (metoffice-weather-aspect day-weather wind-speed)))
+	     (wind (metoffice-weather-aspect day-weather 'wind-speed)))
 	(when (and (>= temperature 10)
 		   (<= rain 6)
 		   (<= wind 6))
-	  (push '(tags-todo "outdoor|@garden") result))))
-    result))
+	  (push '(tags-todo "outdoor|@garden") result))))))
 
-(setq jcgs/org-agenda-current-matcher `("c" "Agenda and upcoming tasks"
-					((tags-todo "urgent")
-					 ,@(jcgs/org-agenda-make-extra-matcher)
-					 (agenda "")
-					 (tags-todo "soon/OPEN")
-					 (tags-todo "soon/TODO")
-					 (tags-todo "next")
-					 )))
+(setq jcgs/org-agenda-current-matcher
+      (let* ((earlies (jcgs/org-agenda-make-early-extra-matcher))
+	     (lates (jcgs/org-agenda-make-late-extra-matcher earlies)))
+	`("c" "Agenda and upcoming tasks"
+	  ((tags-todo "urgent")
+	   (tags-todo "today")
+	   ,@earlies
+	   (agenda "")
+	   (tags-todo "next")
+	   ,@lates
+	   (tags-todo "soon/OPEN")
+	   (tags-todo "soon/TODO")
+	   ))))
 
 (add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
 
@@ -482,7 +493,7 @@ This is John Sturdy's modified version."
 			  (let ((started-at (point)))
 			    (org-archive-subtree)
 			    (setq org-map-continue-from started-at))))
-		       "/DONE|CANCELLED|BOUGHT" 'file))))
+		       "/DONE|CANCELLED|BOUGHT|EATEN|KEPT|BROKEN|ALMOSTKEPT" 'file))))
 
 (defun jcgs/org-archive-done-tasks-file (file)
   "Archive all DONE entries in FILE."
