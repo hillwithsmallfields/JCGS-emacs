@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-03-25 20:48:12 jcgs>
+;;; Time-stamp: <2015-03-25 21:15:18 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -21,7 +21,10 @@
 
 ;;; Commentary:
 
-;;
+;; Propagates state changes up trees of tasks (by marking parents as
+;; DONE when the last child task is DONE, all the way to the top
+;; level), and along lists of tasks (by moving a :next: marker, and
+;; propagating markers such as :urgent: as it does so).
 
 ;;; Code:
 
@@ -64,6 +67,7 @@ Propagate :urgent: and :soon: tags as needed."
     (when (and (org-entry-is-done-p)
 	       (member "next" original-tags))
       (let ((is-urgent (member "urgent" original-tags))
+	    ;; todo: make this take a list of tags to propagate, rather than hard-coding them
 	    (is-soon (member "soon" original-tags)))
 	(org-toggle-tag "next" 'off)
 	(beginning-of-line 1)
