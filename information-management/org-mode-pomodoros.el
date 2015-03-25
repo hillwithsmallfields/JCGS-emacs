@@ -1,5 +1,5 @@
 ;;;; Pomodoros
-;;; Time-stamp: <2015-03-25 20:49:17 jcgs>
+;;; Time-stamp: <2015-03-25 21:22:47 jcgs>
 
 ;; Copyright (C) 2015  John Sturdy
 
@@ -24,6 +24,30 @@
 ;;
 
 ;;; Code:
+
+(defvar jcgs/org-clocking-out-for-type-break nil
+  "Whether the current clocking-out is because of a typing break.
+Should be nil unless bound in a typing break hook function.")
+
+(defun jcgs/org-timer-setup ()
+  "Customizer the org timer to suit me, for pomodoro use."
+  (add-hook 'org-clock-in-hook
+	    (function
+	     (lambda ()
+	       (unless org-timer-current-timer
+		 (org-timer-set-timer '(16)))
+	       (org-todo "CURRENT"))))
+  (add-hook 'org-clock-out-hook
+	    (function
+	     (lambda ()
+	       (when org-timer-current-timer
+		 (org-timer-cancel-timer))
+	       (org-timer-stop)
+	       (org-todo (if jcgs/org-clocking-out-for-type-break
+			     "OPEN"
+			   (if (y-or-n-p "Finished task? ")
+			       "DONE"
+			     "OPEN")))))))
 
 (defvar jcgs/org-timer-pomodoros-done-count 0
   "Count of the pomodoros I have done.

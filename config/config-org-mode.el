@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-03-21 12:51:49 jcgs>
+;;; Time-stamp: <2015-03-25 21:22:47 jcgs>
 
 (require 'org)
 
@@ -172,30 +172,6 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
   (org-tags-view t))
 
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
-
-(defvar jcgs/org-clocking-out-for-type-break nil
-  "Whether the current clocking-out is because of a typing break.
-Should be nil unless bound in a typing break hook function.")
-
-(defun jcgs/org-timer-setup ()
-  "Customizer the org timer to suit me, for pomodoro use."
-  (add-hook 'org-clock-in-hook
-	    (function
-	     (lambda ()
-	       (unless org-timer-current-timer
-		 (org-timer-set-timer '(16)))
-	       (org-todo "CURRENT"))))
-  (add-hook 'org-clock-out-hook
-	    (function
-	     (lambda ()
-	       (when org-timer-current-timer
-		 (org-timer-cancel-timer))
-	       (org-timer-stop)
-	       (org-todo (if jcgs/org-clocking-out-for-type-break
-			     "OPEN"
-			   (if (y-or-n-p "Finished task? ")
-			       "DONE"
-			     "OPEN")))))))
 
 (require 'org-mode-task-colours)
 (require 'org-mode-pomodoros)
