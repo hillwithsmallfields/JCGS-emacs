@@ -1,5 +1,5 @@
 ;;;; Write clocked-in tasks into my work log file
-;;; Time-stamp: <2015-03-25 20:48:12 jcgs>
+;;; Time-stamp: <2015-03-25 21:10:44 jcgs>
 
 ;; Copyright (C) 2015  John Sturdy
 
@@ -21,7 +21,11 @@
 
 ;;; Commentary:
 
-;;
+;; This links an org file of things to do, with a time-structured org
+;; file for journalling what you're doing, by putting clocking-in
+;; marks into your journalling file, so that your journal
+;; automatically includes your tasks.  Also includes a JIRA link if it
+;; spots one.
 
 ;;; Code:
 
