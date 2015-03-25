@@ -1,12 +1,34 @@
 ;;;; Switch colour themes
-;;; Time-stamp: <2015-03-16 21:35:27 jcgs>
+;;; Time-stamp: <2015-03-25 20:49:17 jcgs>
 
-;;; Use nicer ones when I'm clocked in to some task, to encourage me
-;;; to be clocked in more of the time.
+;; Copyright (C) 2015  John Sturdy
+
+;; Author: John Sturdy <jcg.sturdy@gmail.com>
+;; Keywords: convenience, tools
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;; Use nicer colour themes when I'm clocked in to some task, to
+;;; encourage me to be clocked in more of the time.
 
 ;; (add-lispdir "$GATHERED/emacs/color-theme")
 
 ;; (require 'color-theme)
+
+;;; Code:
 
 (load-file (substitute-in-file-name "$GATHERED/emacs/color-theme/color-theme.el"))
 
