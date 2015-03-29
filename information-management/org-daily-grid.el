@@ -1,8 +1,8 @@
 ;;; org-daily-grid.el --- output a daily grid in PostScript, from an org subtree
 
-;; Copyright (C) 2013, 2014  John Sturdy
+;; Copyright (C) 2013, 2014, 2015  John Sturdy
 
-;; Author: John Sturdy <john.sturdy@citrix.com>
+;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: convenience, tools
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;;
+;; Produce a PS or SVG file showing a grid of things to tick off each day.
 
 ;;; Code:
 
@@ -178,7 +178,7 @@
     (setq org-export-grid-svg-y (+ org-export-grid-svg-y org-export-grid-svg-line-height)))))
 
 (defun org-export-grid-write-tree (tree output-format n-days depth)
-  "Insert the PostScript for TREE in OUTPUT-FORMAT for N-DAYS at DEPTH."
+  "Insert the PostScript or SVG for TREE in OUTPUT-FORMAT for N-DAYS at DEPTH."
   (if (consp tree)
       (progn
 	(org-export-grid-write-heading (car tree) output-format n-days depth)
@@ -203,13 +203,18 @@
 					      this-month-start))
        (* 24 60 60))))
 
+(defconst org-export-grid-output-formats
+  '(("SVG" . svg) ("PostScript" . ps))
+  "The allowable output formats.")
+
 (defun org-export-grid (file year month output-format)
   "Export the current subtree as a daily grid.
 Argument FILE is the file to write the PostScript into.
 YEAR and MONTH indicate the month to use.
 Argument OUTPUT-FORMAT is 'svg; it might some day allow others."
   (interactive
-   (let* ((now (decode-time))
+   (let* ((completion-ignore-case t)
+	  (now (decode-time))
 	  (day (nth 3 now))
 	  (now-month (nth 4 now))
 	  (month (if (<= day 15)
@@ -227,7 +232,8 @@ Argument OUTPUT-FORMAT is 'svg; it might some day allow others."
 	   (string-to-number
 	    (read-string (format "Month (default %d): " month)
 			 nil nil (number-to-string month)))
-	   'svg)))
+	   (cdr (assoc (completing-read "Output format: " org-export-grid-output-formats nil t)
+		       org-export-grid-output-formats)))))
   (let* ((tree (save-excursion
 		 (org-export-grid-recursive 0)))
 	 (headings (org-export-grid-count-headings tree))
