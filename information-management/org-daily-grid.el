@@ -120,20 +120,31 @@
    ((eq output-format 'ps)
     nil)
    ((eq output-format 'svg)
-    (let* ((adjust-x (/ (- org-export-grid-svg-day-width org-export-grid-svg-day-box-width)
+    (let* ((adjust-x (/ (- org-export-grid-svg-day-width
+			   org-export-grid-svg-day-box-width)
 			2))
 	   (lines-x (- org-export-grid-svg-days-column
 		       adjust-x)))
       (dotimes (i (1+ n-days))
 	(message "i = %d" i)
 	(let* ((this-time (encode-time 1 1 1 i month year))
-	       (dow (nth 6 (decode-time this-time))))
+	       (decoded-time (decode-time this-time))
+	       (dom (nth 3 decoded-time))
+	       (dow (nth 6 decoded-time)))
 	  (insert (format "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:%s\" stroke-width=\"0.5\"/>\n"
 			  lines-x org-export-grid-svg-top-margin
 			  lines-x org-export-grid-svg-y
 			  (if (zerop dow)
 			      "red"
-			    "black"))))
+			    "black")))
+	  (unless (zerop i)
+	    (insert (format "<text x=\"%d\" y=\"%d\">%d</text>"
+			    (+ (- lines-x
+				  org-export-grid-svg-day-width)
+			       adjust-x)
+			    (+ org-export-grid-svg-top-margin
+			       adjust-x) ; happens to be a suitable amount
+			    dom))))
 	(setq lines-x (+ lines-x org-export-grid-svg-day-width))))
 
     ;; org-export-grid-svg-day-width
