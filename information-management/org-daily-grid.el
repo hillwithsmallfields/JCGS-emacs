@@ -47,7 +47,7 @@
 (defvar org-export-grid-svg-y 0
   "The Y cursor.")
 
-(defvar org-export-grid-svg-line-height 18
+(defvar org-export-grid-svg-line-height 12
   "The Y cursor step.")
 
 (defvar org-export-grid-svg-top-margin 36
@@ -56,7 +56,7 @@
 (defvar org-export-grid-indentation-step 6
   "The X step.")
 
-(defvar org-export-grid-svg-days-column 144
+(defvar org-export-grid-svg-days-column 120
   "Where to start the days.")
 
 (defvar org-export-grid-svg-day-width 14
@@ -99,7 +99,12 @@
     (insert "0 0 moveto\n")
     (insert "gsave\n"))
    ((eq output-format 'svg)
-    (insert "<svg height=\"1000\" width=\"1000\">\n")
+    (insert "<svg height=\"297mm\" width=\"210mm\">\n")
+    (insert (format "<text x=\"%d\" y=\"%d\">%s %d</text>"
+		    org-export-grid-svg-days-column
+		    (/ org-export-grid-svg-top-margin 2) ; todo: improve layout and calculation
+		    (calendar-month-name month)
+		    year))
     (setq org-export-grid-svg-y org-export-grid-svg-top-margin))))
 
 (defun org-export-grid-write-postamble (output-format year month)
