@@ -48,7 +48,10 @@
   "The Y cursor.")
 
 (defvar org-export-grid-svg-line-height 12
-  "The Y cursor step.")
+  "The Y cursor step for normal lines.")
+
+(defvar org-export-grid-svg-heading-line-height 9
+  "The Y cursor step for heading lines.")
 
 (defvar org-export-grid-svg-top-margin 36
   "The margin to leave at the top.")
@@ -100,11 +103,16 @@
     (insert "gsave\n"))
    ((eq output-format 'svg)
     (insert "<svg height=\"297mm\" width=\"210mm\">\n")
-    (insert (format "<text x=\"%d\" y=\"%d\">%s %d</text>"
-		    org-export-grid-svg-days-column
-		    (/ org-export-grid-svg-top-margin 2) ; todo: improve layout and calculation
-		    (calendar-month-name month)
-		    year))
+    ;; to show the supposed page edge, although it doesn't look right to me compared with the real printout
+    ;; (insert "<rect x=\"0\" y=\"0\" height=\"296mm\" width=\"209mm\" style=\"stroke:blue;fill:white\"/>\n")
+    (insert
+     (format
+      "<text font-weight=\"bold\" font-size=\"large\" x=\"%d\" y=\"%d\">%s: %s %d</text>"
+      org-export-grid-svg-days-column
+      (/ org-export-grid-svg-top-margin 2) ; todo: improve layout and calculation
+      (user-full-name)
+      (calendar-month-name month)
+      year))
     (setq org-export-grid-svg-y org-export-grid-svg-top-margin))))
 
 (defun org-export-grid-write-postamble (output-format year month)
@@ -139,16 +147,18 @@
 	  (insert (format "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:%s\" stroke-width=\"0.5\"/>\n"
 			  lines-x org-export-grid-svg-top-margin
 			  lines-x org-export-grid-svg-y
-			  (if (zerop dow)
-			      "red"
-			    "black")))
+			  (if (= dow 6) "red" "black")))
 	  (unless (zerop i)
-	    (insert (format "<text x=\"%d\" y=\"%d\">%d</text>"
+	    (insert (format "<text x=\"%d\" y=\"%d\" fill=\"%s\">%d</text>"
 			    (+ (- lines-x
 				  org-export-grid-svg-day-width)
 			       adjust-x)
 			    (+ org-export-grid-svg-top-margin
 			       adjust-x) ; happens to be a suitable amount
+			    (case dow
+			      (0 "red")
+			      (6 "darkgreen")
+			      (t "black"))  
 			    dom))))
 	(setq lines-x (+ lines-x org-export-grid-svg-day-width))))
 
@@ -162,15 +172,17 @@
    ((eq output-format 'ps)
     (insert (format "(%s) %d heading\n" heading depth)))
    ((eq output-format 'svg)
-    (insert (format "<text x=\"%d\" y=\"%d\">"
+    (insert (format "<text font-size=\"75%%\" font-weight=\"bold\" x=\"%d\" y=\"%d\">"
 		    (* depth org-export-grid-indentation-step)
 		    org-export-grid-svg-y)
 	    heading
 	    "</text>\n")
-    (setq org-export-grid-svg-y (+ org-export-grid-svg-y org-export-grid-svg-line-height)))))
+    (setq org-export-grid-svg-y (+ org-export-grid-svg-y org-export-grid-svg-heading-line-height)))))
 
-(defun org-export-grid-write-entry (entry output-format n-days depth)
-  "Insert ENTRY in OUTPUT-FORMAT for N-DAYS at DEPTH."
+(defun org-export-grid-write-entry (entry output-format n-days depth year month)
+  "Insert ENTRY in OUTPUT-FORMAT for N-DAYS at DEPTH.
+YEAR and MONTH are given so that days of the week can be
+marked with colour."
   (cond
    ((eq output-format 'ps)
     (insert (format "(%s) %d entry\n" entry depth)))
@@ -185,23 +197,33 @@
 		      0 org-export-grid-svg-y
 		      1000 org-export-grid-svg-y)))
     (dotimes (day n-days)
-      (insert (format "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"stroke:black;fill:white\"/>\n"
-		      (+ org-export-grid-svg-days-column
-			 (* day org-export-grid-svg-day-width))
-		      org-export-grid-svg-y
-		      org-export-grid-svg-day-box-width
-		      (- org-export-grid-svg-day-box-height))))
+      (let* ((this-time (encode-time 1 1 1 day month year))
+	       (decoded-time (decode-time this-time))
+	       (dom (nth 3 decoded-time))
+	       (dow (nth 6 decoded-time)))
+	(insert (format "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"stroke:%s;fill:white\"/>\n"
+			(+ org-export-grid-svg-days-column
+			   (* day org-export-grid-svg-day-width))
+			org-export-grid-svg-y
+			org-export-grid-svg-day-box-width
+			(- org-export-grid-svg-day-box-height)
+			(case dow
+			  (6 "red")
+			  (5 "darkgreen")
+			  (t "black"))))))
     (setq org-export-grid-svg-y (+ org-export-grid-svg-y org-export-grid-svg-line-height)))))
 
-(defun org-export-grid-write-tree (tree output-format n-days depth)
-  "Insert the PostScript or SVG for TREE in OUTPUT-FORMAT for N-DAYS at DEPTH."
+(defun org-export-grid-write-tree (tree output-format n-days depth year month)
+  "Insert the PostScript or SVG for TREE in OUTPUT-FORMAT for N-DAYS at DEPTH.
+YEAR and MONTH are given so that days of the week can be
+marked with colour."
   (if (consp tree)
       (progn
 	(org-export-grid-write-heading (car tree) output-format n-days depth)
 	(let ((deeper (1+ depth)))
 	  (dolist (entry (cdr tree))
-	    (org-export-grid-write-tree entry output-format n-days deeper))))
-    (org-export-grid-write-entry tree output-format n-days depth)))
+	    (org-export-grid-write-tree entry output-format n-days deeper year month))))
+    (org-export-grid-write-entry tree output-format n-days depth year month)))
 
 (defun month-length (year month)
   "Return the number of days in YEAR's MONTH."
@@ -240,16 +262,22 @@ Argument OUTPUT-FORMAT is 'svg; it might some day allow others."
 	  (year (if (and (<= day 15)
 			 (= now-month 12))
 		    (1+ (nth 5 now))
-		  (nth 5 now))))
-     (list (read-file-name "Output grid to file: ")
+		  (nth 5 now)))
+	  (filename (read-file-name "Output grid to file: ")))
+     (list filename
 	   (string-to-number
 	    (read-string (format "Year (default %d): " year)
 			 nil nil (number-to-string year)))
 	   (string-to-number
 	    (read-string (format "Month (default %d): " month)
 			 nil nil (number-to-string month)))
-	   (cdr (assoc (completing-read "Output format: " org-export-grid-output-formats nil t)
-		       org-export-grid-output-formats)))))
+	   (cond
+	    ((string-match "\\.ps$" filename)
+	     'ps)
+	    ((string-match "\\.svg$" filename)
+	     'svg)
+	    (t (cdr (assoc (completing-read "Output format: " org-export-grid-output-formats nil t)
+			   org-export-grid-output-formats)))))))
   (let* ((tree (save-excursion
 		 (org-export-grid-recursive 0)))
 	 (headings (org-export-grid-count-headings tree))
@@ -261,7 +289,7 @@ Argument OUTPUT-FORMAT is 'svg; it might some day allow others."
 	(find-file file)
 	(erase-buffer)
 	(org-export-grid-write-preamble output-format year month)
-	(org-export-grid-write-tree tree output-format n-days 0)
+	(org-export-grid-write-tree tree output-format n-days 0 year month)
 	(org-export-grid-write-day-columns output-format n-days year month)
 	(org-export-grid-write-postamble output-format year month)
 	(basic-save-buffer)))))
