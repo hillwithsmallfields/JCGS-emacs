@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-03-13 11:47:58 johstu01>
+;;; Time-stamp: <2015-04-01 15:21:23 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -423,37 +423,73 @@ The nearest FILE is used."
 
 ;;;; Shell
 
-(add-hook 'shell-mode-hook
-	  (lambda ()
-	    (define-key shell-mode-map
-	      "\C-ce"
-	      (function
-	       (lambda ()
-		 (interactive)
-		 (let ((inhibit-read-only t))
-		   (erase-buffer)
-		   (setq comint-last-prompt-overlay nil)))))
-	    (define-key shell-mode-map
-	      "\C-cr"
-	      'comint-fix-ssh-known-hosts)
-	    ;; getting around a problem with it complaining that the
-	    ;; text is read-only (although I don't think I'd changed
-	    ;; anything related) --- 20121114
-	    (define-key shell-mode-map
-	      "\C-c\C-c"
-	      (function
-	       (lambda ()
-		 (interactive)
-		 (let ((inhibit-read-only t))
-		   (comint-interrupt-subjob)))))
-	    (define-key shell-mode-map
-	      "\r"
-	      (function
-	       (lambda ()
-	    	 (interactive)
-	    	 (let ((inhibit-read-only t))
-	    	   (comint-send-input)))))
-	    ))
+(defun jcgs/shell-mode-send-input ()
+  "Send the current line to the shell, even if the shell buffer objects."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (comint-send-input)))
+
+(defvar jcgs/shell-mode-recorded-commands nil
+  "For deduplication.
+Not persistent between sessions, and reset each day.")
+
+(make-variable-buffer-local 'jcgs/shell-mode-recorded-commands)
+
+(defun jcgs/shell-mode-record-command-in-journal (shell-command)
+  "Record SHELL-COMMAND in my journal file."
+  (when (and (boundp 'jcgs/shell-mode-accumulated-command-history-file)
+	     (stringp jcgs/shell-mode-accumulated-command-history-file)
+	     (file-writable-p jcgs/shell-mode-accumulated-command-history-file))
+    (set-text-properties 0 (length shell-command)
+			 nil shell-command)
+    (let ((cwd default-directory)
+	  (buffer (buffer-name)))
+      (save-window-excursion
+	(find-file jcgs/shell-mode-accumulated-command-history-file)
+	(goto-char (point-max))
+	(when (jcgs/org-open-hierarchical-date (format-time-string "%F"))
+	  (setq jcgs/shell-mode-recorded-commands nil))
+	(goto-char (point-max))
+	(dolist (command-line (split-string shell-command "\n" t))
+	  (unless (member command-line jcgs/shell-mode-recorded-commands)
+	    (push command-line jcgs/shell-mode-recorded-commands)
+	    ;; (message "Got shell command %S to record as happening in buffer %S with default directory %s." command-line buffer cwd)
+	    (let ((was-cd (string-match "^cd\\(?:\\s-+\\(.+\\)\\)?" command-line)))
+	      (when was-cd
+		(let ((cd-arg (match-string 1 command-line)))
+		  ;; (message "old cwd %S" cwd)
+		  (setq cwd (if cd-arg
+				(expand-file-name cd-arg cwd) ; todo: this area is not behaving as I expected, cwd is already one too high
+			      (getenv "HOME")))
+		  ;; (message "Command was cd, with arg %S; cwd now %S" cd-arg cwd)
+		  ))))
+	  (insert buffer ":" cwd "$ " command-line)
+	  (basic-save-buffer))))))
+
+(defun jcgs/shell-mode-interrupt-subjob ()
+  "Getting around a problem with it complaining that the text is
+read-only (although I don't think I'd changed anything related)
+--- 20121114 JCGS."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (comint-interrupt-subjob)))
+
+(defun jcgs/shell-mode-erase-buffer ()
+  "Erase the buffer, even if it objects."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (setq comint-last-prompt-overlay nil)))
+
+(defun jcgs/shell-mode-setup ()
+  "Set shell mode up the way I want it."
+  (add-hook 'comint-input-filter-functions 'jcgs/shell-mode-record-command-in-journal t t)
+  (define-key shell-mode-map "\C-ce" 'jcgs/shell-mode-erase-buffer)
+  (define-key shell-mode-map "\C-cr" 'comint-fix-ssh-known-hosts)
+  (define-key shell-mode-map "\C-c\C-c" 'jcgs/shell-mode-interrupt-subjob)
+  (define-key shell-mode-map "\r" 'jcgs/shell-mode-send-input))
+   
+(add-hook 'shell-mode-hook 'jcgs/shell-mode-setup)
 
 ;;;; Comint
 
