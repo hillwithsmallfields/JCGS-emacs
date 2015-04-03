@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-04-03 21:03:46 jcgs>
+;;; Time-stamp: <2015-04-03 21:07:40 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
@@ -183,7 +183,8 @@ When started, runs `scala-mode-hook'." t)
 
 ;; fetch from https://github.com/clojure-emacs/clojure-mode.git and put in $GATHERED/clojure-mode
 
-(let* ((open-projects-clojure-mode-directory (substitute-in-file-name "$OPEN_PROJECTS/clojure-mode"))
+(let* ((open-projects-clojure-mode-directory ; from https://github.com/clojure-emacs/clojure-mode.git
+	(substitute-in-file-name "$OPEN_PROJECTS/clojure-mode"))
        (clojure-mode-directory (if (file-directory-p open-projects-clojure-mode-directory)
 				   open-projects-clojure-mode-directory
 				 (substitute-in-file-name "$GATHERED/emacs/clojure-mode"))))
@@ -191,7 +192,11 @@ When started, runs `scala-mode-hook'." t)
     (add-to-list 'load-path clojure-mode-directory)
     (add-to-list 'auto-mode-alist (cons "\\.clj" 'clojure-mode))
     (autoload 'clojure-mode "clojure-mode"
-      "Major mode for editing Clojure code." t)))
+      "Major mode for editing Clojure code." t)
+    (let ((open-projects-cider-directory ; https://github.com/clojure-emacs/cider.git
+	   (substitute-in-file-name "$OPEN_PROJECTS/cider")))
+      (when (file-directory-p open-projects-cider-directory)
+	(add-to-list 'load-path open-projects-cider-directory)))))
 
 ;;;;;;;;;;;;;;;;;
 ;; Change logs ;;
