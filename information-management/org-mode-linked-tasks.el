@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-03-25 21:15:18 jcgs>
+;;; Time-stamp: <2015-04-03 22:10:02 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -60,29 +60,33 @@ mark the ancestral tasks as DONE."
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-propagate-upwards t)
 
+(defvar jcgs/org-after-todo-state-follower-tags
+  '("urgent" "soon")
+  "Tags which `jcgs/org-after-todo-state-change-move-next-marker'
+should move as the \"next\" tag moves.")
+
 (defun jcgs/org-after-todo-state-change-move-next-marker ()
   "If this task is being marked as done, and has a :next: tag, move the tag.
 Propagate :urgent: and :soon: tags as needed."
   (let ((original-tags (org-get-tags)))
     (when (and (org-entry-is-done-p)
 	       (member "next" original-tags))
-      (let ((is-urgent (member "urgent" original-tags))
-	    ;; todo: make this take a list of tags to propagate, rather than hard-coding them
-	    (is-soon (member "soon" original-tags)))
+      (let ((tags-to-move nil))
+	(dolist (maybe jcgs/org-after-todo-state-follower-tags)
+	  (if (member maybe original-tags)
+	      (push maybe tags-to-move)))
 	(org-toggle-tag "next" 'off)
 	(beginning-of-line 1)
 	(let ((started-at (point)))
 	  (org-forward-heading-same-level 1)
 	  (if (/= (point) started-at)
 	      (progn
-		(org-toggle-tag "next" 'on)
-		(when is-urgent (org-toggle-tag "urgent" 'on))
-		(when is-soon (org-toggle-tag "soon" 'on)))
+		(org-toggle-tag "next" 'on))
 	    (when (y-or-n-p "Move :next: marker to next subtree? ")
 	      (outline-next-heading)
-	      (org-toggle-tag "next" 'on)
-	      (when is-urgent (org-toggle-tag "urgent" 'on))
-	      (when is-soon (org-toggle-tag "soon" 'on)))))))))
+	      (org-toggle-tag "next" 'on))))
+	(dolist (moving-tag tags-to-move)
+	  (org-toggle-tag moving-tag 'on))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
 
