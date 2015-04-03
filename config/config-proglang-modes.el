@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-03-19 19:20:58 jcgs>
+;;; Time-stamp: <2015-04-03 21:03:46 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
@@ -183,12 +183,15 @@ When started, runs `scala-mode-hook'." t)
 
 ;; fetch from https://github.com/clojure-emacs/clojure-mode.git and put in $GATHERED/clojure-mode
 
-(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/clojure-mode"))
-
-(autoload 'clojure-mode "clojure-mode"
-  "Major mode for editing Clojure code." t)
-
-(add-to-list 'auto-mode-alist (cons "\\.clj" 'clojure-mode))
+(let* ((open-projects-clojure-mode-directory (substitute-in-file-name "$OPEN_PROJECTS/clojure-mode"))
+       (clojure-mode-directory (if (file-directory-p open-projects-clojure-mode-directory)
+				   open-projects-clojure-mode-directory
+				 (substitute-in-file-name "$GATHERED/emacs/clojure-mode"))))
+  (when (file-directory-p clojure-mode-directory)
+    (add-to-list 'load-path clojure-mode-directory)
+    (add-to-list 'auto-mode-alist (cons "\\.clj" 'clojure-mode))
+    (autoload 'clojure-mode "clojure-mode"
+      "Major mode for editing Clojure code." t)))
 
 ;;;;;;;;;;;;;;;;;
 ;; Change logs ;;
