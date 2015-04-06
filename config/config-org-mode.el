@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-01 15:20:29 johstu01>
+;;; Time-stamp: <2015-04-06 09:28:41 jcgs>
 
 (require 'org)
 
@@ -135,12 +135,14 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 	     (lates (jcgs/org-agenda-make-late-extra-matcher earlies)))
 	`("c" "Agenda and upcoming tasks"
 	  ((tags-todo "urgent")
+	   (tags-todo "PRIORITY=\"A\"")
 	   (tags-todo "today")
 	   ,@earlies
 	   (agenda "")
 	   (tags-todo "next")
 	   ,@lates
 	   (tags-todo "soon/OPEN")
+	   (tags-todo "PRIORITY=\"B\"")
 	   (tags-todo "soon/TODO")
 	   ))))
 
