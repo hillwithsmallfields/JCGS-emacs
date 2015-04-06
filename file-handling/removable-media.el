@@ -1,7 +1,7 @@
 ;;;; removable-media.el -- find files that may have been put on another drive
-;;; Time-stamp: <2009-01-19 10:50:59 jcgs>
+;;; Time-stamp: <2015-04-06 09:36:32 jcgs>
 
-;; Handle files on removable drives (such as USB keys) under WinEmacs
+;; Handle files on removable drives (such as USB keys)
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -53,7 +53,8 @@ Should normally be accessed via find-removable-files-directory.")
 
 ;;;###autoload
 (defun find-removable-files-directory (directory)
-  "Find and return the path to a removable drive with DIRECTORY at its top level."
+  "Find and return the path to a removable drive with DIRECTORY at its top level.
+DIRECTORY can be several elements of a path, rather than a single element."
   (let ((pair (assoc directory removable-files-directories)))
     (if pair
 	(cdr pair)
