@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-03 22:10:02 jcgs>
+;;; Time-stamp: <2015-04-06 11:12:55 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -89,5 +89,39 @@ Propagate :urgent: and :soon: tags as needed."
 	  (org-toggle-tag moving-tag 'on))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; chaining entries ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/chain-task (uuid tag)
+  "Set up a chained task.
+When the current task is done, onto the task with UUID add the TAG."
+  (interactive
+   (let ((pair (save-window-excursion
+		 (save-excursion
+		   (message 
+		    (substitute-command-keys
+		     "Move to task to chain, press \\[exit-recursive-edit]"))
+		   (recursive-edit)
+		   (cons (org-entry-get nil "ID")
+			 (org-get-buffer-tags))))))
+     (list (car pair)
+	   (completing-read "Tag: " (cdr pair)))))
+  (org-entry-put nil "CHAIN_UUID" uuid)
+  (org-entry-put nil "CHAIN_TAG" tag))
+
+(defun jcgs/org-maybe-chain-task ()
+  "Activate the next stage of a chain."
+  (when (org-entry-is-done-p)
+    (let ((chained-task-id (org-entry-get nil "CHAIN_UUID"))
+	  (chained-task-tag (org-entry-get nil "CHAIN_TAG")))
+      (when (and chained-task-id chained-task-tag)
+	(save-window-excursion
+	  (save-excursion
+	    (org-id-goto chained-task-id)
+	    (org-toggle-tag chained-task-tag 'on)))))))
+
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
 
 (provide 'org-mode-linked-tasks)
