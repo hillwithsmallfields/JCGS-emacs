@@ -1,5 +1,5 @@
 ;;;; Switch colour themes
-;;; Time-stamp: <2015-03-25 20:49:17 jcgs>
+;;; Time-stamp: <2015-04-03 22:13:44 jcgs>
 
 ;; Copyright (C) 2015  John Sturdy
 
@@ -61,24 +61,28 @@
   "Colour themes I can endure but don't like much.")
 
 (add-hook 'org-clock-in-hook
-	  (function
-	   (lambda ()
-	     (condition-case problem
-		 (let ((theme (aref jcgs/org-task-color-themes
-				    (random (length jcgs/org-task-color-themes)))))
-		   (message "Using %s as clocked-in theme" theme)
-		   (funcall theme))
-	       (message "Got error %S in changing colour theme" problem)))))
+	  'jcgs/org-nice-appearance
+	  ;; (function
+	  ;;  (lambda ()
+	  ;;    (condition-case problem
+	  ;; 	 (let ((theme (aref jcgs/org-task-color-themes
+	  ;; 			    (random (length jcgs/org-task-color-themes)))))
+	  ;; 	   (message "Using %s as clocked-in theme" theme)
+	  ;; 	   (funcall theme))
+	  ;;      (message "Got error %S in changing colour theme" problem))))
+	  )
 
 (add-hook 'org-clock-out-hook
-	  (function
-	   (lambda ()
-	     (condition-case problem
-		 (let ((theme (aref jcgs/org-no-task-color-themes
-				    (random (length jcgs/org-no-task-color-themes)))))
-		   (message "Using %s as clocked-out theme" theme)
-		   (funcall theme))
-	       (message "Got error %S in changing colour theme" problem)))))
+	  'jcgs/org-dull-appearance
+	  ;; (function
+	  ;;  (lambda ()
+	  ;;    (condition-case problem
+	  ;; 	 (let ((theme (aref jcgs/org-no-task-color-themes
+	  ;; 			    (random (length jcgs/org-no-task-color-themes)))))
+	  ;; 	   (message "Using %s as clocked-out theme" theme)
+	  ;; 	   (funcall theme))
+	  ;;      (message "Got error %S in changing colour theme" problem))))
+	  )
 
 ;;;; an older attempt at this: sort out how it works, and merge anything useful from it
 
@@ -120,12 +124,8 @@ me to clock in as much as possible."
   (interactive)
   (if (org-clocking-p)
       (progn
-	(org-clock-out)
-	;; todo: use org-clock-out-hook instead
-	(jcgs/org-dull-appearance))
-    (org-clock-in)
-    ;; todo: use org-clock-in-hook instead
-    (jcgs/org-nice-appearance)))
+	(org-clock-out))
+    (org-clock-in)))
 
 (define-key org-mode-map [ f5 ] 'jcgs/org-clock-in-or-out)
 
