@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2015-03-10 14:31:59 johstu01>
+;;; Time-stamp: <2015-04-09 11:55:16 johstu01>
 
 (setq joystick-graphical nil)
 
@@ -7,8 +7,10 @@
 	   ;; (or (file-exists-p "/dev/js1") (file-exists-p "/dev/input/js1"))
 	   )
   (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/joylisp/"))
-  (require 'joystick-chord-kbd)
-  (joystick-braille-kbd-setup))
+  (when (and (or (file-exists-p "/dev/js0") (file-exists-p "/dev/input/js0"))
+	     (or (file-exists-p "/dev/js1") (file-exists-p "/dev/input/js1")))
+    (require 'joystick-chord-kbd)
+    (joystick-braille-kbd-setup)))
 
 (use-package versor
 	     "$OPEN_PROJECTS/emacs-versor/lisp"
