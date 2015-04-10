@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-10 20:32:03 jcgs>
+;;; Time-stamp: <2015-04-10 20:33:17 jcgs>
 
 (require 'org)
 
@@ -152,7 +152,7 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 (add-to-list 'org-agenda-custom-commands '("k" "supermarKet shopping" tags-todo ":supermarket:"))
 (add-to-list 'org-agenda-custom-commands '("o" "Online" tags-todo ":online:"))
 (add-to-list 'org-agenda-custom-commands '("h" "At home" tags-todo ":@home:"))
-(add-to-list 'org-agenda-custom-commands '("H" "Hacking" ((tags-todo ":hacking:") (tags-todo ":programming:"))))
+(add-to-list 'org-agenda-custom-commands '("H" "Hacking" ((tags-todo ":hacking:") (tags-todo ":programming:") (tags-todo ":@Makespace:") (tags-todo ":soldering:"))))
 (add-to-list 'org-agenda-custom-commands '("w" "At work" tags-todo ":@office:"))
 (add-to-list 'org-agenda-custom-commands '("u" "Urgent" ((tags-todo ":urgent:") (tags-todo "PRIORITY=\"A\""))))
 (add-to-list 'org-agenda-custom-commands '("U" "Soon" ((tags-todo ":soon:") (tags-todo "PRIORITY=\"B\""))))
