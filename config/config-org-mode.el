@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-10 20:33:17 jcgs>
+;;; Time-stamp: <2015-04-10 20:36:19 jcgs>
 
 (require 'org)
 
@@ -607,7 +607,18 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 ;; (add-hook 'find-file-hook 'jcgs-select-work-log)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Transfer from and to mobile ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (org-mobile-pull)
+
+(defun jcgs/org-maybe-push-to-mobile ()
+  "Offer to push the agenda to mobile."
+  (when (y-or-n-p "Push to mobile? ")
+    (org-mobile-push)))
+
+(add-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
 
 ;;; some debugging
 
