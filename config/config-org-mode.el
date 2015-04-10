@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-06 09:28:41 jcgs>
+;;; Time-stamp: <2015-04-10 20:28:14 jcgs>
 
 (require 'org)
 
@@ -148,6 +148,16 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 
 (add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
 
+(add-to-list 'org-agenda-custom-commands '("y" "mackaYs shopping" tags-todo ":Mackays:"))
+(add-to-list 'org-agenda-custom-commands '("k" "supermarKet shopping" tags-todo ":supermarket:"))
+(add-to-list 'org-agenda-custom-commands '("o" "Online" tags-todo ":online:"))
+(add-to-list 'org-agenda-custom-commands '("h" "At home" tags-todo ":@home:"))
+(add-to-list 'org-agenda-custom-commands '("w" "At work" tags-todo ":@office:"))
+(add-to-list 'org-agenda-custom-commands '("u" "Urgent" ((tags-todo ":urgent:") (tags-todo "PRIORITY=\"A\""))))
+(add-to-list 'org-agenda-custom-commands '("U" "Soon" ((tags-todo ":soon:") (tags-todo "PRIORITY=\"B\""))))
+(add-to-list 'org-agenda-custom-commands '("p" "Phone" tags-todo ":phone:"))
+(add-to-list 'org-agenda-custom-commands '("x" "Next" tags-todo ":next:"))
+
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
 	   (file-exists-p work-agenda-file))
@@ -218,8 +228,6 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 
 (eval-after-load "org"
   '(jcgs/org-timer-setup))
-
-
 
 (defun jcgs/org-clock-out-on-typing-break-function ()
   "Clock out of the current task, as a typing break is starting."
@@ -597,6 +605,8 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;;     (setq tracking-org-file (substitute-in-file-name "$COMMON/Marmalade/Marmalade-work.log")))))
 
 ;; (add-hook 'find-file-hook 'jcgs-select-work-log)
+
+(org-mobile-pull)
 
 ;;; some debugging
 
