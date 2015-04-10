@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-10 20:41:06 jcgs>
+;;; Time-stamp: <2015-04-10 21:14:43 jcgs>
 
 (require 'org)
 
@@ -148,25 +148,25 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 
 (add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
 
-(add-to-list 'org-agenda-custom-commands '("y" "mackaYs shopping" tags-todo ":Mackays:"))
-(add-to-list 'org-agenda-custom-commands '("k" "supermarKet shopping" tags-todo ":supermarket:"))
-(add-to-list 'org-agenda-custom-commands '("o" "Online" tags-todo ":online:"))
-(add-to-list 'org-agenda-custom-commands '("h" "At home" tags-todo ":@home:"))
-(add-to-list 'org-agenda-custom-commands '("H" "Hacking" ((tags-todo ":hacking:")
-							  (tags-todo ":programming:")
-							  (tags-todo ":@Makespace:")
-							  (tags-todo ":soldering:")
-							  (tags-todo ":woodwork:")
-							  (tags-todo ":sewing:")
-							  (tags-todo ":epoxy:")
-							  (tags-todo ":hotglue:")
-							  (tags-todo ":electronics:"))))
-(add-to-list 'org-agenda-custom-commands '("W" "Writing" tags-todo ":writing:"))
-(add-to-list 'org-agenda-custom-commands '("w" "At work" tags-todo ":@office:"))
-(add-to-list 'org-agenda-custom-commands '("u" "Urgent" ((tags-todo ":urgent:") (tags-todo "PRIORITY=\"A\""))))
-(add-to-list 'org-agenda-custom-commands '("U" "Soon" ((tags-todo ":soon:") (tags-todo "PRIORITY=\"B\""))))
-(add-to-list 'org-agenda-custom-commands '("p" "Phone" tags-todo ":phone:"))
-(add-to-list 'org-agenda-custom-commands '("x" "Next" tags-todo ":next:"))
+(add-to-list 'org-agenda-custom-commands '("y" "mackaYs shopping" tags-todo "Mackays"))
+(add-to-list 'org-agenda-custom-commands '("k" "supermarKet shopping" tags-todo "supermarket"))
+(add-to-list 'org-agenda-custom-commands '("o" "Online" tags-todo "online"))
+(add-to-list 'org-agenda-custom-commands '("h" "At home" tags-todo "@home"))
+(add-to-list 'org-agenda-custom-commands '("H" "Hacking" ((tags-todo "hacking")
+							  (tags-todo "programming")
+							  (tags-todo "@Makespace")
+							  (tags-todo "soldering")
+							  (tags-todo "woodwork")
+							  (tags-todo "sewing")
+							  (tags-todo "epoxy")
+							  (tags-todo "hotglue")
+							  (tags-todo "electronics"))))
+(add-to-list 'org-agenda-custom-commands '("W" "Writing" tags-todo "writing"))
+(add-to-list 'org-agenda-custom-commands '("w" "At work" tags-todo "@office"))
+(add-to-list 'org-agenda-custom-commands '("u" "Urgent" ((tags-todo "urgent") (tags-todo "PRIORITY=\"A\""))))
+(add-to-list 'org-agenda-custom-commands '("U" "Soon" ((tags-todo "soon") (tags-todo "PRIORITY=\"B\""))))
+(add-to-list 'org-agenda-custom-commands '("p" "Phone" tags-todo "phone"))
+(add-to-list 'org-agenda-custom-commands '("x" "Next" tags-todo "next"))
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
