@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-11 08:34:21 jcgs>
+;;; Time-stamp: <2015-04-19 20:37:45 jcgs>
 
 (require 'org)
 
@@ -29,7 +29,7 @@ This analyzes the script for the command run by
 changed." t)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "CURRENT(c)" "OPEN(o)"
+      '((sequence "TODO(t)" "BLOCKED(b)" "CURRENT(c)" "OPEN(o)"
 		  "|"
 		  "DONE(d)" "CANCELLED(x)"))
       org-clock-in-switch-to-state "CURRENT"
