@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-06 11:12:55 jcgs>
+;;; Time-stamp: <2015-04-19 21:02:37 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -94,7 +94,7 @@ Propagate :urgent: and :soon: tags as needed."
 ;; chaining entries ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defun jcgs/chain-task (uuid tag)
+(defun jcgs/org-setup-chain-task (uuid tag)
   "Set up a chained task.
 When the current task is done, onto the task with UUID add the TAG."
   (interactive
@@ -104,23 +104,40 @@ When the current task is done, onto the task with UUID add the TAG."
 		    (substitute-command-keys
 		     "Move to task to chain, press \\[exit-recursive-edit]"))
 		   (recursive-edit)
-		   (cons (org-entry-get nil "ID")
+		   (cons (org-id-get nil t)
 			 (org-get-buffer-tags))))))
      (list (car pair)
 	   (completing-read "Tag: " (cdr pair)))))
   (org-entry-put nil "CHAIN_UUID" uuid)
   (org-entry-put nil "CHAIN_TAG" tag))
 
+(defun jcgs/org-block-task ()
+  "Mark the current task as blocked, and link the blocking task to unblock it."
+  (interactive)
+  (let ((old-tag-state (org-get-todo-state))
+	(blocked-uuid (org-id-get nil t)))
+    (save-window-excursion
+      (save-excursion
+	(message
+	 (substitute-command-keys
+	  "Move to task blocking this one, press \\[exit-recursive-edit]"))
+	(recursive-edit)
+	(org-entry-put nil "CHAIN_UUID" blocked-uuid)
+	(org-entry-put nil "CHAIN_STATE" old-tag-state))))
+  (org-todo "BLOCKED"))
+
 (defun jcgs/org-maybe-chain-task ()
   "Activate the next stage of a chain."
   (when (org-entry-is-done-p)
     (let ((chained-task-id (org-entry-get nil "CHAIN_UUID"))
-	  (chained-task-tag (org-entry-get nil "CHAIN_TAG")))
-      (when (and chained-task-id chained-task-tag)
+	  (chained-task-tag (org-entry-get nil "CHAIN_TAG"))
+	  (chained-task-state (org-entry-get nil "CHAIN_STATE")))
+      (when (and chained-task-id (or chained-task-tag chained-task-state))
 	(save-window-excursion
 	  (save-excursion
 	    (org-id-goto chained-task-id)
-	    (org-toggle-tag chained-task-tag 'on)))))))
+	    (when chained-task-tag (org-toggle-tag chained-task-tag 'on))
+	    (when chained-task-state (org-todo chained-task-state))))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
 
