@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-19 20:37:45 jcgs>
+;;; Time-stamp: <2015-04-19 21:21:09 jcgs>
 
 (require 'org)
 
@@ -630,6 +630,36 @@ An argument can change the number of days ahead, 1 being tomorrow."
     (org-mobile-push)))
 
 (add-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; counting entries ;;
+;;;;;;;;;;;;;;;;;;;;;;
+(defun jcgs/org-count-entry ()
+  "Count the current entry, in the appropriate counter."
+  (let* ((state (and (looking-at org-todo-line-regexp)
+		     (match-end 2)
+		     (match-string-no-properties 2)))
+	 (pair (assoc state jcgs/org-state-counters)))
+    (if pair
+	(rplacd pair (1+ (cdr pair)))
+      (setq jcgs/org-state-counters
+	    (cons (cons state 1)
+		  jcgs/org-state-counters)))))
+
+(defun jcgs/org-count-entries (scope)
+  "Count the entries in each state for SCOPE."
+  (let ((jcgs/org-state-counters nil))
+    (org-map-entries 'jcgs/org-count-entry nil scope)
+    (with-output-to-temp-buffer "*Entry state counts*"
+      (let ((fmt (format "%% %ds: %%d\n" (apply 'max (mapcar 'length (mapcar 'car jcgs/org-state-counters))))))
+	(dolist (state (sort jcgs/org-state-counters (lambda (a b) (> (cdr a) (cdr b )))))
+	  (when (car state)
+	    (princ (format fmt (car state) (cdr state)))))))))
+
+(defun jcgs/org-count-all-entries ()
+  "Count all entries."
+  (interactive)
+  (jcgs/org-count-entries 'agenda))
 
 ;;; some debugging
 
