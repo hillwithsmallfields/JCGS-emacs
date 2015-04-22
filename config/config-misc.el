@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2014-07-22 13:34:36 johstu01>
+;;; Time-stamp: <2015-04-22 15:30:57 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -354,5 +354,15 @@ Optional argument NO-ASK says not to ask, but revert anyway." t)
 	(beginning-of-line 0))
       (beginning-of-line 2)
       (delete-region (point) end))))
+
+;;;; find the buffer visiting the nearest file of a given name
+
+(add-to-list 'load-path (substitute-in-file-name "$EMACS/convenience"))
+
+(autoload 'switch-to-nearest-file-buffer "nearest-file"
+  "Switch to the buffer visiting the nearest file called NAME.
+First, try all the buffers visiting files of that name in subdirectories
+of `default-directory', and if none is found there, try working back up
+the directory tree." t)
 
 ;;; end of config-misc.el
