@@ -64,7 +64,10 @@ intervening directory levels below STARTING-DIRECTORY."
     best-deeper-buffer-so-far))
 
 (defun switch-to-nearest-file-buffer (name)
-  "Switch to the buffer visiting the nearest file called NAME."
+  "Switch to the buffer visiting the nearest file called NAME.
+First, try all the buffers visiting files of that name in subdirectories
+of `default-directory', and if none is found there, try working back up
+the directory tree."
   (interactive
    (let ((names nil))
      (dolist (buf (buffer-list))
