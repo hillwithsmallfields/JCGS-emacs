@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-19 21:21:09 jcgs>
+;;; Time-stamp: <2015-04-24 13:12:19 johstu01>
 
 (require 'org)
 
@@ -634,6 +634,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; counting entries ;;
 ;;;;;;;;;;;;;;;;;;;;;;
+
 (defun jcgs/org-count-entry ()
   "Count the current entry, in the appropriate counter."
   (let* ((state (and (looking-at org-todo-line-regexp)
@@ -660,6 +661,38 @@ An argument can change the number of days ahead, 1 being tomorrow."
   "Count all entries."
   (interactive)
   (jcgs/org-count-entries 'agenda))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; list entries with a given tag ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-tag-list (tag)
+  "Return a list of the occurrences of TAG."
+  (let ((result nil))
+    (org-map-entries
+     (lambda ()
+       (push (cons (org-get-heading t t)
+		   (cons (org-get-todo-state)
+			 (org-get-tags)))
+	     result))
+     tag			  ; maybe add "+TODO=\"TODO\"" or "/!"
+     'agenda)
+    result))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Most Important Three ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-most-important-3 ()
+  "Get the items tagged as the three most important."
+  (jcgs/org-tag-list "mi3"))
+
+(defun jcgs/org-mark-as-most-important ()
+  "Mark the current item as one of three most important things to do today."
+  (let ((already (jcgs/org-most-important-3)))
+    (when (>= (length already) 3)
+      (error "Already got 3 most important tasks"))
+    (org-toggle-tag "mi3" 'on)))
 
 ;;; some debugging
 
