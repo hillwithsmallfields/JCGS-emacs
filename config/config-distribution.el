@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-04-23 11:40:05 johstu01>
+;;; Time-stamp: <2015-04-23 11:46:50 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -440,7 +440,7 @@ Not persistent between sessions, and reset each day.")
   (when (and (boundp 'jcgs/shell-mode-accumulated-command-history-file)
 	     (stringp jcgs/shell-mode-accumulated-command-history-file)
 	     (file-writable-p jcgs/shell-mode-accumulated-command-history-file)
-	     (not (string-match "^!\\(![-0-9]+\\)$" shell-command)))
+	     (not (string-match "^!\\(!\\|[-0-9]+\\)$" shell-command)))
     (set-text-properties 0 (length shell-command)
 			 nil shell-command)
     (let ((cwd default-directory)
