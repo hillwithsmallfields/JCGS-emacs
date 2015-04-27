@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-19 21:02:37 jcgs>
+;;; Time-stamp: <2015-04-27 21:55:20 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -93,6 +93,8 @@ Propagate :urgent: and :soon: tags as needed."
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; chaining entries ;;
 ;;;;;;;;;;;;;;;;;;;;;;
+
+;; TODO: blocking on multiple tasks?
 
 (defun jcgs/org-setup-chain-task (uuid tag)
   "Set up a chained task.
