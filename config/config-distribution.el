@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-04-23 11:46:50 johstu01>
+;;; Time-stamp: <2015-04-28 14:43:59 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -421,6 +421,15 @@ The nearest FILE is used."
 (setq mail-self-blind t
       user-mail-address "john.sturdy@arm.com")
 
+;;;; Comint
+
+(require 'comint)			; so we can overwrite comint-snapshot-last-prompt
+
+(setq comint-use-prompt-regexp t
+      shell-prompt-pattern "^[a-z0-9]+@[-a-z0-9]+:[-._/a-z0-9]+\\$"
+      comint-prompt-read-only t
+      )
+
 ;;;; Shell
 
 (defun jcgs/shell-mode-send-input ()
@@ -486,21 +495,13 @@ read-only (although I don't think I'd changed anything related)
 (defun jcgs/shell-mode-setup ()
   "Set shell mode up the way I want it."
   (add-hook 'comint-input-filter-functions 'jcgs/shell-mode-record-command-in-journal t t)
+  (setq comint-prompt-regexp)
   (define-key shell-mode-map "\C-ce" 'jcgs/shell-mode-erase-buffer)
   (define-key shell-mode-map "\C-cr" 'comint-fix-ssh-known-hosts)
   (define-key shell-mode-map "\C-c\C-c" 'jcgs/shell-mode-interrupt-subjob)
   (define-key shell-mode-map "\r" 'jcgs/shell-mode-send-input))
    
 (add-hook 'shell-mode-hook 'jcgs/shell-mode-setup)
-
-;;;; Comint
-
-(require 'comint)			; so we can overwrite comint-snapshot-last-prompt
-
-(setq comint-use-prompt-regexp t
-      shell-prompt-pattern "^[a-z0-9]+@[.a-z0-9]+:.+\\$"
-      comint-prompt-read-only t
-      )
 
 ;; (unless (string-match "Password for" comint-password-prompt-regexp))
 
