@@ -495,7 +495,6 @@ read-only (although I don't think I'd changed anything related)
 (defun jcgs/shell-mode-setup ()
   "Set shell mode up the way I want it."
   (add-hook 'comint-input-filter-functions 'jcgs/shell-mode-record-command-in-journal t t)
-  (setq comint-prompt-regexp)
   (define-key shell-mode-map "\C-ce" 'jcgs/shell-mode-erase-buffer)
   (define-key shell-mode-map "\C-cr" 'comint-fix-ssh-known-hosts)
   (define-key shell-mode-map "\C-c\C-c" 'jcgs/shell-mode-interrupt-subjob)
