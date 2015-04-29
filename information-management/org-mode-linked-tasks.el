@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-27 21:55:20 jcgs>
+;;; Time-stamp: <2015-04-29 21:03:30 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -43,20 +43,21 @@
 (defun jcgs/org-after-todo-state-change-propagate-upwards ()
   "When the last of a set of sibling tasks is marked as DONE,
 mark the ancestral tasks as DONE."
-  (while (> (funcall outline-level) 1)
-    (outline-up-heading 1)
-    (let ((not-all-done nil)
-	  (on-first t))
-      (org-map-entries
-       (lambda ()
-	 (when (and (not on-first)
-		    (org-entry-is-todo-p))
-	   (setq not-all-done t))
-	 (setq on-first nil))
-       nil
-       'tree)
-      (unless not-all-done
-	(org-todo "DONE")))))
+  (save-excursion
+    (while (> (funcall outline-level) 1)
+      (outline-up-heading 1)
+      (let ((not-all-done nil)
+	    (on-first t))
+	(org-map-entries
+	 (lambda ()
+	   (when (and (not on-first)
+		      (org-entry-is-todo-p))
+	     (setq not-all-done t))
+	   (setq on-first nil))
+	 nil
+	 'tree)
+	(unless not-all-done
+	  (org-todo "DONE"))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-propagate-upwards t)
 
@@ -68,25 +69,26 @@ should move as the \"next\" tag moves.")
 (defun jcgs/org-after-todo-state-change-move-next-marker ()
   "If this task is being marked as done, and has a :next: tag, move the tag.
 Propagate :urgent: and :soon: tags as needed."
-  (let ((original-tags (org-get-tags)))
-    (when (and (org-entry-is-done-p)
-	       (member "next" original-tags))
-      (let ((tags-to-move nil))
-	(dolist (maybe jcgs/org-after-todo-state-follower-tags)
-	  (if (member maybe original-tags)
-	      (push maybe tags-to-move)))
-	(org-toggle-tag "next" 'off)
-	(beginning-of-line 1)
-	(let ((started-at (point)))
-	  (org-forward-heading-same-level 1)
-	  (if (/= (point) started-at)
-	      (progn
-		(org-toggle-tag "next" 'on))
-	    (when (y-or-n-p "Move :next: marker to next subtree? ")
-	      (outline-next-heading)
-	      (org-toggle-tag "next" 'on))))
-	(dolist (moving-tag tags-to-move)
-	  (org-toggle-tag moving-tag 'on))))))
+  (save-excursion
+    (let ((original-tags (org-get-tags)))
+      (when (and (org-entry-is-done-p)
+		 (member "next" original-tags))
+	(let ((tags-to-move nil))
+	  (dolist (maybe jcgs/org-after-todo-state-follower-tags)
+	    (if (member maybe original-tags)
+		(push maybe tags-to-move)))
+	  (org-toggle-tag "next" 'off)
+	  (beginning-of-line 1)
+	  (let ((started-at (point)))
+	    (org-forward-heading-same-level 1)
+	    (if (/= (point) started-at)
+		(progn
+		  (org-toggle-tag "next" 'on))
+	      (when (y-or-n-p "Move :next: marker to next subtree? ")
+		(outline-next-heading)
+		(org-toggle-tag "next" 'on))))
+	  (dolist (moving-tag tags-to-move)
+	    (org-toggle-tag moving-tag 'on)))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
 
