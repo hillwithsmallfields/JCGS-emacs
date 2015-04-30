@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-29 21:03:30 jcgs>
+;;; Time-stamp: <2015-04-30 13:56:01 johstu01>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -96,7 +96,24 @@ Propagate :urgent: and :soon: tags as needed."
 ;; chaining entries ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: blocking on multiple tasks?
+(defun jcgs/org-add-chained-task (uuid tag state)
+  "Add blocked UUID with TAG and STATE to the current task."
+  (org-entry-put nil "CHAINED_TASKS"
+		 (let ((print-length nil))
+		   (prin1-to-string
+		    (cons (list uuid tag state)
+			  (read (org-entry-get nil "CHAINED_TASKS")))))))
+
+(defun jcgs/org-count-chained-tasks ()
+  "Return the number of tasks dependent on the current task."
+  (let* ((directly-chained-tasks (read (org-entry-get nil "CHAINED_TASKS")))
+	 (chained-task-count (length directly-chained-tasks)))
+    (save-excursion
+      (dolist (dct directly-chained-tasks)
+	(org-id-goto (first dct))
+	(setq chained-task-count (+ chained-task-count 
+				    (jcgs/org-count-chained-tasks)))))
+    chained-task-count))
 
 (defun jcgs/org-setup-chain-task (uuid tag)
   "Set up a chained task.
@@ -112,8 +129,7 @@ When the current task is done, onto the task with UUID add the TAG."
 			 (org-get-buffer-tags))))))
      (list (car pair)
 	   (completing-read "Tag: " (cdr pair)))))
-  (org-entry-put nil "CHAIN_UUID" uuid)
-  (org-entry-put nil "CHAIN_TAG" tag))
+  (jcgs/org-add-chained-task uuid tag nil))
 
 (defun jcgs/org-block-task ()
   "Mark the current task as blocked, and link the blocking task to unblock it."
@@ -126,17 +142,27 @@ When the current task is done, onto the task with UUID add the TAG."
 	 (substitute-command-keys
 	  "Move to task blocking this one, press \\[exit-recursive-edit]"))
 	(recursive-edit)
-	(org-entry-put nil "CHAIN_UUID" blocked-uuid)
-	(org-entry-put nil "CHAIN_STATE" old-tag-state))))
+	(jcgs/org-add-chained-task blocked-uuid nil old-tag-state))))
   (org-todo "BLOCKED"))
 
 (defun jcgs/org-maybe-chain-task ()
   "Activate the next stage of a chain."
   (when (org-entry-is-done-p)
+    ;; old version: keep until I have converted tasks that use this
     (let ((chained-task-id (org-entry-get nil "CHAIN_UUID"))
 	  (chained-task-tag (org-entry-get nil "CHAIN_TAG"))
 	  (chained-task-state (org-entry-get nil "CHAIN_STATE")))
       (when (and chained-task-id (or chained-task-tag chained-task-state))
+	(save-window-excursion
+	  (save-excursion
+	    (org-id-goto chained-task-id)
+	    (when chained-task-tag (org-toggle-tag chained-task-tag 'on))
+	    (when chained-task-state (org-todo chained-task-state))))))
+    ;; new version, to use from now onwards: this allows multiple tasks to be chained from one task
+    (dolist (chained-task (read (org-entry-get nil "CHAINED_TASKS")))
+      (let ((chained-task-id (first chained-task))
+	    (chained-task-tag (second chained-task))
+	    (chained-task-state (third chained-task)))
 	(save-window-excursion
 	  (save-excursion
 	    (org-id-goto chained-task-id)
