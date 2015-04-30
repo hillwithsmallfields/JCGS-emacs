@@ -85,5 +85,21 @@ the directory tree."
 	(switch-to-buffer buffer)
       (error "Could not find which buffer is nearest: algorithm found %S" buffer))))
 
+(defun find-nearest-file-mentioned-in-backtrace ()
+  "Find a file mentioned in a backtrace line, and go to the mentioned line number."
+  (interactive)
+  (let ((pair (save-excursion
+		(beginning-of-line 1)
+		(if (re-search-forward "(\\([^:]+\\):\\([0-9]+\\)" (line-end-position) t)
+		    (cons (match-string-no-properties 1)
+			  (string-to-number
+			   (match-string-no-properties 2)))
+		  nil))))
+    (if pair
+	(progn
+	  (switch-to-nearest-file-buffer (car pair))
+	  (goto-line (cdr pair)))
+      (error "Could not find file reference"))))
+
 (provide 'nearest-file)
 ;;; nearest-file.el ends here
