@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-04-30 13:56:01 johstu01>
+;;; Time-stamp: <2015-05-01 13:50:16 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -99,10 +99,13 @@ Propagate :urgent: and :soon: tags as needed."
 (defun jcgs/org-add-chained-task (uuid tag state)
   "Add blocked UUID with TAG and STATE to the current task."
   (org-entry-put nil "CHAINED_TASKS"
-		 (let ((print-length nil))
+		 (let ((print-length nil)
+		       (raw-old-tasks (org-entry-get nil "CHAINED_TASKS")))
 		   (prin1-to-string
 		    (cons (list uuid tag state)
-			  (read (org-entry-get nil "CHAINED_TASKS")))))))
+			  (if raw-old-tasks
+			      (read raw-old-tasks)
+			    nil))))))
 
 (defun jcgs/org-count-chained-tasks ()
   "Return the number of tasks dependent on the current task."
