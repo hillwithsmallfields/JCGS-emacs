@@ -1,5 +1,5 @@
 ;;;; linked tasks in org-mode
-;;; Time-stamp: <2015-05-01 13:50:16 jcgs>
+;;; Time-stamp: <2015-05-01 15:05:36 jcgs>
 
 ;; Copyright (C) 2015 John Sturdy
 
@@ -109,7 +109,10 @@ Propagate :urgent: and :soon: tags as needed."
 
 (defun jcgs/org-count-chained-tasks ()
   "Return the number of tasks dependent on the current task."
-  (let* ((directly-chained-tasks (read (org-entry-get nil "CHAINED_TASKS")))
+  (let* ((chained-tasks-raw (org-entry-get nil "CHAINED_TASKS"))
+	 (directly-chained-tasks (if chained-tasks-raw
+				     (read chained-tasks-raw)
+				   nil))
 	 (chained-task-count (length directly-chained-tasks)))
     (save-excursion
       (dolist (dct directly-chained-tasks)
@@ -162,15 +165,17 @@ When the current task is done, onto the task with UUID add the TAG."
 	    (when chained-task-tag (org-toggle-tag chained-task-tag 'on))
 	    (when chained-task-state (org-todo chained-task-state))))))
     ;; new version, to use from now onwards: this allows multiple tasks to be chained from one task
-    (dolist (chained-task (read (org-entry-get nil "CHAINED_TASKS")))
-      (let ((chained-task-id (first chained-task))
-	    (chained-task-tag (second chained-task))
-	    (chained-task-state (third chained-task)))
-	(save-window-excursion
-	  (save-excursion
-	    (org-id-goto chained-task-id)
-	    (when chained-task-tag (org-toggle-tag chained-task-tag 'on))
-	    (when chained-task-state (org-todo chained-task-state))))))))
+    (let ((chained-tasks-raw (org-entry-get nil "CHAINED_TASKS")))
+      (when chained-tasks-raw
+	(dolist (chained-task (read chained-tasks-raw))
+	  (let ((chained-task-id (first chained-task))
+		(chained-task-tag (second chained-task))
+		(chained-task-state (third chained-task)))
+	    (save-window-excursion
+	      (save-excursion
+		(org-id-goto chained-task-id)
+		(when chained-task-tag (org-toggle-tag chained-task-tag 'on))
+		(when chained-task-state (org-todo chained-task-state))))))))))
 
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
 
