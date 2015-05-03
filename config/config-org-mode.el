@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-04-24 13:12:19 johstu01>
+;;; Time-stamp: <2015-05-03 14:29:46 jcgs>
 
 (require 'org)
 
@@ -54,7 +54,8 @@ changed." t)
 				       '("general" "shopping" "eating" "research" "work"
 					 "projects" "learning" "improvement"))
 			       (list (substitute-in-file-name "$VEHICLES/Marmalade/Marmalade-work.org")
-				     (substitute-in-file-name "$VEHICLES/Marmalade/170.org"))
+				     ;; (substitute-in-file-name "$VEHICLES/Marmalade/170.org")
+				     )
 			       (mapcar (function
 					(lambda (file)
 					  (expand-file-name (format "Cat-Imp-%s.org" file)
