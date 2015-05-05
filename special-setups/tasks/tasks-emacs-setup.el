@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2015-04-29 09:30:58 jcgs>
+;;; Time-stamp: <2015-05-05 21:47:34 jcgs>
 
 (setq debug-on-error t)
 
@@ -44,7 +44,8 @@
       org-agenda-files)
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (org-mobile-pull)
-(org-agenda-list)
+;; (org-agenda-list)
+(org-agenda nil "c")
 
 (defun jcgs/emacs-pre-shutdown-function ()
   "Function to run soon before shutdown."
