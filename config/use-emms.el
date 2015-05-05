@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2014-07-24 13:25:28 johstu01>
+;;; Time-stamp: <2015-05-05 07:26:55 jcgs>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -182,5 +182,24 @@ newline; when playing, they insert a tag and move to the next
 line, respectively, letting you move rapidly through a
 ready-typed text to add a tag to each line." t)
 (add-to-list 'auto-mode-alist (cons "\\.lrc" 'lyric-mode))
+
+(defun convert-tracks-to-ogg (directory &optional force)
+  "Convert the tracks in DIRECTORY to ogg format.
+With optional FORCE, do this even if the output file already exists."
+  (interactive "DConvert tracks in directory: 
+P")
+  (dolist (file (directory-files directory t nil t))
+    (when (and (not (file-directory-p file))
+	       (not (string-match "\\.ogg$" file)))
+      (let ((output (concat (file-name-sans-extension
+			     (file-name-sans-extension file))
+			    ".ogg")))
+	(when (or force
+		  (not (file-exists-p output)))
+	  (message "Converting %s to %s"
+		   file output)
+	  (shell-command (format "oggenc -o %s %s"
+				 output
+				 file)))))))
 
 ;; end of use-emms.el
