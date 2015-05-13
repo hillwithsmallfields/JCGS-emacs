@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-04-28 14:43:59 johstu01>
+;;; Time-stamp: <2015-05-12 10:46:12 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -461,6 +461,9 @@ Not persistent between sessions, and reset each day.")
 	  (setq jcgs/shell-mode-recorded-commands nil))
 	(goto-char (point-max))
 	(dolist (command-line (split-string shell-command "\n" t))
+	  ;; todo: fix this filtering, it doesn't seem to be working
+	  ;; todo: filter out history commands that don't alter anything
+	  ;; todo: filter out "history" commands
 	  (unless (member command-line jcgs/shell-mode-recorded-commands)
 	    (push command-line jcgs/shell-mode-recorded-commands)
 	    ;; (message "Got shell command %S to record as happening in buffer %S with default directory %s." command-line buffer cwd)
@@ -473,7 +476,8 @@ Not persistent between sessions, and reset each day.")
 			      (getenv "HOME")))
 		  ;; (message "Command was cd, with arg %S; cwd now %S" cd-arg cwd)
 		  ))))
-	  (insert buffer ":" cwd "$ " command-line)
+	  (delete-blank-lines)
+	  (insert "    " buffer ":" cwd "$ " command-line)
 	  (basic-save-buffer)
 	  (bury-buffer))))))
 
