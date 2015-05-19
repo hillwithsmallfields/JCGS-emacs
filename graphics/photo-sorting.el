@@ -189,5 +189,39 @@ DDirectory: ")
     (when (yes-or-no-p "Delete files? ")
       (mapcar 'delete-file cull))))
 
+(defun photos-in-tree (dir)
+  "List the photos in DIR and its subdirectories.
+Result is an alist of short name to full name."
+  (let ((result nil))
+    (dolist (file (directory-files dir t nil t))
+      ;; (message "got %S" file)
+      (cond
+       ((string-match "\\.$" file) nil)
+       ((file-directory-p file)
+	(setq result (append result (photos-in-tree file))))
+       ((string-match "\\.jpg$" file)
+	(setq result (cons (cons (file-name-nondirectory file)
+				 file)
+			   result)))))
+    result))
+
+(defun match-raw-and-sorted-photos ()
+  "Match my two photo areas."
+  (interactive)
+  (let ((sorted (photos-in-tree "/gallery/jcgs/photos"))
+	(raw (photos-in-tree "/gallery/jcgs/raw-photos"))
+	(n-same 0))
+    ;; (dolist (file sorted) (message "sorted: %S" file))
+    ;; (dolist (file raw) (message "raw: %S" file))
+    (dolist (file sorted)
+      (when (and (setq m (assoc (car file) raw))
+		 (= (nth 7 (file-attributes (cdr file)))
+		    (nth 7 (file-attributes (cdr m)))))
+	(message "%s is also %s" file m)
+	(setq n-same (1+ n-same))
+	)
+      )
+    (message "%d the same" n-same)))
+
 (provide 'photo-sorting)
 ;;; photo-sorting.el ends here
