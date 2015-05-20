@@ -210,18 +210,27 @@ Result is an alist of short name to full name."
   (interactive)
   (let ((sorted (photos-in-tree "/gallery/jcgs/photos"))
 	(raw (photos-in-tree "/gallery/jcgs/raw-photos"))
-	(n-same 0))
+	(n-same 0)
+	(n-false-matches 0))
     ;; (dolist (file sorted) (message "sorted: %S" file))
     ;; (dolist (file raw) (message "raw: %S" file))
     (dolist (file sorted)
       (when (and (setq m (assoc (car file) raw))
 		 (= (nth 7 (file-attributes (cdr file)))
 		    (nth 7 (file-attributes (cdr m)))))
-	(message "%s is also %s" file m)
-	(setq n-same (1+ n-same))
-	)
-      )
-    (message "%d the same" n-same)))
+	(if (zerop (length (shell-command-to-string
+			    (format "diff %s %s" (cdr file) (cdr m)))))
+	    (progn
+	      (message "%s is also %s" file m)
+	      (setq n-same (1+ n-same))
+	      (when (file-exists-p (cdr m)) ; in case we've already moved it
+		(shell-command
+		 (format "mv %s %s"
+			 (cdr m)
+			 "/gallery/jcgs/from-raw-occurred-elsewhere"))))
+	  (message "%s and %s have the same length but some other difference" file m)
+	  (setq n-false-matches (1+ n-false-matches)))))
+    (message "%d the same; %s false matches" n-same n-false-matches)))
 
 (provide 'photo-sorting)
 ;;; photo-sorting.el ends here
