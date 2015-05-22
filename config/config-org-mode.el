@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-05-03 14:30:33 jcgs>
+;;; Time-stamp: <2015-05-22 07:32:34 jcgs>
 
 (require 'org)
 
@@ -8,25 +8,16 @@
 
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
-(add-to-list 'org-modules 'org-drill)
 (add-to-list 'org-modules 'org-mobile)
 
 (org-load-modules-maybe t)
 
-(message "At start of config-org-mode.el, org-agenda-files is %S" org-agenda-files)
-
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
 (require 'work-tasks)
 (require 'work-log)
+
+;; so I can exchange files with non-emacs users and still have their systems pick a text editor:
 (add-to-list 'auto-mode-alist (cons "\\.org\\.txt" 'org-mode))
-
-(message "Near start of config-org-mode.el, org-agenda-files is %S" org-agenda-files)
-
-(autoload 'post-sync-catchup "post-sync-catchup"
-  "Reload files that might have been changed by syncing with my phone.
-This analyzes the script for the command run by
-`post-sync-catchup-sync-command' to find what might have
-changed." t)
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "BLOCKED(b)" "CURRENT(c)" "OPEN(o)"
@@ -694,9 +685,5 @@ An argument can change the number of days ahead, 1 being tomorrow."
     (when (>= (length already) 3)
       (error "Already got 3 most important tasks"))
     (org-toggle-tag "mi3" 'on)))
-
-;;; some debugging
-
-(message "At end of config-org-mode.el, org-agenda-files is %S" org-agenda-files)
 
 ;;; config-org-mode.el ends here
