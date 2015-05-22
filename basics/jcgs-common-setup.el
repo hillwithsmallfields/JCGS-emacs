@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2015-03-15 17:46:20 jcgs>
+;;; Time-stamp: <2015-05-22 07:15:03 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -10,7 +10,8 @@
       parens-require-spaces nil
       message-log-max t
       eval-expression-print-length nil
-      eval-expression-print-level nil)
+      eval-expression-print-level nil
+      delete-old-versions t)
 
 (unless (and (stringp user-emacs-directory)
 	     (file-directory-p user-emacs-directory)
