@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-04-03 21:07:40 jcgs>
+;;; Time-stamp: <2015-06-01 16:21:47 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
@@ -66,14 +66,19 @@
 
 (message "Setting up python-mode")
 
+(defun jcgs/pylint-available ()
+  "Return whether pylint is available."
+  (not (zerop (length (shell-command-to-string "which epylint")))))
+
 (defun jcgs/python-mode-hook ()
   "My hook for setting up python mode."
   (message "In jcgs/python-mode-hook for buffer=%S buffer-read-only=%S file=%S directory=%S" (current-buffer) buffer-read-only (buffer-file-name) default-directory)
+  (when (jcgs/pylint-available)
   (unless buffer-read-only
     ;; (setq flymake-log-level 3)
     (message "Setting flymake mode for buffer %S" (current-buffer))
     (flymake-find-file-hook)
-    (message "Set flymake mode for buffer %S" (current-buffer))))
+    (message "Set flymake mode for buffer %S" (current-buffer)))))
 
 (defun flymake-pylint-init ()
   "Set up pyling for flymake."
