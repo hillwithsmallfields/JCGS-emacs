@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2015-02-12 11:25:35 johstu01>
+;;; Time-stamp: <2015-06-08 10:31:27 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -38,9 +38,11 @@
  (when (at-work)
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src" "-src-")
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched" "-uniSched-")
-  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/gocommons" "-gocommons-")
-  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer" "-monit-")
-  (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-"))
+  (make-shell-for-directory-if-present "/work/johstu01/build/hapsfarm" "-hapsfarm-")
+  ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/gocommons" "-gocommons-")
+  ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer" "-monit-")
+  ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-")
+  )
 
 (unless (at-work)
   (make-shell-for-directory-if-present "-gos-"
