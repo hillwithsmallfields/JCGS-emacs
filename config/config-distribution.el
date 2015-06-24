@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-05-12 10:46:12 johstu01>
+;;; Time-stamp: <2015-06-24 17:53:43 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -426,7 +426,7 @@ The nearest FILE is used."
 (require 'comint)			; so we can overwrite comint-snapshot-last-prompt
 
 (setq comint-use-prompt-regexp t
-      shell-prompt-pattern "^[a-z0-9]+@[-a-z0-9]+:[-._/a-z0-9]+\\$"
+      shell-prompt-pattern "^[a-z0-9]+@[-a-z0-9]+:[-._/a-z0-9~]+\\$"
       comint-prompt-read-only t
       )
 
