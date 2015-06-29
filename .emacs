@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2014-10-05 22:59:35 jcgs>
+;;; Time-stamp: <2015-06-29 15:37:41 johstu01>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -33,6 +33,11 @@
       print-level 128 eval-expression-print-level 128
       inhibit-startup-message t
       use-package-verbose t)
+
+(unless (and (getenv "EHOME")
+	     (getenv "OPEN_PROJECTS")
+	     (getenv "GATHERED"))
+  (error "Environment not set up --- probably need to source .bash_profile"))
 
 (unless (and (stringp user-emacs-directory)
 	     (file-directory-p user-emacs-directory)
