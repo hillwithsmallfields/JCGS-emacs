@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-06-24 17:53:43 johstu01>
+;;; Time-stamp: <2015-10-07 10:44:23 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -718,6 +718,10 @@ John Sturdy <john@cb1.com>"
 			  "^\\s-+\\[[0-9:]+\\]"))
 	(goto-char (point-min))
 	(delete-matching-lines delendum)))))
+
+;;;; messages-mode
+
+(define-key messages-buffer-mode-map "\C-c\C-e" 'jcgs/shell-mode-erase-buffer)
 
 ;;;; browse-url
 
