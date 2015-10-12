@@ -1,5 +1,5 @@
 ;;;; Switch colour themes
-;;; Time-stamp: <2015-10-12 11:18:50 johstu01>
+;;; Time-stamp: <2015-10-12 11:19:51 johstu01>
 
 ;; Copyright (C) 2015  John Sturdy
 
@@ -126,10 +126,7 @@ me to clock in as much as possible."
   "Clock in (if out) or out (if in)."
   (interactive)
   (if (org-clocking-p)
-      (save-excursion
-	(set-buffer (org-clocking-buffer))
-	(goto-char org-clock-marker)
-	(org-clock-out))
-    (org-clock-in)))
+      (org-clock-out)
+    (org-clock-in-last)))
 
 (provide 'org-mode-task-colours)
