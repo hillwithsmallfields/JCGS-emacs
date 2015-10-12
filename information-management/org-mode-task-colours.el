@@ -1,5 +1,5 @@
 ;;;; Switch colour themes
-;;; Time-stamp: <2015-10-12 11:19:51 johstu01>
+;;; Time-stamp: <2015-10-12 11:26:41 johstu01>
 
 ;; Copyright (C) 2015  John Sturdy
 
@@ -118,15 +118,5 @@ me to clock in as much as possible."
     (if (memq jcgs/org-nice-theme custom-enabled-themes)
 	(enable-theme jcgs/org-nice-theme)
       (load-theme jcgs/org-nice-theme))))
-
-(setq org-clock-out-switch-to-state "OPEN"
-      org-clock-in-switch-to-state "CURRENT")
-
-(defun jcgs/org-clock-in-or-out ()
-  "Clock in (if out) or out (if in)."
-  (interactive)
-  (if (org-clocking-p)
-      (org-clock-out)
-    (org-clock-in-last)))
 
 (provide 'org-mode-task-colours)

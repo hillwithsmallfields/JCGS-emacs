@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2014-07-04 16:19:40 johstu01>
+;;; Time-stamp: <2015-10-12 12:10:23 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -83,6 +83,12 @@ Argument COMMAND-ARGS are the args."
     (prin1 (substitute-command-keys
 	    "Bindings for jcgs-map-1 are \\{jcgs-map-1}"))))
 
+(defvar jcgs-task-tracking-map
+  (make-sparse-keymap "Task tracking")
+  "Keymap for my task tracking.")
+
+(fset 'jcgs-task-tracking-map jcgs-task-tracking-map)
+
 (defvar jcgs-magit-commands-map
   (let ((map (make-sparse-keymap)))
     (define-key map "s" 'magit-status)
@@ -131,6 +137,16 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map-1 "l" 'load-other-window-file-name)
   (define-key jcgs-map-1 "q" 'revert-quickly)
   (define-key jcgs-map-1 "r" 'remember)
+
+  (define-key jcgs-task-tracking-map "a" 'jcgs/org-start-answering)
+  (define-key jcgs-task-tracking-map "i" 'org-clock-in)
+  (define-key jcgs-task-tracking-map "l" 'org-clock-in-last)
+  (define-key jcgs-task-tracking-map "o" 'org-clock-out)
+  (define-key jcgs-task-tracking-map "p" 'jcgs/org-start-paperwork)
+  (define-key jcgs-task-tracking-map "q" 'jcgs/org-start-asking)
+  (define-key jcgs-task-tracking-map "r" 'jcgs/org-resume-creative)
+  (define-key jcgs-task-tracking-map "v" 'jcgs/org-start-reviewing)
+  (define-key jcgs-task-tracking-map "z" 'org-clock-out)
   )
 
 (add-to-list 'load-path (expand-file-name "startup" user-emacs-directory))
@@ -153,12 +169,9 @@ Returns how many buffers it brought up." t)
   (global-set-key [     f2 ] 'other-window)
   (global-set-key [   C-f2 ] 'split-window-horizontally)
 
-  (global-set-key [     f3 ] 'kill-ring-save)
-  (global-set-key [   C-f3 ] 'kill-region)
-  (global-set-key [   M-f3 ] 'yank)
-  (global-set-key [ C-M-f3 ] 'delete-region)
+  (global-set-key [     f3 ] 'other-frame)
 
-  (global-set-key [     f4 ] 'other-frame)
+  (global-set-key [     f4 ] 'jcgs-task-tracking-map)
 
   (global-set-key [     f5 ] 'find-file-at-point)
   (global-set-key [   C-f5 ] 'find-file-at-point)

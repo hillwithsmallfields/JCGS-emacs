@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2015-06-29 15:37:41 johstu01>
+;;; Time-stamp: <2015-10-12 11:32:21 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, John C. G. Sturdy
 
@@ -190,9 +190,6 @@ This should be a list of three parts:
 ;; (add-to-list 'use-package-skip-these 'mulvoc)
 
 ;; set some variables used from several of the config files
-
-(defvar work-agenda-file (expand-file-name "/work/johstu01/work-org/work-tasks.org")
-  "The name of the file containing my work agenda.")
 
 (defvar work-log-file (if (at-work)
 			  (expand-file-name "/work/johstu01/work-org/work.org-log")
