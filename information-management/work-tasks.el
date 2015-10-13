@@ -65,9 +65,16 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   (unless (member org-clock-current-task jcgs/org-ongoing-activities)
     (setq jcgs/org-last-creative-task org-clock-current-task)))
 
+(defun jcgs/org-show-last-creative-task ()
+  "Show the value of 'jcgs/org-last-creative-task'."
+  (interactive)
+  (message (substitute-command-keys
+	    "The creative task that \\[jcgs/org-resume-creative] would resume is %S")
+	   jcgs/org-last-creative-task))
+
 (defun jcgs/org-clock-in-specific (task-heading)
   "Clock in to TASK-HEADING."
-  (save-excursion
+  (save-window-excursion
     (when (org-clocking-p)
       (org-clock-out))
     (find-file work-agenda-file)

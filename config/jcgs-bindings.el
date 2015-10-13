@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2015-10-12 12:10:23 johstu01>
+;;; Time-stamp: <2015-10-13 14:18:46 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -147,6 +147,7 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-task-tracking-map "r" 'jcgs/org-resume-creative)
   (define-key jcgs-task-tracking-map "v" 'jcgs/org-start-reviewing)
   (define-key jcgs-task-tracking-map "z" 'org-clock-out)
+  (define-key jcgs-task-tracking-map "?" 'jcgs/org-show-last-creative-task)
   )
 
 (add-to-list 'load-path (expand-file-name "startup" user-emacs-directory))
