@@ -43,6 +43,7 @@ of the buffer is not examined."
 		    (throw 'enough widest)))))))
       widest)))
 
+
 (defun switch-to-buffer-other-window-jcgs (buffer &optional norecord
 						  force-split)
   ;; todo: replace with use of split-window-preferred-function on Emacs 23 onwards
@@ -123,7 +124,15 @@ The default is 3."
 			       'window-height
 			       several))
 
+(defun switch-to-buffer-window-right (buffer)
+  "Switch to BUFFER in a new window to the right."
+  (interactive "bBuffer: ")
+  (select-window (split-window-right))
+  (switch-to-buffer buffer))
+
 (global-set-key "\C-x\M-2" 'split-window-several)
 (global-set-key "\C-x\M-3" 'split-window-horizontally-several)
+(global-set-key "\C-x\M-1" 'delete-other-windows-vertically)
+(global-set-key "\C-x\C-3 'switch-to-buffer-window-right)
 
 ;;; config-windows.el ends here
