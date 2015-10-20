@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2015-10-13 14:18:46 johstu01>
+;;; Time-stamp: <2015-10-16 16:44:26 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -137,8 +137,9 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map-1 "l" 'load-other-window-file-name)
   (define-key jcgs-map-1 "q" 'revert-quickly)
   (define-key jcgs-map-1 "r" 'remember)
-
+  
   (define-key jcgs-task-tracking-map "a" 'jcgs/org-start-answering)
+  (define-key jcgs-task-tracking-map "c" 'org-capture)
   (define-key jcgs-task-tracking-map "i" 'org-clock-in)
   (define-key jcgs-task-tracking-map "l" 'org-clock-in-last)
   (define-key jcgs-task-tracking-map "o" 'org-clock-out)
