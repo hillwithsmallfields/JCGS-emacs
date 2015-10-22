@@ -62,7 +62,7 @@
 (defun jcgs/org-remember-last-creative-task ()
   "Set `jcgs/org-last-creative-task' as needed.
 This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
-  (unless (member org-clock-current-task jcgs/org-ongoing-activities)
+  (unless (member org-clock-current-task (mapcar 'eval jcgs/org-ongoing-activities))
     (setq jcgs/org-last-creative-task org-clock-current-task)))
 
 (defun jcgs/org-show-last-creative-task ()
