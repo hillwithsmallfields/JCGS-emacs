@@ -4,15 +4,16 @@
   "Ignoring case, read the name of a buffer and return as a string.
 Prompt with PROMPT.
 Optional second arg DEF is value to return if user enters an empty line.
-If optional third arg REQUIRE-MATCH is non-nil,
- only existing buffer names are allowed.
+
+If optional third arg REQUIRE-MATCH is non-nil, only existing buffer
+names are allowed.
 The argument PROMPT should be a string ending with a colon and a space."
-  (let ((completion-ignore-case t))
-    (let ((chosen-buffer (read-buffer prompt def require-match)))
-      (when (and (not (get-buffer chosen-buffer))
-		 (get-buffer (concat chosen-buffer "cpp")))
-	(setq chosen-buffer (concat chosen-buffer "cpp")))
-      chosen-buffer)))
+  (let* ((completion-ignore-case t)
+	 (chosen-buffer (read-buffer prompt def require-match)))
+    (when (and (not (get-buffer chosen-buffer))
+	       (get-buffer (concat chosen-buffer "cpp")))
+      (setq chosen-buffer (concat chosen-buffer "cpp")))
+    chosen-buffer))
 
 (defun switch-to-buffer-ignore-case (buffer)
   "Like `switch-to-buffer' but ignore case when completing.
@@ -83,7 +84,6 @@ Split horizontally if conditions suit."
 
 (defun switch-to-buffer-other-window-ignore-case (buffer)
   "Like `switch-to-buffer-other-window' but ignoring case when reading name."
-
   (switch-to-buffer-other-window-jcgs buffer))
 
 (global-set-key "\C-xb" 'switch-to-buffer-ignore-case)
@@ -98,7 +98,7 @@ The default is 2."
   (let ((only-split (< several 0)))
     (setq several (abs several))
     (when (<= several 1)
-      (setq several 2))
+      (setq several 3))
     (let* ((total-size (funcall width-function))
 	   (resulting-size (/ total-size several)))
       (dotimes (i (1- several))
@@ -133,6 +133,13 @@ The default is 3."
 (global-set-key "\C-x\M-2" 'split-window-several)
 (global-set-key "\C-x\M-3" 'split-window-horizontally-several)
 (global-set-key "\C-x\M-1" 'delete-other-windows-vertically)
-(global-set-key "\C-x\C-3 'switch-to-buffer-window-right)
+
+(defvar jcgs-sideways-windows-map (make-keymap)
+  "keymap for window commands that work sideways.")
+
+(fset 'jcgs-sideways-windows-map jcgs-sideways-windows-map)
+
+(global-set-key "\C-x\M-4" 'jcgs-sideways-windows-map)
+(define-key jcgs-sideways-windows-map "b" 'switch-to-buffer-window-right)
 
 ;;; config-windows.el ends here
