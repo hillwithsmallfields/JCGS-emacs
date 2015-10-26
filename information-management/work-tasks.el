@@ -40,8 +40,16 @@
 (defvar jcgs/org-form-filling-task "Filling in forms etc"
   "The text of the heading for bureaucratic tasks.")
 
+(defvar jcgs/org-emacs-task "Emacs"
+  "The text of the heading for hacking my Emacs environment.")
+
+(defvar jcgs/org-breaks-and-browsing "Breaks and browsing"
+  "The text of the heading for browsing the web or taking a break.")
+
 (defvar jcgs/org-ongoing-activities
   '(jcgs/org-reviews-task-heading-text
+    jcgs/org-emacs-task
+    jcgs/org-breaks-and-browsing
     jcgs/org-answering-questions-task
     jcgs/org-asking-questions-task
     jcgs/org-form-filling-task)
@@ -103,6 +111,16 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   "Switch to the activity of asking questions."
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-asking-questions-task))
+
+(defun jcgs/org-start-emacs ()
+  "Switch to the activity of hacking Emacs."
+  (interactive)
+  (jcgs/org-clock-in-specific jcgs/org-emacs-task))
+
+(defun jcgs/org-start-break-or-browsing ()
+  "Switch to the activity of taking a break, particularly browsing the web."
+  (interactive)
+  (jcgs/org-clock-in-specific jcgs/org-breaks-and-browsing))
 
 (defun jcgs/org-start-paperwork ()
   "Switch to the activity of filling in forms."
