@@ -128,12 +128,12 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   (jcgs/org-clock-in-specific jcgs/org-breaks-and-browsing))
 
 (defun jcgs/org-start-background-reading ()
-  "Switch to the activity of reading background information."
+  "Switch to the activity of reading background information (understanding)."
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-background-reading-task))
 
 (defun jcgs/org-start-paperwork ()
-  "Switch to the activity of filling in forms."
+  "Switch to the activity of filling in forms (paperwork)."
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-form-filling-task))
 
