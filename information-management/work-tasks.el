@@ -46,6 +46,11 @@
 (defvar jcgs/org-breaks-and-browsing "Breaks and browsing"
   "The text of the heading for browsing the web or taking a break.")
 
+(defvar jcgs/org-breaks-and-browsing-time-in-minutes 5
+  "How long to allow for breaks between pomodoros.
+This is applied to pomodoro-type units that have the task heading
+held in `jcgs/org-breaks-and-browsing'.")
+
 (defvar jcgs/org-background-reading-task "Background reading"
   "The text of the heading for background reading.")
 
@@ -59,6 +64,7 @@
     jcgs/org-answering-questions-task
     jcgs/org-asking-questions-task
     jcgs/org-background-reading-task
+    jcgs/org-jcgs-task
     jcgs/org-form-filling-task)
   "Ongoing tasks other than technical work.")
 
@@ -95,8 +101,11 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
     (find-file work-agenda-file)
     (goto-char (org-find-exact-headline-in-buffer task-heading
 						  nil t))
-    ;; possible enhancement: bind org-timer-default-timer while doing this, so that the "Break and browsing" task can be just 5 minutes
-    (org-clock-in)))
+    (let ((org-timer-default-timer
+	   (if (string= task-heading jcgs/org-breaks-and-browsing)
+	       jcgs/org-breaks-and-browsing-time-in-minutes
+	     org-timer-default-timer)))
+    (org-clock-in))))
 
 (defun jcgs/org-clock-in-or-out ()
   "Clock in (if out) or out (if in)."
