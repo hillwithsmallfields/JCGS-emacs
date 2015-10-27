@@ -46,12 +46,16 @@
 (defvar jcgs/org-breaks-and-browsing "Breaks and browsing"
   "The text of the heading for browsing the web or taking a break.")
 
+(defvar jcgs/org-background-reading-task "Background reading"
+  "The text of the heading for background reading.")
+
 (defvar jcgs/org-ongoing-activities
   '(jcgs/org-reviews-task-heading-text
     jcgs/org-emacs-task
     jcgs/org-breaks-and-browsing
     jcgs/org-answering-questions-task
     jcgs/org-asking-questions-task
+    jcgs/org-background-reading-task
     jcgs/org-form-filling-task)
   "Ongoing tasks other than technical work.")
 
@@ -88,6 +92,7 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
     (find-file work-agenda-file)
     (goto-char (org-find-exact-headline-in-buffer task-heading
 						  nil t))
+    ;; possible enhancement: bind org-timer-default-timer while doing this, so that the "Break and browsing" task can be just 5 minutes
     (org-clock-in)))
 
 (defun jcgs/org-clock-in-or-out ()
@@ -122,6 +127,11 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-breaks-and-browsing))
 
+(defun jcgs/org-start-background-reading ()
+  "Switch to the activity of reading background information."
+  (interactive)
+  (jcgs/org-clock-in-specific jcgs/org-background-reading-task))
+
 (defun jcgs/org-start-paperwork ()
   "Switch to the activity of filling in forms."
   (interactive)
@@ -131,6 +141,30 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   "Resume my last creative task."
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-last-creative-task))
+
+(defun jcgs/org-help-task-keys ()
+  "Display help on my task keys."
+  (interactive)
+  (if (and (boundp 'jcgs-task-tracking-map)
+	   (keymapp 'jcgs-task-tracking-map))
+      (with-output-to-temp-buffer "*Task key bindings*"
+	(let ((pairs nil))
+	  (map-keymap (lambda (binding definition)
+			(push (cons binding
+				    (let* ((first-line (car (split-string (documentation definition) "\n"))))
+				      (if (string-match "Switch to the activity of \\(.+\\)" first-line)
+					  (match-string 1 first-line)
+					first-line)))
+			      pairs)
+			)
+		      jcgs-task-tracking-map)
+	  (dolist (pair (sort pairs 'car-less-than-car))
+	    (let ((binding (car pair))
+		  (description (cdr pair)))
+	      (princ (format "%c %s\n" binding description)))
+	    ))
+	)
+    (error "Task keymap not set up")))
 
 (add-hook 'org-clock-out-hook 'jcgs/org-remember-last-creative-task)
 

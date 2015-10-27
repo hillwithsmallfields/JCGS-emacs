@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2015-10-26 17:20:40 johstu01>
+;;; Time-stamp: <2015-10-27 11:37:39 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -142,12 +142,14 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-task-tracking-map "b" 'jcgs/org-start-break-or-browsing)
   (define-key jcgs-task-tracking-map "c" 'org-capture)
   (define-key jcgs-task-tracking-map "e" 'jcgs/org-start-emacs)
+  (define-key jcgs-task-tracking-map "h" 'jcgs/org-help-task-keys)
   (define-key jcgs-task-tracking-map "i" 'org-clock-in)
   (define-key jcgs-task-tracking-map "l" 'org-clock-in-last)
   (define-key jcgs-task-tracking-map "o" 'org-clock-out)
   (define-key jcgs-task-tracking-map "p" 'jcgs/org-start-paperwork)
   (define-key jcgs-task-tracking-map "q" 'jcgs/org-start-asking)
   (define-key jcgs-task-tracking-map "r" 'jcgs/org-resume-creative)
+  (define-key jcgs-task-tracking-map "u" 'jcgs/org-start-background-reading)
   (define-key jcgs-task-tracking-map "v" 'jcgs/org-start-reviewing)
   (define-key jcgs-task-tracking-map "z" 'org-clock-out)
   (define-key jcgs-task-tracking-map "?" 'jcgs/org-show-last-creative-task)
