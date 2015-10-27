@@ -49,6 +49,9 @@
 (defvar jcgs/org-background-reading-task "Background reading"
   "The text of the heading for background reading.")
 
+(defvar jcgs/org-jcgs-task "JCGS own projects"
+  "The text of the heading for doing my own projects.")
+
 (defvar jcgs/org-ongoing-activities
   '(jcgs/org-reviews-task-heading-text
     jcgs/org-emacs-task
@@ -137,6 +140,10 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   (interactive)
   (jcgs/org-clock-in-specific jcgs/org-form-filling-task))
 
+(defun jcgs/org-jcgs-task ()
+  "Switch to the activity of doing one of my own projects (JCGS)."
+  (jcgs/org-clock-in-specific jcgs/org-jcgs-task))
+
 (defun jcgs/org-resume-creative ()
   "Resume my last creative task."
   (interactive)
@@ -148,6 +155,10 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
   (if (and (boundp 'jcgs-task-tracking-map)
 	   (keymapp 'jcgs-task-tracking-map))
       (with-output-to-temp-buffer "*Task key bindings*"
+	(let ((top-levels (where-is-internal 'jcgs-task-tracking-map)))
+	  (if (= (length top-levels) 1)
+	      (princ (format "These commands are prefixed by %S:\n\n" (car top-levels)))
+	    (princ (format "These commands are prefixed by any of the following keys: %s:\n\n" (mapconcat 'identity top-levels ", ")))))
 	(let ((pairs nil))
 	  (map-keymap (lambda (binding definition)
 			(push (cons binding
@@ -161,9 +172,7 @@ This is to resume the last task that wasn't in `jcgs/org-ongoing-activities'"
 	  (dolist (pair (sort pairs 'car-less-than-car))
 	    (let ((binding (car pair))
 		  (description (cdr pair)))
-	      (princ (format "%c %s\n" binding description)))
-	    ))
-	)
+	      (princ (format "%c\t%s\n" binding description))))))
     (error "Task keymap not set up")))
 
 (add-hook 'org-clock-out-hook 'jcgs/org-remember-last-creative-task)
