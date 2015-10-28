@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+(defvar json-brackets-regexp "[][{}]"
+  "Regexp matching what JSON counts as brackets.")
+
+(defvar json-deepening-brackets '(91 123)
+  "List of characters representing deepening brackets in JSON.")
+
 (defun json-indent-expr ()
   "Re-indent the JSON expression starting at point."
   (interactive)
@@ -33,12 +39,12 @@
 	(indent-stack nil)
 	(previous (point)))
     (catch 'done
-      (while (re-search-forward "[][{}]" (point-max) t)
+      (while (re-search-forward json-brackets-regexp (point-max) t)
 	(save-excursion
 	  (let* ((bracket-position (match-beginning 0))
 		 (bracket (char-after bracket-position))
 		 (bracket-column (1- (current-column)))
-		 (deepening (or (= bracket 123) (= bracket 91))))
+		 (deepening (memq bracket json-deepening-brackets)))
 	    (if deepening
 		(setq depth (1+ depth))
 	      (setq depth (1- depth))
@@ -62,9 +68,8 @@
 	       ((> indentation margin-column)
 		(indent-to indentation))
 	       ((< indentation margin-column)
-		;; todo: reduce indentation
-
-		))
+		(move-to-column indentation t)
+		(delete-region (point) margin-point)))
 	      ;; (save-excursion
 	      ;; 	(while (> (point) previous)
 	      ;; 	  (beginning-of-line 0)
@@ -72,7 +77,7 @@
 	      ;; 	  )
 	      ;; 	)
 	      (setq previous (point))
-	      
+
 	      )))))))
 
 (provide 'json-indent)
