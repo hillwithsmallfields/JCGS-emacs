@@ -1,7 +1,7 @@
 ;;; work-log.el --- keep track of things I've done
 ;; Based on my earlier tracked-compile.el
 
-;; Copyright (C) 2011, 2012, 2013, 2014  John Sturdy
+;; Copyright (C) 2011, 2012, 2013, 2014, 2015  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -21,10 +21,6 @@
 
 ;;; Commentary:
 
-;; Experimental package for doing code experiments, in the XenClient (BB/OE) environment
-
-;; TODO: re-write to use org-datetree
-
 ;;; Code:
 
 (defvar work-log-file (expand-file-name "~/Dropbox/notes/hackery.org-log")
@@ -35,19 +31,28 @@ You could set this per-buffer for local logs.")
 ;; Date-based filing ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun work-log-open-date (date)
-  "Ensure there is an open work-log record for DATE."
-  (interactive
-   (list
-    (read-from-minibuffer "Date (YYYY_MM_DD): "
-			  (format-time-string "%Y_%m_%d"))))
+(defun read-ymd-string (&optional prompt)
+  "Read a year-month-day string from the user, using PROMPT."
+  (let ((matched nil))
+     (while (not matched)
+       (setq ymd-string (read-from-minibuffer (or prompt "Date (YYYY-MM-DD): ")
+					      (format-time-string "%Y-%m-%d"))
+	     matched (string-match "\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)-\\([0-9]\\{2\\}\\)"
+				   ymd-string)))
+   (list (string-to-number (match-string 1 ymd-string))
+	 (string-to-number (match-string 2 ymd-string))
+	 (string-to-number (match-string 3 ymd-string)))))
+
+(defun work-log-open-date (year month day)
+  "Ensure there is an open work-log record for YEAR MONTH DAY."
+  (interactive (read-ymd-string))
   (find-file work-log-file)
   ;; we must be in something based on org-mode for some org-mode
   ;; functions we use to work; we mustn't call the mode setup
   ;; function each time, because it kills all local variables
   (unless (eq major-mode 'work-log-mode)
     (work-log-mode))
-  (jcgs/org-open-hierarchical-date date))
+  (org-datetree-find-date-create (list month day year)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; logged shell commands ;;
@@ -104,6 +109,43 @@ Organizes the log hierarchically by date (day, month, year)."
 (define-key work-log-mode-map "\C-c\C-d" 'work-log-open-date)
 
 (add-to-list 'auto-mode-alist (cons "work.org-log" 'work-log-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Conversion from old format ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun foo ()
+  "Insert a date."
+  (interactive)
+  (org-datetree-find-date-create '(11 4 2015))
+  )
+
+(defun convert-dates ()
+  "Convert the dates in my journal file.
+From my old format to org-datetree's format."
+  (interactive)
+  (goto-char (point-min))
+  (while (re-search-forward "^\\*\\*\\* Date \\(....\\)_\\(..\\)_\\(..\\)" (point-max) t)
+    (let* ((year (string-to-int (match-string 1)))
+	   (month (string-to-int (match-string 2)))
+	   (day (string-to-int (match-string 3)))
+	   (date (encode-time 0 0 0 day month year))
+	   (date-string (current-time-string date))
+	   (decoded (decode-time date))
+	   (dow (format-time-string "%A" date)))
+      (replace-match (format "*** %04d-%02d-%02d %s" year month day dow))))
+  (goto-char (point-min))
+  (while (re-search-forward "^\\*\\* Month \\(....\\)_\\(..\\)" (point-max) t)
+    (let* ((year (string-to-int (match-string 1)))
+	   (month (string-to-int (match-string 2)))
+	   (date (encode-time 0 0 0 1 month year))
+	   (date-string (current-time-string date))
+	   (decoded (decode-time date))
+	   (mon (format-time-string "%B" date)))
+      (replace-match (format "** %04d-%02d %s" year month mon))))
+  (goto-char (point-min))
+  (while (re-search-forward "^\\* Year \\(....\\)" (point-max) t)
+    (replace-match "* \\1")))
 
 (provide 'work-log)
 ;;; work-log.el ends here

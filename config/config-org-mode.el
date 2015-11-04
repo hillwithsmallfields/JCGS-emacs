@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-05-22 07:32:34 jcgs>
+;;; Time-stamp: <2015-11-04 18:35:58 johstu01>
 
 (require 'org)
 
@@ -261,39 +261,39 @@ You may want to turn voice input off at this point; and suspend task timers.")
        (run-hooks 'jcgs/type-break-start-break-hook))
      (add-hook 'jcgs/type-break-start-break-hook 'jcgs/org-clock-out-on-typing-break-function)))
 
-(defun jcgs/org-open-hierarchical-date (date)
-  "Ensure there is a hierarchical record for DATE.
-Return whether a new date was inserted."
-  ;; TODO: I think there is an existing library I could use for this
-  ;; TODO: make it find the right place in a file even if DATE is not the last date
-  ;; TODO: make it use a common date format for the argument
-  (let ((new-date-inserted nil))
-    (goto-char (point-max))
-    (beginning-of-line 1)
-    (when (looking-at "^\\s-+$")
-      (delete-region (point) (point-max)))
-    (unless (save-excursion
-	      (beginning-of-line 0)
-	      (looking-at "^$"))
-      (insert "\n")
-      (setq new-date-inserted t))
-    (unless (re-search-backward (concat "* Year " (substring date 0 -6) "$") (point-min) t)
-      (goto-char (point-max))
-      (insert "* Year " (substring date 0 -6) "\n")
-      (setq new-date-inserted t))
-    (goto-char (point-max))
-    (unless (re-search-backward (concat "** Month " (substring date 0 -3) "$") (point-min) t)
-      (goto-char (point-max))
-      (insert "** Month " (substring date 0 -3) "\n")
-      (setq new-date-inserted t))
-    (goto-char (point-max))
-    (unless (re-search-backward (concat "*** Date " date "$") (point-min) t)
-      (goto-char (point-max))
-      (unless (bolp)
-	(insert "\n"))
-      (insert "*** Date " date "\n\n")
-      (setq new-date-inserted t))
-    new-date-inserted))
+;; (defun jcgs/org-open-hierarchical-date (date)
+;;   "Ensure there is a hierarchical record for DATE.
+;; Return whether a new date was inserted."
+;;   ;; TODO: I think there is an existing library I could use for this
+;;   ;; TODO: make it find the right place in a file even if DATE is not the last date
+;;   ;; TODO: make it use a common date format for the argument
+;;   (let ((new-date-inserted nil))
+;;     (goto-char (point-max))
+;;     (beginning-of-line 1)
+;;     (when (looking-at "^\\s-+$")
+;;       (delete-region (point) (point-max)))
+;;     (unless (save-excursion
+;; 	      (beginning-of-line 0)
+;; 	      (looking-at "^$"))
+;;       (insert "\n")
+;;       (setq new-date-inserted t))
+;;     (unless (re-search-backward (concat "* Year " (substring date 0 -6) "$") (point-min) t)
+;;       (goto-char (point-max))
+;;       (insert "* Year " (substring date 0 -6) "\n")
+;;       (setq new-date-inserted t))
+;;     (goto-char (point-max))
+;;     (unless (re-search-backward (concat "** Month " (substring date 0 -3) "$") (point-min) t)
+;;       (goto-char (point-max))
+;;       (insert "** Month " (substring date 0 -3) "\n")
+;;       (setq new-date-inserted t))
+;;     (goto-char (point-max))
+;;     (unless (re-search-backward (concat "*** Date " date "$") (point-min) t)
+;;       (goto-char (point-max))
+;;       (unless (bolp)
+;; 	(insert "\n"))
+;;       (insert "*** Date " date "\n\n")
+;;       (setq new-date-inserted t))
+;;     new-date-inserted))
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
