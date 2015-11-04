@@ -52,6 +52,7 @@ You could set this per-buffer for local logs.")
   ;; function each time, because it kills all local variables
   (unless (eq major-mode 'work-log-mode)
     (work-log-mode))
+  ;; todo: put blank lines before and after headings
   (org-datetree-find-date-create (list month day year)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,16 +110,12 @@ Organizes the log hierarchically by date (day, month, year)."
 (define-key work-log-mode-map "\C-c\C-d" 'work-log-open-date)
 
 (add-to-list 'auto-mode-alist (cons "work.org-log" 'work-log-mode))
+(add-to-list 'auto-mode-alist (cons "hackery.org-log" 'work-log-mode))
+(add-to-list 'auto-mode-alist (cons (file-name-nondirectory work-log-file) 'work-log-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Conversion from old format ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun foo ()
-  "Insert a date."
-  (interactive)
-  (org-datetree-find-date-create '(11 4 2015))
-  )
 
 (defun convert-dates ()
   "Convert the dates in my journal file.
