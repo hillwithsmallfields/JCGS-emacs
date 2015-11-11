@@ -43,6 +43,25 @@ You could set this per-buffer for local logs.")
 	 (string-to-number (match-string 2 ymd-string))
 	 (string-to-number (match-string 3 ymd-string)))))
 
+(defmacro with-surrounding-blank-lines (&rest body)
+  "Execute BODY forms.
+Put a single blank line before and after whatever it inserts."
+  `(let ((before-marker (point-marker))
+	 (after-marker (point-marker)))
+     (set-marker-insertion-type after-marker t)
+     (insert "\n")
+     (progn
+       ,@body)
+     (insert "\n")
+     (goto-char before-marker)
+     (delete-blank-lines)
+     (delete-blank-lines)
+     (open-line 1)
+     (goto-char after-marker)
+     (delete-blank-lines)
+     (delete-blank-lines)
+     (open-line 1)))
+
 (defun work-log-open-date (year month day)
   "Ensure there is an open work-log record for YEAR MONTH DAY."
   (interactive (read-ymd-string))
@@ -53,7 +72,8 @@ You could set this per-buffer for local logs.")
   (unless (eq major-mode 'work-log-mode)
     (work-log-mode))
   ;; todo: put blank lines before and after headings
-  (org-datetree-find-date-create (list month day year)))
+  (with-surrounding-blank-lines
+   (org-datetree-find-date-create (list month day year))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; logged shell commands ;;
