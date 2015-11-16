@@ -65,7 +65,7 @@ Put a single blank line before and after whatever it inserts."
 (defun work-log-open-date (year month day)
   "Ensure there is an open work-log record for YEAR MONTH DAY."
   (interactive (read-ymd-string))
-  (find-file work-log-file)
+;;  (find-file work-log-file)
   ;; we must be in something based on org-mode for some org-mode
   ;; functions we use to work; we mustn't call the mode setup
   ;; function each time, because it kills all local variables
