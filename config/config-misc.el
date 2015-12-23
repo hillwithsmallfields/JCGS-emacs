@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2015-04-22 15:30:57 johstu01>
+;;; Time-stamp: <2015-12-23 19:54:46 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -364,5 +364,19 @@ Optional argument NO-ASK says not to ask, but revert anyway." t)
 First, try all the buffers visiting files of that name in subdirectories
 of `default-directory', and if none is found there, try working back up
 the directory tree." t)
+
+;;;; openscad setup
+
+(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/openscad/"))
+(add-to-list 'auto-mode-alist '("\\.scad$" . scad-mode))
+(autoload 'scad-mode "scad-mode"   "Major mode for editing OpenSCAD code.
+
+To see what version of CC Mode you are running, enter `\\[c-version]'.
+
+The hook `c-mode-common-hook' is run with no args at mode
+initialization, then `scad-mode-hook'.
+
+Key bindings:
+\\{scad-mode-map}" t)
 
 ;;; end of config-misc.el
