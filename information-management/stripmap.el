@@ -48,14 +48,14 @@
       (let* ((end (point-marker))
 	     (spinal-column (stripmap-max-centre-position start end)))
 	(message "Aligning to %d" spinal-column)
-	(goto-char start)
+	(goto-char end)
 	(beginning-of-line 1)
-	(while (< (point) end)
+	(while (>= (point) start)
 	  (when (looking-at "^[^|+%]+[|+%]")
 	    (let ((existing (save-excursion
 			      (goto-char (match-end 0))
 			      (current-column))))
-	      (message "existing is %d" existing)
+	      (message "on %S, existing is %d" (buffer-substring-no-properties (line-beginning-position) (line-end-position)) existing)
 	      (cond
 	       ((> existing spinal-column)
 		(message "On %S, deleting %d char widths" (buffer-substring-no-properties (line-beginning-position) (line-end-position)) (- existing spinal-column))
@@ -66,9 +66,10 @@
 	       ((< existing spinal-column)
 		(message "On %S, adding %d chars" (buffer-substring-no-properties (line-beginning-position) (line-end-position)) (- spinal-column existing))
 		(back-to-indentation)
-		(indent-to (- spinal-column existing))
+		(insert (make-string (- spinal-column existing) 32))
+		;; (indent-to (- spinal-column existing))
 		))))
-	  (beginning-of-line 2))))))
+	  (beginning-of-line 0))))))
 
 (defun stripmap-prepare-html ()
   "Convert this stripmap file to HTML."
