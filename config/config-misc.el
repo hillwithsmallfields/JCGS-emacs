@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2015-12-23 19:54:46 jcgs>
+;;; Time-stamp: <2016-01-07 10:43:05 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -378,5 +378,40 @@ initialization, then `scad-mode-hook'.
 
 Key bindings:
 \\{scad-mode-map}" t)
+
+;;;; Run a shell command on the filename at point
+
+(defvar shell-command-on-file-at-point-history nil
+  "History commands read by `shell-command-on-file-at-point'.")
+
+(defun shell-command-on-file-at-point (filename command &optional background)
+  "On FILENAME, run COMMAND, optionally in the BACKGROUND.
+FILENAME is taken from the text around point, and COMMAND is prompted for."
+  (interactive
+   (let* ((filename-from-text (thing-at-point 'filename))
+	  (filename (read-from-minibuffer "Run command on file: " filename-from-text))
+	  (suggested-command (save-excursion
+			       (goto-char (beginning-of-thing 'filename))
+			       (backward-word 1)
+			       (thing-at-point 'word)))
+	  (command (read-from-minibuffer (format "Command to run on %s: "
+						 filename)
+					 (if (string= (shell-command-to-string
+						       (concat "which " suggested-command))
+						      "")
+					     nil
+					   suggested-command)
+					 nil
+					 nil
+					 'shell-command-on-file-at-point-history))
+	  (background (string-match "\\s-*&$" command)))
+     (list filename (if background
+			(substring command 0 background)
+		      command)
+	   background)))
+  (message "Running %s on %s%s" command filename (if background " in the background" ""))
+  (shell-command (concat command " " filename (if background " &" ""))))
+
+;; (global-set-key "\\C-M-!" 'shell-command-on-file-at-point)
 
 ;;; end of config-misc.el
