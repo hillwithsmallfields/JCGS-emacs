@@ -1,7 +1,7 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2015-06-08 10:31:27 johstu01>
+;;; Time-stamp: <2016-01-11 14:38:01 johstu01>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -38,7 +38,11 @@
  (when (at-work)
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src" "-src-")
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched" "-uniSched-")
-  (make-shell-for-directory-if-present "/work/johstu01/build/hapsfarm" "-hapsfarm-")
+  (make-shell-for-directory-if-present "/work/johstu01/build/farms" "-farms-")
+  (make-shell-for-directory-if-present "/work/johstu01/build/hapsfarm" "-hapsfarm-" 
+				       ". ~/.bash_profile; module load eda synopsys/xactors/2015.03")
+  (make-shell-for-directory-if-present "/work/johstu01/build/profpgafarm" "-profpgafarm-"
+				       ". ~/.bash_profile; module load eda prodesign/proFPGA/2015C")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/gocommons" "-gocommons-")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer" "-monit-")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-")
