@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-01-17 21:28:42 jcgs>
+;;; Time-stamp: <2016-01-17 21:35:47 jcgs>
 
 (require 'org)
 
@@ -703,6 +703,15 @@ An argument can change the number of days ahead, 1 being tomorrow."
 	      (set-buffer buffer)
 	      (revert-buffer t t t))
 	    org-agenda-files))
+  (org-mobile-pull)
+  (save-excursion
+    (org-agenda-list)
+    (write-file "/tmp/agenda-list")
+    (org-agenda nil "c")
+    (write-file "/tmp/agenda-current")
+    (org-agenda nil "k")
+    (write-file "/tmp/agenda-supermarket"))
+  (org-mobile-push)
   (message "Done agenda update")
   (jcgs/org-agenda-monitor-start)	; set the next one going
   )
