@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2015-11-04 18:35:58 johstu01>
+;;; Time-stamp: <2016-01-17 21:28:42 jcgs>
 
 (require 'org)
 
@@ -685,5 +685,68 @@ An argument can change the number of days ahead, 1 being tomorrow."
     (when (>= (length already) 3)
       (error "Already got 3 most important tasks"))
     (org-toggle-tag "mi3" 'on)))
+
+;;;;;;;;;;;;;;;;;
+;; Agenda loop ;;
+;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-agenda-monitor-update ()
+  "Update my outgoing agenda files from incoming org file alterations."
+  (interactive)				; for debugging, mostly
+  (message "Starting agenda update")
+  (save-excursion
+    (let ((x (find-buffer-visiting org-mobile-capture-file)))
+      (when x
+	(kill-buffer x)))
+    (find-file org-mobile-capture-file)
+    (mapcar (lambda (buffer)
+	      (set-buffer buffer)
+	      (revert-buffer t t t))
+	    org-agenda-files))
+  (message "Done agenda update")
+  (jcgs/org-agenda-monitor-start)	; set the next one going
+  )
+
+(defvar jcgs/org-agenda-monitor-timer nil
+  "The timer to batch updates rather than doing them on every change.")
+
+(defvar jcgs/org-agenda-monitor-delay 20
+  "How long to delay to allow other changes to come in.")
+
+(defun jcgs/org-agenda-monitor-sentinel (process change-descr)
+  "Run on each state change of the agenda monitor.
+Argument PROCESS is the monitor process.
+CHANGE-DESCR is the change"
+  (message "agenda monitor sentinel %s" change-descr)
+  (when (string= change-descr "finished")
+    (message "Agenda directory has changed, waiting %d seconds in case of further changes"
+	     jcgs/org-agenda-monitor-delay)
+    (when (timerp jcgs/org-agenda-monitor-timer)
+      (cancel-timer jcgs/org-agenda-monitor-timer)
+      (setq jcgs/org-agenda-monitor-timer nil))
+    (setq jcgs/org-agenda-monitor-timer
+	  (run-with-idle-timer jcgs/org-agenda-monitor-delay nil 'jcgs/org-agenda-monitor-update))))
+
+(defun jcgs/org-agenda-monitor-start ()
+  "Arrange to monitor incoming alterations to my agenda files."
+  (interactive)				; mostly for testing
+  (message "Starting agenda monitor")
+  (let* ((agenda-monitor-buffer (get-buffer-create " *agenda monitor*"))
+	 (agenda-monitor-process (start-process "agenda-monitor"
+						agenda-monitor-buffer
+						"/usr/bin/inotifywait"
+						"-e" "modify"
+						"-e" "create"
+						(expand-file-name "Dropbox/org"
+								  "~")
+						)))
+    (set-process-sentinel agenda-monitor-process
+			  'jcgs/org-agenda-monitor-sentinel))
+  )
+
+(defun jcgs/org-agenda-monitor-stop ()
+  "Arrange to stop monitoring incoming alterations to my agenda files."
+  (interactive)				; mostly for testing
+  (setq jcgs/org-agenda-monitor-timer nil))
 
 ;;; config-org-mode.el ends here
