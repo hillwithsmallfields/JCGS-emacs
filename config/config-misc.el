@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-01-18 17:01:37 johstu01>
+;;; Time-stamp: <2016-01-18 17:30:49 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -423,14 +423,18 @@ Argument START-MINS is the starting minute.
 Argument DAYS is the number of days to fast for."
   (interactive "nStarting hour: \nnStarting minute: \nnNumber of days: ")
   (with-output-to-temp-buffer "*fast*"
-    (dotimes (i 24)
-      (princ (format "%02d:%02d %s\n"
-		     (mod (+ i start-hour) 24) start-mins
-		     (mapconcat (lambda (h) (format "%3d" h))
-				(reverse (let ((ds nil))
-					    (dotimes (j days)
-					      (push (+ i (* j 24)) ds))
-					    ds))
-				" "))))))
+    (let ((hour-now (nth 2 (decode-time))))
+      (dotimes (i 24)
+	(princ (format "%02d:%02d %s%s\n"
+		       (mod (+ i start-hour) 24) start-mins
+		       (mapconcat (lambda (h) (format "%3d" h))
+				  (reverse (let ((ds nil))
+					     (dotimes (j days)
+					       (push (+ i (* j 24)) ds))
+					     ds))
+				  " ")
+		       (if (= (mod (+ i start-hour) 24) hour-now)
+			   " <=="
+			 "")))))))
 
 ;;; end of config-misc.el
