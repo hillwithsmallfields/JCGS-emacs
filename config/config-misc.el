@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-01-07 10:43:05 johstu01>
+;;; Time-stamp: <2016-01-18 17:01:37 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -413,5 +413,24 @@ FILENAME is taken from the text around point, and COMMAND is prompted for."
   (shell-command (concat command " " filename (if background " &" ""))))
 
 ;; (global-set-key "\\C-M-!" 'shell-command-on-file-at-point)
+
+;;;; fasting times
+
+(defun fasting-table (start-hour start-mins days)
+  "Create a table of how far into a fast I am.
+Argument START-HOUR is the starting hour.
+Argument START-MINS is the starting minute.
+Argument DAYS is the number of days to fast for."
+  (interactive "nStarting hour: \nnStarting minute: \nnNumber of days: ")
+  (with-output-to-temp-buffer "*fast*"
+    (dotimes (i 24)
+      (princ (format "%02d:%02d %s\n"
+		     (mod (+ i start-hour) 24) start-mins
+		     (mapconcat (lambda (h) (format "%3d" h))
+				(reverse (let ((ds nil))
+					    (dotimes (j days)
+					      (push (+ i (* j 24)) ds))
+					    ds))
+				" "))))))
 
 ;;; end of config-misc.el
