@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-01-17 21:35:47 jcgs>
+;;; Time-stamp: <2016-01-19 09:45:18 johstu01>
 
 (require 'org)
 
@@ -86,6 +86,8 @@
 (defvar weather-loadable (and (file-readable-p metoffice-config-file)
 			      (load-file metoffice-config-file))
   "Whether we have a chance of getting the weather data.")
+
+(require 'calendar)
 
 (defun jcgs/org-agenda-make-early-extra-matcher ()
   "Make some extra matcher types for my custom agenda, to go early in the list."

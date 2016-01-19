@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2015-11-10 15:45:15 johstu01>
+;;; Time-stamp: <2016-01-19 09:44:16 johstu01>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -725,7 +725,9 @@ John Sturdy <john@cb1.com>"
 
 ;;;; messages-mode
 
-(define-key messages-buffer-mode-map "\C-c\C-e" 'jcgs/shell-mode-erase-buffer)
+(when (and (boundp 'messages-buffer-mode-map)
+	   (keymapp messages-buffer-mode-map))
+  (define-key messages-buffer-mode-map "\C-c\C-e" 'jcgs/shell-mode-erase-buffer))
 
 ;;;; browse-url
 
