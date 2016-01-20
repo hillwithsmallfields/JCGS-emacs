@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-01-19 09:45:18 johstu01>
+;;; Time-stamp: <2016-01-20 18:19:50 johstu01>
 
 (require 'org)
 
@@ -701,8 +701,8 @@ An argument can change the number of days ahead, 1 being tomorrow."
       (when x
 	(kill-buffer x)))
     (find-file org-mobile-capture-file)
-    (mapcar (lambda (buffer)
-	      (set-buffer buffer)
+    (mapcar (lambda (file)
+	      (set-buffer (find-buffer-visiting file))
 	      (revert-buffer t t t))
 	    org-agenda-files))
   (org-mobile-pull)
@@ -717,6 +717,16 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (message "Done agenda update")
   (jcgs/org-agenda-monitor-start)	; set the next one going
   )
+
+(setq remote-update 'remote-update)
+
+(global-set-key [ remote-update ] 'jcgs/org-agenda-monitor-update)
+
+(defun jcgs/org-agenda-trigger-monitor-update ()
+  "Trigger an agenda update.
+Doing it this means we're not running anything large in the sentinel."
+  (interactive)
+  (setq unread-command-events (nreverse (cons remote-update (nreverse unread-command-events)))))
 
 (defvar jcgs/org-agenda-monitor-timer nil
   "The timer to batch updates rather than doing them on every change.")
@@ -736,7 +746,7 @@ CHANGE-DESCR is the change"
       (cancel-timer jcgs/org-agenda-monitor-timer)
       (setq jcgs/org-agenda-monitor-timer nil))
     (setq jcgs/org-agenda-monitor-timer
-	  (run-with-idle-timer jcgs/org-agenda-monitor-delay nil 'jcgs/org-agenda-monitor-update))))
+	  (run-with-idle-timer jcgs/org-agenda-monitor-delay nil 'jcgs/org-agenda-trigger-monitor-update))))
 
 (defun jcgs/org-agenda-monitor-start ()
   "Arrange to monitor incoming alterations to my agenda files."
@@ -748,8 +758,7 @@ CHANGE-DESCR is the change"
 						"/usr/bin/inotifywait"
 						"-e" "modify"
 						"-e" "create"
-						(expand-file-name "Dropbox/org"
-								  "~")
+						(substitute-in-file-name "$EHOME/Dropbox/org")
 						)))
     (set-process-sentinel agenda-monitor-process
 			  'jcgs/org-agenda-monitor-sentinel))
