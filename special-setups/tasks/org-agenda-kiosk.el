@@ -58,10 +58,14 @@
 			   (match-string-no-properties 1)
 			 (file-name-nondirectory file)))
 		     )))
-	(insert (format "%s %s\n" file title)))))
+	(put-text-property 0 (length title) 'file file title)
+	(insert (format "%s\n" title)))))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
   (when initial-file
     ;; todo: find initial file
     ))
 
+(defun org-agenda-kiosk-files-select ()
+  "Select the file currently pointed to."
+  (interactive))
