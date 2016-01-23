@@ -59,13 +59,40 @@
 			 (file-name-nondirectory file)))
 		     )))
 	(put-text-property 0 (length title) 'file file title)
-	(insert (format "%s\n" title)))))
+	(insert (format "%s\n" title))))
+    (org-agenda-kiosk-files-mode))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
   (when initial-file
-    ;; todo: find initial file
-    ))
+    (unless (catch 'found 
+	      (while (not (eobp))
+		(if (equal (get-text-property (point) 'file)
+			   initial-file)
+		    (throw 'found (point))
+		  (beginning-of-line 2))))
+      (goto-char (point-min)))))
 
 (defun org-agenda-kiosk-files-select ()
   "Select the file currently pointed to."
-  (interactive))
+  (interactive)
+  (let ((file (get-text-property (point) 'file)))
+    (if (stringp file)
+	(if (file-exists-p file)
+	    (find-file file)
+	  (error "File %s is missing" file))
+      (error "No file specified here"))))
+
+(defvar org-agenda-kiosk-files-map
+  (let ((map (make-keymap)))
+    (define-key map "n" 'next-line)
+    (define-key map "p" 'previous-line)
+    (define-key map " " 'org-agenda-kiosk-files-select)
+    map))
+
+(defun org-agenda-kiosk-files-mode ()
+  "A mode for the agenda file selector buffer."
+  (interactive)
+  (setq goal-column 0
+	major-mode 'org-agenda-kiosk-files-mode
+	mode-name "Agenda file selector")
+  (use-local-map org-agenda-kiosk-files-map))
