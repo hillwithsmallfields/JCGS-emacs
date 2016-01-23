@@ -24,7 +24,8 @@
   (interactive)
   (if (<= (org-outline-level) 1)
       (org-agenda-kiosk-files-list (buffer-file-name))
-    (outline-up-heading 1)))
+    (outline-up-heading 1)
+    (hide-subtree)))
 
 (defun org-agenda-kiosk-down-or-cycle-level ()
   "Move down a level."
