@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2015-10-27 13:41:51 johstu01>
+;;; Time-stamp: <2016-01-24 16:49:14 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -32,22 +32,24 @@ Particularly useful in a shell window."
 (defun keypad-separate ()
   "Remove mappings of keypad keys."
   (interactive)
-  (let* ((holder (cons nil (cdr function-key-map)))
-	 (pairs holder)
-	 (nextpairs (cdr pairs)))
-    (while pairs
-      (let* ((pair (car nextpairs))
-	     (name (car pair)))
-	(if (and (symbolp name)
-		 (string-match "kp-" (symbol-name name)))
-	    (progn
-	      (message "Unmapping %S from function-key-map" name)
-	      (rplacd pairs (cdr nextpairs))
-	      (setq nextpairs (cdr pairs)))
-	  (progn
-	    (setq pairs (cdr pairs)
-		  nextpairs (cdr pairs))))))
-    (rplacd function-key-map (cdr holder))))
+  (keypad-setup 'none)
+  ;; (let* ((holder (cons nil (cdr function-key-map)))
+  ;; 	 (pairs holder)
+  ;; 	 (nextpairs (cdr pairs)))
+  ;;   (while pairs
+  ;;     (let* ((pair (car nextpairs))
+  ;; 	     (name (car pair)))
+  ;; 	(if (and (symbolp name)
+  ;; 		 (string-match "kp-" (symbol-name name)))
+  ;; 	    (progn
+  ;; 	      (message "Unmapping %S from function-key-map" name)
+  ;; 	      (rplacd pairs (cdr nextpairs))
+  ;; 	      (setq nextpairs (cdr pairs)))
+  ;; 	  (progn
+  ;; 	    (setq pairs (cdr pairs)
+  ;; 		  nextpairs (cdr pairs))))))
+  ;;   (rplacd function-key-map (cdr holder)))
+  )
 
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
 (global-set-key "\C-x\C-y" 'browse-yank)
