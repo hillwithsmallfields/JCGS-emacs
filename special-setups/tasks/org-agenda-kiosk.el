@@ -1,13 +1,11 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-01-23 21:08:12 jcgs>
+;;; Time-stamp: <2016-01-24 17:32:18 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
 ;;; The idea is to have a Raspberry Pi or similar in a case with some
 ;;; buttons on it, centrally in my house, that I can use to find
 ;;; things to do and to tick them off as I do them.
-
-(load-file "$EMACS/basics/tasks-emacs-setup.el")
 
 (defun org-agenda-kiosk-next ()
   "Move to the next entry."
@@ -35,16 +33,48 @@
 	  (setq child-level (org-goto-first-child)))
 	(progn
 	  (show-children 1)
-	  (goto child-level))
-      ;; todo: cycle the keyword
-      )))
+	  (goto-char child-level))
+      (org-todo))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Minor mode for use over org-mode ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar org-agenda-kiosk-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [ kp-up ] 'org-agenda-kiosk-previous)
+    (define-key map [ kp-down ] 'org-agenda-kiosk-next)
+    (define-key map [ kp-left ] 'org-agenda-kiosk-up-level)
+    (define-key map [ kp-right ] 'org-agenda-kiosk-down-or-cycle-level)
+    (define-key map [ kp-begin ] 'org-agenda-kiosk-files-list)
+    (define-key map [ kp-prior ] 'org-metaup)
+    (define-key map [ kp-next ] 'org-metadown)
+    (define-key map [ kp-home ] 'org-priority-up)
+    (define-key map [ kp-end ] 'org-priority-down)
+    ;; (define-key map [ kp-divide ] ')
+    ;; (define-key map [ kp-multiply ] ')
+    ;; (define-key map [ kp-subtract ] ')
+    ;; (define-key map [ kp-kp-add ] ')
+    ;; (define-key map [ kp-enter ] ')
+    map)
+  "Keymap for the agenda kiosk.")
+
+(define-minor-mode org-agenda-kiosk-mode
+  "Minor mode to put kiosk keys onto org-mode."
+  nil
+  " agenda kiosk"
+  'org-agenda-kiosk-mode-map)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; File selection buffer ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar org-agenda-kiosk-files-buffer nil
   "Buffer containing the agenda files list.")
 
-(defun org-agenda-kiosk-files-list (initial-file)
+(defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
-  (interactive (list nil))
+  (interactive)
   (unless (and (bufferp org-agenda-kiosk-files-buffer)
 	       (buffer-live-p org-agenda-kiosk-files-buffer))
     (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Agenda files*"))
@@ -88,6 +118,10 @@
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
     (define-key map " " 'org-agenda-kiosk-files-select)
+    (define-key map [ kp-down ] 'next-line)
+    (define-key map [ kp-up ] 'previous-line)
+    (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
+    (define-key map [ kp-begin ] 'beginning-of-buffer)
     map))
 
 (defun org-agenda-kiosk-files-mode ()
@@ -97,3 +131,16 @@
 	major-mode 'org-agenda-kiosk-files-mode
 	mode-name "Agenda file selector")
   (use-local-map org-agenda-kiosk-files-map))
+
+(defun org-agenda-kiosk-on ()
+  "Turn kiosk mode on in this buffer."
+  (org-agenda-kiosk-mode 1))
+
+(defun org-agenda-kiosk ()
+  "Start running the agenda kiosk."
+  (interactive)
+  (keypad-setup 'none)
+  (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
+  (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el")
+  (org-agenda-kiosk-files-list))
+
