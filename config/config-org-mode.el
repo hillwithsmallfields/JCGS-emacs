@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-01-20 18:19:50 johstu01>
+;;; Time-stamp: <2016-02-04 20:54:59 jcgs>
 
 (require 'org)
 
@@ -695,6 +695,8 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (defun jcgs/org-agenda-monitor-update ()
   "Update my outgoing agenda files from incoming org file alterations."
   (interactive)				; for debugging, mostly
+  (when (file-exists-p "/tmp/restart-agenda-kiosk")
+    (save-buffers-kill-emacs))
   (message "Starting agenda update")
   (save-excursion
     (let ((x (find-buffer-visiting org-mobile-capture-file)))
