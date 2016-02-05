@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-01-24 17:32:18 jcgs>
+;;; Time-stamp: <2016-02-05 23:22:58 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -51,6 +51,14 @@
     (define-key map [ kp-next ] 'org-metadown)
     (define-key map [ kp-home ] 'org-priority-up)
     (define-key map [ kp-end ] 'org-priority-down)
+    (define-key map [ up ] 'org-agenda-kiosk-previous)
+    (define-key map [ down ] 'org-agenda-kiosk-next)
+    (define-key map [ left ] 'org-agenda-kiosk-up-level)
+    (define-key map [ right ] 'org-agenda-kiosk-down-or-cycle-level)
+    (define-key map [ prior ] 'org-metaup)
+    (define-key map [ next ] 'org-metadown)
+    (define-key map [ home ] 'org-priority-up)
+    (define-key map [ end ] 'org-priority-down)
     ;; (define-key map [ kp-divide ] ')
     ;; (define-key map [ kp-multiply ] ')
     ;; (define-key map [ kp-subtract ] ')
@@ -87,10 +95,10 @@
 		       (goto-char (point-min))
 		       (if (re-search-forward "^#+TITLE: \\(.+\\)" (point-max) t)
 			   (match-string-no-properties 1)
-			 (file-name-nondirectory file)))
-		     )))
-	(put-text-property 0 (length title) 'file file title)
-	(insert (format "%s\n" title))))
+			 (file-name-nondirectory file))))))
+	(let ((title-string (format "* %s\n" title)))
+	  (put-text-property 0 (length title-string) 'file file title-string)
+	  (insert title-string))))
     (org-agenda-kiosk-files-mode))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
@@ -122,6 +130,9 @@
     (define-key map [ kp-up ] 'previous-line)
     (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
     (define-key map [ kp-begin ] 'beginning-of-buffer)
+    (define-key map [ down ] 'next-line)
+    (define-key map [ up ] 'previous-line)
+    (define-key map [ right] 'org-agenda-kiosk-files-select)
     map))
 
 (defun org-agenda-kiosk-files-mode ()
