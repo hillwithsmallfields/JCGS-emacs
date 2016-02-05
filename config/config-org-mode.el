@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 13:04:27 johstu01>
+;;; Time-stamp: <2016-02-05 13:28:00 johstu01>
 
 (require 'org)
 
@@ -703,8 +703,9 @@ An argument can change the number of days ahead, 1 being tomorrow."
 		    (revert-buffer t t t))))))
 	  org-agenda-files))
 
-(defun jcgs/org-agenda-monitor-update ()
-  "Update my outgoing agenda files from incoming org file alterations."
+(defun jcgs/org-agenda-monitor-update (&optional with-mobile)
+  "Update my outgoing agenda files from incoming org file alterations.
+With optional WITH-MOBILE, pull and push the mobile data."
   (interactive)				; for debugging, mostly
   (when (file-exists-p "/tmp/restart-agenda-kiosk")
     ;; Exit this emacs session; the shell script that it is meant to
@@ -715,10 +716,12 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (save-excursion
     (let ((x (find-buffer-visiting org-mobile-capture-file)))
       (when x
+	;; todo: could I just "revert" it?
 	(kill-buffer x)))
     (find-file org-mobile-capture-file)
     (jcgs/org-revert-agenda-files))
-  (org-mobile-pull)
+  (when with-mobile
+    (org-mobile-pull))
   (save-excursion
     (org-agenda-list)
     (write-file "/tmp/agenda-list")
@@ -726,14 +729,21 @@ An argument can change the number of days ahead, 1 being tomorrow."
     (write-file "/tmp/agenda-current")
     (org-agenda nil "k")
     (write-file "/tmp/agenda-supermarket"))
-  (org-mobile-push)
-  (message "Done agenda update")
-  (jcgs/org-agenda-monitor-start)	; set the next one going
-  )
+  (when with-mobile
+    (org-mobile-push))
+  (message "Done agenda update"))
+
+(defun jcgs/org-agenda-monitor-update-step ()
+  "Update my outgoing agenda files from incoming org file alterations.
+Then arrange for it to happen again when the files change again."
+  (interactive)
+  (jcgs/org-agenda-monitor-update t)
+  ;; set the next one going
+  (jcgs/org-agenda-monitor-start))
 
 (setq remote-update 'remote-update)
 
-(global-set-key [ remote-update ] 'jcgs/org-agenda-monitor-update)
+(global-set-key [ remote-update ] 'jcgs/org-agenda-monitor-update-step)
 
 (defun jcgs/org-agenda-trigger-monitor-update ()
   "Trigger an agenda update.
