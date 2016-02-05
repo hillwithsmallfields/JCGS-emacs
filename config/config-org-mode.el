@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 18:51:30 johstu01>
+;;; Time-stamp: <2016-02-05 23:38:49 jcgs>
 
 (require 'org)
 
@@ -705,8 +705,22 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (defun jcgs/org-agenda-write-agenda-to-file (agenda-letter file)
   "Generate the agenda for AGENDA-LETTER and write it to FILE."
+  (when (bufferp (get-buffer "*Org Agenda*"))
+    (kill-buffer "*Org Agenda*"))
   (org-agenda nil agenda-letter)
+  (read-only-mode -1)
   ;; todo: tidy up the buffer, removing any tables and the instructions about producing another agenda
+  (goto-char (point-min))
+  (delete-matching-lines "Press `C-u r' to search again with new search string")
+  (delete-matching-lines "^\s-*|")
+  (goto-char (point-min))
+  (while (re-search-forward "^Headlines with" (point-max) t)
+    (replace-match "* \\&"))
+  (goto-char (point-min))
+  (while (re-search-forward "^\\s-+" (point-max) t)
+    ;; todo: make this re-arrange the items on the line, so the keyword comes first
+    (replace-match (concat (make-string (- (match-end 0) (match-beginning 0)) ?*) " ")))
+  (goto-char (point-min))
   (write-file file))
 
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
@@ -731,11 +745,13 @@ With optional WITH-MOBILE, pull and push the mobile data."
   (save-excursion
     (org-agenda-list)
     (write-file "/tmp/agenda-list")
+    (when (bufferp (get-buffer "*Org Agenda*"))
+      (kill-buffer "*Org Agenda*"))
     (dolist (descr org-agenda-custom-commands)
       (message "Making %s agenda" (cadr descr))
       (jcgs/org-agenda-write-agenda-to-file
        (car descr)
-       (format "/tmp/agenda-%s" (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))))
+       (format "/tmp/agenda-%s.org" (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))))
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
