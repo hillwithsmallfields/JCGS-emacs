@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-04 20:54:59 jcgs>
+;;; Time-stamp: <2016-02-05 10:17:41 johstu01>
 
 (require 'org)
 
@@ -692,10 +692,24 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;; Agenda loop ;;
 ;;;;;;;;;;;;;;;;;
 
+(defun jcgs/org-revert-agenda-files ()
+  "Re-read any agenda files that have changed."
+  (interactive)
+  (mapcar (lambda (file)
+	    (let ((filebuf (find-buffer-visiting file)))
+	      (when (bufferp filebuf)
+		(with-current-buffer filebuf
+		  (unless (verify-visited-file-modtime)
+		    (revert-buffer t t t))))))
+	  org-agenda-files))
+
 (defun jcgs/org-agenda-monitor-update ()
   "Update my outgoing agenda files from incoming org file alterations."
   (interactive)				; for debugging, mostly
   (when (file-exists-p "/tmp/restart-agenda-kiosk")
+    ;; Exit this emacs session; the shell script that it is meant to
+    ;; be started (agenda-kiosk-emacs) from will start a new emacs
+    ;; session unless the file /tmp/stop-agenda-kiosk exists.
     (save-buffers-kill-emacs))
   (message "Starting agenda update")
   (save-excursion
@@ -703,10 +717,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
       (when x
 	(kill-buffer x)))
     (find-file org-mobile-capture-file)
-    (mapcar (lambda (file)
-	      (set-buffer (find-buffer-visiting file))
-	      (revert-buffer t t t))
-	    org-agenda-files))
+    (jcgs/org-revert-agenda-files))
   (org-mobile-pull)
   (save-excursion
     (org-agenda-list)
@@ -770,5 +781,15 @@ CHANGE-DESCR is the change"
   "Arrange to stop monitoring incoming alterations to my agenda files."
   (interactive)				; mostly for testing
   (setq jcgs/org-agenda-monitor-timer nil))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Agenda from home server ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-agenda-from-server ()
+  "Fetch my agenda files from my home server, and update buffers."
+  (interactive)
+  (shell-command (substitute-in-file-name "$EHOME/JCGS-scripts/orgfrompi"))
+  (jcgs/org-revert-agenda-files))
 
 ;;; config-org-mode.el ends here
