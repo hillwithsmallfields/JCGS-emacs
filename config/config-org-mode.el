@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 23:38:49 jcgs>
+;;; Time-stamp: <2016-02-05 23:40:36 jcgs>
 
 (require 'org)
 
@@ -727,7 +727,8 @@ An argument can change the number of days ahead, 1 being tomorrow."
   "Update my outgoing agenda files from incoming org file alterations.
 With optional WITH-MOBILE, pull and push the mobile data."
   (interactive)				; for debugging, mostly
-  (when (file-exists-p "/tmp/restart-agenda-kiosk")
+  (when (or (file-exists-p "/tmp/restart-agenda-kiosk")
+	    (file-exists-p "/tmp/stop-agenda-kiosk"))
     ;; Exit this emacs session; the shell script that it is meant to
     ;; be started (agenda-kiosk-emacs) from will start a new emacs
     ;; session unless the file /tmp/stop-agenda-kiosk exists.
