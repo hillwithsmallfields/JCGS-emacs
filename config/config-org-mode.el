@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 13:28:00 johstu01>
+;;; Time-stamp: <2016-02-05 18:42:47 johstu01>
 
 (require 'org)
 
@@ -703,6 +703,11 @@ An argument can change the number of days ahead, 1 being tomorrow."
 		    (revert-buffer t t t))))))
 	  org-agenda-files))
 
+(defun jcgs/org-agenda-write-agenda-to-file (agenda-letter file)
+  "Generate the agenda for AGENDA-LETTER and write it to FILE."
+  (org-agenda nil agenda-letter)
+  (write-file file))
+
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
   "Update my outgoing agenda files from incoming org file alterations.
 With optional WITH-MOBILE, pull and push the mobile data."
@@ -725,10 +730,10 @@ With optional WITH-MOBILE, pull and push the mobile data."
   (save-excursion
     (org-agenda-list)
     (write-file "/tmp/agenda-list")
-    (org-agenda nil "c")
-    (write-file "/tmp/agenda-current")
-    (org-agenda nil "k")
-    (write-file "/tmp/agenda-supermarket"))
+    (dolist (descr org-agenda-custom-commands)
+      (jcgs/org-agenda-write-agenda-to-file
+       (car descr)
+       (format "/tmp/agenda-%s" (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))))
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
