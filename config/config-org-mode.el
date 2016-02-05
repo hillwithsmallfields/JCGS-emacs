@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 23:40:36 jcgs>
+;;; Time-stamp: <2016-02-05 23:45:16 jcgs>
 
 (require 'org)
 
@@ -722,6 +722,14 @@ An argument can change the number of days ahead, 1 being tomorrow."
     (replace-match (concat (make-string (- (match-end 0) (match-beginning 0)) ?*) " ")))
   (goto-char (point-min))
   (write-file file))
+
+(defun jcgs/org-agenda-monitor-really-stop ()
+  "Stop the monitor system.
+This is done in such a way that the calling script will not restart it."
+  (interactive)
+  (find-file "/tmp/stop-agenda-kiosk")
+  (insert "Flag file\n")
+  (basic-save-buffer))
 
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
   "Update my outgoing agenda files from incoming org file alterations.
