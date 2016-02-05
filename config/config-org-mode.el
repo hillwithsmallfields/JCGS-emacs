@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 18:42:47 johstu01>
+;;; Time-stamp: <2016-02-05 18:51:30 johstu01>
 
 (require 'org)
 
@@ -706,6 +706,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (defun jcgs/org-agenda-write-agenda-to-file (agenda-letter file)
   "Generate the agenda for AGENDA-LETTER and write it to FILE."
   (org-agenda nil agenda-letter)
+  ;; todo: tidy up the buffer, removing any tables and the instructions about producing another agenda
   (write-file file))
 
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
@@ -731,6 +732,7 @@ With optional WITH-MOBILE, pull and push the mobile data."
     (org-agenda-list)
     (write-file "/tmp/agenda-list")
     (dolist (descr org-agenda-custom-commands)
+      (message "Making %s agenda" (cadr descr))
       (jcgs/org-agenda-write-agenda-to-file
        (car descr)
        (format "/tmp/agenda-%s" (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))))
@@ -804,6 +806,7 @@ CHANGE-DESCR is the change"
 (defun jcgs/org-agenda-from-server ()
   "Fetch my agenda files from my home server, and update buffers."
   (interactive)
+  (messsage "Fetching agenda files from home server")
   (shell-command (substitute-in-file-name "$EHOME/JCGS-scripts/orgfrompi"))
   (jcgs/org-revert-agenda-files))
 
