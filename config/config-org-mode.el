@@ -731,7 +731,17 @@ Either of these may be null."
       (find-file json-file)
       (read-only-mode -1)
       (erase-buffer)
-      (insert "{content: \"" agenda-string "\"}\n")
+      (insert agenda-string)
+      (goto-char (point-min))
+      (while (search-forward "\n" (point-max) t)
+	(replace-match "\\n"))
+      (goto-char (point-min))
+      (while (search-forward "\"" (point-max) t)
+	(replace-match "\\\""))
+      (goto-char (point-min))
+      (insert "{content: \"")
+      (goto-char (point-max))
+      (insert "\"}\n")
       (basic-save-buffer))))
 
 (defun jcgs/org-agenda-monitor-really-stop ()
@@ -741,6 +751,10 @@ This is done in such a way that the calling script will not restart it."
   (find-file "/tmp/stop-agenda-kiosk")
   (insert "Flag file\n")
   (basic-save-buffer))
+
+(defvar agenda-card-filename-format (or (getenv "CARDFILENAMEFORMAT")
+					"/tmp/agenda-%s.json")
+  "The format for card file names.")
 
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
   "Update my outgoing agenda files from incoming org file alterations.
@@ -773,7 +787,7 @@ With optional WITH-MOBILE, pull and push the mobile data."
 	(jcgs/org-agenda-write-agenda-to-file
 	 (car descr)
 	 (format "/tmp/agenda-%s.org" name)
-	 (format "/tmp/agenda-%s.json" name)))))
+	 (format agenda-card-filename-format name)))))
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
