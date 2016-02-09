@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-09 14:34:18 johstu01>
+;;; Time-stamp: <2016-02-09 17:53:25 jcgs>
 
 (require 'org)
 
@@ -734,10 +734,10 @@ Either of these may be null."
       (insert agenda-string)
       (goto-char (point-min))
       (while (search-forward "\n" (point-max) t)
-	(replace-match "\\n"))
+	(replace-match "\\n" t t))
       (goto-char (point-min))
       (while (search-forward "\"" (point-max) t)
-	(replace-match "\\\""))
+	(replace-match "\\\"" t t))
       (goto-char (point-min))
       (insert "{content: \"")
       (goto-char (point-max))
@@ -784,10 +784,9 @@ With optional WITH-MOBILE, pull and push the mobile data."
     (dolist (descr org-agenda-custom-commands)
       (message "Making %s agenda" (cadr descr))
       (let ((name (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))
-	(jcgs/org-agenda-write-agenda-to-file
-	 (car descr)
-	 (format "/tmp/agenda-%s.org" name)
-	 (format agenda-card-filename-format name)))))
+	(jcgs/org-agenda-write-agenda-to-file (car descr)
+					      (format "/tmp/agenda-%s.org" name)
+					      (format agenda-card-filename-format name)))))
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
