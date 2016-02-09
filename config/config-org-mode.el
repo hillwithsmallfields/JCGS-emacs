@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-05 23:45:16 jcgs>
+;;; Time-stamp: <2016-02-09 14:34:18 johstu01>
 
 (require 'org)
 
@@ -703,25 +703,36 @@ An argument can change the number of days ahead, 1 being tomorrow."
 		    (revert-buffer t t t))))))
 	  org-agenda-files))
 
-(defun jcgs/org-agenda-write-agenda-to-file (agenda-letter file)
-  "Generate the agenda for AGENDA-LETTER and write it to FILE."
+(defun jcgs/org-agenda-write-agenda-to-file (agenda-letter org-file json-file)
+  "Generate the agenda for AGENDA-LETTER and write it to ORG-FILE and JSON-FILE.
+Either of these may be null."
   (when (bufferp (get-buffer "*Org Agenda*"))
     (kill-buffer "*Org Agenda*"))
   (org-agenda nil agenda-letter)
-  (read-only-mode -1)
-  ;; todo: tidy up the buffer, removing any tables and the instructions about producing another agenda
-  (goto-char (point-min))
-  (delete-matching-lines "Press `C-u r' to search again with new search string")
-  (delete-matching-lines "^\s-*|")
-  (goto-char (point-min))
-  (while (re-search-forward "^Headlines with" (point-max) t)
-    (replace-match "* \\&"))
-  (goto-char (point-min))
-  (while (re-search-forward "^\\s-+" (point-max) t)
-    ;; todo: make this re-arrange the items on the line, so the keyword comes first
-    (replace-match (concat (make-string (- (match-end 0) (match-beginning 0)) ?*) " ")))
-  (goto-char (point-min))
-  (write-file file))
+  (let ((agenda-string (buffer-string)))
+    (when (stringp org-file)
+      (find-file org-file)
+      (read-only-mode -1)
+      (erase-buffer)
+      (insert agenda-string)
+      (goto-char (point-min))
+      (delete-matching-lines "Press `C-u r' to search again with new search string")
+      (delete-matching-lines "^\s-*|")
+      (goto-char (point-min))
+      (while (re-search-forward "^Headlines with" (point-max) t)
+	(replace-match "* \\&"))
+      (goto-char (point-min))
+      (while (re-search-forward "^\\s-+" (point-max) t)
+	;; todo: make this re-arrange the items on the line, so the keyword comes first
+	(replace-match (concat (make-string (- (match-end 0) (match-beginning 0)) ?*) " ")))
+      (goto-char (point-min))
+      (basic-save-buffer))
+    (when (stringp json-file)
+      (find-file json-file)
+      (read-only-mode -1)
+      (erase-buffer)
+      (insert "{content: \"" agenda-string "\"}\n")
+      (basic-save-buffer))))
 
 (defun jcgs/org-agenda-monitor-really-stop ()
   "Stop the monitor system.
@@ -758,9 +769,11 @@ With optional WITH-MOBILE, pull and push the mobile data."
       (kill-buffer "*Org Agenda*"))
     (dolist (descr org-agenda-custom-commands)
       (message "Making %s agenda" (cadr descr))
-      (jcgs/org-agenda-write-agenda-to-file
-       (car descr)
-       (format "/tmp/agenda-%s.org" (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))))
+      (let ((name (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))
+	(jcgs/org-agenda-write-agenda-to-file
+	 (car descr)
+	 (format "/tmp/agenda-%s.org" name)
+	 (format "/tmp/agenda-%s.json" name)))))
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
