@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-09 17:53:25 jcgs>
+;;; Time-stamp: <2016-02-10 07:46:19 jcgs>
 
 (require 'org)
 
@@ -733,6 +733,9 @@ Either of these may be null."
       (erase-buffer)
       (insert agenda-string)
       (goto-char (point-min))
+      (delete-matching-lines "Press `C-u r' to search again with new search string")
+      (delete-matching-lines "^\s-*|")
+      (goto-char (point-min))
       (while (search-forward "\n" (point-max) t)
 	(replace-match "\\n" t t))
       (goto-char (point-min))
@@ -772,7 +775,8 @@ With optional WITH-MOBILE, pull and push the mobile data."
       (when x
 	;; todo: could I just "revert" it?
 	(kill-buffer x)))
-    (find-file org-mobile-capture-file)
+    (when with-mobile
+      (find-file org-mobile-capture-file))
     (jcgs/org-revert-agenda-files))
   (when with-mobile
     (org-mobile-pull))
