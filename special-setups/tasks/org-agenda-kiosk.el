@@ -83,6 +83,7 @@
 (defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
   (interactive)
+  ;; todo: also make entries for the agenda types
   (unless (and (bufferp org-agenda-kiosk-files-buffer)
 	       (buffer-live-p org-agenda-kiosk-files-buffer))
     (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Agenda files*"))
@@ -119,6 +120,7 @@
 	(if (file-exists-p file)
 	    (find-file file)
 	  (error "File %s is missing" file))
+      ;; todo: also handle agendas
       (error "No file specified here"))))
 
 (defvar org-agenda-kiosk-files-map
