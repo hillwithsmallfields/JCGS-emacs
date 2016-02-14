@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2015-05-05 21:47:34 jcgs>
+;;; Time-stamp: <2016-02-14 18:46:16 jcgs>
 
 (setq debug-on-error t)
 
@@ -15,6 +15,10 @@
 (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
 (message "org-agenda-files is %S" org-agenda-files)
 (load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
+
+(load-file (expand-file-name "basics/use-package.el" user-emacs-directory))
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-pedals"))
+(load-file (expand-file-name "config/use-versor.el" user-emacs-directory))
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
