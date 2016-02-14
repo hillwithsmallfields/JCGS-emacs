@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-10 07:46:19 jcgs>
+;;; Time-stamp: <2016-02-14 18:48:43 jcgs>
 
 (require 'org)
 
@@ -621,9 +621,14 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (defun jcgs/org-maybe-push-to-mobile ()
   "Offer to push the agenda to mobile."
   (when (y-or-n-p "Push to mobile? ")
-    (org-mobile-push)))
+    (org-mobile-push))
+  t)
 
-(add-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
+(add-hook
+ ;; would be on kill-emacs-hook, but that's not suitable for functions
+ ;; that interact with the user --- see its docstring
+ 'kill-emacs-query-functions
+ 'jcgs/org-maybe-push-to-mobile)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; counting entries ;;
