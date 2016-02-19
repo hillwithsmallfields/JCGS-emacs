@@ -1,8 +1,8 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2015-06-01 16:21:47 johstu01>
+;;; Time-stamp: <2016-02-19 06:58:54 jcgs>
 
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -210,5 +210,15 @@ When started, runs `scala-mode-hook'." t)
 (message "Setting up change logs")
 
 (setq change-log-default-name "../ChangeLog")
+
+;;;;;;;;;;;;;;;
+;; scad-mode ;;
+;;;;;;;;;;;;;;;
+
+(let ((scad-dir (substitute-in-file-name "$GATHERED/emacs/openscad")))
+  (when (file-directory-p scad-dir)
+    (add-to-list 'load-path scad-dir)
+    (autoload 'scad-mode "scad-mode" "Major mode for editing scad files." t)
+    (add-to-list 'auto-mode-alist (cons "\\.scad\\'" 'scad-mode))))
 
 ;;;; config-proglang-modes.el ends here
