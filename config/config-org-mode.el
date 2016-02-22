@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-14 18:48:43 jcgs>
+;;; Time-stamp: <2016-02-22 14:11:58 johstu01>
 
 (require 'org)
 
@@ -171,14 +171,6 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 				      (file+headline work-agenda-file "Incoming"
 						     "** TODO"))
 				    org-capture-templates)))
-
-;; TODO: make this stop my pomodoro timer
-;; TODO: probably it should be in the pomodoro code rather than this hook
-;; (defun jcgs/org-clock-out-function ()
-;;   "My customization of task clock-out."
-;;   (org-timer-stop))
-
-;; (add-hook 'org-clock-out-hook 'jcgs/org-clock-out-function)
 
 (require 'org-mode-linked-tasks)
 
