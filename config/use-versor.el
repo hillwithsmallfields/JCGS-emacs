@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2016-02-14 18:31:18 jcgs>
+;;; Time-stamp: <2016-02-22 14:09:52 johstu01>
 
 (setq joystick-graphical nil)
 
@@ -11,6 +11,10 @@
 	     (or (file-exists-p "/dev/js1") (file-exists-p "/dev/input/js1")))
     (require 'joystick-chord-kbd)
     (joystick-braille-kbd-setup)))
+
+(let ((pedals-dir (substitute-in-file-name "$OPEN_PROJECTS/emacs-pedals")))
+  (when (file-directory-p pedals-dir)
+    (add-to-list 'load-path pedals-dir))))
 
 (use-package versor
 	     "$OPEN_PROJECTS/emacs-versor/lisp"
