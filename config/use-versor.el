@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2016-02-22 14:09:52 johstu01>
+;;; Time-stamp: <2016-02-22 17:48:43 johstu01>
 
 (setq joystick-graphical nil)
 
@@ -14,7 +14,7 @@
 
 (let ((pedals-dir (substitute-in-file-name "$OPEN_PROJECTS/emacs-pedals")))
   (when (file-directory-p pedals-dir)
-    (add-to-list 'load-path pedals-dir))))
+    (add-to-list 'load-path pedals-dir)))
 
 (use-package versor
 	     "$OPEN_PROJECTS/emacs-versor/lisp"
