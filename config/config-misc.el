@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-01-18 17:30:49 johstu01>
+;;; Time-stamp: <2016-02-25 11:16:58 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -436,5 +436,26 @@ Argument DAYS is the number of days to fast for."
 		       (if (= (mod (+ i start-hour) 24) hour-now)
 			   " <=="
 			 "")))))))
+
+;;;; find file from name in buffer, with line number
+
+(defun fflap ()
+  "Find file and line at point."
+  (interactive)
+  (let* ((limit (line-end-position))
+	 (line-string (or (if (save-excursion
+				(re-search-forward "[^:]+:\\([0-9]+\\)" limit t))
+			      (match-string 1)
+			    nil)
+			  (if (save-excursion
+				(re-search-forward "line \\([0-9]+\\)" limit t))
+			      (match-string 1)
+			    nil)))
+	 (line-number (if (stringp line-string)
+			  (string-to-number line-string)
+			nil)))
+    (find-file-at-point)
+    (when line-number
+      (goto-line line-number))))
 
 ;;; end of config-misc.el
