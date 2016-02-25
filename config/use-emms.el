@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2015-05-05 07:26:55 jcgs>
+;;; Time-stamp: <2016-02-25 11:40:46 johstu01>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -49,6 +49,8 @@ playlist."
 	     (global-set-key [ M-f12 ] 'emms)
 	     )
 
+;;;; renaming tracks as I import CDs
+
 (defun rename-track (old new)
   "Rename track from OLD to NEW.
 Some adjustment of the name may be done."
@@ -77,6 +79,8 @@ tracks produced by cdda2ogg, to named and numbered tracks."
     (rename-track (expand-file-name old directory)
 		  (read-from-minibuffer
 		   (format "Rename %s to: " old)))))
+
+;;;; merging multi-volume CD collections
 
 (defun multiple-CD-renumber-tracks (directory &optional allow-skip)
   "Renumber tracks in DIRECTORY.
@@ -171,6 +175,8 @@ nNumber to add to each number: ")
 	    (message "Renaming %s to %s" old-name new-name)
 	    (rename-file old-name new-name)))))))
 
+;;;; autoloads
+
 (add-lispdir (expand-file-name "music/" user-emacs-directory))
 (autoload 'lyric-mode "lyric-mode"
   "Major mode for editing lyric files.
@@ -182,6 +188,8 @@ newline; when playing, they insert a tag and move to the next
 line, respectively, letting you move rapidly through a
 ready-typed text to add a tag to each line." t)
 (add-to-list 'auto-mode-alist (cons "\\.lrc" 'lyric-mode))
+
+;;;; import from other formats
 
 (defun convert-tracks-to-ogg (directory &optional force)
   "Convert the tracks in DIRECTORY to ogg format.
@@ -201,5 +209,36 @@ P")
 	  (shell-command (format "oggenc -o %s %s"
 				 output
 				 file)))))))
+
+;;;; start drowning out annoying conversations
+
+(defvar drown-out-tracks
+  ["In Extremo - Horizont"
+   "In Extremo - Kuess Mich"
+   "Procol Harum - Long gone geek"
+   "Various - Traditional dance and Thomas Hardy music"
+   "Assorted - Gathering Peascods"
+   "Assorted - In feuers hitz"
+   "Mostly Slovak orchestras - Vivaldi Spring from Four Seasons"
+   "Mostly Slovak orchestras - Tchaikovsky Danse Espagnole from Swan Lake"
+   "Mostly Slovak orchestras - Glinka Overture from Ruslan and Ludmilla"
+   "Mostly Slovak orchestras - Bizet Farandole from Arlesienne Suite"
+   "Mostly Slovak orchestras - Mozart Presto from Salzburg Symphony"
+   "Mostly Slovak orchestras - Tchaikovsky Polonaise from Yevgeni Onegin"
+   "Mostly Slovak orchestras - Schubert Moment Musical in F minor"]
+  "Tracks that drown out annoying background sounds.
+These should all start full volume very quickly, without a quiet lead-in.")
+
+(defun drown-out-annoying-conversations ()
+  "Play a track that drowns out annoying background sound."
+  (interactive)
+  (save-window-excursion
+    (emms)
+    (goto-char (point-min))
+    (if (search-forward (aref drown-out-tracks
+			      (random (length drown-out-tracks)))
+			(point-max) t)
+	(emms-playlist-mode-play-smart)
+      (error "Could not find blanking track"))))
 
 ;; end of use-emms.el
