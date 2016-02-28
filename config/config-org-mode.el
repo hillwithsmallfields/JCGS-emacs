@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-28 11:10:17 jcgs>
+;;; Time-stamp: <2016-02-28 11:27:01 jcgs>
 
 (require 'org)
 
@@ -820,12 +820,17 @@ With optional WITH-MOBILE, pull and push the mobile data."
 	(kill-buffer x)))
     (when with-mobile
       (find-file org-mobile-capture-file))
+    (message "Reloading agenda files")
     (jcgs/org-revert-agenda-files))
   (when with-mobile
+    (message "Pulling input from org-mobile")
     (org-mobile-pull))
+  (message "Saving agenda views")
   (org-store-agenda-views)
+  (message "Indexing agenda views")
   (jcgs/org-make-stored-agenda-index)
   (when with-mobile
+    (message "Pushing to mobile")
     (org-mobile-push))
   (message "Done agenda update"))
 
