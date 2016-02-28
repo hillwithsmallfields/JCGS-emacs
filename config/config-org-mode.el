@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-28 13:17:21 jcgs>
+;;; Time-stamp: <2016-02-28 15:48:42 jcgs>
 
 (require 'org)
 
@@ -163,9 +163,9 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
   "Define a custom agenda command with DESCRIPTION, KEY, TYPE, MATCH.
 See `org-agenda-custom-commands' for what these mean.
 The filenames to save in are added by this function"
-  (pushnew (list key description type (or match "") nil
-		 (jcgs/org-make-custom-agenda-file-names description))
-	   org-agenda-custom-commands))
+  (org-add-agenda-custom-command
+   (list key description type (or match "") nil
+	 (jcgs/org-make-custom-agenda-file-names description))))
 
 (jcgs/def-org-agenda-custom-command "mackaYs shopping" "y" 'tags-todo "Mackays")
 (jcgs/def-org-agenda-custom-command "supermarKet shopping" "k" 'tags-todo "supermarket")
