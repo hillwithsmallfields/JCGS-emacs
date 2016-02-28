@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-28 15:48:42 jcgs>
+;;; Time-stamp: <2016-02-28 18:29:55 jcgs>
 
 (require 'org)
 
@@ -790,15 +790,17 @@ This is done in such a way that the calling script will not restart it."
     (insert "<html><head><title>My agenda files</title></head>\n")
     (insert "<body>\n<h1>My agenda files</h1>\n<ul>\n")
     (mapcar (lambda (file)
-	      (insert (format "  <li> <a href=\"%s\">%s</a>\n"
-			      file
-			      (capitalize
-			       (subst-char-in-string ?_ ?  (file-name-sans-extension file))))))
+	      (let ((base-name (file-name-sans-extension file)))
+		(insert (format "  <li> <a href=\"%s\">%s</a> (<a href=\"%s\">txt</a>, <a href=\"%s.org\">org</a>, <a href=\"%s.ps\">ps</a>)\n"
+				file
+				(capitalize
+				 (subst-char-in-string ?_ ?  base-name))
+				base-name base-name base-name))))
 	    (delete-if
 	     (lambda (file)
 	       (string-match "index.html" file))
 	     (directory-files jcgs/org-agenda-store-directory
-			     nil ".html")))
+			      nil ".html$")))
     (insert "</ul>\n</body></html>\n")
     (basic-save-buffer)))
 
@@ -812,27 +814,28 @@ With optional WITH-MOBILE, pull and push the mobile data."
     ;; be started (agenda-kiosk-emacs) from will start a new emacs
     ;; session unless the file /tmp/stop-agenda-kiosk exists.
     (save-buffers-kill-emacs))
-  (message "Starting agenda update")
-  (save-excursion
-    (let ((x (find-buffer-visiting org-mobile-capture-file)))
-      (when x
-	;; todo: could I just "revert" it?
-	(kill-buffer x)))
+  (save-window-excursion
+    (message "Starting agenda update")
+    (save-excursion
+      (let ((x (find-buffer-visiting org-mobile-capture-file)))
+	(when x
+	  ;; todo: could I just "revert" it?
+	  (kill-buffer x)))
+      (when with-mobile
+	(find-file org-mobile-capture-file))
+      (message "Reloading agenda files")
+      (jcgs/org-revert-agenda-files))
     (when with-mobile
-      (find-file org-mobile-capture-file))
-    (message "Reloading agenda files")
-    (jcgs/org-revert-agenda-files))
-  (when with-mobile
-    (message "Pulling input from org-mobile")
-    (org-mobile-pull))
-  (message "Saving agenda views")
-  (org-store-agenda-views)
-  (message "Indexing agenda views")
-  (jcgs/org-make-stored-agenda-index)
-  (when with-mobile
-    (message "Pushing to mobile")
-    (org-mobile-push))
-  (message "Done agenda update"))
+      (message "Pulling input from org-mobile")
+      (org-mobile-pull))
+    (message "Saving agenda views")
+    (org-store-agenda-views)
+    (message "Indexing agenda views")
+    (jcgs/org-make-stored-agenda-index)
+    (when with-mobile
+      (message "Pushing to mobile")
+      (org-mobile-push))
+    (message "Done agenda update")))
 
 (defun jcgs/org-agenda-monitor-update-step ()
   "Update my outgoing agenda files from incoming org file alterations.
@@ -848,22 +851,23 @@ Then arrange for it to happen again when the files change again."
 
 (defun jcgs/org-agenda-trigger-monitor-update ()
   "Trigger an agenda update.
-Doing it this means we're not running anything large in the sentinel."
+Doing it this way means we're not running anything large in the sentinel."
   (interactive)
+  (message "Triggering agenda update")
   (setq unread-command-events (nreverse (cons remote-update (nreverse unread-command-events)))))
 
 (defvar jcgs/org-agenda-monitor-timer nil
   "The timer to batch updates rather than doing them on every change.")
 
-(defvar jcgs/org-agenda-monitor-delay 20
+(defvar jcgs/org-agenda-monitor-delay 15
   "How long to delay to allow other changes to come in.")
 
 (defun jcgs/org-agenda-monitor-sentinel (process change-descr)
   "Run on each state change of the agenda monitor.
 Argument PROCESS is the monitor process.
 CHANGE-DESCR is the change"
-  (message "agenda monitor sentinel %s" change-descr)
-  (when (string= change-descr "finished")
+  (message "agenda monitor sentinel \"%s\"" change-descr)
+  (when (string= change-descr "finished\n")
     (message "Agenda directory has changed, waiting %d seconds in case of further changes"
 	     jcgs/org-agenda-monitor-delay)
     (when (timerp jcgs/org-agenda-monitor-timer)
@@ -877,16 +881,14 @@ CHANGE-DESCR is the change"
   (interactive)				; mostly for testing
   (message "Starting agenda monitor")
   (let* ((agenda-monitor-buffer (get-buffer-create " *agenda monitor*"))
-	 (agenda-monitor-process (start-process "agenda-monitor"
-						agenda-monitor-buffer
-						"/usr/bin/inotifywait"
-						"-e" "modify"
-						"-e" "create"
-						(substitute-in-file-name "$EHOME/Dropbox/org")
-						)))
+	 (agenda-monitor-process (apply 'start-process "agenda-monitor"
+					agenda-monitor-buffer
+					"/usr/bin/inotifywait"
+					"-e" "modify"
+					"-e" "create"
+					org-agenda-files)))
     (set-process-sentinel agenda-monitor-process
-			  'jcgs/org-agenda-monitor-sentinel))
-  )
+			  'jcgs/org-agenda-monitor-sentinel)))
 
 (defun jcgs/org-agenda-monitor-stop ()
   "Arrange to stop monitoring incoming alterations to my agenda files."
