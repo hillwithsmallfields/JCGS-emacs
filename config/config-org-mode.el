@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-28 13:14:58 jcgs>
+;;; Time-stamp: <2016-02-28 13:17:21 jcgs>
 
 (require 'org)
 
@@ -901,7 +901,7 @@ CHANGE-DESCR is the change"
   "Fetch my agenda files from my home server, and update buffers."
   (interactive)
   (messsage "Fetching agenda files from home server")
-  (shell-command (substitute-in-file-name "$EHOME/JCGS-scripts/orgfrompi"))
+  (shell-command (substitute-in-file-name "$EHOME/JCGS-scripts/pullorg"))
   (jcgs/org-revert-agenda-files))
 
 ;;; config-org-mode.el ends here
