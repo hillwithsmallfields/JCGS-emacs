@@ -1,10 +1,13 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-22 14:11:58 johstu01>
+;;; Time-stamp: <2016-02-28 11:10:17 jcgs>
 
 (require 'org)
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs"))
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/information-management"))
+(let ((dir "/usr/share/emacs/site-lisp/emacs-goodies-el")) ;for htmlize
+  (when (file-directory-p dir)
+    (add-to-list 'load-path dir)))
 
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
@@ -124,6 +127,18 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 		   (<= wind 6))
 	  (push '(tags-todo "outdoor|@garden") result))))))
 
+(defvar jcgs/org-agenda-store-directory (or (getenv "WWW_AGENDA_DIR")
+					    "/tmp")
+  "Where to store agenda views.")
+
+(defun jcgs/org-make-custom-agenda-file-names (description)
+  "Make a saved agenda file list for DESCRIPTION."
+  (let ((name-base (subst-char-in-string ?  ?_ (downcase description) t)))
+    (mapcar (lambda (extension)
+	      (expand-file-name (concat name-base extension)
+				jcgs/org-agenda-store-directory))
+	    '("" ".html"))))
+
 (setq jcgs/org-agenda-current-matcher
       (let* ((earlies (jcgs/org-agenda-make-early-extra-matcher))
 	     (lates (jcgs/org-agenda-make-late-extra-matcher earlies)))
@@ -138,16 +153,26 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 	   (tags-todo "soon/OPEN")
 	   (tags-todo "PRIORITY=\"B\"")
 	   (tags-todo "soon/TODO")
-	   ))))
+	   )
+	  nil
+	  ,(jcgs/org-make-custom-agenda-file-names "current"))))
 
 (add-to-list 'org-agenda-custom-commands jcgs/org-agenda-current-matcher)
 
-(add-to-list 'org-agenda-custom-commands '("y" "mackaYs shopping" tags-todo "Mackays"))
-(add-to-list 'org-agenda-custom-commands '("k" "supermarKet shopping" tags-todo "supermarket"))
-(add-to-list 'org-agenda-custom-commands '("d" "Daily Bread" tags-todo "daily_bread"))
-(add-to-list 'org-agenda-custom-commands '("o" "Online" tags-todo "online"))
-(add-to-list 'org-agenda-custom-commands '("h" "At home" tags-todo "@home"))
-(add-to-list 'org-agenda-custom-commands '("H" "Hacking" ((tags-todo "hacking")
+(defun jcgs/def-org-agenda-custom-command (description key type &optional match)
+  "Define a custom agenda command with DESCRIPTION, KEY, TYPE, MATCH.
+See `org-agenda-custom-commands' for what these mean.
+The filenames to save in are added by this function"
+  (pushnew (list key description type (or match "") nil
+		 (jcgs/org-make-custom-agenda-file-names description))
+	   org-agenda-custom-commands))
+
+(jcgs/def-org-agenda-custom-command "mackaYs shopping" "y" 'tags-todo "Mackays")
+(jcgs/def-org-agenda-custom-command "supermarKet shopping" "k" 'tags-todo "supermarket")
+(jcgs/def-org-agenda-custom-command "Daily Bread" "d" 'tags-todo "daily_bread")
+(jcgs/def-org-agenda-custom-command "Online" "o" 'tags-todo "online")
+(jcgs/def-org-agenda-custom-command "At home" "h" 'tags-todo "@home")
+(jcgs/def-org-agenda-custom-command "Hacking" "H" '((tags-todo "hacking")
 							  (tags-todo "programming")
 							  (tags-todo "@Makespace")
 							  (tags-todo "soldering")
@@ -155,14 +180,14 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 							  (tags-todo "sewing")
 							  (tags-todo "epoxy")
 							  (tags-todo "hotglue")
-							  (tags-todo "electronics"))))
-(add-to-list 'org-agenda-custom-commands '("W" "Writing" tags-todo "writing"))
-(add-to-list 'org-agenda-custom-commands '("w" "At work" tags-todo "@office"))
-(add-to-list 'org-agenda-custom-commands '("E" "weekEnd" tags-todo "weekend"))
-(add-to-list 'org-agenda-custom-commands '("u" "Urgent" ((tags-todo "urgent") (tags-todo "PRIORITY=\"A\""))))
-(add-to-list 'org-agenda-custom-commands '("U" "Soon" ((tags-todo "soon") (tags-todo "PRIORITY=\"B\""))))
-(add-to-list 'org-agenda-custom-commands '("p" "Phone" tags-todo "phone"))
-(add-to-list 'org-agenda-custom-commands '("x" "Next" tags-todo "next"))
+							  (tags-todo "electronics")))
+(jcgs/def-org-agenda-custom-command "Writing" "W" 'tags-todo "writing")
+(jcgs/def-org-agenda-custom-command "At work" "w" 'tags-todo "@office")
+(jcgs/def-org-agenda-custom-command "weekEnd" "E" 'tags-todo "weekend")
+(jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "urgent") (tags-todo "PRIORITY=\"A\"")))
+(jcgs/def-org-agenda-custom-command "Soon" "U" '((tags-todo "soon") (tags-todo "PRIORITY=\"B\"")))
+(jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
+(jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -756,6 +781,27 @@ This is done in such a way that the calling script will not restart it."
 					"/tmp/agenda-%s.json")
   "The format for card file names.")
 
+(defun jcgs/org-make-stored-agenda-index ()
+  "Index my stored agenda files."
+  (interactive)
+  (save-window-excursion
+    (find-file (expand-file-name "index.html" jcgs/org-agenda-store-directory))
+    (erase-buffer)
+    (insert "<html><head><title>My agenda files</title></head>\n")
+    (insert "<body>\n<h1>My agenda files</h1>\n<ul>\n")
+    (mapcar (lambda (file)
+	      (insert (format "  <li> <a href=\"%s\">%s</a>\n"
+			      file
+			      (capitalize
+			       (subst-char-in-string ?_ ?  (file-name-sans-extension file))))))
+	    (delete-if
+	     (lambda (file)
+	       (string-match "index.html" file))
+	     (directory-files jcgs/org-agenda-store-directory
+			     nil ".html")))
+    (insert "</ul>\n</body></html>\n")
+    (basic-save-buffer)))
+
 (defun jcgs/org-agenda-monitor-update (&optional with-mobile)
   "Update my outgoing agenda files from incoming org file alterations.
 With optional WITH-MOBILE, pull and push the mobile data."
@@ -777,17 +823,8 @@ With optional WITH-MOBILE, pull and push the mobile data."
     (jcgs/org-revert-agenda-files))
   (when with-mobile
     (org-mobile-pull))
-  (save-excursion
-    (org-agenda-list)
-    (write-file "/tmp/agenda-list")
-    (when (bufferp (get-buffer "*Org Agenda*"))
-      (kill-buffer "*Org Agenda*"))
-    (dolist (descr org-agenda-custom-commands)
-      (message "Making %s agenda" (cadr descr))
-      (let ((name (subst-char-in-string ?  ?- (downcase (cadr descr)) t)))
-	(jcgs/org-agenda-write-agenda-to-file (car descr)
-					      (format "/tmp/agenda-%s.org" name)
-					      (format agenda-card-filename-format name)))))
+  (org-store-agenda-views)
+  (jcgs/org-make-stored-agenda-index)
   (when with-mobile
     (org-mobile-push))
   (message "Done agenda update"))
