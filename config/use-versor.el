@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2016-02-22 17:48:43 johstu01>
+;;; Time-stamp: <2016-02-28 10:41:22 jcgs>
 
 (setq joystick-graphical nil)
 
@@ -46,7 +46,8 @@
 	     (global-set-key [ C-y ] 'versor-yank)
 
 	     (when (pedals-p)
-	       (add-to-list 'load-path "$OPEN_PROJECTS/emacs-pedals")
+	       (add-to-list 'load-path (substitute-in-file-name
+					"$OPEN_PROJECTS/emacs-pedals"))
 	       (setq pedal:versor-change-dimension-ctrl t
 		     pedals-hosts-preferring-num-lock '("hosea"))
 	       (message "setting up keypad")
