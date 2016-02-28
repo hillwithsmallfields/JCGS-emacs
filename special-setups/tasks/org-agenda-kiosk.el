@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-02-05 23:22:58 jcgs>
+;;; Time-stamp: <2016-02-28 09:55:28 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -41,16 +41,42 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar org-agenda-kiosk-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [ kp-up ] 'org-agenda-kiosk-previous)
-    (define-key map [ kp-down ] 'org-agenda-kiosk-next)
-    (define-key map [ kp-left ] 'org-agenda-kiosk-up-level)
-    (define-key map [ kp-right ] 'org-agenda-kiosk-down-or-cycle-level)
-    (define-key map [ kp-begin ] 'org-agenda-kiosk-files-list)
-    (define-key map [ kp-prior ] 'org-metaup)
-    (define-key map [ kp-next ] 'org-metadown)
-    (define-key map [ kp-home ] 'org-priority-up)
-    (define-key map [ kp-end ] 'org-priority-down)
+  (let ((portrait t)
+	(map (make-sparse-keymap)))
+    (if portrait
+	(progn
+	  (define-key map [ kp-up ] 'org-agenda-kiosk-previous)
+	  (define-key map [ kp-down ] 'org-agenda-kiosk-next)
+	  (define-key map [ kp-left ] 'org-agenda-kiosk-up-level)
+	  (define-key map [ kp-right ] 'org-agenda-kiosk-down-or-cycle-level)
+	  (define-key map [ kp-begin ] 'org-agenda-kiosk-files-list)
+	  (define-key map [ kp-prior ] 'org-metaup)
+	  (define-key map [ kp-next ] 'org-metadown)
+	  (define-key map [ kp-home ] 'org-priority-up)
+	  (define-key map [ kp-end ] 'org-priority-down)
+
+	  ;; (define-key map [ kp-divide ] ')
+	  ;; (define-key map [ kp-multiply ] ')
+	  ;; (define-key map [ kp-subtract ] ')
+	  ;; (define-key map [ kp-kp-add ] ')
+	  ;; (define-key map [ kp-enter ] ')
+	  )
+      (define-key map [ kp-left ] 'org-agenda-kiosk-previous)
+      (define-key map [ kp-right ] 'org-agenda-kiosk-next)
+      (define-key map [ kp-up ] 'org-agenda-kiosk-up-level)
+      (define-key map [ kp-down ] 'org-agenda-kiosk-down-or-cycle-level)
+      (define-key map [ kp-begin ] 'org-agenda-kiosk-files-list)
+      (define-key map [ kp-next ] 'org-metaup)
+      (define-key map [ kp-end ] 'org-metadown)
+      (define-key map [ kp-prior ] 'org-priority-up)
+      (define-key map [ kp-home ] 'org-priority-down)
+
+      ;; (define-key map [ kp-divide ] ')
+      ;; (define-key map [ kp-multiply ] ')
+      ;; (define-key map [ kp-subtract ] ')
+      ;; (define-key map [ kp-kp-add ] ')
+      ;; (define-key map [ kp-enter ] ')
+      )
     (define-key map [ up ] 'org-agenda-kiosk-previous)
     (define-key map [ down ] 'org-agenda-kiosk-next)
     (define-key map [ left ] 'org-agenda-kiosk-up-level)
@@ -59,11 +85,6 @@
     (define-key map [ next ] 'org-metadown)
     (define-key map [ home ] 'org-priority-up)
     (define-key map [ end ] 'org-priority-down)
-    ;; (define-key map [ kp-divide ] ')
-    ;; (define-key map [ kp-multiply ] ')
-    ;; (define-key map [ kp-subtract ] ')
-    ;; (define-key map [ kp-kp-add ] ')
-    ;; (define-key map [ kp-enter ] ')
     map)
   "Keymap for the agenda kiosk.")
 
@@ -104,7 +125,7 @@
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
   (when initial-file
-    (unless (catch 'found 
+    (unless (catch 'found
 	      (while (not (eobp))
 		(if (equal (get-text-property (point) 'file)
 			   initial-file)
@@ -156,4 +177,3 @@
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el")
   (org-agenda-kiosk-files-list))
-
