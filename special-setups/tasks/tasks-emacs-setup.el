@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2016-02-14 18:46:16 jcgs>
+;;; Time-stamp: <2016-02-28 15:58:30 jcgs>
 
 (setq debug-on-error t)
 
@@ -18,7 +18,8 @@
 
 (load-file (expand-file-name "basics/use-package.el" user-emacs-directory))
 (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-pedals"))
-(load-file (expand-file-name "config/use-versor.el" user-emacs-directory))
+(unless (and (boundp 'no-versor) no-versor)
+  (load-file (expand-file-name "config/use-versor.el" user-emacs-directory)))
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
