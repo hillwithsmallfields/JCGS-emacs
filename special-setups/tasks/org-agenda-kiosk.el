@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-02-28 09:55:28 jcgs>
+;;; Time-stamp: <2016-02-28 16:08:46 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -40,10 +40,12 @@
 ;; Minor mode for use over org-mode ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar org-agenda-portrait-keypad t
+  "Whether the keypad has a portrait orientation.")
+
 (defvar org-agenda-kiosk-mode-map
-  (let ((portrait t)
-	(map (make-sparse-keymap)))
-    (if portrait
+  (let ((map (make-sparse-keymap)))
+    (if org-agenda-portrait-keypad
 	(progn
 	  (define-key map [ kp-up ] 'org-agenda-kiosk-previous)
 	  (define-key map [ kp-down ] 'org-agenda-kiosk-next)
@@ -104,12 +106,12 @@
 (defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
   (interactive)
-  ;; todo: also make entries for the agenda types
   (unless (and (bufferp org-agenda-kiosk-files-buffer)
 	       (buffer-live-p org-agenda-kiosk-files-buffer))
     (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Agenda files*"))
     (set-buffer org-agenda-kiosk-files-buffer)
     (erase-buffer)
+    (insert "* Files\n")
     (dolist (file org-agenda-files)
       (let ((title (save-excursion
 		     (find-file file)
@@ -118,9 +120,14 @@
 		       (if (re-search-forward "^#+TITLE: \\(.+\\)" (point-max) t)
 			   (match-string-no-properties 1)
 			 (file-name-nondirectory file))))))
-	(let ((title-string (format "* %s\n" title)))
+	(let ((title-string (format "** %s\n" title)))
 	  (put-text-property 0 (length title-string) 'file file title-string)
 	  (insert title-string))))
+    (insert "* Agendas\n")
+    (dolist (agenda-command org-agenda-custom-commands)
+      (let ((title-string (format "** %s\n" (second agenda-command))))
+	(put-text-property 0 (length title-string) 'command-key (first agenda-command) title-string)
+	(insert title-string)))
     (org-agenda-kiosk-files-mode))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
@@ -141,21 +148,37 @@
 	(if (file-exists-p file)
 	    (find-file file)
 	  (error "File %s is missing" file))
-      ;; todo: also handle agendas
-      (error "No file specified here"))))
+      (let ((command-key (get-text-property (point) 'command-key)))
+	(if (stringp command-key)
+	    (org-agenda nil command-key) ; todo: put it in a new mode that will define the keys, including one to get back to here, like using org-agenda-kiosk-on
+	  (error "Neither file nor agenda specified here"))))))
 
 (defvar org-agenda-kiosk-files-map
   (let ((map (make-keymap)))
-    (define-key map "n" 'next-line)
-    (define-key map "p" 'previous-line)
-    (define-key map " " 'org-agenda-kiosk-files-select)
-    (define-key map [ kp-down ] 'next-line)
-    (define-key map [ kp-up ] 'previous-line)
-    (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
-    (define-key map [ kp-begin ] 'beginning-of-buffer)
-    (define-key map [ down ] 'next-line)
-    (define-key map [ up ] 'previous-line)
-    (define-key map [ right] 'org-agenda-kiosk-files-select)
+    (if org-agenda-portrait-keypad
+	(progn
+	  (define-key map "n" 'next-line)
+	  (define-key map "p" 'previous-line)
+	  (define-key map " " 'org-agenda-kiosk-files-select)
+	  (define-key map [ kp-down ] 'next-line)
+	  (define-key map [ kp-up ] 'previous-line)
+	  (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
+	  (define-key map [ kp-begin ] 'beginning-of-buffer)
+	  (define-key map [ down ] 'next-line)
+	  (define-key map [ up ] 'previous-line)
+	  (define-key map [ right] 'org-agenda-kiosk-files-select)
+	  )
+      (define-key map "n" 'next-line)
+      (define-key map "p" 'previous-line)
+      (define-key map " " 'org-agenda-kiosk-files-select)
+      (define-key map [ kp-down ] 'next-line)
+      (define-key map [ kp-up ] 'previous-line)
+      (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
+      (define-key map [ kp-begin ] 'beginning-of-buffer)
+      (define-key map [ down ] 'next-line)
+      (define-key map [ up ] 'previous-line)
+      (define-key map [ right] 'org-agenda-kiosk-files-select)
+      )
     map))
 
 (defun org-agenda-kiosk-files-mode ()
@@ -175,5 +198,6 @@
   (interactive)
   (keypad-setup 'none)
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
-  (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el")
+  (let ((no-versor t))
+    (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
   (org-agenda-kiosk-files-list))
