@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-02-28 11:27:01 jcgs>
+;;; Time-stamp: <2016-02-28 13:14:58 jcgs>
 
 (require 'org)
 
@@ -137,7 +137,7 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
     (mapcar (lambda (extension)
 	      (expand-file-name (concat name-base extension)
 				jcgs/org-agenda-store-directory))
-	    '("" ".html"))))
+	    '("" ".html" ".org" ".ps"))))
 
 (setq jcgs/org-agenda-current-matcher
       (let* ((earlies (jcgs/org-agenda-make-early-extra-matcher))
