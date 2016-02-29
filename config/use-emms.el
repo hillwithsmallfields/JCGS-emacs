@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2016-02-25 11:40:46 johstu01>
+;;; Time-stamp: <2016-02-26 11:19:48 johstu01>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -222,7 +222,6 @@ P")
    "Mostly Slovak orchestras - Vivaldi Spring from Four Seasons"
    "Mostly Slovak orchestras - Tchaikovsky Danse Espagnole from Swan Lake"
    "Mostly Slovak orchestras - Glinka Overture from Ruslan and Ludmilla"
-   "Mostly Slovak orchestras - Bizet Farandole from Arlesienne Suite"
    "Mostly Slovak orchestras - Mozart Presto from Salzburg Symphony"
    "Mostly Slovak orchestras - Tchaikovsky Polonaise from Yevgeni Onegin"
    "Mostly Slovak orchestras - Schubert Moment Musical in F minor"]
