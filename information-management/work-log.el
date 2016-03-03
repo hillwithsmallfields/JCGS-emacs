@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(defvar work-log-file (expand-file-name "~/Dropbox/notes/hackery.org-log")
+(defvar work-log-file (expand-file-name "~/common/notes/hackery.org-log")
   "The file into which you log your work.
 You could set this per-buffer for local logs.")
 
