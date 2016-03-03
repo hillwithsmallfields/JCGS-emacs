@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2016-02-26 11:19:48 johstu01>
+;;; Time-stamp: <2016-03-03 15:25:23 johstu01>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -233,11 +233,17 @@ These should all start full volume very quickly, without a quiet lead-in.")
   (interactive)
   (save-window-excursion
     (emms)
+    (when emms-player-playing-p
+      (emms-stop))
+    (setq pre-drowning-track (and emms-playlist-selected-marker
+				  (marker-position emms-playlist-selected-marker)))
     (goto-char (point-min))
     (if (search-forward (aref drown-out-tracks
 			      (random (length drown-out-tracks)))
 			(point-max) t)
-	(emms-playlist-mode-play-smart)
+	(progn
+	  (emms-playlist-select (line-beginning-position))
+	  (emms-start))
       (error "Could not find blanking track"))))
 
 ;; end of use-emms.el
