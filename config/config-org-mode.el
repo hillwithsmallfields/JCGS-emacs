@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-01 08:26:20 jcgs>
+;;; Time-stamp: <2016-03-04 11:40:26 johstu01>
 
 (require 'org)
 
@@ -171,6 +171,7 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "supermarKet shopping" "k" 'tags-todo "supermarket")
 (jcgs/def-org-agenda-custom-command "Daily Bread" "d" 'tags-todo "daily_bread")
 (jcgs/def-org-agenda-custom-command "Online" "o" 'tags-todo "online")
+(jcgs/def-org-agenda-custom-command "Ordered" "O" '((todo "ORDERED"))); todo: make this one go by keyword
 (jcgs/def-org-agenda-custom-command "At home" "h" 'tags-todo "@home")
 (jcgs/def-org-agenda-custom-command "Hacking" "H" '((tags-todo "hacking")
 							  (tags-todo "programming")
