@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-04 11:40:26 johstu01>
+;;; Time-stamp: <2016-03-06 20:05:12 jcgs>
 
 (require 'org)
 
@@ -320,6 +320,13 @@ You may want to turn voice input off at this point; and suspend task timers.")
 	   (file-readable-p work-agenda-file)
 	   (not (member work-agenda-file org-agenda-files)))
   (push work-agenda-file org-agenda-files))
+
+(let ((myself-org (substitute-in-file-name "$EHOME/myself/org")))
+  (when (file-directory-p myself-org)
+    (setq org-agenda-files (append org-agenda-files
+				   (directory-files myself-org
+						    t
+						    ".org$")))))
 
 (defvar jcgs/shell-mode-accumulated-command-history-file
   (if (file-directory-p "/work/johstu01")
