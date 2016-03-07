@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management web pages update only
-;;; Time-stamp: <2016-03-07 17:26:04 johstu01>
+;;; Time-stamp: <2016-03-07 17:47:36 johstu01>
 
 (setq debug-on-error t)
 
@@ -25,6 +25,8 @@
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 
 (jcgs/org-agenda-monitor-update nil)
+
+(remove-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
 
 (save-buffers-kill-emacs t)
 
