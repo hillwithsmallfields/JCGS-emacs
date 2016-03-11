@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-11 17:14:36 jcgs>
+;;; Time-stamp: <2016-03-11 17:26:53 jcgs>
 
 (require 'org)
 
@@ -199,7 +199,7 @@ The filenames to save in are added by this function"
 						     "** TODO"))
 				    org-capture-templates)))
 
-(require 'org-mode-linked-tasks)
+(require 'org-linked-tasks)
 
 (global-set-key "\C-cn" 'org-capture)
 
@@ -210,10 +210,10 @@ The filenames to save in are added by this function"
 
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
 
-(require 'org-mode-task-colours)
-(require 'org-mode-pomodoros)
-(require 'org-mode-jira)
-(require 'org-mode-log-tasks)
+(require 'org-task-colours)
+(require 'org-pomodoros)
+(require 'org-jira)
+(require 'org-log-tasks)
 (require 'org-agenda-notify)
 (require 'org-agenda-count)
 (require 'org-agenda-server)
