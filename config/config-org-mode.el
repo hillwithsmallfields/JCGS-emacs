@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-11 17:26:53 jcgs>
+;;; Time-stamp: <2016-03-12 21:19:19 jcgs>
 
 (require 'org)
 
@@ -9,16 +9,13 @@
 (let ((dir "/usr/share/emacs/site-lisp/emacs-goodies-el")) ;for htmlize
   (when (file-directory-p dir)
     (add-to-list 'load-path dir)))
+(add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
 
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-mobile)
 
 (org-load-modules-maybe t)
-
-(add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
-(require 'work-tasks)
-(require 'work-log)
 
 ;; so I can exchange files with non-emacs users and still have their systems pick a text editor:
 (add-to-list 'auto-mode-alist (cons "\\.org\\.txt" 'org-mode))
@@ -199,8 +196,6 @@ The filenames to save in are added by this function"
 						     "** TODO"))
 				    org-capture-templates)))
 
-(require 'org-linked-tasks)
-
 (global-set-key "\C-cn" 'org-capture)
 
 (defun org-tags-view-todo-only ()
@@ -210,6 +205,16 @@ The filenames to save in are added by this function"
 
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
 
+;; todo: make at least some of these into autoloads
+(require 'work-tasks)
+(require 'work-log)
+(require 'org-upwards-propagation)
+(add-hook 'org-clock-in-prepare-hook 'jcgs/org-propagate-openness-upward)
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-propagate-doneness-upwards t)
+(require 'org-moving-tags)
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
+(require 'org-linked-tasks)
 (require 'org-task-colours)
 (require 'org-pomodoros)
 (require 'org-jira)
@@ -218,6 +223,8 @@ The filenames to save in are added by this function"
 (require 'org-agenda-count)
 (require 'org-agenda-server)
 (require 'org-mi3)
+(require 'org-mouse-extras)
+(add-hook 'org-mode-hook 'jcgs-org-mouse-stuff)
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -237,9 +244,6 @@ The filenames to save in are added by this function"
       "/work/johstu01/work-org/shell-command-history.org"
     (substitute-in-file-name "$ORG/shell-command-history.org"))
   "My accumulated command history.")
-
-(require 'org-mouse-extras)
-(add-hook 'org-mode-hook 'jcgs-org-mouse-stuff)
 
 (defun planner-to-org ()
   "Convert text from planner format to org format."
