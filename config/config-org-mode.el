@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-12 21:19:19 jcgs>
+;;; Time-stamp: <2016-03-13 20:49:57 jcgs>
 
 (require 'org)
 
@@ -580,5 +580,15 @@ An argument can change the number of days ahead, 1 being tomorrow."
      tag			  ; maybe add "+TODO=\"TODO\"" or "/!"
      'agenda)
     result))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Sync with google calendar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'org-gcal)
+
+(let ((gcal-settings-file (substitute-in-file-name "$HOME/.org-gcal.el")))
+  (when (file-readable-p gcal-settings-file)
+    (load-file gcal-settings-file)))
 
 ;;; config-org-mode.el ends here
