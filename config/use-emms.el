@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2016-03-03 15:25:23 johstu01>
+;;; Time-stamp: <2016-03-21 16:08:59 johstu01>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -245,5 +245,20 @@ These should all start full volume very quickly, without a quiet lead-in.")
 	  (emms-playlist-select (line-beginning-position))
 	  (emms-start))
       (error "Could not find blanking track"))))
+
+(defun brandenburgs ()
+  "Start playing the Brandenburg concertos."
+  (interactive)
+  (save-window-excursion
+    (emms)
+    (when emms-player-playing-p
+      (emms-stop))
+    (goto-char (point-min))
+    (if (search-forward "Brandenburg"
+			(point-max) t)
+	(progn
+	  (emms-playlist-select (line-beginning-position))
+	  (emms-start))
+      (error "Could not find Brandenburgs"))))
 
 ;; end of use-emms.el
