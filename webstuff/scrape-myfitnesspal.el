@@ -1,5 +1,5 @@
 ;;; Scrape data from myfitnesspal.com food diary pages
-;;; Time-stamp: <2016-03-20 20:49:41 jcgs>
+;;; Time-stamp: <2016-03-23 14:55:17 johstu01>
 ;;; The resulting data should convert easily to CSV etc.
 ;;; Started by John Sturdy <jcg.sturdy@gmail.com> on 2016-03-18
 
@@ -84,6 +84,9 @@ The result is an alist element of meal data."
 (defvar myfitnesspal-accumulated-data-file "~/myfitnesspal-data-el"
   "File containing accumulated scrapes.")
 
+(defvar myfitnesspal-accumulated-data nil
+  "Alist containing accumulated scrapes.")
+
 (defun myfitnesspal-read-accumulated-data ()
   "Read the accumulated data."
   (if (file-exists-p myfitnesspal-accumulated-data-file)
@@ -109,10 +112,10 @@ The result is an alist element of meal data."
 (defun myfitnesspal-work-backwards (starting-back)
   "Work through a series of report pages."
   (interactive "nStart how many days ago: ")
-  (let ((accumulated (myfitnesspal-read-accumulated-data))
-	(page-file-name nil)
+  (let ((page-file-name nil)
 	(another t)
 	(back starting-back))
+    (setq myfitnesspal-accumulated-data (myfitnesspal-read-accumulated-data))
     (while another
       (myfitnesspal-fetch-days-ago back)
       (setq page-file-name (read-file-name "File of saved web page: "
@@ -120,6 +123,11 @@ The result is an alist element of meal data."
       (push (myfitnesspal-parse-file page-file-name) accumulated)
       (setq another (y-or-n-p "Fetch another page? ")
 	    back (1+ back)))
-    (myfitnesspal-write-accumulated-data accumulated)
+    (myfitnesspal-write-accumulated-data myfitnesspal-accumulated-data)
     (message "Finished %d days ago" back)))
     
+(defun myfitnesspal-fetch-most-recent-unfetched ()
+  "Fetch the most recent page that isn't in the database."
+  (interactive)
+  ;; todo: look through myfitnesspal-accumulated-data then call myfitnesspal-fetch
+  )
