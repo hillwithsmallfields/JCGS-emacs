@@ -1,5 +1,5 @@
 ;;;; journal.el -- stuff for keeping a diary
-;;; Time-stamp: <2009-04-29 12:44:11 jcgs>
+;;; Time-stamp: <2016-03-27 22:00:37 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -552,5 +552,35 @@ Causes insertion of links to other files where available.")
   (use-local-map html-journal-helper-map)
   (abbrev-mode 1)
   )
+
+(defun journal-read-html-to-data (file)
+  "Return an alist of days to paragraphs in FILE."
+  (save-window-excursion
+    (find-file file)
+    (save-excursion
+      (goto-char (point-max))
+      (search-backward "<hr>")
+      (let ((days nil)
+	    (end (point)))
+	(while (re-search-backward "<h2><a name=\"[0-9]+\">\\[\\(.+\\)\\]</a></h2>" (point-min) t)
+	  (let* ((date (match-string-no-properties 1))
+		 (text (buffer-substring-no-properties end (match-end 0))))
+	    (push (cons date text) days))
+	  (setq end (point))
+	  ;; todo: also go back over <br>
+	  )
+	days))))
+
+(defun journal-convert-directory-to-org (dir)
+  "Convert htmljournal in DIR to org format."
+  (interactive "DConvert journal pages in directory: ")
+  (let ((dir-last (file-name-nondirectory (substring (file-name-directory dir) 0 -1)))
+	(files (directory-files dir t "[0-9].+\\.html$")))
+    (message "Directory is %s %s" dir dir-last)
+    (message "Files are %S" files)
+    (find-file (expand-file-name (concat dir-last ".org") dir))
+    (dolist (file files)
+      (insert (journal-read-html-to-data file)))
+    ))
 
 ;;; end of journal.el
