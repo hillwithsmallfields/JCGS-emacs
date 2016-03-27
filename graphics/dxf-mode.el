@@ -2,16 +2,16 @@
 ;;; Time-stamp: <2016-03-27 14:12:54 jcgs>
 
 (defvar dxf-code-details
-  '((0 "type")
-    (1 "text")
-    (2 "name")
-    (3 "other text")
-    (4 "other text")
-    (5 "entity handle")
-    (6 "linetype name")
-    (7 "text style name")
-    (8 "layer name")
-    (9 "variable name identifier")
+  '((0 "type" font-lock-type-face)
+    (1 "text" font-lock-string-face)
+    (2 "name" font-lock-function-name-face)
+    (3 "other text" font-lock-string-face)
+    (4 "other text" font-lock-string-face)
+    (5 "entity handle" font-lock-function-name-face)
+    (6 "linetype name" font-lock-variable-name-face)
+    (7 "text style name" font-lock-variable-name-face)
+    (8 "layer name" font-lock-variable-name-face)
+    (9 "variable name identifier" font-lock-variable-name-face)
     (10 "primary point X")
     (11 "other point X")
     (12 "other point X")
@@ -59,29 +59,50 @@
     (98 "32-bit integer value")
     (99 "32-bit integer value")
     (100 "subclass data")
-    (102 "control string")
+    (102 "control string" font-lock-string-face)
     )
   "Definitions of the numeric codes.")
+
+(defvar dxf-mode-type-display-strings nil
+  "A cache of modified type names.")
+
+(defun dxf-mode-type-display-string (code-number)
+  "Return the display string for CODE-NUMBER."
+  (let ((pair (assoc code-number dxf-mode-type-display-strings)))
+    (if pair
+	(cdr pair)
+      (setq pair (assoc code-number dxf-code-details))
+      (if (null pair)
+	  "unknown"
+	(let ((string (concat (copy-sequence (cadr pair)) ": ")))
+	  (put-text-property 0 (length string) 'face 'font-lock-comment-face string)
+	  (push (cons code-number
+		      string)
+		dxf-mode-type-display-strings)
+	  string)))))
 
 (defun dxf-mode-annotate-region (from to)
   "Annotate the region between FROM and TO."
   (interactive "r")
   (put-text-property from to 'help-echo nil)
+  (put-text-property from to 'display nil)
   (goto-char from)
   (with-silent-modifications
     (while (re-search-forward "^\\s-*\\([0-9]+\\)\\s-*$" to t)
       (let* ((code-number (string-to-number (match-string 1)))
-	     (start (match-beginning 1))
-	     (code-end (match-end 1))
+	     (start (match-beginning 0))
+	     (code-end (1+ (match-end 0)))
 	     (code-details (assoc code-number dxf-code-details)))
 	(if (null code-details)
 	    (error "unknown code %d at %d" code-number start)
-	  (let ((string (nth 1 code-details))
-		(skip (or (nth 2 code-details) 1))
+	  (let ((string (dxf-mode-type-display-string code-number))
+		(face (nth 2 code-details))
+		(skip (or (nth 3 code-details) 1))
 		)
 	    (beginning-of-line (+ skip 2))
 	    (put-text-property start code-end 'display string) ; todo: fontify this
-	    ;; todo: fontify the data part (put-text-property code-end (point) 'font-lock-face ....)
+	    (when face
+	      (put-text-property code-end (point) 'font-lock-face face))
 	    (put-text-property start (point) 'help-echo string)
 	    ))))))
 
