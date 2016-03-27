@@ -81,6 +81,14 @@
 		dxf-mode-type-display-strings)
 	  string)))))
 
+(defvar dxf-mode-symbolic-display t
+  "Whether to do symbolic display.")
+
+(defun dxf-mode-toggle-symbolic-display ()
+  "Toggle symbolic display."
+  (interactive)
+  (setq dxf-mode-symbolic-display (not dxf-mode-symbolic-display)))
+
 (defun dxf-mode-annotate-region (from to)
   "Annotate the region between FROM and TO."
   (interactive "r")
@@ -96,18 +104,37 @@
 	(if (null code-details)
 	    (error "unknown code %d at %d" code-number start)
 	  (let ((string (dxf-mode-type-display-string code-number))
+		(type (intern (nth 1 code-details)))
 		(face (nth 2 code-details))
-		(skip (or (nth 3 code-details) 1))
-		)
+		(skip (or (nth 3 code-details) 1)))
 	    (beginning-of-line (+ skip 2))
-	    (put-text-property start code-end 'display string) ; todo: fontify this
+	    (put-text-property start code-end 'display
+			       `(when dxf-mode-symbolic-display . ,string))
 	    (when face
 	      (put-text-property code-end (point) 'font-lock-face face))
-	    (put-text-property start (point) 'help-echo string)
-	    ))))))
+	    (put-text-property start (point) 'dxf-type type)
+	    (put-text-property start (point) 'help-echo string)))))))
+
+(defun dxf-mode-next-section ()
+  "Move to the next section."
+  (interactive)
+  ;; todo: use (next-single-property-change (point) 'dxf-type) and look for the type
+  (let ((next-change nil))
+    (catch 'found
+      (while (setq next-change (next-single-property-change (point) 'dxf-type))
+	(goto-char next-change)
+	;; todo: check the type, if it is 'type, check whether the type is SECTION
+	(let ((type (get-text-property (point) 'dxf-type)))
+	  (when (eq type 'type)
+	    (message "Got type at %d" (point))
+	    (beginning-of-line 2)
+	    (message "following line text is %s" (buffer-substring-no-properties (point) (line-end-position)))
+	    (when (looking-at "SECTION")
+	      (throw 'found t))))))))
 
 (defvar dxf-mode-keymap
   (let ((map (make-keymap "DXF")))
+    ;; todo: make a ctrl-c map, and have C-c C-c run dxf-mode-toggle-symbolic-display
     map))
 
 (defun dxf-mode ()
