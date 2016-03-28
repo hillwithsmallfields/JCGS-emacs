@@ -1,5 +1,5 @@
 ;;;; DXF display and editing tools
-;;; Time-stamp: <2016-03-27 14:12:54 jcgs>
+;;; Time-stamp: <2016-03-28 18:03:13 jcgs>
 
 (defvar dxf-code-details
   '((0 "type" font-lock-type-face)
@@ -92,28 +92,29 @@
 (defun dxf-mode-annotate-region (from to)
   "Annotate the region between FROM and TO."
   (interactive "r")
-  (put-text-property from to 'help-echo nil)
-  (put-text-property from to 'display nil)
-  (goto-char from)
-  (with-silent-modifications
-    (while (re-search-forward "^\\s-*\\([0-9]+\\)\\s-*$" to t)
-      (let* ((code-number (string-to-number (match-string 1)))
-	     (start (match-beginning 0))
-	     (code-end (1+ (match-end 0)))
-	     (code-details (assoc code-number dxf-code-details)))
-	(if (null code-details)
-	    (error "unknown code %d at %d" code-number start)
-	  (let ((string (dxf-mode-type-display-string code-number))
-		(type (intern (nth 1 code-details)))
-		(face (nth 2 code-details))
-		(skip (or (nth 3 code-details) 1)))
-	    (beginning-of-line (+ skip 2))
-	    (put-text-property start code-end 'display
-			       `(when dxf-mode-symbolic-display . ,string))
-	    (when face
-	      (put-text-property code-end (point) 'font-lock-face face))
-	    (put-text-property start (point) 'dxf-type type)
-	    (put-text-property start (point) 'help-echo string)))))))
+  (save-excursion
+    (put-text-property from to 'help-echo nil)
+    (put-text-property from to 'display nil)
+    (goto-char from)
+    (with-silent-modifications
+      (while (re-search-forward "^\\s-*\\([0-9]+\\)\\s-*$" to t)
+	(let* ((code-number (string-to-number (match-string 1)))
+	       (start (match-beginning 0))
+	       (code-end (1+ (match-end 0)))
+	       (code-details (assoc code-number dxf-code-details)))
+	  (if (null code-details)
+	      (error "unknown code %d at %d" code-number start)
+	    (let ((string (dxf-mode-type-display-string code-number))
+		  (type (intern (nth 1 code-details)))
+		  (face (nth 2 code-details))
+		  (skip (or (nth 3 code-details) 1)))
+	      (beginning-of-line (+ skip 2))
+	      (put-text-property start code-end 'display
+				 `(when dxf-mode-symbolic-display . ,string))
+	      (when face
+		(put-text-property code-end (point) 'font-lock-face face))
+	      (put-text-property start (point) 'dxf-type type)
+	      (put-text-property start (point) 'help-echo string))))))))
 
 (defun dxf-mode-next-section ()
   "Move to the next section."
