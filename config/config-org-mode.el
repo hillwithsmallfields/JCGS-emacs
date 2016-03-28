@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-13 20:57:08 jcgs>
+;;; Time-stamp: <2016-03-28 14:17:48 jcgs>
 
 (require 'org)
 
@@ -65,11 +65,13 @@
 						"** BUY")))
       org-refile-use-outline-path 'full-file-path
       org-outline-path-complete-in-steps t
+      org-edit-timestamp-down-means-later t
       org-timer-default-timer 25
       org-clock-idle-time 26
       org-enforce-todo-dependencies t
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
+      org-todo-state-tags-triggers '((done ("soon" . nil) ("urgent" . nil) ("today" . nil)))
       org-M-RET-may-split-line nil
       org-mobile-directory (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")
       org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory)
@@ -205,6 +207,7 @@ The filenames to save in are added by this function"
 
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
 
+
 ;; todo: make at least some of these into autoloads
 (require 'work-tasks)
 (require 'work-log)
@@ -225,6 +228,8 @@ The filenames to save in are added by this function"
 (require 'org-mi3)
 (require 'org-mouse-extras)
 (add-hook 'org-mode-hook 'jcgs-org-mouse-stuff)
+(require 'org-timestamps)
+(add-hook 'org-after-todo-state-change-hook 'jcgs/org-update-timestamp)
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
