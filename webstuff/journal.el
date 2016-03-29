@@ -1,5 +1,5 @@
 ;;;; journal.el -- stuff for keeping a diary
-;;; Time-stamp: <2016-03-27 22:00:37 jcgs>
+;;; Time-stamp: <2016-03-29 21:58:41 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -553,8 +553,47 @@ Causes insertion of links to other files where available.")
   (abbrev-mode 1)
   )
 
+;;;; Migration from html to org mode
+
+(defvar html-to-org-replacements
+  '(("</p>\\s-*<p>" . "\n\n")
+    ("</?p>" . "")
+    ("<br[^>]*>" . "")
+    ("<a href=\"\\.\\./\\.\\./people/\\([-a-z/]+\\)\\.html\">\\([a-z]+\\)</a>" . "[[people:\\1][\\2]]")
+    ("\\`\\s-+" . "")
+    ("\\s-+\\'" . "")
+    ;; ("" . "")
+    ;; ("" . "")
+    ;; ("" . "")
+    ;; ("" . "")
+    )
+  "Patterns and replacements to convert my journal html to org text.")
+
+(defun html-to-org-string (html)
+  "Convert HTML to org."
+  (dolist (replacement html-to-org-replacements)
+    (setq html (replace-regexp-in-string (car replacement)
+					 (cdr replacement)
+					 html)))
+  html)
+
+(defun journal-date-to-time (datestring)
+  "Convert DATESTRING to an Emacs time."
+  (if (string-match "\\([0-9]\\{4\\}\\)-\\([a-z]\\{3\\}\\)-\\([0-9]\\{2\\}\\)" datestring)
+      (let ((year (string-to-number (match-string-no-properties 1 datestring)))
+	    (month (cdr (assoc (match-string-no-properties 2 datestring)
+			       journal-monthname-alist)))
+	    (day (string-to-number (match-string-no-properties 3 datestring))))
+	(encode-time 0 0 0 day month year))
+    nil))
+
+(defun time-to-datetree-date (time)
+  "Convert TIME to (month day year)."
+  (let ((d (decode-time time)))
+    (list (nth 4 d) (nth 3 d) (nth 5 d))))
+
 (defun journal-read-html-to-data (file)
-  "Return an alist of days to paragraphs in FILE."
+  "Return an alist of days to lists of paragraphs in FILE."
   (save-window-excursion
     (find-file file)
     (save-excursion
@@ -564,10 +603,13 @@ Causes insertion of links to other files where available.")
 	    (end (point)))
 	(while (re-search-backward "<h2><a name=\"[0-9]+\">\\[\\(.+\\)\\]</a></h2>" (point-min) t)
 	  (let* ((date (match-string-no-properties 1))
-		 (text (buffer-substring-no-properties end (match-end 0))))
-	    (push (cons date text) days))
+		 (text (html-to-org-string
+			(subst-char-in-string
+			 ?\n ?\s (buffer-substring-no-properties end (match-end 0))))))
+	    (push (cons (journal-date-to-time date)
+			(split-string text "\n\n" t))
+		  days))
 	  (setq end (point))
-	  ;; todo: also go back over <br>
 	  )
 	days))))
 
@@ -580,7 +622,12 @@ Causes insertion of links to other files where available.")
     (message "Files are %S" files)
     (find-file (expand-file-name (concat dir-last ".org") dir))
     (dolist (file files)
-      (insert (journal-read-html-to-data file)))
-    ))
+      (dolist (day (journal-read-html-to-data file))
+	(org-datetree-find-date-create
+	 (time-to-datetree-date
+	  (car day)))
+	(insert "\n")
+	(dolist (para (cdr day))
+	  (insert "    " para "\n\n"))))))
 
 ;;; end of journal.el
