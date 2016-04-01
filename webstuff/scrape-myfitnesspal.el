@@ -1,5 +1,5 @@
 ;;; Scrape data from myfitnesspal.com food diary pages
-;;; Time-stamp: <2016-03-23 14:55:17 johstu01>
+;;; Time-stamp: <2016-04-01 22:22:33 jcgs>
 ;;; The resulting data should convert easily to CSV etc.
 ;;; Started by John Sturdy <jcg.sturdy@gmail.com> on 2016-03-18
 
@@ -8,12 +8,37 @@
 (defun myfitnesspal-fetch-days-ago (days)
   "Fetch the myfitnesspal food diary for DAYS ago."
   (interactive "nGet data for days ago: ")
-  (let ((calculated-date (time-add (current-time) (days-to-time (- days)))))
+  (let ((calculated-date ))
     (message "Calculated date is %s" (current-time-string calculated-date))
     (myfitnesspal-fetch calculated-date)))
 
+(defvar latest-year nil
+  "The latest year read, as a number.")
+
+(defvar latest-month nil
+  "The latest month read, as a number.")
+
+(defvar latest-day nil
+  "The latest day read, as a number.")
+
+(let ((now (decode-time)))
+  (setq latest-year (nth 5 now)
+	latest-month (nth 4 now)
+	latest-day (nth 3 now)))
+
+(defun read-date (prompt)
+  "Read a date from the user, using the minibuffer."
+  (setq latest-year (read-from-minibuffer (format "%s (year): " prompt)
+						 (number-to-string latest-year) nil t)
+	latest-month (read-from-minibuffer (format "%s (month in %d): " prompt latest-year)
+						  (number-to-string latest-month) nil t)
+	latest-day (read-from-minibuffer (format "%s (day in %s-%s): " prompt latest-year latest-month)
+						(number-to-string latest-day) nil t))
+  (encode-time 0 0 0 latest-day latest-month latest-year))
+
 (defun myfitnesspal-fetch (date)
   "Fetch the myfitnesspal food diary for DATE."
+  (interactive (list (read-date "Fetch food diary for")))
   (let ((url (format-time-string
 	      "http://www.myfitnesspal.com/food/diary?date=%Y-%m-%d" date)))
     (message "url is %s" url)
@@ -46,7 +71,7 @@ The result is an alist element of meal data."
 	(find-file file)))
     (save-excursion
       (goto-char (point-min))
-      (re-search-forward "// </food/diary\\?date=\\(....\\)-\\(..\\)-\\(..\\)>")
+      (re-search-forward "</food/diary\\?date=\\(....\\)-\\(..\\)-\\(..\\)>")
       (let* ((year (string-to-number (match-string-no-properties 1)))
 	     (month (string-to-number (match-string-no-properties 2)))
 	     (yesterday-day (string-to-number (match-string-no-properties 3)))
@@ -109,18 +134,27 @@ The result is an alist element of meal data."
       (insert ")\n")
       (basic-save-buffer))))
 
+(defvar latest-page-file-name nil
+  "The latest filename used in scraping data.")
+
+(defun myfitnesspal-process-one-day (date)
+  "Fetch, analyze and store the data for DATE."
+  (interactive (list (read-date "Process food diary for")))
+  (myfitnesspal-fetch date)
+  (setq latest-page-file-name (read-file-name "File of saved web page: "
+				       nil latest-page-file-name))
+  (push (myfitnesspal-parse-file latest-page-file-name) myfitnesspal-accumulated-data))
+
 (defun myfitnesspal-work-backwards (starting-back)
   "Work through a series of report pages."
   (interactive "nStart how many days ago: ")
-  (let ((page-file-name nil)
-	(another t)
+  (let ((another t)
 	(back starting-back))
-    (setq myfitnesspal-accumulated-data (myfitnesspal-read-accumulated-data))
+    (setq myfitnesspal-accumulated-data (myfitnesspal-read-accumulated-data)
+	  latest-page-file-name nil)
     (while another
-      (myfitnesspal-fetch-days-ago back)
-      (setq page-file-name (read-file-name "File of saved web page: "
-					   nil page-file-name))
-      (push (myfitnesspal-parse-file page-file-name) accumulated)
+      (myfitnesspal-process-one-day
+       (time-add (current-time) (days-to-time (- days))))
       (setq another (y-or-n-p "Fetch another page? ")
 	    back (1+ back)))
     (myfitnesspal-write-accumulated-data myfitnesspal-accumulated-data)
@@ -129,5 +163,10 @@ The result is an alist element of meal data."
 (defun myfitnesspal-fetch-most-recent-unfetched ()
   "Fetch the most recent page that isn't in the database."
   (interactive)
-  ;; todo: look through myfitnesspal-accumulated-data then call myfitnesspal-fetch
+  (setq myfitnesspal-accumulated-data
+	(sort myfitnesspal-accumulated-data (function
+					     (lambda (a b)
+					       (if (= (car a) (car b))
+						   (< (cadr a) (cadr b))
+						 (< (car a) (car b)))))))
   )
