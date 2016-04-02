@@ -1,5 +1,5 @@
 ;;; Scrape data from myfitnesspal.com food diary pages
-;;; Time-stamp: <2016-04-01 22:22:33 jcgs>
+;;; Time-stamp: <2016-04-02 20:49:28 jcgs>
 ;;; The resulting data should convert easily to CSV etc.
 ;;; Started by John Sturdy <jcg.sturdy@gmail.com> on 2016-03-18
 
@@ -114,25 +114,47 @@ The result is an alist element of meal data."
 
 (defun myfitnesspal-read-accumulated-data ()
   "Read the accumulated data."
+  (interactive)
   (if (file-exists-p myfitnesspal-accumulated-data-file)
       (save-window-excursion
 	(find-file myfitnesspal-accumulated-data-file)
 	(save-excursion
 	  (goto-char (point-min))
-	  (read (current-buffer))))
+	  (setq myfitnesspal-accumulated-data
+		(read (current-buffer)))))
     nil))
 
-(defun myfitnesspal-write-accumulated-data (data)
+(defun myfitnesspal-write-accumulated-data ()
   "Write the accumulated data."
+  (interactive)
   (save-window-excursion
     (find-file myfitnesspal-accumulated-data-file)
     (save-excursion
       (erase-buffer)
       (insert "(")
-      (dolist (entry data)
-	(insert (format "%S\n" data)))
+      (dolist (entry myfitnesspal-accumulated-data)
+	(insert (format "%S\n" entry)))
       (insert ")\n")
       (basic-save-buffer))))
+
+(defun myfitnesspal-show-accumulated-data ()
+  "Display a summary of the data."
+  (interactive)
+  (with-output-to-temp-buffer "*Food diary summary*"
+    (dolist (entry myfitnesspal-accumulated-data)
+      (let* ((date (cadr entry)))
+	(princ (format "%d-%d-%d: %s\n"
+		       (car date) (cadr date) (caddr date)
+		       (mapconcat (function
+				   (lambda (meal)
+				     (let ((calories-pair (assoc 'Calories meal)))
+				       (format "%s: %d"
+					       (car meal)
+					       (if calories-pair
+						   (cdr calories-pair)
+						 0)))))
+				  (cddr entry)
+				  "; ")))))))
 
 (defvar latest-page-file-name nil
   "The latest filename used in scraping data.")
@@ -142,7 +164,8 @@ The result is an alist element of meal data."
   (interactive (list (read-date "Process food diary for")))
   (myfitnesspal-fetch date)
   (setq latest-page-file-name (read-file-name "File of saved web page: "
-				       nil latest-page-file-name))
+					      nil latest-page-file-name))
+  ;; todo: make this overwrite an existing entry if the date is the same
   (push (myfitnesspal-parse-file latest-page-file-name) myfitnesspal-accumulated-data))
 
 (defun myfitnesspal-work-backwards (starting-back)
@@ -150,14 +173,14 @@ The result is an alist element of meal data."
   (interactive "nStart how many days ago: ")
   (let ((another t)
 	(back starting-back))
-    (setq myfitnesspal-accumulated-data (myfitnesspal-read-accumulated-data)
-	  latest-page-file-name nil)
+    (myfitnesspal-read-accumulated-data)
+    (setq latest-page-file-name nil)
     (while another
       (myfitnesspal-process-one-day
        (time-add (current-time) (days-to-time (- days))))
       (setq another (y-or-n-p "Fetch another page? ")
 	    back (1+ back)))
-    (myfitnesspal-write-accumulated-data myfitnesspal-accumulated-data)
+    (myfitnesspal-write-accumulated-data)
     (message "Finished %d days ago" back)))
     
 (defun myfitnesspal-fetch-most-recent-unfetched ()
@@ -169,4 +192,5 @@ The result is an alist element of meal data."
 					       (if (= (car a) (car b))
 						   (< (cadr a) (cadr b))
 						 (< (car a) (car b)))))))
+  (message "Oldest entry is %S" (car (last myfitnesspal-accumulated-data)))
   )
