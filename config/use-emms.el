@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2016-03-21 16:08:59 johstu01>
+;;; Time-stamp: <2016-04-04 16:40:44 johstu01>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -228,9 +228,16 @@ P")
   "Tracks that drown out annoying background sounds.
 These should all start full volume very quickly, without a quiet lead-in.")
 
-(defun drown-out-annoying-conversations ()
-  "Play a track that drowns out annoying background sound."
-  (interactive)
+(defvar drown-out-forcibly-tracks
+  ["In Extremo - Horizont"
+   "In Extremo - Kuess Mich"]
+  "Tracks that drown out annoying background sounds.
+These should all start full volume very quickly, without a quiet lead-in.")
+  
+(defun drown-out-annoying-conversations (&optional force)
+  "Play a track that drowns out annoying background sound.
+Optional argument FORCE means do it more forcibly."
+  (interactive "P")
   (save-window-excursion
     (emms)
     (when emms-player-playing-p
@@ -238,13 +245,16 @@ These should all start full volume very quickly, without a quiet lead-in.")
     (setq pre-drowning-track (and emms-playlist-selected-marker
 				  (marker-position emms-playlist-selected-marker)))
     (goto-char (point-min))
-    (if (search-forward (aref drown-out-tracks
-			      (random (length drown-out-tracks)))
+    (let ((tracks (if force
+		      drown-out-forcibly-tracks
+		    drown-out-tracks)))
+    (if (search-forward (aref tracks
+			      (random (length tracks)))
 			(point-max) t)
 	(progn
 	  (emms-playlist-select (line-beginning-position))
 	  (emms-start))
-      (error "Could not find blanking track"))))
+      (error "Could not find blanking track")))))
 
 (defun brandenburgs ()
   "Start playing the Brandenburg concertos."
