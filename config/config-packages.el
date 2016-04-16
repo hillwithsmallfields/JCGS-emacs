@@ -27,11 +27,28 @@
 
 ;;; Code:
 
+(require 'package)
+
 (setq package-user-dir (substitute-in-file-name "$EHOME/emacs-packages"))
 (unless (file-directory-p package-user-dir)
   (make-directory package-user-dir))
 (add-to-list 'package-archives (cons "marmalade" "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/"))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; version patching ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(dolist (base '("org-20160411/org.el"))
+  (let* ((file (expand-file-name base package-user-dir))
+	 (elc (concat file "c")))
+    (if (file-exists-p elc)
+	(progn
+	  (message "Patching with %s" elc)
+	  (load-file elc))
+      (when (file-exists-p file)
+	(message "Patching with %s" file)
+	(load-file file)))))
 
 (provide 'config-packages)
 
