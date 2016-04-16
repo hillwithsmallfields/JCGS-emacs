@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2016-01-24 16:49:14 jcgs>
+;;; Time-stamp: <2016-04-16 13:58:12 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -179,8 +179,6 @@ Returns how many buffers it brought up." t)
 
   (global-set-key [     f3 ] 'other-frame)
 
-  (global-set-key [     f4 ] 'jcgs-task-tracking-map)
-
   (global-set-key [     f5 ] 'find-file-at-point)
   (global-set-key [   C-f5 ] 'find-file-at-point)
   (global-set-key [ M-C-f5 ] 'find-file-at-point-other-window)
@@ -194,8 +192,7 @@ Returns how many buffers it brought up." t)
   (global-set-key [   C-f7 ] 'bury-buffer)
   (global-set-key [   M-f7 ] 'jcgs-map-1)
 
-  (global-set-key [     f8 ] 'other-window-or-buffer)
-  (global-set-key [   C-f8 ] 'other-window-backwards)
+  (global-set-key [     f8 ] 'jcgs-task-tracking-map)
 
   (global-set-key [     f9 ] ctl-x-map)
   (global-set-key [   C-f9 ] ctl-x-4-map)
