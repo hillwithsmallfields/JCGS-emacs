@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2016-01-19 09:44:16 johstu01>
+;;; Time-stamp: <2016-04-16 14:24:34 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -303,6 +303,7 @@ Top and bottom destinations are actually `scroll-margin' lines
     (kill-new filename)))
 
 (setq image-dired-dir (expand-file-name "~/tmp")
+      image-dired-thumbnail-storage 'standard
       image-dired-rotate-original-ask-before-overwrite nil)
 
 (eval-after-load "image-dired"
