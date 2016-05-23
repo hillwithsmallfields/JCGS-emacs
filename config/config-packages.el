@@ -32,6 +32,7 @@
 (setq package-user-dir (substitute-in-file-name "$EHOME/emacs-packages"))
 (unless (file-directory-p package-user-dir)
   (make-directory package-user-dir))
+(require 'package)
 (add-to-list 'package-archives (cons "marmalade" "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/"))
 
