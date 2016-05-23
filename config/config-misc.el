@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-02-25 11:16:58 johstu01>
+;;; Time-stamp: <2016-05-11 11:25:06 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -457,5 +457,18 @@ Argument DAYS is the number of days to fast for."
     (find-file-at-point)
     (when line-number
       (goto-line line-number))))
+
+;;; git things
+
+(defun git-this-version (whereat)
+  "Checkout the version around WHEREAT (in a git log)."
+  (interactive "d")
+  (save-excursion
+    (goto-char whereat)
+    (if (re-search-backward "^commit \\([0-9a-f]+\\)$" (point-min) t)
+	(let ((id (match-string-no-properties 1)))
+	  (message "Checking out commit %s in %s" id default-directory)
+	  (shell-command (concat "git checkout " id)))
+      (error "Could not find commit"))))
 
 ;;; end of config-misc.el
