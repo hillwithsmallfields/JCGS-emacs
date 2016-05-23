@@ -1,4 +1,4 @@
-;;; Time-stamp: <2014-06-20 15:44:00 johstu01>
+;;; Time-stamp: <2016-05-23 12:33:18 johstu01>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -46,13 +46,15 @@ DDirectory to start %s in: ")
 (defun make-shell-for-directory-if-present (directory &optional name command)
   "Make a shell for DIRECTORY, called NAME, if DIRECTORY exists.
 If COMMAND is given, send it that command too."
-  (setq directory (substitute-in-file-name directory))
-  (if (file-directory-p directory)
+  (unless (or (null name)
+	      (get-buffer name))
+    (setq directory (substitute-in-file-name directory))
+    (when (file-directory-p directory)
       (make-named-shell (if name
 			    name
 			  (format "-%s-"
 				  (file-name-nondirectory directory)))
 			directory
-			command)))
+			command))))
 
 ;;; end of external-programs/multiple-shells.el
