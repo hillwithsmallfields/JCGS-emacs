@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management only
-;;; Time-stamp: <2016-02-28 15:58:30 jcgs>
+;;; Time-stamp: <2016-04-21 13:56:31 johstu01>
 
 (setq debug-on-error t)
 
@@ -27,10 +27,10 @@
     (progn
       (dolist (file '("work-tasks"))
 	(add-to-list 'org-agenda-files
-		     (substitute-in-file-name (format "/work/johstu01/work-org/%s.org"
+		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
 						      file))
 		     t))
-      (setq work-log-file "/work/johstu01/work-org/work-log.org"))
+      (setq work-log-file "/nethome/johstu01/work-org/work-log.org"))
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
