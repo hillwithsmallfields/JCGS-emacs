@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2016-02-28 10:41:22 jcgs>
+;;; Time-stamp: <2016-04-21 13:50:43 johstu01>
 
 (setq joystick-graphical nil)
 
@@ -29,7 +29,7 @@
 			   'meta
 			   'research
 			   'modal
-			   'joystick
+			   ;; 'joystick
 			   ;; 'local
 			   'menu
 			   'quiet-underlying
