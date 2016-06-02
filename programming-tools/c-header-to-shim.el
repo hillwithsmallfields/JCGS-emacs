@@ -109,7 +109,7 @@
     (insert "\n{\n")
     (unless is-void
       (insert "  " type " result;\n"))
-    (insert "  fprintf(stderr, \"" name "(")
+    (insert "  fprintf(stderr, \"trace: " name "(")
     (insert (mapconcat 'c-shim-format
 		       args
 		       ", "))
@@ -191,21 +191,6 @@ Interactively, prompts for a directory to use the headers from."
 		 (mapconcat 'identity (c-shim-include-dirs headers) " -I ")
 		 source
 		 edit-function-name)))))
-
-(defun c-shim-do-it ()
-  "Make my usual C shims."
-  (interactive)
-  (let ((header-dir  "/arm/tools/prodesign/proFPGA/2015C/include/"))
-    (apply 'c-shim-from-files "/work/johstu01/c-shims/shims.c"
-	   "/work/johstu01/c-shims/shims.h"
-	   (mapcar (lambda (header)
-		     (expand-file-name header header-dir))
-		   '("mmi64.h"
-		     "mmi64_module_axi_master.h"
-		     "mmi64_module_regif.h"
-		     "profpga.h"
-		     "profpga_error.h"
-		     "profpga_acm.h")))))
 
 (provide 'c-header-to-shim)
 ;;; c-header-to-shim.el ends here
