@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-02-28 17:11:39 jcgs>
+;;; Time-stamp: <2016-06-18 20:57:05 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -196,6 +196,7 @@
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
   (interactive)
+  (setq debug-on-error t)
   (keypad-setup 'none)
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (let ((no-versor t))
