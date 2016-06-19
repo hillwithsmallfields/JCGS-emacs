@@ -3,9 +3,12 @@
 
 ;;; This lets you operate an agenda with very few buttons.
 
-;;; The idea is to have a Raspberry Pi or similar in a case with some
-;;; buttons on it, centrally in my house, that I can use to find
-;;; things to do and to tick them off as I do them.
+;;; This is for use on a small, always-on, home server (Raspberry Pi
+;;; or similar) in a case with some buttons on it, centrally in my
+;;; house, that I can use to find things to do and to tick them off as
+;;; I do them.  Some related software will look for incoming changes
+;;; to the agenda files, read the new versions, and produce a new
+;;; agenda.
 
 (defun org-agenda-kiosk-next ()
   "Move to the next entry."
@@ -34,7 +37,8 @@
 	(progn
 	  (show-children 1)
 	  (goto-char child-level))
-      (org-todo))))
+      ;; (org-todo) ; put this on a separate key
+      )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode for use over org-mode ;;
@@ -103,6 +107,23 @@
 (defvar org-agenda-kiosk-files-buffer nil
   "Buffer containing the agenda files list.")
 
+(defun org-agenda-kiosk-insert-file-index (files)
+  "Insert entries for some FILES."
+  (dolist (file files)
+    (let ((title (save-excursion
+		   (find-file file)
+		   (save-excursion
+		     (goto-char (point-min))
+		     (if (re-search-forward "^#+TITLE: \\(.+\\)" (point-max) t)
+			 (match-string-no-properties 1)
+		       (file-name-nondirectory file))))))
+      (let ((title-string (format "** %s\n" title)))
+	(put-text-property 0 (length title-string) 'file file title-string)
+	(insert title-string)))))
+
+(defvar org-reading-files nil
+  "Files to put on my reading and reference list.")
+
 (defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
   (interactive)
@@ -112,22 +133,14 @@
     (set-buffer org-agenda-kiosk-files-buffer)
     (erase-buffer)
     (insert "* Files\n")
-    (dolist (file org-agenda-files)
-      (let ((title (save-excursion
-		     (find-file file)
-		     (save-excursion
-		       (goto-char (point-min))
-		       (if (re-search-forward "^#+TITLE: \\(.+\\)" (point-max) t)
-			   (match-string-no-properties 1)
-			 (file-name-nondirectory file))))))
-	(let ((title-string (format "** %s\n" title)))
-	  (put-text-property 0 (length title-string) 'file file title-string)
-	  (insert title-string))))
+    (org-agenda-kiosk-insert-file-index org-agenda-files)
     (insert "* Agendas\n")
     (dolist (agenda-command org-agenda-custom-commands)
       (let ((title-string (format "** %s\n" (second agenda-command))))
 	(put-text-property 0 (length title-string) 'command-key (first agenda-command) title-string)
 	(insert title-string)))
+    (insert "* Reading\n")
+    (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
   (goto-char (point-min))
