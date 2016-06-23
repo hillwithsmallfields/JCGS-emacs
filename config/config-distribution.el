@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2016-04-16 14:24:34 jcgs>
+;;; Time-stamp: <2016-06-23 20:34:27 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -41,7 +41,9 @@
 
 (when (boundp 'safe-local-variable-values)
   (add-to-list 'safe-local-variable-values
-	       (cons 'parser 'read)))
+	       (cons 'parser 'read))
+  (add-to-list 'safe-local-variable-values
+	       (cons 'TeX-Master t)))
 
 ;;;; editing
 
