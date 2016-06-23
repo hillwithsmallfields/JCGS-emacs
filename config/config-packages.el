@@ -44,6 +44,7 @@
   "Patch some packages."
   (interactive)
   (dolist (base '("org-20160411/org.el"
+		  "org-20160411/org-agenda.el"
 		  "org-20160411/org-compat.el"))
     (let* ((file (expand-file-name base package-user-dir))
 	   (elc (concat file "c")))
