@@ -42,15 +42,17 @@
     (goto-char from)
     (let ((results nil))
       (while (re-search-forward c-shim-function-pattern to t)
-	(let ((scope (match-string-no-properties 1))
-	      (type (match-string-no-properties 2))
-	      (name (match-string-no-properties 3))
-	      (args (mapcar 'c-shim-split-arg
-			    (split-string (match-string-no-properties 4) ",\\s-+"))))
-	  (push (list scope
-		      type name
-		      args)
-		results)))
+	(unless (save-match-data
+		  (string-match "typedef" (match-string-no-properties 0)))
+	  (let ((scope (match-string-no-properties 1))
+		(type (match-string-no-properties 2))
+		(name (match-string-no-properties 3))
+		(args (mapcar 'c-shim-split-arg
+			      (split-string (match-string-no-properties 4) ",\\s-+"))))
+	    (push (list scope
+			type name
+			args)
+		  results))))
       (nreverse results))))
 
 (defun c-shim-from-file (file)
@@ -91,10 +93,17 @@
   "Return a formatting directive to suit ARG."
   (let ((type (car arg)))
     (cond
+     ((string-match "u?int64* " type) "%#lx")
      ((string-match "u?int[0-9]* " type) "%#x")
      ((string= "char * " type) "\\\"%s\\\"")
-     ((string-match "\\*$" type) "%p")
+     ((string-match "\\*" type) "%p")
      (t "%#x"))))
+
+(defvar c-shim-pre-specials nil
+  "Alist of names to extra code to insert before the target calls.")
+
+(defvar c-shim-post-specials nil
+  "Alist of names to extra code to insert after the target calls.")
 
 (defun c-shim-generate-function (function-descr)
   "Insert a function for FUNCTION-DESCR."
@@ -114,9 +123,11 @@
 		       args
 		       ", "))
     (insert ")\\n\", " bare-args-string ");\n  ")
+    (insert (or (cdr (assoc name c-shim-pre-specials)) ""))
     (unless is-void
       (insert "result = "))
     (insert name "(" bare-args-string ");\n")
+    (insert (or (cdr (assoc name c-shim-post-specials)) ""))
     (unless is-void
       (insert "  fprintf(stderr, \"result of " name " is %x\\n\", result);\n")
       (insert "  return result;\n"))
@@ -143,9 +154,13 @@
 	       :test 'string=))
     dirs))
 
-(defun c-shim-from-files (shim-source-file shim-header-file &rest headers)
-  "Make a SHIM-SOURCE-FILE and SHIM-HEADER-FILE from HEADERS.
-Interactively, prompts for a directory to use the headers from."
+(defun c-shim-from-files (shim-source-file
+			  shim-header-file
+			  shim-helper-file
+			  &rest headers)
+  "Make SHIM-SOURCE-FILE and SHIM-HEADER-FILE from SHIM-HELPER-FILE and HEADERS.
+Interactively, prompts for a directory to use the headers from.
+SHIM-HELPER-FILE is a file to insert as a preamble."
   (interactive
    (let ((shim-source-file (read-file-name "Make shim source file: "))
 	 (shim-header-file (read-file-name "Make shim header file: "))
@@ -164,6 +179,10 @@ Interactively, prompts for a directory to use the headers from."
       (erase-buffer)
       (insert "/* Generated at " (current-time-string) " */\n")
       (c-shim-includes headers)
+      (when (and (stringp shim-helper-file)
+		 (file-readable-p shim-helper-file))
+	(insert-file-contents shim-helper-file)
+	(goto-char (point-max)))
       (mapcar 'c-shim-generate-function
 	      functions)
       (basic-save-buffer)
@@ -174,7 +193,7 @@ Interactively, prompts for a directory to use the headers from."
       (mapcar 'c-shim-generate-prototype
 	      functions)
       (basic-save-buffer)
-      (fset (intern edit-function-name )
+      (fset (intern edit-function-name)
 	    `(lambda ()
 	       (interactive)
 	       (dolist (name ',(mapcar (lambda (function) (nth 2 function))
