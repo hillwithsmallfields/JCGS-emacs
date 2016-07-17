@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2016-07-17 21:47:29 jcgs>
+;;; Time-stamp: <2016-07-17 21:59:23 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -64,6 +64,7 @@
 		  entries))
 	  (goto-char entry-start)
 	  (beginning-of-line 1)
+	  (setq entry-end (point))
 	  (message "resuming search from %d" (point))))
       entries)))
 
@@ -78,13 +79,21 @@ Argument INPUT-FILE is the input file."
 	(dolist (para (cdr entry))
 	  (princ (format "    %s\n\n" para)))))))
 
+(defun journal-html-to-org-add-entries (entries)
+  "Add ENTRIES to the current file."
+  (dolist (entry entries)
+    (apply work-log-open-date (car entry))
+    (dolist (para (cdr entry))
+      (insert "    " para "\n\n"))))
+
 (defun journal-html-to-org-add-file (org-file html-file)
   "Into ORG-FILE add HTML-FILE.
 It always adds the new file at the end."
   (interactive "FOrg file: \nfHTML file: \n")
   (find-file org-file)
   (goto-char (point-max))
-)
+  (journal-html-to-org-add-entries
+   (journal-html-get-file-entries html-file)))
 
 (defun file-name-last-directory (directory)
   "Return the last directory part of DIRECTORY."
@@ -100,8 +109,10 @@ It always adds the new file at the end."
 	 (html-files (directory-files directory t "[0-9][0-9]-[0-9][0-9]\\.html")))
     (find-file org-filename)
     (erase-buffer)
-    (dolist (html-file html-files)
-      (journal-html-to-org-add-file org-filename html-file))
+    (journal-html-to-org-add-entries
+     (apply 'concatenate 'list
+	    (mapcar 'journal-html-get-file-entries
+		    html-files)))
     (basic-save-buffer)))
 
 (provide 'journal-html-to-org)
