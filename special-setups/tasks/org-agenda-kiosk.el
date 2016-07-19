@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-06-18 20:57:05 jcgs>
+;;; Time-stamp: <2016-07-19 21:39:35 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -44,7 +44,7 @@
 ;; Minor mode for use over org-mode ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar org-agenda-portrait-keypad t
+(defvar org-agenda-portrait-keypad nil
   "Whether the keypad has a portrait orientation.")
 
 (defvar org-agenda-kiosk-mode-map
@@ -67,15 +67,25 @@
 	  ;; (define-key map [ kp-kp-add ] ')
 	  ;; (define-key map [ kp-enter ] ')
 	  )
+      ;; landscape keypad
       (define-key map [ kp-left ] 'org-agenda-kiosk-previous)
+      (define-key map [ kp-4 ] 'org-agenda-kiosk-previous)
       (define-key map [ kp-right ] 'org-agenda-kiosk-next)
-      (define-key map [ kp-up ] 'org-agenda-kiosk-up-level)
-      (define-key map [ kp-down ] 'org-agenda-kiosk-down-or-cycle-level)
+      (define-key map [ kp-6 ] 'org-agenda-kiosk-next)
+      (define-key map [ kp-down ] 'org-agenda-kiosk-up-level)
+      (define-key map [ kp-2 ] 'org-agenda-kiosk-up-level)
+      (define-key map [ kp-up ] 'org-agenda-kiosk-down-or-cycle-level)
+      (define-key map [ kp-8 ] 'org-agenda-kiosk-down-or-cycle-level)
       (define-key map [ kp-begin ] 'org-agenda-kiosk-files-list)
-      (define-key map [ kp-next ] 'org-metaup)
-      (define-key map [ kp-end ] 'org-metadown)
-      (define-key map [ kp-prior ] 'org-priority-up)
-      (define-key map [ kp-home ] 'org-priority-down)
+      (define-key map [ kp-5 ] 'org-agenda-kiosk-files-list)
+      (define-key map [ kp-end ] 'org-metaup)
+      (define-key map [ kp-1 ] 'org-metaup)
+      (define-key map [ kp-next ] 'org-metadown)
+      (define-key map [ kp-3 ] 'org-metadown)
+      (define-key map [ kp-home ] 'org-priority-up)
+      (define-key map [ kp-7 ] 'org-priority-up)
+      (define-key map [ kp-prior ] 'org-priority-down)
+      (define-key map [ kp-9 ] 'org-priority-down)
 
       ;; (define-key map [ kp-divide ] ')
       ;; (define-key map [ kp-multiply ] ')
@@ -211,6 +221,7 @@
   (interactive)
   (setq debug-on-error t)
   (keypad-setup 'none)
+  ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (let ((no-versor t))
     (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
