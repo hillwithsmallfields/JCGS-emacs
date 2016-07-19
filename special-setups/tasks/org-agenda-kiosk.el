@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-19 21:39:35 jcgs>
+;;; Time-stamp: <2016-07-19 21:25:26 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -191,12 +191,16 @@
 	  (define-key map [ up ] 'previous-line)
 	  (define-key map [ right] 'org-agenda-kiosk-files-select)
 	  )
-      (define-key map "n" 'next-line)
+      ;; portrait keypad
       (define-key map "p" 'previous-line)
+      (define-key map "n" 'next-line)
       (define-key map " " 'org-agenda-kiosk-files-select)
-      (define-key map [ kp-down ] 'next-line)
-      (define-key map [ kp-up ] 'previous-line)
-      (define-key map [ kp-right] 'org-agenda-kiosk-files-select)
+      (define-key map [ kp-left ] 'previous-line)
+      (define-key map [ kp-4 ] 'previous-line)
+      (define-key map [ kp-right ] 'next-line)
+      (define-key map [ kp-6 ] 'next-line)
+      (define-key map [ kp-up ] 'org-agenda-kiosk-files-select)
+      (define-key map [ kp-8 ] 'org-agenda-kiosk-files-select)
       (define-key map [ kp-begin ] 'beginning-of-buffer)
       (define-key map [ down ] 'next-line)
       (define-key map [ up ] 'previous-line)
