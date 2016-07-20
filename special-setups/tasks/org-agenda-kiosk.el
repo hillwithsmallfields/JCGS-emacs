@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-19 21:25:26 jcgs>
+;;; Time-stamp: <2016-07-20 23:00:42 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -108,7 +108,8 @@
   "Minor mode to put kiosk keys onto org-mode."
   nil
   " agenda kiosk"
-  'org-agenda-kiosk-mode-map)
+  'org-agenda-kiosk-mode-map
+  (keypad-setup 'none))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File selection buffer ;;
