@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2015-05-22 07:15:03 jcgs>
+;;; Time-stamp: <2016-07-20 22:19:58 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -12,6 +12,9 @@
       eval-expression-print-length nil
       eval-expression-print-level nil
       delete-old-versions t)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (unless (and (stringp user-emacs-directory)
 	     (file-directory-p user-emacs-directory)
