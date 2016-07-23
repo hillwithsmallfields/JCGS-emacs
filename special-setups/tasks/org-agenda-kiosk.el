@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-20 23:00:42 jcgs>
+;;; Time-stamp: <2016-07-23 18:48:45 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -154,6 +154,7 @@
     (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
   (switch-to-buffer org-agenda-kiosk-files-buffer)
+  (delete-other-windows)
   (goto-char (point-min))
   (when initial-file
     (unless (catch 'found
