@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  John Sturdy
 
-;; Time-stamp: <2016-06-27 20:11:57 jcgs>
+;; Time-stamp: <2016-07-24 21:20:23 jcgs>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -28,8 +28,6 @@
 ;; - http://www.gnu.org/software/emacs/manual/html_node/elisp/Packaging.html
 
 ;;; Code:
-
-(require 'package)
 
 (setq package-user-dir (substitute-in-file-name "$EHOME/emacs-packages"))
 (unless (file-directory-p package-user-dir)
