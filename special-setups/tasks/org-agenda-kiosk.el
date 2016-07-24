@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-24 20:29:24 jcgs>
+;;; Time-stamp: <2016-07-24 21:26:14 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -233,5 +233,12 @@
     (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
   (jcgs/org-agenda-monitor-start)
   (org-agenda-kiosk-files-list))
+
+;; temporary load, until I work out how to get it there using the
+;; package system
+(unless (featurep 'htmlize)
+  (let ((file "~/emacs-packages/htmlize-20130207.1202/htmlize-autoloads.el"))
+    (when (file-readable-p file)
+      (load-file file))))
 
 (remove-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
