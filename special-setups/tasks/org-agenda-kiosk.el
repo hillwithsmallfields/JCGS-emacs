@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-20 23:00:42 jcgs>
+;;; Time-stamp: <2016-07-24 19:55:47 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -232,3 +232,5 @@
     (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
   (jcgs/org-agenda-monitor-start)
   (org-agenda-kiosk-files-list))
+
+(remove-hook 'kill-emacs-query-functions 'jcgs/org-maybe-push-to-mobile)
