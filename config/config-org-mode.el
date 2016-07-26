@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-03-28 14:17:48 jcgs>
+;;; Time-stamp: <2016-07-02 12:31:21 jcgs>
 
 (require 'org)
 
@@ -146,13 +146,13 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
 	  ((tags-todo "urgent")
 	   (tags-todo "PRIORITY=\"A\"")
 	   (tags-todo "today")
+	   (tags-todo "soon/OPEN")
+	   (tags-todo "soon/TODO")
 	   ,@earlies
 	   (agenda "")
 	   (tags-todo "next")
 	   ,@lates
-	   (tags-todo "soon/OPEN")
 	   (tags-todo "PRIORITY=\"B\"")
-	   (tags-todo "soon/TODO")
 	   )
 	  nil
 	  ,(jcgs/org-make-custom-agenda-file-names "current"))))
@@ -186,7 +186,7 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "At work" "w" 'tags-todo "@office")
 (jcgs/def-org-agenda-custom-command "weekEnd" "E" 'tags-todo "weekend")
 (jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "urgent") (tags-todo "PRIORITY=\"A\"")))
-(jcgs/def-org-agenda-custom-command "Soon" "U" '((tags-todo "soon") (tags-todo "PRIORITY=\"B\"")))
+(jcgs/def-org-agenda-custom-command "Soon" "s" 'tags-todo "soon")
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
 
