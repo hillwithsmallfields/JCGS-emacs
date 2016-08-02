@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2016-05-23 13:20:50 johstu01>
+;;; Time-stamp: <2016-08-02 17:54:38 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -38,11 +38,11 @@
  (when (at-work)
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src" "-src-")
   (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched" "-uniSched-")
-  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/farms" "-farms-")
-  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/hapsfarm" "-hapsfarm-" 
+  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/trunk/work/farms" "-farms-")
+  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/trunk/work/hapsfarm/" "-hapsfarm-" 
 				       ". ~/.bash_profile\n" ; ". ~/.bash_profile; module load eda synopsys/xactors/2015.03"
 				       )
-  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/profpgafarm" "-profpgafarm-"
+  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/trunk/work/profpgafarm" "-profpgafarm-"
 				       ". ~/.bash_profile\n" ;". ~/.bash_profile; module load eda prodesign/proFPGA/2015C"
 				       )
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/gocommons" "-gocommons-")
