@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-24 21:26:14 jcgs>
+;;; Time-stamp: <2016-07-27 06:04:15 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -87,7 +87,7 @@
       (define-key map [ kp-prior ] 'org-priority-down)
       (define-key map [ kp-9 ] 'org-priority-down)
 
-      ;; (define-key map [ kp-divide ] ')
+      (define-key map [ kp-divide ] 'save-all)
       ;; (define-key map [ kp-multiply ] ')
       ;; (define-key map [ kp-subtract ] ')
       ;; (define-key map [ kp-kp-add ] ')
