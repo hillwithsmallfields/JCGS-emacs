@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-07-27 06:04:15 jcgs>
+;;; Time-stamp: <2016-08-09 21:22:34 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -111,6 +111,29 @@
   'org-agenda-kiosk-mode-map
   (keypad-setup 'none))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Log kiosk actions ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar org-agenda-kiosk-log-file (expand-file-name "kiosk-log.org"
+						    org-directory)
+  "File to log agenda kiosk activity into.")
+
+(defun org-agenda-kiosk-log (level string)
+  "Make a log entry for LEVEL with STRING."
+  (let ((log-buffer (find-buffer-visiting org-agenda-kiosk-log-file)))
+    (if (null log-buffer)
+	(find-file org-agenda-kiosk-log-file)
+      (set-buffer log-buffer)
+      (revert-buffer t t))
+    (goto-char (point-end))
+    (insert (make-string level ?*)
+	    (format-time-string " [%Y-%m-%d %H:%M] ")
+	    (system-name) " "
+	    string
+	    "\n")
+    (basic-save-buffer)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File selection buffer ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,6 +166,7 @@
     (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Agenda files*"))
     (set-buffer org-agenda-kiosk-files-buffer)
     (erase-buffer)
+    (setq header-line-format '("Last updated" org-agenda-monitor-last-updated))
     (insert "* Files\n")
     (org-agenda-kiosk-insert-file-index org-agenda-files)
     (insert "* Agendas\n")
@@ -171,7 +195,9 @@
   (let ((file (get-text-property (point) 'file)))
     (if (stringp file)
 	(if (file-exists-p file)
-	    (find-file file)
+	    (progn
+	      (find-file file)
+	      (hide-sublevels 1))
 	  (error "File %s is missing" file))
       (let ((command-key (get-text-property (point) 'command-key)))
 	(if (stringp command-key)
@@ -225,7 +251,9 @@
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
   (interactive)
+  (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
+  (setq org-startup-folded t)
   (keypad-setup 'none)
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)

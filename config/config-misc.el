@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-05-11 11:25:06 johstu01>
+;;; Time-stamp: <2016-07-01 20:09:51 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
