@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-09 21:22:34 jcgs>
+;;; Time-stamp: <2016-08-10 07:14:55 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -9,6 +9,8 @@
 ;;; I do them.  Some related software will look for incoming changes
 ;;; to the agenda files, read the new versions, and produce a new
 ;;; agenda.
+
+(require 'org)
 
 (defun org-agenda-kiosk-next ()
   "Move to the next entry."
