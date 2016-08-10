@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-10 07:14:55 jcgs>
+;;; Time-stamp: <2016-08-10 07:33:51 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -221,7 +221,7 @@
 	  (define-key map [ up ] 'previous-line)
 	  (define-key map [ right] 'org-agenda-kiosk-files-select)
 	  )
-      ;; portrait keypad
+      ;; landscape keypad
       (define-key map "p" 'previous-line)
       (define-key map "n" 'next-line)
       (define-key map " " 'org-agenda-kiosk-files-select)
@@ -245,6 +245,35 @@
 	major-mode 'org-agenda-kiosk-files-mode
 	mode-name "Agenda file selector")
   (use-local-map org-agenda-kiosk-files-map))
+
+(if org-agenda-portrait-keypad
+	(progn
+	  ;; (define-key org-agenda-mode-map "n" 'next-line)
+	  ;; (define-key org-agenda-mode-map "p" 'previous-line)
+	  ;; (define-key org-agenda-mode-map " " 'org-agenda-kiosk-files-select)
+	  ;; (define-key org-agenda-mode-map [ kp-down ] 'next-line)
+	  ;; (define-key org-agenda-mode-map [ kp-up ] 'previous-line)
+	  ;; (define-key org-agenda-mode-map [ kp-right] 'org-agenda-kiosk-files-select)
+	  ;; (define-key org-agenda-mode-map [ kp-begin ] 'beginning-of-buffer)
+	  ;; (define-key org-agenda-mode-map [ down ] 'next-line)
+	  ;; (define-key org-agenda-mode-map [ up ] 'previous-line)
+	  ;; (define-key org-agenda-mode-map [ right] 'org-agenda-kiosk-files-select)
+	  )
+      ;; landscape keypad
+      ;; (define-key org-agenda-mode-map "p" 'previous-line)
+      ;; (define-key org-agenda-mode-map "n" 'next-line)
+      ;; (define-key org-agenda-mode-map " " 'org-agenda-kiosk-files-select)
+      ;; (define-key org-agenda-mode-map [ kp-left ] 'previous-line)
+      ;; (define-key org-agenda-mode-map [ kp-4 ] 'previous-line)
+      ;; (define-key org-agenda-mode-map [ kp-right ] 'next-line)
+      ;; (define-key org-agenda-mode-map [ kp-6 ] 'next-line)
+      ;; (define-key org-agenda-mode-map [ kp-up ] 'org-agenda-kiosk-files-select)
+      ;; (define-key org-agenda-mode-map [ kp-8 ] 'org-agenda-kiosk-files-select)
+      ;; (define-key org-agenda-mode-map [ kp-begin ] 'beginning-of-buffer)
+      ;; (define-key org-agenda-mode-map [ down ] 'next-line)
+      ;; (define-key org-agenda-mode-map [ up ] 'previous-line)
+      ;; (define-key org-agenda-mode-map [ right] 'org-agenda-kiosk-files-select)
+      )
 
 (defun org-agenda-kiosk-on ()
   "Turn kiosk mode on in this buffer."
