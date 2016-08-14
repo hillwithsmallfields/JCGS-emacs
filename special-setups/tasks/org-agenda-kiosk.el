@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-10 07:33:51 jcgs>
+;;; Time-stamp: <2016-08-14 15:24:38 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -128,7 +128,7 @@
 	(find-file org-agenda-kiosk-log-file)
       (set-buffer log-buffer)
       (revert-buffer t t))
-    (goto-char (point-end))
+    (goto-char (point-max))
     (insert (make-string level ?*)
 	    (format-time-string " [%Y-%m-%d %H:%M] ")
 	    (system-name) " "
@@ -199,11 +199,14 @@
 	(if (file-exists-p file)
 	    (progn
 	      (find-file file)
-	      (hide-sublevels 1))
+	      (org-overview))
 	  (error "File %s is missing" file))
       (let ((command-key (get-text-property (point) 'command-key)))
 	(if (stringp command-key)
-	    (org-agenda nil command-key) ; todo: put it in a new mode that will define the keys, including one to get back to here, like using org-agenda-kiosk-on
+	    (progn
+	      (message "Preparing agenda...")
+	      (org-agenda nil command-key) ; todo: put it in a new mode that will define the keys, including one to get back to here, like using org-agenda-kiosk-on
+	      (message "Preparing agenda... done"))
 	  (error "Neither file nor agenda specified here"))))))
 
 (defvar org-agenda-kiosk-files-map
