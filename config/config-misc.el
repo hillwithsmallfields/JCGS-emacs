@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2016-07-01 20:09:51 jcgs>
+;;; Time-stamp: <2016-08-17 10:42:31 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -470,5 +470,7 @@ Argument DAYS is the number of days to fast for."
 	  (message "Checking out commit %s in %s" id default-directory)
 	  (shell-command (concat "git checkout " id)))
       (error "Could not find commit"))))
+
+(add-to-list 'auto-mode-alist '("\\.gitdiffs" . diff-mode))
 
 ;;; end of config-misc.el
