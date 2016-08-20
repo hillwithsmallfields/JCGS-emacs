@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2016-08-14 20:08:40 jcgs>
+;;; Time-stamp: <2016-08-20 20:17:01 jcgs>
 
 (setq debug-on-error t)
 
@@ -36,11 +36,12 @@
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
 						  file))
 		 t))
-  (setq org-reading-files (let ((reading-dir (substitute-in-file-name
+  (setq org-reading-files (cons (substitute-in-file-name "$ORG/guide.org")
+			   (let ((reading-dir (substitute-in-file-name
 					      "$COMMON/noticeboard-reading")))
 			    (mapcar (lambda (file)
 				      (expand-file-name file reading-dir))
-				    '("advices-and-queries.org")))))
+				    '("advices-and-queries.org"))))))
 
 (find-file work-log-file)
 (if (fboundp 'work-log-mode)
@@ -59,6 +60,8 @@
 
 (defun jcgs/emacs-pre-shutdown-function ()
   "Function to run soon before shutdown."
+  (when (fboundp 'jcgs/org-revert-agenda-files)
+    (jcgs/org-revert-agenda-files))
   (save-all-buffers-no-ask)
   (org-mobile-push))
 
