@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-14 15:24:38 jcgs>
+;;; Time-stamp: <2016-08-14 20:04:26 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -39,8 +39,7 @@
 	(progn
 	  (show-children 1)
 	  (goto-char child-level))
-      ;; (org-todo) ; put this on a separate key
-      )))
+      (org-show-entry))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode for use over org-mode ;;
@@ -165,7 +164,7 @@
   (interactive)
   (unless (and (bufferp org-agenda-kiosk-files-buffer)
 	       (buffer-live-p org-agenda-kiosk-files-buffer))
-    (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Agenda files*"))
+    (setq org-agenda-kiosk-files-buffer (get-buffer-create "*Organizer files*"))
     (set-buffer org-agenda-kiosk-files-buffer)
     (erase-buffer)
     (setq header-line-format '("Last updated" org-agenda-monitor-last-updated))
