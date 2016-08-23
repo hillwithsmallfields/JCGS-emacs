@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-14 20:04:26 jcgs>
+;;; Time-stamp: <2016-08-23 21:42:51 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -122,6 +122,7 @@
 
 (defun org-agenda-kiosk-log (level string)
   "Make a log entry for LEVEL with STRING."
+  (message "Agenda kiosk logging at level %d with %s" level string)
   (let ((log-buffer (find-buffer-visiting org-agenda-kiosk-log-file)))
     (if (null log-buffer)
 	(find-file org-agenda-kiosk-log-file)
