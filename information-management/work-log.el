@@ -1,7 +1,7 @@
 ;;; work-log.el --- keep track of things I've done
 ;; Based on my earlier tracked-compile.el
 
-;; Copyright (C) 2011, 2012, 2013, 2014, 2015  John Sturdy
+;; Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -62,8 +62,9 @@ Put a single blank line before and after whatever it inserts."
      (delete-blank-lines)
      (open-line 1)))
 
-(defun work-log-open-date (year month day)
-  "Ensure there is an open work-log record for YEAR MONTH DAY."
+(defun work-log-open-date (year month day &optional no-blank-lines)
+  "Ensure there is an open work-log record for YEAR MONTH DAY.
+With optional NO-BLANK-LINES, don't surround it with blank lines."
   (interactive (read-ymd-string))
 ;;  (find-file work-log-file)
   ;; we must be in something based on org-mode for some org-mode
@@ -71,9 +72,10 @@ Put a single blank line before and after whatever it inserts."
   ;; function each time, because it kills all local variables
   (unless (eq major-mode 'work-log-mode)
     (work-log-mode))
-  ;; todo: put blank lines before and after headings
-  (with-surrounding-blank-lines
-   (org-datetree-find-date-create (list month day year))))
+  (if no-blank-lines
+      (org-datetree-find-date-create (list month day year))
+    (with-surrounding-blank-lines
+     (org-datetree-find-date-create (list month day year)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; logged shell commands ;;
