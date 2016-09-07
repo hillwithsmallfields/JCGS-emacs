@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2016-06-23 20:34:27 jcgs>
+;;; Time-stamp: <2016-09-06 13:28:59 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -464,7 +464,7 @@ Not persistent between sessions, and reset each day.")
 	(find-file jcgs/shell-mode-accumulated-command-history-file)
 	(goto-char (point-max))
 	(when (let ((date (decode-time)))
-		(work-log-open-date (nth 5 date) (nth 4 date) (nth 3 date)))
+		(work-log-open-date (nth 5 date) (nth 4 date) (nth 3 date) t))
 	  (setq jcgs/shell-mode-recorded-commands nil))
 	(goto-char (point-max))
 	(dolist (command-line (split-string shell-command "\n" t))

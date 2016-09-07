@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  John Sturdy
 
-;; Time-stamp: <2016-07-24 21:20:23 jcgs>
+;; Time-stamp: <2016-09-06 15:51:13 johstu01>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -35,6 +35,7 @@
 (require 'package)
 (add-to-list 'package-archives (cons "marmalade" "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/"))
+(package-initialize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; making my choice available ;;
