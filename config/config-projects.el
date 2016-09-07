@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2016-08-02 17:54:38 johstu01>
+;;; Time-stamp: <2016-09-07 12:46:47 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -45,6 +45,7 @@
   (make-shell-for-directory-if-present "/nethome/johstu01/fpga/trunk/work/profpgafarm" "-profpgafarm-"
 				       ". ~/.bash_profile\n" ;". ~/.bash_profile; module load eda prodesign/proFPGA/2015C"
 				       )
+  (make-shell-for-directory-if-present "/nethome/johstu01/fpga/trunk/work/autotesting" "-autotesting-")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/gocommons" "-gocommons-")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/overseer" "-monit-")
   ;; (make-shell-for-directory-if-present "/work/johstu01/build/trunk/work/src/arm.com/uniSched/dryrun" "-dripfeed-")
