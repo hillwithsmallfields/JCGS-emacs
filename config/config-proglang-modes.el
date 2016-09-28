@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2016-04-05 11:22:27 johstu01>
+;;; Time-stamp: <2016-09-28 14:24:51 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
@@ -20,7 +20,8 @@
 (defun jcgs-c-mode-hook ()
   "My hook for setting up C mode."
   (define-key c-mode-map "\C-cc" 'compile)
-  (define-key c-mode-map "\C-cf" 'cflow-file))
+  (define-key c-mode-map "\C-cf" 'cflow-file)
+  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t))
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
 
@@ -71,15 +72,19 @@
   (not (zerop (length (shell-command-to-string "which epylint")))))
 
 (defun jcgs/regularize-whitespace ()
-  (let ((delete-trailing-lines t))
-    (delete-trailing-whitespace nil nil))
-  ;; say we didn't write the file ourselves
-  nil)
+  "Regularize whitespace, typically before saving a file."
+  (let* ((tabs (count-matches "	" (point-min) (point-max)))
+	 (lines (count-lines (point-min) (point-max)))
+	 (delete-trailing-lines t))
+    ;; untabify only if there are just a few tabs
+    (when (> (* tabs 24) lines)
+      (untabify (point-min) (point-max)))
+    (delete-trailing-whitespace)))
 
 (defun jcgs/python-mode-hook ()
   "My hook for setting up python mode."
   (message "In jcgs/python-mode-hook for buffer=%S buffer-read-only=%S file=%S directory=%S" (current-buffer) buffer-read-only (buffer-file-name) default-directory)
-  (add-hook 'write-file-functions 'jcgs/regularize-whitespace nil t)
+  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
   (when (jcgs/pylint-available)
     (unless buffer-read-only
       ;; (setq flymake-log-level 3)
