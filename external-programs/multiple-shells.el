@@ -1,4 +1,4 @@
-;;; Time-stamp: <2016-05-23 12:33:18 johstu01>
+;;; Time-stamp: <2016-10-06 11:24:58 johstu01>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -19,17 +19,23 @@
 
 (provide 'multiple-shells)
 
-(defun make-named-shell (name &optional directory command)
-  "Make a shell called NAME, optionally cd it to DIRECTORY and give it COMMAND."
-  (interactive "sShell name: 
+(defun make-named-shell (name &optional directory host command)
+  "Make a shell called NAME, optionally cd it to DIRECTORY having logged in to HOST, and give it COMMAND."
+  (interactive "sShell name:
 DDirectory to start %s in: ")
-  (if (and (or (null directory)
+  (if (and (or host			; other hosts have other directory trees
+	       (null directory)
 	       (file-directory-p directory))
 	   (not (get-buffer name)))
       (progn
 	(sleep-for 2)
 	(let ((new-shell-buffer (shell)))
 	  (rename-buffer name)
+	  (when host
+	    (process-send-string
+		 (get-buffer-process new-shell-buffer)
+		 (format "ssh %s\n" host))
+	    (sleep-for 2))
 	  (if directory
 	      (let ((full-dir (expand-file-name
 			       (substitute-in-file-name directory))))

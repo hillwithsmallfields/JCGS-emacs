@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2016-09-07 12:46:47 johstu01>
+;;; Time-stamp: <2016-10-06 11:23:09 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -72,5 +72,55 @@
     (make-shell-for-directory-if-present (format "=%s=" login-host)
 					 "~"
 					 (format "echo ssh %s" login-host))))
+
+(defun run-command-in-shell-buffer (command buffer)
+  "Run COMMAND in BUFFER and return the result."
+  (interactive "sCommand: bRun %s in buffer: \n")
+  (set-buffer buffer)
+  (goto-char (point-max))
+  (let ((start (point)))
+    (comint-send-string (get-buffer-process buffer)
+	(concat command "\n"))
+    (sit-for 1)
+    (goto-char (point-max))
+    ;; (re-search-backward comint-prompt-regexp)
+    ;; (beginning-of-line -1)
+    (buffer-substring-no-properties start (point))))
+
+(defun get-shell-cwd (buffer)
+  "Get the directory of the shell in BUFFER."
+  (interactive "bBuffer: ")
+  (car (split-string (run-command-in-shell-buffer "pwd" buffer) "\n")))
+
+(defun get-shell-host (buffer)
+  "Get the host of the shell in BUFFER."
+  (interactive "bBuffer: ")
+  (car (split-string (run-command-in-shell-buffer "hostname -f" buffer) "\n")))
+
+(defun get-shell-locations ()
+  "Return a list of the shell buffers and their hosts and directories."
+  (save-window-excursion
+    (let ((result nil))
+      (dolist (buf (buffer-list))
+	(set-buffer buf)
+	(when (and (eq major-mode 'shell-mode)
+		   (get-buffer-process buf))
+	  (push (list (buffer-name buf)
+		      (get-shell-host buf)
+		      (get-shell-cwd buf))
+		result)))
+      result)))
+
+(defun list-shell-locations ()
+  "List the shell locations."
+  (interactive)
+  (find-file "~/emacs-shells.el")
+  (erase-buffer)
+  (dolist (buf (get-shell-locations))
+    (insert (format "(make-named-shell \"%s\" \"%s\" \"%s\")\n"
+		    (first buf)
+		    (third buf)
+		    (second buf))))
+  (basic-save-buffer))
 
 ;;; config-projects.el ends here
