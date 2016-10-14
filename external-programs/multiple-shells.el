@@ -1,4 +1,4 @@
-;;; Time-stamp: <2016-10-06 11:24:58 johstu01>
+;;; Time-stamp: <2016-10-06 11:40:21 johstu01>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -37,8 +37,10 @@ DDirectory to start %s in: ")
 		 (format "ssh %s\n" host))
 	    (sleep-for 2))
 	  (if directory
-	      (let ((full-dir (expand-file-name
-			       (substitute-in-file-name directory))))
+	      (let ((full-dir (if host 	; foreign directory tree:
+				  directory ; so pass literally
+				(expand-file-name
+				 (substitute-in-file-name directory)))))
 		(process-send-string
 		 (get-buffer-process new-shell-buffer)
 		 (format "cd %s\n" (convert-standard-filename full-dir)))
