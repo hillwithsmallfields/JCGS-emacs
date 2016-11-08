@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-07-02 12:31:21 jcgs>
+;;; Time-stamp: <2016-11-07 11:06:58 johstu01>
 
 (require 'org)
 
@@ -245,8 +245,8 @@ The filenames to save in are added by this function"
 						    ".org$")))))
 
 (defvar jcgs/shell-mode-accumulated-command-history-file
-  (if (file-directory-p "/work/johstu01")
-      "/work/johstu01/work-org/shell-command-history.org"
+  (if (file-directory-p "/nethome/johstu01")
+      "/nethome/johstu01/work-org/shell-command-history.org"
     (substitute-in-file-name "$ORG/shell-command-history.org"))
   "My accumulated command history.")
 
