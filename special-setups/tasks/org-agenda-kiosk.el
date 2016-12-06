@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-08-23 21:42:51 jcgs>
+;;; Time-stamp: <2016-12-06 18:39:11 johstu01>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -26,7 +26,10 @@
   "Move up a level."
   (interactive)
   (if (<= (org-outline-level) 1)
-      (org-agenda-kiosk-files-list (buffer-file-name))
+      (progn
+	(when (buffer-file-name)
+	  (basic-save-buffer))
+	(org-agenda-kiosk-files-list (buffer-file-name)))
     (outline-up-heading 1)
     (hide-subtree)))
 
@@ -291,6 +294,7 @@
   (keypad-setup 'none)
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
+  (global-auto-revert-mode 1)
   (let ((no-versor t))
     (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
   (jcgs/org-agenda-monitor-start)
