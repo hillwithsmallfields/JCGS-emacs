@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2016-12-12 11:43:12 johstu01>
+;;; Time-stamp: <2016-12-12 11:53:14 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
 
@@ -510,6 +510,8 @@ read-only (although I don't think I'd changed anything related)
   (define-key shell-mode-map "\C-cr" 'comint-fix-ssh-known-hosts)
   (define-key shell-mode-map "\C-c\C-c" 'jcgs/shell-mode-interrupt-subjob)
   (define-key shell-mode-map "\r" 'jcgs/shell-mode-send-input)
+  (make-local-variable 'comint-prompt-regexp)
+  (setq comint-prompt-regexp "^[^#$%>\n]*[#$%>] *")
   (highlight-regexp "succeeded" 'hi-green)
   (highlight-regexp "failed" 'hi-red))
    
