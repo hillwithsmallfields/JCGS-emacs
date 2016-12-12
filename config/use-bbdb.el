@@ -1,5 +1,5 @@
 ;;; use-bbdb.el --- setup for bbdb
-;;; Time-stamp: <2014-01-03 08:56:30 jcgs>
+;;; Time-stamp: <2016-12-12 22:52:09 jcgs>
 
 (use-package bbdb
 	     "$GATHERED/emacs/bbdb"
@@ -19,5 +19,7 @@
 		     )
 )
 	     (bbdb-initialize))
+
+(add-to-list 'load-path (substitute-in-file-name "$EMACS/my-extensions-to-packages/bbdb/"))
 
 ;;; use-bbdb.el ends here
