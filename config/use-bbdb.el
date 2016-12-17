@@ -1,5 +1,5 @@
 ;;; use-bbdb.el --- setup for bbdb
-;;; Time-stamp: <2016-12-12 22:52:09 jcgs>
+;;; Time-stamp: <2016-12-17 16:59:58 jcgs>
 
 (use-package bbdb
 	     "$GATHERED/emacs/bbdb"
@@ -11,7 +11,7 @@
 	      (bbdb-insinuate-vm "bbdb-vm"
 				 "Hook BBDB into VM"))
 	     (setq bbdb-north-american-phone-numbers-p nil
-		   bbdb-file (substitute-in-file-name "$DROPBOX/org/bbdb")
+		   bbdb-file (substitute-in-file-name "$ORG/bbdb")
 		   bbdb/mail-auto-create-p 'bbdb-ignore-most-messages-hook
 		   bbdb-ignore-most-messages-alist
 		   '(("Subject" . "\\[OLRG]")
