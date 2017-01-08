@@ -1,4 +1,4 @@
-;;; Time-stamp: <2012-11-22 12:08:18 johnstu>
+;;; Time-stamp: <2017-01-08 21:32:50 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -23,10 +23,22 @@
 				       verbose)
   "Apply EDIT-LIST to the current buffer, and return the count of alterations.
 Each edit is a regexp and a replacement for that regexp.
+
 The edits are applied in order, to the whole buffer; that is, the buffer is
 edited throughout with the first one, then with the next one, and so on.
+
+If a replacement is function, it is called to get the text to use.
+If it is a list, it is iterated over.
+
+Elements of the list may be strings (normal replacement rules
+apply), or functions to call, or expressions to evaluate, or
+numbers to use as capture group references.
+
 If START and END are specified, replace only between them.
+
+
 See documentation of `replace-match' for further optional arguments.
+
 Optional argument FIXEDCASE is passed to `replace-match'.
 Optional argument LITERAL is passed to `replace-match'.
 Optional argument VERBOSE produces a report on the alterations made."
@@ -50,10 +62,36 @@ Optional argument VERBOSE produces a report on the alterations made."
 	(goto-char start)
 	(let* ((regexp (car edit))
 	       (replacement (cdr edit))
-	       (this-count 0))
+	       (this-count 0)
+	       (end-marker (make-marker)))
 	  (while (re-search-forward regexp end t)
-	    (replace-match replacement fixedcase literal)
+	    (let ((matched (match-string-no-properties 0)))
+	      (set-marker end-marker (match-end 0))
+	      ;; (message "Replacing %S with %S" matched replacement)
+	      (cond
+	       ((stringp replacement)
+		(replace-match replacement fixedcase literal))
+	       ((functionp replacement)
+		(replace-match (funcall replacement matched) fixedcase literal))
+	       ((consp replacement)
+		(replace-match
+		 (mapconcat (lambda (replace-element)
+			      ;; (message "Replacement element is %S" replace-element)
+			      (cond
+			       ((stringp replace-element)
+				replace-element)
+			       ((functionp replace-element)
+				(funcall replace-element matched))
+			       ((integerp replace-element)
+				(match-string-no-properties replace-element))
+			       ((consp replace-element)
+				(eval replace-element))))
+			    replacement
+			    "")
+		 fixedcase literal))))
+	    (goto-char end-marker)
 	    (setq this-count (1+ this-count)))
+	  (set-marker end-marker nil)
 	  (setq total-count (+ total-count this-count))
 	  (when verbose
 	    (push (format message-format regexp replacement this-count) messages)))))
