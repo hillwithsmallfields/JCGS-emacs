@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2016-11-12 18:10:04 jcgs>
+;;; Time-stamp: <2017-01-06 21:27:13 jcgs>
 
 (require 'org)
 
@@ -218,7 +218,7 @@ The filenames to save in are added by this function"
 
 ;; todo: make at least some of these into autoloads
 (require 'work-tasks)
-(require 'work-log)
+(require 'org-jcgs-journal)
 (require 'org-upwards-propagation)
 (add-hook 'org-clock-in-prepare-hook 'jcgs/org-propagate-openness-upward)
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-propagate-doneness-upwards t)
