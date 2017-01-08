@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2017-01-08 21:27:06 jcgs>
+;;; Time-stamp: <2017-01-08 22:13:37 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -75,21 +75,43 @@
      :link link
      :description description)))
 
+(defvar journal-html-file-person-names nil
+  "Cache for journal-html-get-file-person-name.")
+
 (defun journal-html-get-file-person-name (person-file &optional as-token)
   "From PERSON-FILE, find their full name.
 With optional AS-TOKEN, replace spaces in result with underscores."
   (save-excursion
-    (message "(journal-html-get-file-person-name %S)" person-file)
-    (find-file (expand-file-name person-file
-				 journal-people-directory))
-    (let ((base (save-excursion
-		  (goto-char (point-min))
-		  (if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
-		      (match-string-no-properties 1)
-		    person-file))))
-      (if as-token
-	  (subst-char-in-string 32 ?_ base)
-	base))))
+    ;; (message "(journal-html-get-file-person-name %S)" person-file)
+    (let* ((pair (assoc person-file journal-html-file-person-names)))
+      (unless pair
+	(find-file (expand-file-name person-file
+				     journal-people-directory))
+	(let ((name-from-file (save-excursion
+				(goto-char (point-min))
+				(if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
+				    (match-string-no-properties 1)
+				  person-file))))
+	  (setq pair (cons person-file name-from-file)
+		journal-html-file-person-names
+		(cons pair
+		      journal-html-file-person-names))))
+      (let ((base (cdr pair)))
+	(if as-token
+	    (subst-char-in-string 32 ?_ base)
+	  base)))))
+
+(defun journal-html-show-people-name-cache ()
+  "Show the name cache."
+  (interactive)
+  (with-output-to-temp-buffer "*Names*"
+    (let* ((fmt (format "%%%ds: %%s\n"
+			(apply 'max
+			       (mapcar 'length
+				       (mapcar 'car
+					       journal-html-file-person-names))))))
+      (dolist (pair journal-html-file-person-names)
+	(princ (format fmt (car pair) (cdr pair)))))))
 
 (defvar journal-html-to-org-edits
   '(("<a href=\"../../people/\\([^\"]+\\)\">\\([^<]+\\)</a>"
