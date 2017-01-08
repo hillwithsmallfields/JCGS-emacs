@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2016-08-20 20:17:01 jcgs>
+;;; Time-stamp: <2017-01-06 21:24:27 jcgs>
 
 (setq debug-on-error t)
 
@@ -30,7 +30,7 @@
 		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
 						      file))
 		     t))
-      (setq work-log-file "/nethome/johstu01/work-org/work-log.org"))
+      (setq jcgs/org-journal-file "/nethome/johstu01/work-org/work-log.org"))
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
@@ -43,9 +43,9 @@
 				      (expand-file-name file reading-dir))
 				    '("advices-and-queries.org"))))))
 
-(find-file work-log-file)
-(if (fboundp 'work-log-mode)
-    (work-log-mode)
+(find-file jcgs/org-journal-file)
+(if (fboundp 'jcgs/org-journal-mode)
+    (jcgs/org-journal-mode)
   (org-mode))
 
 (mapc (lambda (file)
