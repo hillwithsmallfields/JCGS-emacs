@@ -1,8 +1,9 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2016-07-18 21:26:42 jcgs>
+;;; Time-stamp: <2017-01-08 21:27:06 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
+(require 'journal-bio)			; for journal-people-directory
 
 (defvar journal-html-html-date-regexp
     "\\([0-9]\\{4\\}\\)-\\([a-z]\\{3\\}\\)-\\([0-9]\\{2\\}\\)"
@@ -23,13 +24,30 @@
 	       (encoded (encode-time 0 0 0 day month year)))
 	  (list year month day)))))
 
+(defvar journal-org-html-people-directory
+  (if (boundp 'personal-files-directory)
+      (expand-file-name "journal/people/org/" personal-files-directory)
+    "/tmp/journal/people")
+  "The directory containing the people files in the new system.")
+
 (org-add-link-type "journal-people" 'journal-people-open)
 (add-hook 'org-store-link-functions 'journal-people-store-link)
+
+(unless (file-directory-p journal-org-html-people-directory)
+  (make-directory journal-org-html-people-directory t))
 
 (defun journal-people-open (path)
   "Open the people entry at PATH."
   ;; todo: complete this
-  )
+  (message "Opening person file for %S" path)
+  (let* ((parts (save-match-data
+		  (split-string path "[ _]" t)))
+	 (forename (car parts))
+	 (surname (mapconcat 'identity (cdr parts) "_"))
+	 (file (concat journal-org-html-people-directory
+		       surname "/" forename ".html")))
+    (message "(journal-people-open %S)" file)
+    (find-file file)))
 
 (defun journal-people-store-link ()
   "Store a people link."
@@ -57,8 +75,29 @@
      :link link
      :description description)))
 
+(defun journal-html-get-file-person-name (person-file &optional as-token)
+  "From PERSON-FILE, find their full name.
+With optional AS-TOKEN, replace spaces in result with underscores."
+  (save-excursion
+    (message "(journal-html-get-file-person-name %S)" person-file)
+    (find-file (expand-file-name person-file
+				 journal-people-directory))
+    (let ((base (save-excursion
+		  (goto-char (point-min))
+		  (if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
+		      (match-string-no-properties 1)
+		    person-file))))
+      (if as-token
+	  (subst-char-in-string 32 ?_ base)
+	base))))
+
 (defvar journal-html-to-org-edits
-  '(("<a href=\"../../people/\\([^\"]+\\)\">\\([^<]+\\)</a>" . "[[journal-people:\\1][\\2]]")
+  '(("<a href=\"../../people/\\([^\"]+\\)\">\\([^<]+\\)</a>"
+     "[[journal-people:"
+     (journal-html-get-file-person-name (match-string-no-properties 1) t)
+     "]["
+     2
+     "]]")
     ("<a href=\"\\([0-9][0-9]-[0-9][0-9]\\).html#\\([0-9][0-9]\\)\">\\([^<]+\\)</a>" . "[[journal-date:\\1-\\2][\\3]]")
     ("<a href=\"../[0-9][0-9][0-9][0-9]/\\([0-9][0-9]-[0-9][0-9]\\).html#\\([0-9][0-9]\\)\">\\([^<]+\\)</a>" . "[[journal-date:\\1-\\2][\\3]]")
     )
@@ -69,22 +108,24 @@
   (save-excursion
     (switch-to-buffer (get-buffer-create " *Conversion*"))
     (erase-buffer)
+    (message "Converting contents of file %s" file)
     (insert-file-contents file)
     ;; (replace-regexp-alist journal-html-to-org-edits)
     (goto-char (point-max))
-    (unless (and (re-search-backward "^.*<hr>" (point-min) t)
-		 (> (point)
-		    (- (point-max) 400)))
-      (error "Could not find realistic end of journal"))
+    (unless (or (re-search-backward "^.*<hr>" (- (point-min) 400) t)
+		(progn
+		  (goto-char (point-max))
+		  (re-search-backward "^.*\\[<a href.+Next month" (- (point-min) 400) t)))
+      (error "Could not find realistic end of journal in %s" file))
     (let ((entry-end (point))
 	  (entries nil))
       (while (re-search-backward journal-html-html-date-header-regexp
 				 (point-min) t)
-	(message "Found one starting at %d" (point))
+	;; (message "Found one starting at %d" (point))
 	(let* ((raw-date (match-string-no-properties 1))
 	       (entry-start (line-end-position))
 	       (date (journal-html-to-org-date raw-date)))
-	  (message "Got %S at %d" date entry-start)
+	  ;; (message "Got %S at %d" date entry-start)
 	  (goto-char entry-end)
 	  (let ((paragraphs nil))
 	    (while (search-backward "</p>" entry-start t)
@@ -102,27 +143,28 @@
 	  (goto-char entry-start)
 	  (beginning-of-line 1)
 	  (setq entry-end (point))
-	  (message "resuming search from %d" (point))))
+	  ;; (message "resuming search from %d" (point))
+	  ))
       (bury-buffer)
       entries)))
 
-(defun journal-html-to-org-test (input-file)
-  "Test the reader.
-Argument INPUT-FILE is the input file."
-  (interactive "fInput file: ")
-  (let ((entries (journal-html-get-file-entries input-file)))
-    (with-output-to-temp-buffer "*Entries*"
-      (dolist (entry entries)
-	(princ (format "\n\n%S:\n" (car entry)))
-	(dolist (para (cdr entry))
-	  (princ (format "    %s\n\n" para)))))
-    (find-file "/tmp/journal.org")
-    (journal-html-to-org-add-entries entries)))
+;; (defun journal-html-to-org-test (input-file)
+;;   "Test the reader.
+;; Argument INPUT-FILE is the input file."
+;;   (interactive "fInput file: ")
+;;   (let ((entries (journal-html-get-file-entries input-file)))
+;;     (with-output-to-temp-buffer "*Entries*"
+;;       (dolist (entry entries)
+;; 	(princ (format "\n\n%S:\n" (car entry)))
+;; 	(dolist (para (cdr entry))
+;; 	  (princ (format "    %s\n\n" para)))))
+;;     (find-file "/tmp/journal.org")
+;;     (journal-html-to-org-add-entries entries)))
 
 (defun journal-html-to-org-add-entries (entries)
   "Add ENTRIES to the current file."
   (dolist (entry entries)
-    (apply 'work-log-open-date (car entry))
+    (apply 'jcgs/org-journal-open-date (car entry))
     (insert "\n")
     (dolist (para (cdr entry))
       (insert "   " para "\n\n"))))
@@ -131,6 +173,7 @@ Argument INPUT-FILE is the input file."
   "Into ORG-FILE add HTML-FILE.
 It always adds the new file at the end."
   (interactive "FOrg file: \nfHTML file: \n")
+  (message "(journal-html-to-org-add-file %S %S)" org-file html-file)
   (find-file org-file)
   (goto-char (point-max))
   (journal-html-to-org-add-entries
@@ -147,25 +190,30 @@ It always adds the new file at the end."
 (defun journal-html-to-org-directory (directory)
   "Make up an org version of the journal files in DIRECTORY."
   (interactive "DConvert journal in directory: ")
-  (let* ((dir-dirname (file-name-last-directory directory))
-	 (output-directory (expand-file-name ".." directory))
-	 (org-filename (expand-file-name (concat dir-dirname ".org") output-directory))
-	 (html-files (directory-files directory t "[0-9][0-9]-[0-9][0-9]\\.html")))
-    (find-file org-filename)
-    (erase-buffer)
-    (journal-html-to-org-add-entries
-     (apply 'concatenate 'list
-	    (mapcar 'journal-html-get-file-entries
-		    html-files)))
-    (replace-regexp-alist journal-html-to-org-edits)
-    (fill-individual-paragraphs (point-min) (point-max))
-    (basic-save-buffer)))
+  (when (file-directory-p directory)
+    (let* ((dir-dirname (file-name-last-directory directory))
+	   (output-directory (expand-file-name ".." directory))
+	   (org-filename (expand-file-name (concat
+					    ;; dir-dirname
+					    (file-name-nondirectory directory)
+					    ".org") output-directory))
+	   (html-files (directory-files directory t "[0-9][0-9]-[0-9][0-9]\\.html$")))
+      (message "Scanning files %S in dir-dirname %S, output dir %S, org file %S" html-files dir-dirname output-directory org-filename)
+      (find-file org-filename)
+      (erase-buffer)
+      (journal-html-to-org-add-entries
+       (apply 'concatenate 'list
+	      (mapcar 'journal-html-get-file-entries
+		      html-files)))
+      (replace-regexp-alist journal-html-to-org-edits)
+      (fill-individual-paragraphs (point-min) (point-max))
+      (basic-save-buffer))))
 
 (defun journal-html-to-org-subdirectories (directory)
   "Make up org versions of subdirectories of DIRECTORY."
   (interactive "DConvert journal in subdirectories of: ")
   (mapcar 'journal-html-to-org-directory
 	  (directory-files directory t
-			   "[0-9]\\{4\\}")))
+			   "[0-9]\\{4\\}$")))
 
 (provide 'journal-html-to-org)
