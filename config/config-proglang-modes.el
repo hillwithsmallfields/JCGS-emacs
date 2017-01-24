@@ -1,8 +1,8 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2016-09-28 14:24:51 johstu01>
+;;; Time-stamp: <2017-01-24 21:44:30 jcgs>
 
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -152,7 +152,7 @@
 ;; arduino-mode ;;
 ;;;;;;;;;;;;;;;;;;
 
-(let ((dir (substitute-in-file-name "$GATHERED/emacs/arduino-mode")))
+(let ((dir (substitute-in-file-name "$OPEN_PROJECTS/arduino-mode")))
   (when (file-directory-p dir)
     (add-to-list 'load-path dir)
     (autoload 'arduino-mode "arduino-mode"
