@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-12-06 18:39:11 johstu01>
+;;; Time-stamp: <2017-01-27 13:04:39 johstu01>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -291,6 +291,13 @@
   (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
   (setq org-startup-folded t)
+  (cond ((and (string-match "^whortleberry" (system-name))
+	      (getenv "DISPLAY"))
+	 (setq server-name "noticeboard")
+	 (server-start))
+	((not (string-match "^whortleberry" (system-name)))
+	 (setq server-name "remote-kiosk")
+	 (server-start)))
   (keypad-setup 'none)
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
