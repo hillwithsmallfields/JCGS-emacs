@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2017-01-08 21:53:14 jcgs>
+;;; Time-stamp: <2017-01-27 14:01:23 johstu01>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
 
@@ -513,7 +513,8 @@ read-only (although I don't think I'd changed anything related)
   (make-local-variable 'comint-prompt-regexp)
   (setq comint-prompt-regexp "^[^#$%>\n]*[#$%>] *")
   (highlight-regexp "succeeded" 'hi-green)
-  (highlight-regexp "failed" 'hi-red))
+  (highlight-regexp "failed" 'hi-red-b)
+  (highlight-lines-matching-regexp "^FAIL: " 'hi-red-b))
    
 (add-hook 'shell-mode-hook 'jcgs/shell-mode-setup)
 
