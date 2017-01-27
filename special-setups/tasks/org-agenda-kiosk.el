@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2016-12-06 18:39:11 johstu01>
+;;; Time-stamp: <2016-12-13 23:52:35 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -38,7 +38,9 @@
   (interactive)
   (let (child-level)
     (if (save-excursion
-	  (setq child-level (org-goto-first-child)))
+	  (setq child-level (if (org-goto-first-child)
+				(point)
+			      nil)))
 	(progn
 	  (show-children 1)
 	  (goto-char child-level))
