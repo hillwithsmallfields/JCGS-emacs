@@ -293,6 +293,13 @@
   (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
   (setq org-startup-folded t)
+  (cond ((and (string-match "^whortleberry" (system-name))
+	      (getenv "DISPLAY"))
+	 (setq server-name "noticeboard")
+	 (server-start))
+	((not (string-match "^whortleberry" (system-name)))
+	 (setq server-name "remote-kiosk")
+	 (server-start)))
   (keypad-setup 'none)
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
