@@ -1,5 +1,5 @@
 ;;;; finances-columns.el --- adjust the text I copy from my online bank statements
-;;; Time-stamp: <2014-03-03 09:34:09 jcgs>
+;;; Time-stamp: <2017-01-30 21:26:42 jcgs>
 
 (defvar finances-columns-recent-transactions-regexp
   (concat "^\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9][0-9][0-9]\\)"
@@ -81,6 +81,31 @@ With optional WITH-BALANCES, keep the balance column."
     (goto-char (point-min))
     (search-forward this-line)
     (move-to-column this-column)))
+
+(defun bank-date-to-iso-date (bank-date)
+  "Convert BANK-DATE to an ISO-8601 date."
+  (let ((day (substring bank-date 0 2))
+	(month-in (substring bank-date 3 6))
+	(year (substring bank-date 7 11)))
+    (format "%s-%02d-%s"
+	    year
+	    (1+ (position month-in calendar-month-abbrev-array :test 'equal))
+	    day)))
+
+(defun bank-spreadsheet-to-iso-dates (file)
+  "Convert a bank spreadsheet to ISO dates.
+Argument FILE is the file to convert."
+  (interactive "fConvert dates in file: ")
+  (find-file file)
+  (let ((raw-date-regexp (concat "[0-3][0-9] \\("
+				 (mapconcat 'identity
+					    calendar-month-abbrev-array
+					    "\\|")
+				 "\\) [12][0-9][0-9][0-9]")))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward raw-date-regexp (point-max) t)
+	(replace-match (bank-date-to-iso-date (match-string-no-properties 0)))))))
 
 (defvar finances-spreadsheet-mode-map
   (let ((map (make-sparse-keymap "Finances spreadsheet")))
