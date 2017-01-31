@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2016-09-06 16:10:16 johstu01>
+;;; Time-stamp: <2017-01-31 11:26:46 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -125,6 +125,7 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map "r" 'replace-regexp)
   (define-key jcgs-map "s" 'replace-string)
   (define-key jcgs-map "t" 'insert-tag-name)
+  (define-key jcgs-map "\C-t" 'toggle-truncate-lines)
   (define-key jcgs-map "w" 'write-region-and-find-it)
   (define-key jcgs-map "x" 'swap-windows)
   (define-key jcgs-map "y" 'browse-yank)
@@ -139,7 +140,7 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map-1 "l" 'load-other-window-file-name)
   (define-key jcgs-map-1 "q" 'revert-quickly)
   (define-key jcgs-map-1 "r" 'remember)
-  
+
   (define-key jcgs-task-tracking-map "a" 'jcgs/org-start-answering)
   (define-key jcgs-task-tracking-map "b" 'jcgs/org-start-break-or-browsing)
   (define-key jcgs-task-tracking-map "c" 'org-capture)
@@ -209,6 +210,7 @@ Returns how many buffers it brought up." t)
   (define-key minibuffer-local-map [ C-f12 ] 'next-history-element)
   (global-set-key [   C-f12 ] 'repeat-matching-complex-command))
 
+(require 'structure-edit)
 (jcgs-keys:jcgs-function-keys)
 
 ;;; end of jcgs-bindings.el
