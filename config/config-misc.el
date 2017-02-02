@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2017-01-06 21:22:43 jcgs>
+;;; Time-stamp: <2017-02-02 21:10:07 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -472,5 +472,14 @@ Argument DAYS is the number of days to fast for."
       (error "Could not find commit"))))
 
 (add-to-list 'auto-mode-alist '("\\.gitdiffs" . diff-mode))
+
+;;; ledger
+
+(let ((ledger-emacs-directory (substitute-in-file-name "$OPEN_PROJECTS/ledger-mode")))
+  (when (file-directory-p ledger-emacs-directory)
+    (add-to-list 'load-path ledger-emacs-directory)
+    (autoload 'ledger-mode "ledger-mode"
+      "A mode for editing ledger data files."
+      t)))
 
 ;;; end of config-misc.el
