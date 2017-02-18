@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-01-06 21:27:13 jcgs>
+;;; Time-stamp: <2017-02-18 19:46:08 jcgs>
 
 (require 'org)
 
@@ -43,9 +43,9 @@
       org-agenda-files (append (mapcar (function
 					(lambda (file)
 					  (expand-file-name (format "%s.org" file) org-directory)))
-				       '("general" 
+				       '("general"
 					 "shopping"
-					 ;; "eating" 
+					 ;; "eating"
 					 ;; "research"
 					 ;; "work"
 					 "projects"
@@ -179,7 +179,7 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "supermarKet shopping" "k" 'tags-todo "supermarket")
 (jcgs/def-org-agenda-custom-command "Daily Bread" "d" 'tags-todo "daily_bread")
 (jcgs/def-org-agenda-custom-command "Online" "o" 'tags-todo "online")
-(jcgs/def-org-agenda-custom-command "Ordered" "O" '((todo "ORDERED"))); todo: make this one go by keyword
+(jcgs/def-org-agenda-custom-command "Ordered" "O" '((todo "ORDERED")))
 (jcgs/def-org-agenda-custom-command "At home" "h" 'tags-todo "@home")
 (jcgs/def-org-agenda-custom-command "Hacking" "H" '((tags-todo "hacking")
 							  (tags-todo "programming")
@@ -193,9 +193,12 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "Writing" "W" 'tags-todo "writing")
 (jcgs/def-org-agenda-custom-command "At work" "w" 'tags-todo "@office")
 (jcgs/def-org-agenda-custom-command "weekEnd" "E" 'tags-todo "weekend")
-(jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "urgent") (tags-todo "PRIORITY=\"A\"")))
-(jcgs/def-org-agenda-custom-command "Soon" "s" 'tags-todo "soon")
+(jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "PRIORITY=\"A\"")
+						   (tags-todo "urgent")))
+(jcgs/def-org-agenda-custom-command "Soon" "s" '((tags-todo "PRIORITY=\"B\"")
+						 (tags-todo "soon")))
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
+(jcgs/def-org-agenda-custom-command "maKespace" "K" 'tags-todo "@Makespace")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
 
 (when (and (boundp 'work-agenda-file)
@@ -214,7 +217,6 @@ The filenames to save in are added by this function"
   (org-tags-view t))
 
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
-
 
 ;; todo: make at least some of these into autoloads
 (require 'work-tasks)
