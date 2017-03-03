@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2017-01-31 11:26:46 johstu01>
+;;; Time-stamp: <2017-03-03 16:47:00 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -170,8 +170,6 @@ Returns how many buffers it brought up." t)
 
   (global-set-key "\C-x\M-2" '2C-mode-map)
 
-  (jcgs-keys:setup-jcgs-map)
-
   (global-set-key [   C-f1 ] 'delete-other-windows)
   (global-set-key [ C-M-f1 ] 'delete-window)
 
@@ -210,7 +208,23 @@ Returns how many buffers it brought up." t)
   (define-key minibuffer-local-map [ C-f12 ] 'next-history-element)
   (global-set-key [   C-f12 ] 'repeat-matching-complex-command))
 
+(defun jcgs-keys:setup-super-map ()
+  "Bind some keys on the super modifier."
+  (interactive)
+  (global-set-key (kbd "s-a") 'beginning-of-defun)
+  (global-set-key (kbd "s-e") 'end-of-defun)
+  (global-set-key (kbd "s-b") 'backward-sexp)
+  (global-set-key (kbd "s-f") 'forward-sexp)
+  (global-set-key (kbd "s-u") 'backward-up-list)
+  (global-set-key (kbd "s-d") 'down-list)
+  (global-set-key (kbd "s-s") 'isearch-forward-regexp)
+  (global-set-key (kbd "s-r") 'isearch-backward-regexp)
+  (global-set-key (kbd "s-z") 'raise-sexp) ; z for zoom
+  (global-set-key (kbd "s-(") 'insert-parentheses))
+
 (require 'structure-edit)
 (jcgs-keys:jcgs-function-keys)
+(jcgs-keys:setup-jcgs-map)
+(jcgs-keys:setup-super-map)
 
 ;;; end of jcgs-bindings.el
