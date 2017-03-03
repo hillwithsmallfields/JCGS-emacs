@@ -34,9 +34,7 @@
 				"$EHOME/JCGS-emacs"
 				"$EHOME/JCGS-org-mode"))
       (let ((base (substitute-in-file-name base-description)))
-	(when (eq (compare-strings name 0 (length base)
-				   base nil nil)
-		  t)
+	(when (string-prefix-p base name)
 	  (throw 'trimmed (concat base-description
 				  (substring name (length base)))))))
     name))
