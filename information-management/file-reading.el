@@ -81,15 +81,21 @@ Optional NOTE may be added."
     (save-window-excursion
       (find-file jcgs/files-read-log)
       (goto-char (point-max))
-      (unless (search-backward (concat trimmed-form ",") (point-min) t)
+      (if (search-backward (concat trimmed-form ",") (point-min) t)
+	  ;; already got this file; update note
+	  (if (looking-at "^[^,]+,[-0-9]+,\\(.+\\)")
+	      (replace-match note t t nil 1)
+	    (end-of-line 1)
+	    (insert "," note))
+	;; new file for the collection
 	(insert trimmed-form ","
 		(format-time-string "%F"))
 	(when note
 	  (insert "," note))
 	(insert "\n")
-	(sort-lines nil (point-min) (point-max))
-	(basic-save-buffer)
-	(bury-buffer)))))
+	(sort-lines nil (point-min) (point-max)))
+      (basic-save-buffer)
+      (bury-buffer))))
 
 (provide 'file-reading)
 ;;; file-reading.el ends here
