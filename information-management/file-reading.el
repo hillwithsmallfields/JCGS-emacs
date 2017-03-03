@@ -54,12 +54,27 @@
 	  (match-string-no-properties 1)
 	nil))))
 
+(defun jcgs/files-read-log-get-existing-comments ()
+  "Get all the existing comment for any files."
+  (let ((results nil))
+    (save-window-excursion
+      (find-file jcgs/files-read-log)
+      (save-excursion
+	(goto-char (point-min))
+	(while (re-search-forward "^[^,]+,[-0-9]+,\\(.+\\)$"
+				  (point-max) t)
+	  (push (match-string-no-properties 1)
+		results))))
+    results))
+
 (defun jcgs/files-read-log-as-read (&optional note)
   "Log that I have read the file in this buffer.
 Optional NOTE may be added."
   (interactive
-   (list (read-from-minibuffer "Note about file: "
-			       (jcgs/files-read-log-get-existing-comment (buffer-file-name)))))
+   (list (completing-read "Note about file: "
+			  (jcgs/files-read-log-get-existing-comments)
+			  nil nil
+			  (jcgs/files-read-log-get-existing-comment (buffer-file-name)))))
   (unless (buffer-file-name)
     (error "This command is for file buffers only"))
   (let ((trimmed-form (jcgs/files-read-log-trim-name (buffer-file-name))))
