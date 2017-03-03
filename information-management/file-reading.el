@@ -47,7 +47,7 @@
       (goto-char (point-min))
       (if (re-search-forward (concat "^"
 				     (jcgs/files-read-log-trim-name name)
-				     ",[-0-9]+,\\(.+\\)$")
+				     ",[-0-9]+,\"?\\(.+\\)\"?$")
 			     (point-max) t)
 	  (match-string-no-properties 1)
 	nil))))
@@ -59,7 +59,7 @@
       (find-file jcgs/files-read-log)
       (save-excursion
 	(goto-char (point-min))
-	(while (re-search-forward "^[^,]+,[-0-9]+,\\(.+\\)$"
+	(while (re-search-forward "^[^,]+,[-0-9]+,\"?\\(.+?\\)\"?$"
 				  (point-max) t)
 	  (push (match-string-no-properties 1)
 		results))))
@@ -89,23 +89,25 @@ Optional NOTE may be added."
 				  (buffer-file-name))))))
   (unless (buffer-file-name)
     (error "This command is for file buffers only"))
+  (when (zerop (length note))
+    (setq note nil))
+  (when (and note (string-match "," note))
+    (setq note (concat "\"" note "\"")))
   (let ((trimmed-form (jcgs/files-read-log-trim-name (buffer-file-name))))
     (save-window-excursion
       (find-file jcgs/files-read-log)
       (goto-char (point-max))
       (if (search-backward (concat trimmed-form ",") (point-min) t)
 	  ;; already got this file; update note
-	  (if (looking-at "^[^,]+,[-0-9]+,\\(.+\\)")
-	      (replace-match note t t nil 1)
-	    (end-of-line 1)
-	    (insert "," note))
+	  (if (looking-at "^[^,]+,[-0-9]+,\\(\"?.+?\"?\\)$")
+	      (replace-match note t t nil 1))
 	;; new file for the collection
 	(insert trimmed-form ","
 		(format-time-string "%F"))
 	(when note
 	  (insert "," note))
-	(insert "\n")
-	(sort-lines nil (point-min) (point-max)))
+	(insert "\n"))
+      (sort-lines nil (point-min) (point-max))
       (basic-save-buffer)
       (bury-buffer))))
 
