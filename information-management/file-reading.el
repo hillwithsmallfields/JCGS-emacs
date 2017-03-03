@@ -67,14 +67,22 @@
 		results))))
     results))
 
+(defvar jcgs/files-read-log-read-note-with-completion nil
+  "Whether to use completion when reading the note.")
+
 (defun jcgs/files-read-log-as-read (&optional note)
   "Log that I have read the file in this buffer.
 Optional NOTE may be added."
   (interactive
-   (list (completing-read "Note about file: "
-			  (jcgs/files-read-log-get-existing-comments)
-			  nil nil
-			  (jcgs/files-read-log-get-existing-comment (buffer-file-name)))))
+   (list (if jcgs/files-read-log-read-note-with-completion
+	     (completing-read "Note about file: "
+			      (jcgs/files-read-log-get-existing-comments)
+			      nil nil
+			      (jcgs/files-read-log-get-existing-comment
+			       (buffer-file-name)))
+	   (read-from-minibuffer "Note about file: "
+				 (jcgs/files-read-log-get-existing-comment
+				  (buffer-file-name))))))
   (unless (buffer-file-name)
     (error "This command is for file buffers only"))
   (let ((trimmed-form (jcgs/files-read-log-trim-name (buffer-file-name))))
