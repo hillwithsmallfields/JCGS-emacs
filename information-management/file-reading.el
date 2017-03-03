@@ -67,6 +67,12 @@
 		results))))
     results))
 
+(defun jcgs/files-read-log-show-existing-comment ()
+  "Show the existing comment on a file.
+Meant for use from `find-file-hook'."
+  (message "Reading comment: %s"
+	   (jcgs/files-read-log-get-existing-comment (buffer-file-name))))
+
 (defvar jcgs/files-read-log-read-note-with-completion nil
   "Whether to use completion when reading the note.")
 
