@@ -27,27 +27,42 @@
 (defvar jcgs/files-read-log (substitute-in-file-name "$ORG/files-read.csv")
   "Files that I have indicated that I have read.")
 
-(defun jcgs/log-file-as-read (&optional note)
+(defun jcgs/files-read-log-trim-name (name)
+  "Trim NAME."
+  (catch 'trimmed
+    (dolist (base-description '("$OPEN_PROJECTS"
+				"$EHOME/JCGS-emacs"
+				"$EHOME/JCGS-org-mode"))
+      (let ((base (substitute-in-file-name base-description)))
+	(when (eq (compare-strings name 0 (length base)
+				   base nil nil)
+		  t)
+	  (throw 'trimmed (concat base-description
+				  (substring name (length base)))))))
+    name))
+
+(defun jcgs/files-read-log-get-existing-comment (name)
+  "Get the existing comment for NAME."
+  (save-window-excursion
+    (find-file jcgs/files-read-log)
+    (save-excursion
+      (goto-char (point-min))
+      (if (re-search-forward (concat "^"
+				     (jcgs/files-read-log-trim-name name)
+				     ",[-0-9]+,\\(.+\\)$")
+			     (point-max) t)
+	  (match-string-no-properties 1)
+	nil))))
+
+(defun jcgs/files-read-log-as-read (&optional note)
   "Log that I have read the file in this buffer.
 Optional NOTE may be added."
-  (interactive "sNote about file: ")
+  (interactive
+   (list (read-from-minibuffer "Note about file: "
+			       (jcgs/files-read-log-get-existing-comment (buffer-file-name)))))
   (unless (buffer-file-name)
     (error "This command is for file buffers only"))
-  (let* ((full-form (buffer-file-name))
-	 (trimmed-form full-form))
-    (catch 'trimmed
-      (dolist (base-description '("$OPEN_PROJECTS"
-				  "$EHOME/JCGS-emacs"
-				  "$EHOME/JCGS-org-mode"))
-	(let ((base (substitute-in-file-name base-description)))
-	  (when (eq (compare-strings full-form 0 (length base)
-				     base nil nil)
-		    t)
-	    (setq trimmed-form (concat base-description
-				       (substring full-form (length base))))
-	    (throw 'trimmed t)
-	    ))
-	))
+  (let ((trimmed-form (jcgs/files-read-log-trim-name (buffer-file-name))))
     (save-window-excursion
       (find-file jcgs/files-read-log)
       (goto-char (point-max))
