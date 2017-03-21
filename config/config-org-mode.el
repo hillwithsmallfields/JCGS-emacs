@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-04-22 13:34:15 jcgs>
+;;; Time-stamp: <2017-05-30 11:10:25 johstu01>
 
 (require 'org)
 
@@ -569,7 +569,8 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (defun jcgs/org-maybe-push-to-mobile ()
   "Offer to push the agenda to mobile."
-  (when (y-or-n-p "Push to mobile? ")
+  (when (and (string-match "isaiah" (system-name))
+	     (y-or-n-p "Push to mobile? "))
     (org-mobile-push))
   t)
 
