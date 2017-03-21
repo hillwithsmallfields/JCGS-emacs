@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-02-18 19:46:08 jcgs>
+;;; Time-stamp: <2017-03-21 15:59:27 johstu01>
 
 (require 'org)
 
@@ -605,5 +605,17 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (let ((gcal-settings-file (substitute-in-file-name "$HOME/.org-gcal.el")))
   (when (file-readable-p gcal-settings-file)
     (load-file gcal-settings-file)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make exported links open in new tabs ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-export-html-open-in-new-tabs (text back-end channel)
+  (if (eq back-end 'html)
+      (mapconcat 'identity (split-string text "<a href") "<a target=\"_blank\" href")
+    text))
+
+(add-to-list 'org-export-filter-final-output-functions
+	     'jcgs/org-export-html-open-in-new-tabs)
 
 ;;; config-org-mode.el ends here
