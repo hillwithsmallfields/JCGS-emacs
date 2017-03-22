@@ -126,6 +126,8 @@
           (goto-line (cdr location)))
       (message "Could not find a place description"))))
 
+(add-to-list 'auto-mode-alist (cons "sconscript" 'python-mode))
+
 ;;;;;;;;;;;;;
 ;; go-mode ;;
 ;;;;;;;;;;;;;
