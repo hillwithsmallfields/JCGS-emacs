@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-03-21 15:59:27 johstu01>
+;;; Time-stamp: <2017-03-22 21:38:42 jcgs>
 
 (require 'org)
 
@@ -615,7 +615,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
       (mapconcat 'identity (split-string text "<a href") "<a target=\"_blank\" href")
     text))
 
-(add-to-list 'org-export-filter-final-output-functions
-	     'jcgs/org-export-html-open-in-new-tabs)
+(add-hook 'org-export-filter-final-output-functions
+	  'jcgs/org-export-html-open-in-new-tabs)
 
 ;;; config-org-mode.el ends here
