@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-02-28 16:21:36 johstu01>
+;;; Time-stamp: <2017-05-30 11:11:16 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
@@ -126,7 +126,7 @@
           (goto-line (cdr location)))
       (message "Could not find a place description"))))
 
-(add-to-list 'auto-mode-alist (cons "sconscript" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "scons\\(crip\\|truc\\)t" 'python-mode))
 
 ;;;;;;;;;;;;;
 ;; go-mode ;;
