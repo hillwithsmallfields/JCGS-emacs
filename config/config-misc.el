@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2017-02-02 21:10:07 jcgs>
+;;; Time-stamp: <2017-05-30 11:07:27 johstu01>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -481,5 +481,23 @@ Argument DAYS is the number of days to fast for."
     (autoload 'ledger-mode "ledger-mode"
       "A mode for editing ledger data files."
       t)))
+
+;;;; adjust frame width to match window
+
+(defun adjust-frame-width-to-window ()
+  "Adjust the width of the frame to suit the current window.
+The currently visible text is used to determine the width."
+  (interactive)
+  (goto-char (window-start))
+  (let ((end (window-end))
+	(widest 0))
+    (while (and (<= (point) end)
+		(not (eobp)))
+      (end-of-line 1)
+      (let ((x (current-column)))
+	(when (> x widest)
+	  (setq widest x)))
+      (forward-line 1))
+    (set-frame-width nil widest)))
 
 ;;; end of config-misc.el
