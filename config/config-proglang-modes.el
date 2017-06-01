@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-05-30 11:11:16 johstu01>
+;;; Time-stamp: <2017-05-31 14:44:03 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
@@ -94,7 +94,7 @@
       (message "Set flymake mode for buffer %S" (current-buffer)))))
 
 (defun flymake-pylint-init ()
-  "Set up pyling for flymake."
+  "Set up epylint for flymake."
   ;; from http://www.emacswiki.org/emacs/?action=browse;oldid=PythonMode;id=PythonProgrammingInEmacs#toc13
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
 		     'flymake-create-temp-inplace))
