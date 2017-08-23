@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2017-03-03 16:47:00 jcgs>
+;;; Time-stamp: <2017-08-23 14:41:33 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -220,7 +220,13 @@ Returns how many buffers it brought up." t)
   (global-set-key (kbd "s-s") 'isearch-forward-regexp)
   (global-set-key (kbd "s-r") 'isearch-backward-regexp)
   (global-set-key (kbd "s-z") 'raise-sexp) ; z for zoom
-  (global-set-key (kbd "s-(") 'insert-parentheses))
+  (global-set-key (kbd "s-(") 'insert-parentheses)
+  (global-set-key (kbd "s-[") 'wander-yank)
+  (global-set-key (kbd "s-]") 'pick-up-sexp-at-point)
+  (global-set-key (kbd "s-{") 'wander)
+  (global-set-key (kbd "s-}") 'exit-recursive-edit)
+  (global-set-key (kbd "s-n") 'sexp-preceding-next-parenthesis)
+  (global-set-key (kbd "s-o") 'other-window))
 
 (require 'structure-edit)
 (jcgs-keys:jcgs-function-keys)

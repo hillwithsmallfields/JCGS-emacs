@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2005-01-18 19:13:55 jcgs>
+;;; Time-stamp: <2017-08-23 14:41:33 johstu01>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -25,7 +25,6 @@
 (defvar in-wander-yank nil
   "Whether we are currently in a wander-yank.")
 
-;;;###autoload
 (defun pick-up-sexp-at-point (count)
   "Copy COUNT sexps from point into the kill ring, and exit recursive edit.
 Use with wander-yank for copying (non-destructive-cut-and-paste)."
@@ -34,7 +33,6 @@ Use with wander-yank for copying (non-destructive-cut-and-paste)."
   (copy-region-as-kill (point) (mark))
   (exit-recursive-edit))
 
-;;;###autoload
 (defun move-sexp-from-point (count)
   "Kill COUNT sexps starting at point, and exit recursive edit.
 Use with wander-yank for moves (destructive-cut-and-paste)."
@@ -42,11 +40,10 @@ Use with wander-yank for moves (destructive-cut-and-paste)."
   (kill-sexp count)
   (exit-recursive-edit))
 
-;;;###autoload
 (defun wander-yank ()
-  "Let the user wander around in a recursive edit inside a
-save-excursion, then do a yank - presumably the user picks something
-up into the kill ring during the recursive edit."
+  "Let the user wander in a recursive edit inside save-excursion, then yank.
+Presumably the user picks something up into the kill ring during
+the recursive edit."
   (interactive)
   (let ((in-wander-yank t))
     (save-excursion
@@ -54,7 +51,6 @@ up into the kill ring during the recursive edit."
 	(recursive-edit))))
   (yank 1))
 
-;;;###autoload
 (defun wander-yank-dwim (count)
   "If not already in a wander-yank (which see), do wander-yank, else pick-up-sexp-at-point."
   (interactive "p")
@@ -63,5 +59,19 @@ up into the kill ring during the recursive edit."
     (wander-yank)))
 
 (setq enable-recursive-minibuffers t)
+
+(defun wander ()
+  "Let the user wander around in a recursive edit inside a save-excursion."
+  (interactive)
+  (save-excursion
+    (save-window-excursion
+      (recursive-edit))))
+
+(defun sexp-preceding-next-parenthesis ()
+  "Move to the start of the sexp preceding the next opening parenthesis."
+  (interactive)
+  (down-list 1)
+  (backward-up-list 1)
+  (backward-sexp 1))
 
 ;;; end of /harlqn/usr/users/jcgs/emacs/handy-lisp.el
