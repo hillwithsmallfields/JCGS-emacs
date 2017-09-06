@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-05-31 14:44:03 johstu01>
+;;; Time-stamp: <2017-09-06 15:49:18 johstu01>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
@@ -235,5 +235,11 @@ When started, runs `scala-mode-hook'." t)
     (add-to-list 'load-path scad-dir)
     (autoload 'scad-mode "scad-mode" "Major mode for editing scad files." t)
     (add-to-list 'auto-mode-alist (cons "\\.scad\\'" 'scad-mode))))
+
+;;;;;;;;;;;;;;;
+;; blueprint ;;
+;;;;;;;;;;;;;;;
+
+(add-to-list 'auto-mode-alist (cons "\\.bp" 'javascript-mode))
 
 ;;;; config-proglang-modes.el ends here
