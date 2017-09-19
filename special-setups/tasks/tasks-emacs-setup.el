@@ -1,7 +1,9 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2017-01-06 21:24:27 jcgs>
+;;; Time-stamp: <2017-03-23 22:15:48 jcgs>
 
 (setq debug-on-error t)
+
+(setq weather-loadable nil)
 
 (load-file "$EMACS/basics/jcgs-common-setup.el")
 (load-file "$EMACS/basics/host.el")

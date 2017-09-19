@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-06-15 10:34:02 johstu01>
+;;; Time-stamp: <2017-09-19 21:37:27 jcgs>
 
 (require 'org)
 
@@ -43,7 +43,8 @@
       org-agenda-files (append (mapcar (function
 					(lambda (file)
 					  (expand-file-name (format "%s.org" file) org-directory)))
-				       '("general"
+				       '("habits"
+					 "general"
 					 "shopping"
 					 ;; "eating"
 					 ;; "research"
