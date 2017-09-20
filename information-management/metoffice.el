@@ -1,5 +1,5 @@
 ;;;; metoffice.el --- handle data from the UK's Meteorological Office
-;;; Time-stamp: <2017-03-23 21:39:52 jcgs>
+;;; Time-stamp: <2017-09-20 20:49:05 jcgs>
 
 (require 'json)
 
@@ -51,9 +51,11 @@ EXTRA is another piece of URL, to go after the question mark."
 EXTRA is another piece of URL, to go after the question mark."
   (let ((meto-string (metoffice-get-string-data data-point extra)))
     (if (stringp meto-string)
-	(condition-case
+	(condition-case evar
 	    (json-read-from-string meto-string)
-	    (error nil))
+	  (error
+	   (message "Error %s occurred reading from %s" evar meto-string)
+	   nil))
       nil)))
 
 (defvar metoffice-site-list nil
