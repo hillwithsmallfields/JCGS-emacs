@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2017-01-27 14:01:23 johstu01>
+;;; Time-stamp: <2017-09-24 19:15:28 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
 
@@ -435,6 +435,12 @@ The nearest FILE is used."
       shell-prompt-pattern "^[a-z0-9]+@[-a-z0-9]+:[-._/a-z0-9~]+\\$"
       comint-prompt-read-only t
       )
+
+(when (or (not (boundp 'jcgs-added-github-prompt))
+	  (not jcgs-added-github-prompt))
+  (setq comint-password-prompt-regexp
+	(concat "\\(Password for.+:\\)\\|\\(" comint-password-prompt-regexp "\\)")
+	jcgs-added-github-prompt t))
 
 ;;;; Shell
 
