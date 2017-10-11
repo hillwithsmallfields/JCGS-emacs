@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2017-08-23 14:41:33 johstu01>
+;;; Time-stamp: <2017-08-24 12:05:02 johstu01>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -112,7 +112,7 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map "[" 'wander-yank)
   (define-key jcgs-map "]" 'pick-up-sexp-at-point)
   (define-key jcgs-map "b" 'bury-buffer)
-  (define-key jcgs-map "c" 'wander-safe)
+  (define-key jcgs-map "c" 'wander)
   (define-key jcgs-map "d" 'other-window-directory-name)
   (define-key jcgs-map "f" 'other-window-file-name)
   (define-key jcgs-map "g" 'jcgs-magit-commands-map)
