@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-09-19 21:37:27 jcgs>
+;;; Time-stamp: <2017-10-31 20:17:55 jcgs>
 
 (require 'org)
 
@@ -96,7 +96,10 @@
 (require 'metoffice)
 
 (defvar weather-loadable (and (file-readable-p metoffice-config-file)
-			      (load-file metoffice-config-file))
+			      (condition-case weather-problem
+				  (load-file metoffice-config-file)
+				(error (message "Could not load weather config")
+				       nil)))
   "Whether we have a chance of getting the weather data.")
 
 (require 'calendar)
@@ -127,14 +130,16 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
       (push todo-home result))
     (when (and weather-loadable (or (member todo-home result)
 				    (member todo-home early-matches))) ; could be there because of hostname, or ssid
-      (let* ((day-weather (metoffice-get-site-period-weather nil 0 'day))
-	     (temperature (metoffice-weather-aspect day-weather 'feels-like-day-maximum-temperature))
-	     (rain (metoffice-weather-aspect day-weather 'precipitation-probability-day))
-	     (wind (metoffice-weather-aspect day-weather 'wind-speed)))
-	(when (and (>= temperature 10)
-		   (<= rain 6)
-		   (<= wind 6))
-	  (push '(tags-todo "outdoor|@garden") result))))))
+      (condition-case weather-problem
+	  (let* ((day-weather (metoffice-get-site-period-weather nil 0 'day))
+		 (temperature (metoffice-weather-aspect day-weather 'feels-like-day-maximum-temperature))
+		 (rain (metoffice-weather-aspect day-weather 'precipitation-probability-day))
+		 (wind (metoffice-weather-aspect day-weather 'wind-speed)))
+	    (when (and (>= temperature 10)
+		       (<= rain 6)
+		       (<= wind 6))
+	      (push '(tags-todo "outdoor|@garden") result)))
+	(error (message "Problem %s in adding weather-dependent items" weather-problem))))))
 
 (defvar jcgs/org-agenda-store-directory (or (getenv "WWW_AGENDA_DIR")
 					    "/tmp")
