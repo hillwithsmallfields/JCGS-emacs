@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2017-05-30 11:07:27 johstu01>
+;;; Time-stamp: <2017-10-07 21:44:08 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -179,16 +179,16 @@ FWrite region to file: ")
 			    "")
 		","))
     (let ((frame-name (file-name-nondirectory
-		       (file-name-sans-extension jcgs/org-journal-file))))
-      (message "setting up work.log frame")
+		       (file-name-sans-extension (car jcgs/org-journal-files)))))
+      (message "setting up journalling frame")
       (ratpoison-fselect 1)
-      (find-file jcgs/org-journal-file)
+      (find-file (car jcgs/org-journal-files))
       (setq frame-for-work-log
 	    (or (get-frame frame-name)
 		(make-frame-on-display ":0.1"
 				       '((title . "Work log")
 					 (name . "Work log")))))
-      (display-buffer (find-buffer-visiting jcgs/org-journal-file)
+      (display-buffer (find-buffer-visiting (car jcgs/org-journal-files))
 		      nil
 		      frame-for-work-log))
 

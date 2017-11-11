@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2017-03-23 22:15:48 jcgs>
+;;; Time-stamp: <2017-10-07 21:50:35 jcgs>
 
 (setq debug-on-error t)
 
@@ -32,7 +32,7 @@
 		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
 						      file))
 		     t))
-      (setq jcgs/org-journal-file "/nethome/johstu01/work-org/work-log.org"))
+      (setq jcgs/org-journal-files '("/nethome/johstu01/work-org/work-log.org")))
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
@@ -43,9 +43,12 @@
 					      "$COMMON/noticeboard-reading")))
 			    (mapcar (lambda (file)
 				      (expand-file-name file reading-dir))
-				    '("advices-and-queries.org"))))))
+				    '("advices-and-queries.org")))))
+  (let ((journal-incoming "~/common/jottings/for-journal.txt"))
+    (when (file-exists-p journal-incoming)
+    (find-file journal-incoming))))
 
-(find-file jcgs/org-journal-file)
+(mapcar 'find-file jcgs/org-journal-files)
 (if (fboundp 'jcgs/org-journal-mode)
     (jcgs/org-journal-mode)
   (org-mode))
