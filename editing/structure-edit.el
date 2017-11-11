@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2017-08-23 14:41:33 johstu01>
+;;; Time-stamp: <2017-11-11 18:36:40 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -73,5 +73,14 @@ the recursive edit."
   (down-list 1)
   (backward-up-list 1)
   (backward-sexp 1))
+
+(defun insert-quotes (n)
+  "Insert quotes.  With argument, surround N sexps with quotes."
+  (interactive "p")
+  (if (= n 1)
+      (insert "\"\"")
+    (insert "\"")
+    (forward-sexp n)
+    (insert "\"")))
 
 ;;; end of /harlqn/usr/users/jcgs/emacs/handy-lisp.el

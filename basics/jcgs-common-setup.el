@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2016-07-20 22:19:58 jcgs>
+;;; Time-stamp: <2017-11-11 18:43:42 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -41,14 +41,11 @@
 (when (string-match "isaiah" (system-name))
   (setq printer-name "JCGS_print_scan_1"))
 
-(defun save-all-buffers-no-ask ()
-  "Save all buffers, without prompting for each one."
-  (interactive)
-  (save-some-buffers t)
-  (message "Saved all buffers"))
+(dolist (dir '("config" "editing"))
+  (add-to-list 'load-path
+	       (expand-file-name dir user-emacs-directory)))
 
-(global-set-key [ f11 ] 'save-all-buffers-no-ask)
-(global-set-key "\C-x\C-b" 'electric-buffer-list)
+(load-library "jcgs-bindings")
 
 (defun enable-debug (arg)
   "Switch debugging on.
