@@ -1,5 +1,5 @@
 ;;;; find, load and configure auctex
-;;; Time-stamp: <2014-10-05 22:44:59 jcgs>
+;;; Time-stamp: <2017-09-20 20:39:55 jcgs>
 
 (fset 'tex-mode nil)
 (fset 'latex-mode nil)
@@ -36,7 +36,11 @@
 	     (load-library "latex.el"))
 
 (setq-default TeX-master nil)
-(put 'TeX-master 'safe-local-variable (lambda (file) (or (eq file t)
-							 (not (string-match "/" file)))))
+(put 'TeX-master 'safe-local-variable
+     (function
+      (lambda (file)
+	(message "Checking \"%s\" for safety as TeX-master" file)
+	(or (eq file t)
+	    (not (string-match "/" file))))))
 
 ;;; end of use-auctex.el
