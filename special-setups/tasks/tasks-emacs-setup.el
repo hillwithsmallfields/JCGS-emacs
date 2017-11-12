@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2017-10-07 21:50:35 jcgs>
+;;; Time-stamp: <2017-11-12 13:53:27 jcgs>
 
 (setq debug-on-error t)
 
@@ -25,28 +25,29 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
-(if (at-work)
-    (progn
+(when (at-work)
       (dolist (file '("work-tasks"))
 	(add-to-list 'org-agenda-files
 		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
 						      file))
 		     t))
-      (setq jcgs/org-journal-files '("/nethome/johstu01/work-org/work-log.org")))
+      (add-to-list 'jcgs/org-journal-files "/nethome/johstu01/work-org/work-log.org"))
+
+(when (at-home)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
 						  file))
 		 t))
   (setq org-reading-files (cons (substitute-in-file-name "$ORG/guide.org")
-			   (let ((reading-dir (substitute-in-file-name
-					      "$COMMON/noticeboard-reading")))
-			    (mapcar (lambda (file)
-				      (expand-file-name file reading-dir))
-				    '("advices-and-queries.org")))))
+				(let ((reading-dir (substitute-in-file-name
+						    "$COMMON/noticeboard-reading")))
+				  (mapcar (lambda (file)
+					    (expand-file-name file reading-dir))
+					  '("advices-and-queries.org")))))
   (let ((journal-incoming "~/common/jottings/for-journal.txt"))
     (when (file-exists-p journal-incoming)
-    (find-file journal-incoming))))
+      (find-file journal-incoming))))
 
 (mapcar 'find-file jcgs/org-journal-files)
 (if (fboundp 'jcgs/org-journal-mode)

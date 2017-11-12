@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2015-03-14 18:37:37 jcgs>
+;; Time-stamp: <2017-11-12 13:18:42 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -60,13 +60,26 @@
 			  "glg.csisdmz.ul.ie"
 			  )))
 
+(defvar employer-domain "grapeshot"
+  "The domain of my employer.
+Used for determining whether this Emacs is running at work.")
+
 (defun at-work ()
   "Return whether I'm on a work machine."
-  (string-match "arm.com"
+  (string-match employer-domain
 		(system-name)))
+
+(defun at-home ()
+  "Return whether I'm on a home system."
+  ;; for now, ignore the middle possibility
+  (not (at-work)))
 
 (defun on-small-machine ()
   "Whether I'm on some small machine, such as a laptop."
-  (string-match "ezra" (system-name)))
+  (catch 'found
+    (dolist (pattern '("ezra" "elijah"))
+      (when (string-match pattern (system-name))
+	(throw 'found t)))
+    nil))
 
 ;;; host.el ends here
