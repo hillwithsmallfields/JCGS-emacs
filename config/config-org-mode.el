@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-10-31 20:17:55 jcgs>
+;;; Time-stamp: <2017-11-16 09:46:08 jcgs>
 
 (require 'org)
 
@@ -11,10 +11,16 @@
     (add-to-list 'load-path dir)))
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
 
+(add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
-(add-to-list 'org-modules 'org-mobile)
 
+(let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
+  (when (file-directory-p omd)
+    (add-to-list 'org-modules 'org-mobile)
+    (setq
+     org-mobile-directory omd
+     org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory))))
 (org-load-modules-maybe t)
 
 ;; so I can exchange files with non-emacs users and still have their systems pick a text editor:
@@ -82,8 +88,6 @@
       org-enforce-todo-checkbox-dependencies t
       org-todo-state-tags-triggers '((done ("soon" . nil) ("urgent" . nil) ("today" . nil)))
       org-M-RET-may-split-line nil
-      org-mobile-directory (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")
-      org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory)
       )
 
 (defvar jcgs/org-ssid-tag-alist
@@ -571,20 +575,23 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;; Transfer from and to mobile ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(org-mobile-pull)
+(when (and (boundp 'org-mobile-directory)
+	   (stringp org-mobile-directory)
+	   (file-directory-p org-mobile-directory))
+  (org-mobile-pull)
 
-(defun jcgs/org-maybe-push-to-mobile ()
-  "Offer to push the agenda to mobile."
-  (when (and (string-match "isaiah" (system-name))
-	     (y-or-n-p "Push to mobile? "))
-    (org-mobile-push))
-  t)
+  (defun jcgs/org-maybe-push-to-mobile ()
+    "Offer to push the agenda to mobile."
+    (when (and (string-match "isaiah" (system-name))
+	       (y-or-n-p "Push to mobile? "))
+      (org-mobile-push))
+    t)
 
-(add-hook
- ;; would be on kill-emacs-hook, but that's not suitable for functions
- ;; that interact with the user --- see its docstring
- 'kill-emacs-query-functions
- 'jcgs/org-maybe-push-to-mobile)
+  (add-hook
+   ;; would be on kill-emacs-hook, but that's not suitable for functions
+   ;; that interact with the user --- see its docstring
+   'kill-emacs-query-functions
+   'jcgs/org-maybe-push-to-mobile))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; list entries with a given tag ;;
