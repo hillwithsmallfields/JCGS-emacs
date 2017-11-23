@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2016-09-07 11:34:11 johstu01>
+;;; Time-stamp: <2017-11-23 15:11:46 jcgs>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -191,9 +191,10 @@ This should be a list of three parts:
 
 ;; set some variables used from several of the config files
 
-(defvar work-log-file (if (at-work)
-			  (expand-file-name "/nethome/johstu01/work-org/work.org-log")
-			(expand-file-name "~/Dropbox/notes/hackery.org-log"))
+(defvar work-log-file (expand-file-name
+		       (if (at-work)
+			   "~/work-org/work.org-log"
+			 "~/common/notes/hackery.org-log"))
   "The name of the file containing my work log.")
 
 (message "before loading config, load-path=%S and user-emacs-directory=%S" load-path user-emacs-directory)
