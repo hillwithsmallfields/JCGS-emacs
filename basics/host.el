@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2017-11-23 15:11:46 jcgs>
+;; Time-stamp: <2017-11-24 07:27:50 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -64,7 +64,7 @@
   "The domain of my employer.
 Used for determining whether this Emacs is running at work.")
 
-(defun employer-laptop "duralium"
+(defvar employer-laptop "duralium"
   "The name of my work laptop.
 This lets my configuration recognize I'm at work even when the
 machine is on some other network connection.")
