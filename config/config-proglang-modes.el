@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-09-06 15:49:18 johstu01>
+;;; Time-stamp: <2017-12-01 12:09:57 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
@@ -174,9 +174,9 @@
 (autoload 'find-tag-with-hooks "tags-with-hooks")
 
 (setq tags-file-name nil
-      tags-table-list (list (substitute-in-file-name (expand-file-name "tags" user-emacs-directory))
-			    (substitute-in-file-name "$GATHERED/emacs/tags")
-			    (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/tags")))
+      tags-table-list (list (substitute-in-file-name (expand-file-name "TAGS" user-emacs-directory))
+			    (substitute-in-file-name "$GATHERED/emacs/TAGS")
+			    (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/TAGS")))
 
 (let ((build-dir "~/build/emacs"))
   (if (file-readable-p (expand-file-name "TAGS" build-dir))
