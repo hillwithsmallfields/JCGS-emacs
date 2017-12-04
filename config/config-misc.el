@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2017-10-07 21:44:08 jcgs>
+;;; Time-stamp: <2017-12-04 16:24:16 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -109,16 +109,6 @@ FWrite region to file: ")
 
 (add-to-list 'auto-mode-alist
 	     (cons "\\.hs" 'haskell-mode))
-
-;;;; cflow-mode
-
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/cflow/cflow-1.4/elisp/"))
-
-(autoload 'cflow-mode "cflow-mode")
-
-(add-to-list 'auto-mode-alist (cons "\\.cflow$" 'cflow-mode))
-
-(setq cflow-source-beside-callgraph t)
 
 ;;;; source code annotation
 

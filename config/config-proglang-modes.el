@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-12-01 12:09:57 jcgs>
+;;; Time-stamp: <2017-12-04 16:43:21 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
@@ -33,6 +33,36 @@
 	    (when (file-exists-p "../Makefile")
 	      (make-local-variable 'compile-command)
 	      (setq compile-command "cd ..; make -k "))))
+
+;;;; cflow-mode
+
+(defun use-latest-version (project-directory pattern file)
+  "Use the latest version in PROJECT-DIRECTORY/PATTERN containing FILE."
+  (catch 'found
+    (dolist (version (reverse (directory-files project-directory
+					       t
+					       pattern
+					       nil)))
+      (let ((dir (expand-file-name "elisp" version)))
+	(when (file-exists-p (expand-file-name file dir))
+	  (message "Using %s for %s" dir file)
+	  (add-to-list 'load-path dir)
+	  (throw 'found version))))
+    (message "Could not find a version in %s that contains %s"
+	     project-directory file)
+    nil))
+
+(use-latest-version (substitute-in-file-name "$OPEN_PROJECTS/cflow")
+		    "cflow-[0-9]+\\.[0-9]+"
+		    "cflow-mode.el")
+
+(autoload 'cflow-mode "cflow-mode")
+
+(add-to-list 'auto-mode-alist (cons "\\.cflow$" 'cflow-mode))
+
+(require 'cflow-mode)
+
+(setq cflow-source-beside-callgraph t)
 
 ;;;;;;;;;;;;;;;
 ;; perl-mode ;;
