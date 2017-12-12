@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-11-16 09:46:08 jcgs>
+;;; Time-stamp: <2017-12-12 14:13:46 jcgs>
 
 (require 'org)
 
@@ -239,6 +239,9 @@ The filenames to save in are added by this function"
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
 (require 'org-linked-tasks)
 (require 'org-task-colours)
+(add-hook 'org-clock-in-hook 'jcgs/org-nice-appearance)
+(add-hook 'org-clock-out-hook 'jcgs/org-dull-appearance)
+(jcgs/org-dull-appearance)
 (require 'org-pomodoros)
 (require 'org-jira)
 (require 'org-log-tasks)
