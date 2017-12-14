@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2017-11-23 15:11:46 jcgs>
+;;; Time-stamp: <2017-12-14 16:52:35 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
 
@@ -45,7 +45,11 @@
 	      (expand-file-name "basics" user-emacs-directory)))
   (setq user-emacs-directory
 	(catch 'found
-	  (dolist (raw-dir '("$HOME/JCGS-emacs" "/work/johstu01/JCGS-emacs"))
+	  (dolist (raw-dir '("$HOME/JCGS-emacs"
+			     ;; strange site-specific directories used
+			     ;; as honorary home in strange sites may
+			     ;; go here
+			     ))
 	    (let ((dir (substitute-in-file-name raw-dir)))
 	      (when (and (stringp dir)
 			 (file-directory-p dir)
