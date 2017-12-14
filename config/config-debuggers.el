@@ -26,23 +26,15 @@
 
 (require 'realgud)
 
-(defun jcgs-find-ancestral-directory-matching (dir pattern)
-  "Find the nearest ancestor of DIR matching PATTERN."
-  (setq dir (expand-file-name dir))
-  (while (and (> (length dir) 2)
-	      (not (string-match pattern (file-name-nondirectory dir))))
-    (setq dir (expand-file-name ".." dir)))
-  (and (string-match pattern dir)
-       dir))
-
 (defun jcgs/preload-realgud-file-remap ()
   "Preload the file name table for ‘realgud:gdb’.
 Gets all the C source files in the general vicinity."
   (when realgud:gdb-track-mode
     (dolist (file (directory-files-recursively
-		   (or (jcgs-find-ancestral-directory-matching default-directory "src")
-		       ;; take a guess if we can't find ....../src/.......
-		       (expand-file-name "../.."))
+		   (let ((src-parent (locate-dominating-file "." "src")))
+		     (if src-parent
+			 (expand-file-name "src" src-parent))
+		     (expand-file-name "../.."))
 		   ".+\\.c$"))
       (puthash (file-name-nondirectory file)
 	       file
