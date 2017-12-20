@@ -1,5 +1,5 @@
 ;;;; journal-from-text.el -- convert plain-text journalling into html journal format
-;;; Time-stamp: <2007-09-24 17:49:47 jcgs>
+;;; Time-stamp: <2017-12-10 16:40:23 jcgs>
 
 (provide 'journal-from-text)
 (require 'journal)
@@ -45,13 +45,15 @@
 				 this-year
 				 this-month (substring (aref journal-month-full-names this-month) 0 3)
 				 (string-to-int day))
-		(message "Adding to buffer %S" (current-buffer))
+		(message "Adding to buffer %S and setting journal-buffer to it" (current-buffer))
 		(setq journal-buffer (current-buffer)
 		      first-in-day t))))
 	   ((looking-at "^\\* *\\(.+\\)$")
 	    (save-excursion
 	      (let ((item-text (match-string-no-properties 1)))
-		(message "Item text %s" item-text)
+		(message "Item text %s journal-buffer %S" item-text journal-buffer)
+		(unless journal-buffer
+		  (error "No output buffer set --- possibly no date header yet?"))
 		(set-buffer journal-buffer)
 		(unless in-list
 		  (insert "\n\n<ul>\n")
@@ -71,6 +73,8 @@
 					  trailing)
 			on-right (not on-right))))
 	      (save-excursion
+		(unless journal-buffer
+		  (error "No output buffer set --- possibly no date header yet?"))
 		(set-buffer journal-buffer)
 		(when in-list
 		  (insert "</ul>\n\n")
@@ -82,7 +86,7 @@
 		  (insert para-text)
 		  (fill-paragraph nil)
 		  (unless (search-forward "</p>" (point-max) t)
-		      (end-of-line 1))
+		    (end-of-line 1))
 		  (insert "\n")
 		  (save-excursion
 		    (save-restriction

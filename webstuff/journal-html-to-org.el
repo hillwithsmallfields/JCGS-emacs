@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2017-01-08 22:13:37 jcgs>
+;;; Time-stamp: <2017-09-20 20:01:16 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -22,7 +22,9 @@
 	       (month (cdr (assoc month-name journal-monthname-alist)))
 	       (day (string-to-number (match-string-no-properties 3 html-date)))
 	       (encoded (encode-time 0 0 0 day month year)))
-	  (list year month day)))))
+	  (list year month day))
+      (message "Could not convert date %s" html-date)
+      html-date)))
 
 (defvar journal-org-html-people-directory
   (if (boundp 'personal-files-directory)
@@ -51,8 +53,10 @@
 
 (defun journal-people-store-link ()
   "Store a people link."
-  (let ((link "")			; todo: complete
-	(description ""))		; todo: complete
+  (let* ((possible-name-at-point (word-at-point))
+	 (name (read-from-minibuffer "Name to store: " possible-name-at-point))
+	 (link (concat "people:" name))	; todo: process
+	 (description name))		; todo: complete
     (org-store-link-props
      :type "journal-people"
      :link link
@@ -126,7 +130,7 @@ With optional AS-TOKEN, replace spaces in result with underscores."
   "Edits to make to convert a journal file.")
 
 (defun journal-html-get-file-entries (file)
-  "Return the journal entries in FILE."
+  "Return the journal entries in FILE, converted from html."
   (save-excursion
     (switch-to-buffer (get-buffer-create " *Conversion*"))
     (erase-buffer)
