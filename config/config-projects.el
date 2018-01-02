@@ -1,7 +1,7 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2017-01-20 15:27:17 johstu01>
+;;; Time-stamp: <2018-01-02 12:37:28 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -35,9 +35,6 @@
 (make-shell-for-directory-if-present "-emacs-"
 				     "$EMACS")
 
- (when (at-work)
-  (make-shell-for-directory-if-present "/work/johstu01/ddk" "-ddk-"))
-
 (unless (at-work)
   (make-shell-for-directory-if-present "-gos-"
 				       "$OPEN_PROJECTS/gos/"
@@ -53,12 +50,6 @@
 					 ;; "latex last-khan.tex\n"
 					 ))
   )
-
-(when (and nil (at-work))
-  (let ((login-host (format "login%d.euhpc.arm.com" (1+ (random 7)))))
-    (make-shell-for-directory-if-present (format "=%s=" login-host)
-					 "~"
-					 (format "echo ssh %s" login-host))))
 
 (defun run-command-in-shell-buffer (command buffer)
   "Run COMMAND in BUFFER and return the result."
