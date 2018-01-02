@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2018-01-02 12:37:28 jcgs>
+;;; Time-stamp: <2018-01-02 12:45:06 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -27,26 +27,26 @@
 		      "$COMMON/research/bds/grevo/ephemerals/"
 		      )))
 
-(make-shell-for-directory-if-present "-muesli-"
-				     "$OPEN_PROJECTS/muesli/"
+(make-shell-for-directory-if-present "$OPEN_PROJECTS/muesli/"
+				     "-muesli-"
 				     ;; "make clean; ./configure; make\n"
 				     )
 
-(make-shell-for-directory-if-present "-emacs-"
-				     "$EMACS")
+(make-shell-for-directory-if-present "$EMACS"
+				     "-emacs-")
 
 (unless (at-work)
-  (make-shell-for-directory-if-present "-gos-"
-				       "$OPEN_PROJECTS/gos/"
+  (make-shell-for-directory-if-present "$OPEN_PROJECTS/gos/"
+				       "-gos-"
 				       ;; "make clean; ./configure; make\n"
 				       )
-  (make-shell-for-directory-if-present "-mulvoc-"
-				       "$OPEN_PROJECTS/mulvoc/mulvoc/"
+  (make-shell-for-directory-if-present "$OPEN_PROJECTS/mulvoc/mulvoc/"
+				       "-mulvoc-"
 				       ;; "make clean; ./configure; make\n"
 				       )
   (when t
-    (make-shell-for-directory-if-present "-khanate-"
-					 "$WRITING/fiction/last-khan/"
+    (make-shell-for-directory-if-present "$WRITING/fiction/last-khan/"
+					 "-khanate-"
 					 ;; "latex last-khan.tex\n"
 					 ))
   )
