@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-12-12 14:13:46 jcgs>
+;;; Time-stamp: <2017-12-18 09:53:59 jcgs>
 
 (require 'org)
 
@@ -306,6 +306,7 @@ The filenames to save in are added by this function"
 
 (define-key org-mode-map "\C-z" 'org-todo)
 (define-key org-mode-map "\C-cw" 'org-agenda-list)
+(define-key org-mode-map "\C-c\M-l" 'org-toggle-link-display)
 (global-set-key "\C-ca" 'org-agenda)
 (define-key org-agenda-mode-map "\C-z" 'org-agenda-todo)
 
