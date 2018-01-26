@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2018-01-02 12:45:06 jcgs>
+;;; Time-stamp: <2018-01-14 18:29:05 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -49,6 +49,8 @@
 					 "-khanate-"
 					 ;; "latex last-khan.tex\n"
 					 ))
+  (make-shell-for-directory-if-present "/home/jcgs/open-projects/qs/qs"
+				       "-qs-")
   )
 
 (defun run-command-in-shell-buffer (command buffer)
