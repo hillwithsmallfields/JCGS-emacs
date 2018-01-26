@@ -1,13 +1,13 @@
 ;;; config-diary-calendar.el --- configure the diary and calendar systems
 
-;; Copyright (C) 2013  John Sturdy
+;; Copyright (C) 2013, 2018  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience, data
 
 ;;;; Diary and calendar
 
-(setq diary-file (substitute-in-file-name "$DROPBOX/org/diary")
+(setq diary-file (substitute-in-file-name "$ORG/diary")
       calendar-date-style 'iso
       calendar-christian-all-holidays-flag t
       diary-display-function 'diary-fancy-display
