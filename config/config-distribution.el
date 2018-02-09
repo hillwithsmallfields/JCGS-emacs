@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2017-11-29 14:52:23 jcgs>
+;;; Time-stamp: <2018-02-09 10:37:50 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -335,6 +335,7 @@ Top and bottom destinations are actually `scroll-margin' lines
       savehist-coding-system 'utf-8
       savehist-file (substitute-in-file-name "$COMMON/var/emacs-history")
       savehist-file-modes nil		; can't set them on FAT file systems
+      desktop-dirname (substitute-in-file-name "$HOME")
       )
 
 ;; (when (fboundp 'savehist-mode)
