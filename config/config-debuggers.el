@@ -1,6 +1,6 @@
 ;;; config-debuggers.el --- setup up emacs debugging   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017  John Sturdy
+;; Copyright (C) 2017, 2018  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@grapeshot.com>
 ;; Keywords: tools, convenience
@@ -24,23 +24,26 @@
 
 ;;; Code:
 
-(require 'realgud)
+(condition-case evar
+    (progn
+      (require 'realgud)
 
-(defun jcgs/preload-realgud-file-remap ()
-  "Preload the file name table for ‘realgud:gdb’.
+      (defun jcgs/preload-realgud-file-remap ()
+	"Preload the file name table for ‘realgud:gdb’.
 Gets all the C source files in the general vicinity."
-  (when realgud:gdb-track-mode
-    (dolist (file (directory-files-recursively
-		   (let ((src-parent (locate-dominating-file "." "src")))
-		     (if src-parent
-			 (expand-file-name "src" src-parent))
-		     (expand-file-name "../.."))
-		   ".+\\.c$"))
-      (puthash (file-name-nondirectory file)
-	       file
-	       realgud-file-remap))))
+	(when realgud:gdb-track-mode
+	  (dolist (file (directory-files-recursively
+			 (let ((src-parent (locate-dominating-file "." "src")))
+			   (if src-parent
+			       (expand-file-name "src" src-parent))
+			   (expand-file-name "../.."))
+			 ".+\\.c$"))
+	    (puthash (file-name-nondirectory file)
+		     file
+		     realgud-file-remap))))
 
-(add-hook 'realgud:gdb-track-mode-hook 'jcgs/preload-realgud-file-remap)
+      (add-hook 'realgud:gdb-track-mode-hook 'jcgs/preload-realgud-file-remap))
+  ((error (message "Realgud not set up (is it installed?)"))))
 
 (provide 'config-debuggers)
 ;;; config-debuggers.el ends here
