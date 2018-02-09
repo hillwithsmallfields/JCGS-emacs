@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2018  John Sturdy
 
-;; Time-stamp: <2018-02-09 10:47:24 jcgs>
+;; Time-stamp: <2018-02-09 10:51:58 jcgs>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -50,7 +50,90 @@
 	(package-install package))
     (error (message "Problem installing package %s: %s" package error))))
 
-(defvar jcgs/packages '(firefox-controller popwin moz god-mode golden-ratio google google-contacts oauth2 google-maps google-translate moz-controller moz oauth2 org-alert alert log4e gntp dash s org-beautify-theme org-clock-convenience org org-dashboard org-doing org-dropbox names dash org-fstree org-gcal org alert log4e gntp request-deferred request deferred org-jira org-journal org-outlook org-page git f dash s dash s dash org htmlize mustache dash s ht simple-httpd ht org-password-manager s org org-pomodoro alert log4e gntp org-random-todo alert log4e gntp org-tracktable org-webpage web-server dash org htmlize mustache dash s ht ht org2blog xml-rpc org popwin request-deferred request deferred s scad-preview scad-mode scala-mode scala-outline-popup flx-ido flx scala-mode2 popup dash scheme-complete scheme-here simple-httpd sotlisp ssh stumpwm-mode sudo-ext sx let-alist markdown-mode symbols-mode thumb-through tomatinho unbound undo-tree uuid uuidgen web-server which-key window-jump window-layout window-purpose imenu-list let-alist wonderland multi dash-functional dash dash xml-rpc yaml-mode yatemplate yasnippet)
+(defvar jcgs/packages '(
+			alert
+			dash
+			dash-functional
+			deferred
+			f
+			firefox-controller
+			flx
+			flx-ido
+			git
+			gntp
+			god-mode
+			golden-ratio
+			google
+			google-contacts
+			google-maps
+			google-translate
+			ht
+			htmlize
+			imenu-list
+			let-alist
+			log4e
+			markdown-mode
+			moz
+			moz-controller
+			multi
+			mustache
+			names
+			oauth2
+			org
+			org2blog
+			org-alert
+			org-beautify-theme
+			org-clock-convenience
+			org-dashboard
+			org-doing
+			org-dropbox
+			org-fstree
+			org-gcal
+			org-jira
+			org-journal
+			org-outlook
+			org-page
+			org-password-manager
+			org-pomodoro
+			org-random-todo
+			org-tracktable
+			org-webpage
+			popup
+			popwin
+			request
+			request-deferred
+			s
+			scad-mode
+			scad-preview
+			scala-mode
+			scala-mode2
+			scala-outline-popup
+			scheme-complete
+			scheme-here
+			simple-httpd
+			sotlisp
+			ssh
+			stumpwm-mode
+			sudo-ext
+			sx
+			symbols-mode
+			thumb-through
+			tomatinho
+			unbound
+			undo-tree
+			uuid
+			uuidgen
+			web-server
+			which-key
+			window-jump
+			window-layout
+			window-purpose
+			wonderland
+			xml-rpc
+			yaml-mode
+			yasnippet
+			yatemplate
+			)
   "The packages I want installed.
 Derived from `package-activated-list'.")
 
