@@ -1,8 +1,8 @@
 ;;; config-packages.el --- set up my packages downloads  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  John Sturdy
+;; Copyright (C) 2016, 2018  John Sturdy
 
-;; Time-stamp: <2016-09-06 15:51:13 johstu01>
+;; Time-stamp: <2018-02-09 10:47:24 jcgs>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -47,7 +47,7 @@
       (if (package-installed-p package)
 	  (message "Package %s already installed" package)
 	(message "Installing package %s" package)
-	(install-package package))
+	(package-install package))
     (error (message "Problem installing package %s: %s" package error))))
 
 (defvar jcgs/packages '(firefox-controller popwin moz god-mode golden-ratio google google-contacts oauth2 google-maps google-translate moz-controller moz oauth2 org-alert alert log4e gntp dash s org-beautify-theme org-clock-convenience org org-dashboard org-doing org-dropbox names dash org-fstree org-gcal org alert log4e gntp request-deferred request deferred org-jira org-journal org-outlook org-page git f dash s dash s dash org htmlize mustache dash s ht simple-httpd ht org-password-manager s org org-pomodoro alert log4e gntp org-random-todo alert log4e gntp org-tracktable org-webpage web-server dash org htmlize mustache dash s ht ht org2blog xml-rpc org popwin request-deferred request deferred s scad-preview scad-mode scala-mode scala-outline-popup flx-ido flx scala-mode2 popup dash scheme-complete scheme-here simple-httpd sotlisp ssh stumpwm-mode sudo-ext sx let-alist markdown-mode symbols-mode thumb-through tomatinho unbound undo-tree uuid uuidgen web-server which-key window-jump window-layout window-purpose imenu-list let-alist wonderland multi dash-functional dash dash xml-rpc yaml-mode yatemplate yasnippet)
