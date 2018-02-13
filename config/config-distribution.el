@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-02-09 10:37:50 jcgs>
+;;; Time-stamp: <2018-02-14 15:16:58 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -47,9 +47,10 @@
 
 ;;;; editing
 
-(setq indent-tabs-mode nil
-      kill-whole-line t
+(setq kill-whole-line t
       parens-require-spaces nil)
+
+(set-default 'indent-tabs-mode nil)
 
 (defcustom quotes-require-spaces t
   "If non-nil, add whitespace as needed when inserting quotes.
