@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2017-12-04 16:24:16 jcgs>
+;;; Time-stamp: <2018-02-14 15:18:33 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -448,7 +448,7 @@ Argument DAYS is the number of days to fast for."
     (when line-number
       (goto-line line-number))))
 
-;;; git things
+;;;; git things
 
 (defun git-this-version (whereat)
   "Checkout the version around WHEREAT (in a git log)."
@@ -463,7 +463,7 @@ Argument DAYS is the number of days to fast for."
 
 (add-to-list 'auto-mode-alist '("\\.gitdiffs" . diff-mode))
 
-;;; ledger
+;;;; ledger
 
 (let ((ledger-emacs-directory (substitute-in-file-name "$OPEN_PROJECTS/ledger-mode")))
   (when (file-directory-p ledger-emacs-directory)
@@ -489,5 +489,9 @@ The currently visible text is used to determine the width."
 	  (setq widest x)))
       (forward-line 1))
     (set-frame-width nil widest)))
+
+;;;; groovy-mode
+
+(add-to-list 'auto-mode-alist (cons "Jenkinsfile" 'groovy-mode))
 
 ;;; end of config-misc.el
