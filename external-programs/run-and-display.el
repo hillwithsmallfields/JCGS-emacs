@@ -53,8 +53,10 @@
   (when (or edit-options
             (null rad-command)
             (null rad-files-regexp))
-    (setq rad-command (read-from-minibuffer "Command to run: ")
-          rad-files-regexp (read-from-minibuffer "Regexp for files to display: ")
+    (setq rad-command (read-from-minibuffer "Command to run: "
+                                            rad-command)
+          rad-files-regexp (read-from-minibuffer "Regexp for files to display: "
+                                                 rad-files-regexp)
           rad-highlight-regexps-alist nil)
     (catch 'done
       (while t
@@ -66,40 +68,44 @@
                         (hi-lock-read-face-name))
                   rad-highlight-regexps-alist)))))
     (setq rad-use-view-mode (y-or-n-p "Use view-mode on files? ")))
-  (when (y-or-n-p "Kill buffers from previous run? ")
+  (when (and (reduce (lambda (a b) (or a b)) ; can't use builtin or for this
+                     (mapcar 'get-buffer rad-found-buffers))
+             (y-or-n-p (format "Kill buffers from previous run (%s)? "
+                               (mapconcat 'buffer-name rad-found-buffers " "))))
     (mapcar 'kill-buffer rad-found-buffers))
-  (setq rad-found-buffers nil)
-  (let ((output-buffer (get-buffer-create
-                        (format "*RAD output for %s*" (buffer-name))))
-        ;; put these in locals as we're about to change buffer and
-        ;; they are buffer-local
-        (command rad-command)
-        (files-regexp rad-files-regexp)
-        (highlight-regexps-alist rad-highlight-regexps-alist))
+  (let* ((original-buffer (current-buffer))
+         (output-buffer (get-buffer-create
+                         (format "*RAD output for %s*" (buffer-name))))
+         ;; put these in locals as we're about to change buffer and
+         ;; they are buffer-local
+         (command rad-command)
+         (files-regexp rad-files-regexp)
+         (highlight-regexps-alist rad-highlight-regexps-alist)
+         (found-buffers  (list output-buffer)))
     (set-buffer output-buffer)
     (erase-buffer)
     (shell-command command output-buffer)
     (pop-to-buffer output-buffer)
-    (shrink-window-if-larger-than-buffer (get-buffer-window output-buffer))
     (goto-char (point-min))
-    (let ((files-to-find nil))
-      ;; get all the filenames from this buffer before finding any of
-      ;; them, so we stay in the same buffer while looking for
-      ;; filenames
-      (while (re-search-forward files-regexp (point-max) t)
-        (let ((filename (ffap-file-at-point)))
-          (when (and (stringp filename)
-                     (file-exists-p filename))
-            (push filename files-to-find))))
-      (dolist (filename files-to-find)
-        (find-file-other-window filename)
-        (push (current-buffer) rad-found-buffers)
-        (dolist (highlighter highlight-regexps-alist)
-          (hi-lock-face-buffer (car highlighter)
-                               (cdr highlighter)))
-        (when rad-use-view-mode
-          (view-mode 1))))
-    t))
+    (while (re-search-forward files-regexp (point-max) t)
+      (let ((filename (ffap-file-at-point)))
+        (when (and (stringp filename)
+                   (file-exists-p filename))
+          (save-excursion
+            (find-file-other-window filename)
+            (push (current-buffer) found-buffers)
+            (dolist (highlighter highlight-regexps-alist)
+              (hi-lock-face-buffer (car highlighter)
+                                   (cdr highlighter)))
+            (when rad-use-view-mode
+              (view-mode 1))))))
+    (save-excursion
+      (set-buffer original-buffer)
+      (setq rad-found-buffers found-buffers))
+    (let ((window (get-buffer-window output-buffer)))
+      (select-window window)
+      (shrink-window-if-larger-than-buffer window))
+    (message "")))
 
 (provide 'run-and-display)
 ;;; run-and-display.el ends here
