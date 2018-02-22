@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2017-11-11 18:45:00 jcgs>
+;;; Time-stamp: <2018-02-22 10:53:59 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -207,7 +207,8 @@ Returns how many buffers it brought up." t)
   (global-set-key [     f12 ] 'smart-repeat-complex-command)
   (define-key minibuffer-local-map [ f12 ] 'previous-history-element)
   (define-key minibuffer-local-map [ C-f12 ] 'next-history-element)
-  (global-set-key [   C-f12 ] 'repeat-matching-complex-command))
+  (global-set-key [   C-f12 ] 'repeat-matching-complex-command)
+  (global-set-key "\C-cr" 'run-and-display))
 
 (defun jcgs-keys:setup-super-map ()
   "Bind some keys on the super modifier."
