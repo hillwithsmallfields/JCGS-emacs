@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2018-01-14 18:29:05 jcgs>
+;;; Time-stamp: <2018-03-13 19:57:54 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -34,6 +34,9 @@
 
 (make-shell-for-directory-if-present "$EMACS"
 				     "-emacs-")
+
+(make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
+                                     "-makers-")
 
 (unless (at-work)
   (make-shell-for-directory-if-present "$OPEN_PROJECTS/gos/"
