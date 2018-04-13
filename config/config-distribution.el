@@ -1,9 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-<<<<<<< HEAD
-;;; Time-stamp: <2018-02-14 15:22:23 jcgs>
-=======
-;;; Time-stamp: <2018-02-13 10:20:14 jcgs>
->>>>>>> 58592ea45c264601e325d60e3507f1757cd8ae81
+;;; Time-stamp: <2018-04-13 11:17:27 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -526,6 +522,7 @@ read-only (although I don't think I'd changed anything related)
   (setq comint-prompt-regexp "^[^#$%>\n]*[#$%>] *")
   (highlight-regexp "succeeded" 'hi-green)
   (highlight-regexp "failed" 'hi-red-b)
+  (highlight-lines-matching-regexp "^==[0-9]+==") ; valgrind output
   (highlight-lines-matching-regexp "^FAIL: " 'hi-red-b))
    
 (add-hook 'shell-mode-hook 'jcgs/shell-mode-setup)
