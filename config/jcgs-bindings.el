@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2018-02-22 10:53:59 jcgs>
+;;; Time-stamp: <2018-03-14 11:44:10 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -53,6 +53,7 @@ Particularly useful in a shell window."
 
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
 (global-set-key "\C-x\C-y" 'browse-yank)
+(global-set-key "\C-cd" 'ediff-buffers)
 
 (defun grep-this (command-args)
   "Run grep on the current symbol.
