@@ -37,26 +37,51 @@
 (defvar rad-found-buffers nil
   "List of buffers containing files found by `run-and-display'.")
 
+(defvar rad-start-from-one-window t
+  "Whether `run-and-display' should delete other windows before running.
+If you don't do this, it may end up producing excessive windows cumulatively.")
+
 (defvar rad-use-view-mode t
   "Whether `run-and-display' should use `view-mode' for the files it finds.")
+
+(defvar rad-kill-previous-buffers 'ask
+  "Whether to kill previous buffers when doing a new run.
+Can be nil, t or `ask'.")
 
 (mapcar 'make-variable-buffer-local
         '(rad-command
           rad-files-regexp
           rad-highlight-regexps-alist
           rad-found-buffers
-          rad-use-view-mode))
+          rad-start-from-one-window
+          rad-use-view-mode
+          rad-kill-previous-buffers))
+
+(defun rad-preserve-lastest-buffers ()
+  "Prevent `run-and-display' from killing the buffers it made last time.
+Meant for use when `rad-kill-previous-buffers' is t."
+  (interactive)
+  (setq rad-found-buffers nil))
 
 (defun run-and-display (&optional edit-options)
-  "Run a shell command and display indirect results; optionally EDIT-OPTIONS."
+  "Run a shell command and display indirect results; optionally EDIT-OPTIONS.
+The standard output of the command is shown, and is searched for
+filenames matching `rad-files-regexp'.  Those files are visited
+and the buffers are displayed, in view mode if
+`rad-use-view-mode' is set, with highlighting from
+`rad-highlight-regexps-alist'.  These settings are per-buffer,
+and this command prompts to set their values the first time it is
+run in a buffer, or when called with a prefix argument."
   (interactive "P")
   (when (or edit-options
             (null rad-command)
             (null rad-files-regexp))
     (setq rad-command (read-from-minibuffer "Command to run: "
                                             rad-command)
+          rad-start-from-one-window (y-or-n-p "Start from a single window? ")
           rad-files-regexp (read-from-minibuffer "Regexp for files to display: "
                                                  rad-files-regexp)
+          rad-found-buffers nil
           rad-highlight-regexps-alist nil)
     (catch 'done
       (while t
@@ -68,11 +93,21 @@
                         (hi-lock-read-face-name))
                   rad-highlight-regexps-alist)))))
     (setq rad-use-view-mode (y-or-n-p "Use view-mode on files? ")))
-  (when (and (reduce (lambda (a b) (or a b)) ; can't use builtin or for this
+  (when (and rad-found-buffers
+             rad-kill-previous-buffers
+             ;; are there any such buffers?
+             (reduce (lambda (a b) (or a b)) ; can't use builtin `or' for this
                      (mapcar 'get-buffer rad-found-buffers))
-             (y-or-n-p (format "Kill buffers from previous run (%s)? "
-                               (mapconcat 'buffer-name rad-found-buffers " "))))
+             (or (eq rad-kill-previous-buffers t)
+                 (and (eq rad-kill-previous-buffers 'ask)
+                      (y-or-n-p (format "Kill buffers from previous run (%s)? "
+                                        (mapconcat 'buffer-name rad-found-buffers " "))))))
     (mapcar 'kill-buffer rad-found-buffers))
+  (when (and (buffer-modified-p)
+             (y-or-n-p (format "Save buffer %s? " (buffer-name))))
+    (save-buffer))
+  (when rad-start-from-one-window
+    (delete-other-windows))
   (let* ((original-buffer (current-buffer))
          (output-buffer (get-buffer-create
                          (format "*RAD output for %s*" (buffer-name))))
@@ -105,6 +140,7 @@
     (let ((window (get-buffer-window output-buffer)))
       (select-window window)
       (shrink-window-if-larger-than-buffer window))
+    (select-window (get-buffer-window original-buffer))
     (message "")))
 
 (provide 'run-and-display)

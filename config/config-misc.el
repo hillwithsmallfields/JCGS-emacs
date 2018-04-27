@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2018-02-14 15:18:33 jcgs>
+;;; Time-stamp: <2018-02-23 08:37:11 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -493,5 +493,20 @@ The currently visible text is used to determine the width."
 ;;;; groovy-mode
 
 (add-to-list 'auto-mode-alist (cons "Jenkinsfile" 'groovy-mode))
+
+;;;; run-and-display
+
+(autoload 'run-and-display "run-and-display"
+  "Run a shell command and display indirect results; optionally EDIT-OPTIONS.
+The standard output of the command is shown, and is searched for
+filenames matching `rad-files-regexp'.  Those files are visited
+and the buffers are displayed, in view mode if
+`rad-use-view-mode' is set, with highlighting from
+`rad-highlight-regexps-alist'.  These settings are per-buffer,
+and this command prompts to set their values the first time it is
+run in a buffer, or when called with a prefix argument."
+  t)
+
+(set-default 'rad-kill-previous-buffers t)
 
 ;;; end of config-misc.el
