@@ -1,4 +1,4 @@
-;;; Time-stamp: <2010-06-21 16:56:54 jcgs>
+;;; Time-stamp: <2018-03-09 10:57:34 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -22,13 +22,11 @@ With optional (prefix) argument, insert only the NON-DIRECTORY part of the name.
 With double prefix argument, also insert a colon and the line number.
 Particularly useful in a shell window."
   (interactive "*P")
-  (let ((name
-	 (save-window-excursion
-	   (buffer-file-name
-	    (window-buffer
-	     (other-window 1))))))
-    (if name
-	(progn
+  (let* ((target-buffer (save-window-excursion
+                          (window-buffer (other-window 1))))
+         (raw-name (buffer-file-name target-buffer)))
+    (if raw-name
+	(let ((name (file-relative-name raw-name)))
 	  (insert
 	   (if non-directory
 	       (file-name-nondirectory name)
@@ -38,7 +36,7 @@ Particularly useful in a shell window."
 		   (> (car non-directory) 4))
 	      (let ((line
 		     (save-window-excursion
-		       (set-buffer (window-buffer (other-window 1)))
+		       (set-buffer target-buffer)
 		       (1+ (count-lines (point-min) (point))))))
 		(insert ":" (int-to-string line)))))
       (message "Other window has no file"))))
@@ -56,7 +54,7 @@ Particularly useful in a shell window."
     (if name
 	(insert name)
       (message "Other window has no file"))))
-  
+
 (defun cd-supposed-directory ()
   "Insert a cd command to the current directory of the buffer."
   (interactive)
