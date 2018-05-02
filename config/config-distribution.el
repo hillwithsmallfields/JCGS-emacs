@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-04-27 16:46:15 jcgs>
+;;; Time-stamp: <2018-05-02 12:23:18 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -458,6 +458,100 @@ Not persistent between sessions, and reset each day.")
 
 (make-variable-buffer-local 'jcgs/shell-mode-recorded-commands)
 
+(defconst jcgs/shell-command-record-regexp
+  "^ +\\([^:]+\\):\\([^$]+\\)\\$ \\(.+\\)$")
+
+(defun jcgs/shell-command-records-get-buffer ()
+  "Get the buffer of the current line, and put it on the kill ring."
+  (interactive)
+  (save-excursion
+    (beginning-of-line 1)
+    (if (looking-at jcgs/shell-command-record-regexp)
+        (kill-new (match-string-no-properties 1)))))
+
+(defun jcgs/shell-command-records-get-command ()
+  "Get the command of the current line, and put it on the kill ring.."
+  (interactive)
+  (save-excursion
+    (beginning-of-line 1)
+    (if (looking-at jcgs/shell-command-record-regexp)
+        (kill-new (match-string-no-properties 3)))))
+
+(defun jcgs/shell-command-records-get-directory ()
+  "Get the directory of the current line, and put it on the kill ring.."
+  (interactive)
+  (save-excursion
+    (beginning-of-line 1)
+    (if (looking-at jcgs/shell-command-record-regexp)
+        (kill-new (match-string-no-properties 2)))))
+
+(defun jcgs/shell-command-records-set-buffer-other-window ()
+  "Select the buffer of the current line, in another window."
+  (interactive)
+  (switch-to-buffer-other-window
+   (save-excursion
+     (beginning-of-line 1)
+     (if (looking-at jcgs/shell-command-record-regexp)
+         (match-string-no-properties 1)))))
+
+(defun jcgs/shell-command-records-run-in-nearest-shell (&optional no-confirm)
+  "Run the command on this line, in the most recent shell buffer.
+Ask for confirmation of the buffer, except with prefix arg NO-CONFIRM."
+  (interactive "P")
+  (let* ((command (save-excursion
+                    (beginning-of-line 1)
+                    (if (looking-at jcgs/shell-command-record-regexp)
+                        (match-string-no-properties 3)
+                      (error "Not on a shell history line"))))
+         (shell-buffer (catch 'got-one
+                         (dolist (buffer (buffer-list))
+                           (set-buffer buffer)
+                           (when (eq major-mode 'shell-mode)
+                             (throw 'got-one buffer)))
+                         nil)))
+    (when (and shell-buffer (or no-confirm (y-or-n-p (format "Run %s in %s? " command shell-buffer))))
+      (switch-to-buffer shell-buffer)
+      (comint-send-string (get-buffer-process shell-buffer) (concat command "\n")))))
+
+(defun jcgs/shell-command-records-run-in-same-shell (&optional no-confirm)
+  "Run the command on this line, in the same shell it was originally run in.
+Ask for confirmation of the buffer, except with prefix arg NO-CONFIRM."
+  (interactive "P")
+  (let* ((buffer-directory-command (save-excursion
+                                     (beginning-of-line 1)
+                                     (if (looking-at jcgs/shell-command-record-regexp)
+                                         (list
+                                          (match-string-no-properties 1)
+                                          (match-string-no-properties 2)
+                                          (match-string-no-properties 3))
+                                       (error "Not on a shell history line"))))
+         (shell-buffer (nth 0 buffer-directory-command))
+         (directory (nth 1 buffer-directory-command))
+         (command (nth 2 buffer-directory-command)))
+    (when (and shell-buffer (or no-confirm (y-or-n-p (format "Run %s in %s? (dir %s)" command shell-buffer directory))))
+      (switch-to-buffer shell-buffer)
+      (unless (equal directory default-directory)
+        (comint-send-string (get-buffer-process shell-buffer)
+                            (concat "cd " directory "\n")))
+      (comint-send-string (get-buffer-process shell-buffer) (concat command "\n")))))
+
+(defvar jcgs/shell-command-records-mode-map
+  (let ((map (make-keymap)))
+    (suppress-keymap map)
+    (define-key map "b" 'jcgs/shell-command-records-get-buffer)
+    (define-key map "c" 'jcgs/shell-command-records-get-command)
+    (define-key map "d" 'jcgs/shell-command-records-get-directory)
+    (define-key map "o" 'jcgs/shell-command-records-set-buffer-other-window)
+    (define-key map "r" 'jcgs/shell-command-records-run-in-nearest-shell)
+    (define-key map (kbd "RET") 'jcgs/shell-command-records-run-in-same-shell)
+    (define-key map "n" 'next-line)
+    (define-key map "p" 'previous-line)
+    (define-key map "u" 'outline-up-heading)
+    map))
+
+(define-derived-mode jcgs/shell-command-records-mode jcgs/org-journal-mode "Shell command records"
+  "Major mode for an accumulated list of shell commands.")
+
 (defun jcgs/shell-mode-record-command-in-journal (shell-command)
   "Record SHELL-COMMAND in my journal file."
   (when (and (boundp 'jcgs/shell-mode-accumulated-command-history-file)
@@ -472,7 +566,8 @@ Not persistent between sessions, and reset each day.")
 	(find-file jcgs/shell-mode-accumulated-command-history-file)
 	(goto-char (point-max))
 	(when (let ((date (decode-time)))
-		(jcgs/org-journal-open-date (nth 5 date) (nth 4 date) (nth 3 date) t))
+		(jcgs/org-journal-open-date (nth 5 date) (nth 4 date) (nth 3 date) t
+                                            'jcgs/shell-command-records-mode))
 	  (setq jcgs/shell-mode-recorded-commands nil))
 	(goto-char (point-max))
 	(dolist (command-line (split-string shell-command "\n" t))
