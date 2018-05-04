@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-05-02 12:23:18 jcgs>
+;;; Time-stamp: <2018-05-03 17:01:25 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -467,7 +467,8 @@ Not persistent between sessions, and reset each day.")
   (save-excursion
     (beginning-of-line 1)
     (if (looking-at jcgs/shell-command-record-regexp)
-        (kill-new (match-string-no-properties 1)))))
+        (kill-new (match-string-no-properties 1))
+      (error "Not on a shell history line"))))
 
 (defun jcgs/shell-command-records-get-command ()
   "Get the command of the current line, and put it on the kill ring.."
@@ -475,7 +476,8 @@ Not persistent between sessions, and reset each day.")
   (save-excursion
     (beginning-of-line 1)
     (if (looking-at jcgs/shell-command-record-regexp)
-        (kill-new (match-string-no-properties 3)))))
+        (kill-new (match-string-no-properties 3))
+      (error "Not on a shell history line"))))
 
 (defun jcgs/shell-command-records-get-directory ()
   "Get the directory of the current line, and put it on the kill ring.."
@@ -483,7 +485,8 @@ Not persistent between sessions, and reset each day.")
   (save-excursion
     (beginning-of-line 1)
     (if (looking-at jcgs/shell-command-record-regexp)
-        (kill-new (match-string-no-properties 2)))))
+        (kill-new (match-string-no-properties 2))
+      (error "Not on a shell history line"))))
 
 (defun jcgs/shell-command-records-set-buffer-other-window ()
   "Select the buffer of the current line, in another window."
@@ -492,7 +495,19 @@ Not persistent between sessions, and reset each day.")
    (save-excursion
      (beginning-of-line 1)
      (if (looking-at jcgs/shell-command-record-regexp)
-         (match-string-no-properties 1)))))
+         (match-string-no-properties 1)
+       (error "Not on a shell history line")))))
+
+(defun jcgs/shell-command-records-insert-command-other-window ()
+  "Insert the command on this line into the other window."
+  (interactive)
+  (let ((command (save-excursion
+                   (beginning-of-line 1)
+                   (if (looking-at jcgs/shell-command-record-regexp)
+                       (match-string-no-properties 3)
+                     (error "Not on a shell history line")))))
+    (other-window 1)
+    (insert command)))
 
 (defun jcgs/shell-command-records-run-in-nearest-shell (&optional no-confirm)
   "Run the command on this line, in the most recent shell buffer.
@@ -541,7 +556,8 @@ Ask for confirmation of the buffer, except with prefix arg NO-CONFIRM."
     (define-key map "b" 'jcgs/shell-command-records-get-buffer)
     (define-key map "c" 'jcgs/shell-command-records-get-command)
     (define-key map "d" 'jcgs/shell-command-records-get-directory)
-    (define-key map "o" 'jcgs/shell-command-records-set-buffer-other-window)
+    (define-key map "B" 'jcgs/shell-command-records-set-buffer-other-window)
+    (define-key map "C" 'jcgs/shell-command-records-insert-command-other-window)
     (define-key map "r" 'jcgs/shell-command-records-run-in-nearest-shell)
     (define-key map (kbd "RET") 'jcgs/shell-command-records-run-in-same-shell)
     (define-key map "n" 'next-line)
