@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2018-03-14 11:44:10 jcgs>
+;;; Time-stamp: <2018-06-23 13:47:15 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -210,6 +210,13 @@ Returns how many buffers it brought up." t)
   (define-key minibuffer-local-map [ C-f12 ] 'next-history-element)
   (global-set-key [   C-f12 ] 'repeat-matching-complex-command)
   (global-set-key "\C-cr" 'run-and-display))
+
+(defun jcgs-keys:setup-default-keyboardio ()
+  "Add some keys for my keyboardio.
+This copies some awkward M- bindings to C-."
+  (interactive)
+  (global-set-key [ C-< ] 'beginning-of-buffer)
+  (global-set-key [ C-> ] 'end-of-buffer))
 
 (defun jcgs-keys:setup-super-map ()
   "Bind some keys on the super modifier."
