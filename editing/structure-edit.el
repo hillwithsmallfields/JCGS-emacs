@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2017-11-11 18:36:40 jcgs>
+;;; Time-stamp: <2018-07-05 14:12:18 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -22,8 +22,8 @@
 
 (provide 'structure-edit)
 
-(defvar in-wander-yank nil
-  "Whether we are currently in a wander-yank.")
+(defvar wander-yank-depth 0
+  "How many levels of wander-yank we are in.")
 
 (defun pick-up-sexp-at-point (count)
   "Copy COUNT sexps from point into the kill ring, and exit recursive edit.
@@ -45,7 +45,7 @@ Use with wander-yank for moves (destructive-cut-and-paste)."
 Presumably the user picks something up into the kill ring during
 the recursive edit."
   (interactive)
-  (let ((in-wander-yank t))
+  (let ((wander-yank-depth (1+ wander-yank-depth)))
     (save-excursion
       (save-window-excursion
 	(recursive-edit))))
@@ -54,7 +54,7 @@ the recursive edit."
 (defun wander-yank-dwim (count)
   "If not already in a wander-yank (which see), do wander-yank, else pick-up-sexp-at-point."
   (interactive "p")
-  (if in-wander-yank
+  (if (> wander-yank-depth 0)
       (pick-up-sexp-at-point count)
     (wander-yank)))
 
