@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2017-11-12 13:53:27 jcgs>
+;;; Time-stamp: <2018-07-05 13:51:37 jcgs>
 
 (setq debug-on-error t)
 
@@ -25,7 +25,7 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
-(when (at-work)
+(when (at-work-p)
       (dolist (file '("work-tasks"))
 	(add-to-list 'org-agenda-files
 		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
@@ -33,7 +33,7 @@
 		     t))
       (add-to-list 'jcgs/org-journal-files "/nethome/johstu01/work-org/work-log.org"))
 
-(when (at-home)
+(when (at-home-p)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"

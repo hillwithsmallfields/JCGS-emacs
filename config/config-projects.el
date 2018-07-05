@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2018-03-13 19:57:54 jcgs>
+;;; Time-stamp: <2018-07-05 13:52:22 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -14,7 +14,7 @@
 
 (make-named-shell (format "=%s=" (system-name)) "~")
 
-(unless (or (at-work)
+(unless (or (at-work-p)
 	    (on-small-machine))
   (dolist (pair '(("-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/")
 		  ("-examples-for-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/examples/")
@@ -38,7 +38,7 @@
 (make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
                                      "-makers-")
 
-(unless (at-work)
+(unless (at-work-p)
   (make-shell-for-directory-if-present "$OPEN_PROJECTS/gos/"
 				       "-gos-"
 				       ;; "make clean; ./configure; make\n"

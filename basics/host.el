@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2018-07-05 13:49:30 jcgs>
+;; Time-stamp: <2018-07-05 13:51:10 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -70,14 +70,14 @@ Used for determining whether this Emacs is running at work.")
 This lets my configuration recognize I'm at work even when the
 machine is on some other network connection.")
 
-(defun at-work ()
+(defun at-work-p ()
   "Return whether I'm on a work machine."
   (or (string-match employer-domain
 		    (system-name))
       (string-match employer-laptop
 		    (system-name))))
 
-(defun at-home ()
+(defun at-home-p ()
   "Return whether I'm on a home system.
 Currently looks for whether one of my Raspberry Pis is reachable
 through a local address."
