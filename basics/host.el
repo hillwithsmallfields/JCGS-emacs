@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2017-11-24 14:08:16 jcgs>
+;; Time-stamp: <2018-07-05 13:49:30 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -78,9 +78,11 @@ machine is on some other network connection.")
 		    (system-name))))
 
 (defun at-home ()
-  "Return whether I'm on a home system."
-  ;; for now, ignore the middle possibility
-  (not (at-work)))
+  "Return whether I'm on a home system.
+Currently looks for whether one of my Raspberry Pis is reachable
+through a local address."
+  (string-match "1 packets transmitted, 1 received"
+                (shell-command-to-string "ping -W 1 -c 1 fragaria")))
 
 (defun on-small-machine ()
   "Whether I'm on some small machine, such as a laptop."
