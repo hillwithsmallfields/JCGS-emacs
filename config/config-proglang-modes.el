@@ -1,8 +1,8 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2017-12-04 16:43:21 jcgs>
+;;; Time-stamp: <2018-07-18 08:54:24 jcgs>
 
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -21,6 +21,7 @@
   "My hook for setting up C mode."
   (define-key c-mode-map "\C-cc" 'compile)
   (define-key c-mode-map "\C-cf" 'cflow-file)
+  (setq c-basic-offset 4)
   ;; (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
   )
 
