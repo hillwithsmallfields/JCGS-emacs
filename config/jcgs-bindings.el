@@ -212,6 +212,13 @@ Returns how many buffers it brought up." t)
   (global-set-key [   C-f12 ] 'repeat-matching-complex-command)
   (global-set-key "\C-cr" 'run-and-display))
 
+(defun jcgs-keys:setup-default-keyboardio ()
+  "Add some keys for my keyboardio.
+This copies some awkward M- bindings to C-."
+  (interactive)
+  (global-set-key [ C-< ] 'beginning-of-buffer)
+  (global-set-key [ C-> ] 'end-of-buffer))
+
 (defun jcgs-keys:setup-super-map ()
   "Bind some keys on the super modifier."
   (interactive)
