@@ -38,7 +38,7 @@
         (while (re-search-forward "<\\(/?\\)\\([a-z]+\\)" (line-end-position) t)
           (let ((closing (/= (match-beginning 1) (match-end 1)))
                 (tag (match-string-no-properties 2)))
-            (message "%S %S %d" closing tag indentation)
+            ;; (message "%S %S %d" closing tag indentation)
             (unless (member tag indent-html-non-enclosing-tags)
               (setq indentation (+ indentation (if closing -1 1)))))))
       (beginning-of-line 2)
