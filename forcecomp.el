@@ -1,4 +1,4 @@
-(setq load-path `("emacs/my-extensions-to-packages/bbdb"
+(setq load-path `(;; "emacs/my-extensions-to-packages/bbdb"
 		  "emacs/my-extensions-to-packages/type-break"
 		  "emacs/my-extensions-to-packages/vm"
 		  "emacs/my-extensions-to-packages/voice"

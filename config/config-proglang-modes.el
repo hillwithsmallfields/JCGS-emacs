@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2018-07-18 08:54:24 jcgs>
+;;; Time-stamp: <2018-09-10 09:20:38 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
@@ -39,31 +39,29 @@
 
 (defun use-latest-version (project-directory pattern file)
   "Use the latest version in PROJECT-DIRECTORY/PATTERN containing FILE."
-  (catch 'found
-    (dolist (version (reverse (directory-files project-directory
-					       t
-					       pattern
-					       nil)))
-      (let ((dir (expand-file-name "elisp" version)))
-	(when (file-exists-p (expand-file-name file dir))
-	  (message "Using %s for %s" dir file)
-	  (add-to-list 'load-path dir)
-	  (throw 'found version))))
-    (message "Could not find a version in %s that contains %s"
-	     project-directory file)
+  (if (file-directory-p project-directory)
+      (catch 'found
+        (dolist (version (reverse (directory-files project-directory
+					           t
+					           pattern
+					           nil)))
+          (let ((dir (expand-file-name "elisp" version)))
+	    (when (file-exists-p (expand-file-name file dir))
+	      (message "Using %s for %s" dir file)
+	      (add-to-list 'load-path dir)
+	      (throw 'found version))))
+        (message "Could not find a version in %s that contains %s"
+	         project-directory file)
+        nil)
     nil))
 
-(use-latest-version (substitute-in-file-name "$OPEN_PROJECTS/cflow")
-		    "cflow-[0-9]+\\.[0-9]+"
-		    "cflow-mode.el")
-
-(autoload 'cflow-mode "cflow-mode")
-
-(add-to-list 'auto-mode-alist (cons "\\.cflow$" 'cflow-mode))
-
-(require 'cflow-mode)
-
-(setq cflow-source-beside-callgraph t)
+(when (use-latest-version (substitute-in-file-name "$OPEN_PROJECTS/cflow")
+		          "cflow-[0-9]+\\.[0-9]+"
+		          "cflow-mode.el")
+  (autoload 'cflow-mode "cflow-mode")
+  (add-to-list 'auto-mode-alist (cons "\\.cflow$" 'cflow-mode))
+  (require 'cflow-mode)
+  (setq cflow-source-beside-callgraph t))
 
 ;;;;;;;;;;;;;;;
 ;; perl-mode ;;
