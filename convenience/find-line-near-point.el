@@ -44,6 +44,20 @@ With optional argument FORWARD, look after WHERE instead of before it."
                   (string-to-number (match-string 4))
                 nil)))))
 
+(defun locate-file-in-tree (file &optional tree)
+  "Locate FILE within TREE."
+  (unless tree (setq tree default-directory))
+  (let ((here (expand-file-name file tree)))
+    (if (file-exists-p here)
+        here
+      (catch 'found
+        (dolist (dirent (directory-files tree nil "^[^.]" t))
+          (let ((exp (expand-file-name dirent tree)))
+            (if (file-directory-p exp)
+                (let ((found-under (locate-file-in-tree file exp)))
+                  (when found-under (throw 'found found-under))))))
+        nil))))
+
 (defun find-place (&optional where forward)
   "Find a buffer visiting the file before WHERE, at line and column.
 With optional argument FORWARD, look after WHERE instead of before it.
@@ -60,7 +74,8 @@ directory."
          (column (third place))
          (buffer (or (find-buffer-visiting name)
                      (and (file-exists-p name) (find-file-noselect name))
-                     (get-buffer (file-name-nondirectory name)))))
+                     (get-buffer (file-name-nondirectory name))
+                     (locate-file-in-tree (file-name-nondirectory name)))))
     (if (null buffer)
         (error "Could not find %s" name)
       (switch-to-buffer-other-window buffer)
