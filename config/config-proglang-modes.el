@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2018-09-10 09:20:38 jcgs>
+;;; Time-stamp: <2018-09-18 17:01:45 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
@@ -22,7 +22,7 @@
   (define-key c-mode-map "\C-cc" 'compile)
   (define-key c-mode-map "\C-cf" 'cflow-file)
   (setq c-basic-offset 4)
-  ;; (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
+  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
   )
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
@@ -109,6 +109,11 @@
     ;; untabify only if there are just a few tabs
     (when (> (* tabs 24) lines)
       (untabify (point-min) (point-max)))
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward "\n\n\n" (point-max) t)
+        (forward-line -1)
+        (delete-blank-lines)))
     (delete-trailing-whitespace)))
 
 (defun jcgs/python-mode-hook ()
