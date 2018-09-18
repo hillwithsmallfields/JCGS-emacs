@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-05-03 17:01:25 jcgs>
+;;; Time-stamp: <2018-09-18 13:49:05 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -622,12 +622,21 @@ read-only (although I don't think I'd changed anything related)
     (erase-buffer)
     (setq comint-last-prompt-overlay nil)))
 
+(defun jcgs/shell-mode-latest-jira-mention ()
+  "Insert the latest thing that looks like a jira ticket."
+  (interactive)
+  (let ((ticket (save-excursion (re-search-backward "\\<[A-Z][A-Z]-[0-9]\\{3,5\\}\\>" (point-min) t))))
+    (if ticket
+        (insert (match-string 0))
+      (error "Could not find anything that looked like a JIRA ticket"))))
+
 (defun jcgs/shell-mode-setup ()
   "Set shell mode up the way I want it."
   (add-hook 'comint-input-filter-functions 'jcgs/shell-mode-record-command-in-journal t t)
   (define-key shell-mode-map "\C-ce" 'jcgs/shell-mode-erase-buffer)
   (define-key shell-mode-map "\C-cr" 'comint-fix-ssh-known-hosts)
   (define-key shell-mode-map "\C-c\C-c" 'jcgs/shell-mode-interrupt-subjob)
+  (define-key shell-mode-map "\C-cj" 'jcgs/shell-mode-latest-jira-mention)
   (define-key shell-mode-map "\r" 'jcgs/shell-mode-send-input)
   (make-local-variable 'comint-prompt-regexp)
   (setq comint-prompt-regexp "^[^#$%>\n]*[#$%>] *")
