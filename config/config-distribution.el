@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-09-18 13:49:05 jcgs>
+;;; Time-stamp: <2018-09-24 10:43:26 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -210,6 +210,23 @@ Top and bottom destinations are actually `scroll-margin' lines
 	    ((eq recenter-last-op 'top)
 	     (setq recenter-last-op 'bottom)
 	     (recenter (- -1 this-scroll-margin))))))))
+
+(defvar other-window-or-frame-starting-window nil)
+
+(defun other-window-or-frame (&optional count)
+  "Select another window, or frame, or screen.
+COUNT can be passed in to make it negative."
+  (interactive "p")
+  (if (eq this-command last-command)
+      (progn
+	(other-window count)
+	(when (eq (selected-window) other-window-or-frame-starting-window)
+	  (other-frame count)
+          (setq other-window-or-frame-starting-window (selected-window))))
+    (setq other-window-or-frame-starting-window (selected-window))
+    (other-window count)))
+
+(global-set-key "\C-xo" 'other-window-or-frame)
 
 ;;;; History
 
