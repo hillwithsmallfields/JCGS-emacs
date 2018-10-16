@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2018  John Sturdy
 
-;; Time-stamp: <2018-02-09 10:51:58 jcgs>
+;; Time-stamp: <2018-10-16 15:42:53 jcgs>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -158,7 +158,7 @@ Derived from `package-activated-list'.")
 	  (message "Patching with %s" file)
 	  (load-file file))))))
 
-(add-hook 'after-init-hook 'jcgs/config-packages-after-init-function)
+;; (add-hook 'after-init-hook 'jcgs/config-packages-after-init-function)
 
 (provide 'config-packages)
 
