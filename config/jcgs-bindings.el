@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2018-07-09 11:16:06 jcgs>
+;;; Time-stamp: <2018-09-14 15:45:45 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -21,6 +21,13 @@ Particularly useful in a shell window."
 (autoload 'other-window-directory-name "file-name-insertions"
   "Insert at point the name of the directory of the file in the next window.
 Particularly useful in a shell window."
+  t)
+
+(autoload 'find-place "find-line-near-point"
+  "Find a buffer visiting the file before WHERE, at line and column.
+Looks in the buffers you are visiting, as well trying the
+filename as such, as the filename may be relative to the wrong
+directory."
   t)
 
 (defun save-all-buffers-no-ask ()
@@ -55,6 +62,8 @@ Particularly useful in a shell window."
 (global-set-key "\C-x\C-y" 'browse-yank)
 (global-set-key "\C-cd" 'ediff-buffers)
 (global-set-key "\C-cf" 'find-file-at-point)
+(global-set-key "\C-cl" 'find-place)
+(global-set-key "\C-cL" 'find-place-forward)
 
 (defun grep-this (command-args)
   "Run grep on the current symbol.
