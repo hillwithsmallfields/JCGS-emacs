@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-09-24 10:43:26 jcgs>
+;;; Time-stamp: <2018-10-09 12:42:14 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -23,7 +23,7 @@
 (setq display-time-and-date t)
 (display-time)
 
-(when (string-match "elijah" (system-name))
+(when (string-match "elijah\\|duralium" (system-name))
   (display-battery-mode))
 
 ;;;; Commands
@@ -410,6 +410,25 @@ in case several build up before you dismiss them.")
 
 (add-hook 'compilation-finish-functions 'jcgs-compilation-finished)
 
+(defvar pre-compilation-frames nil
+  "A hack to capture the frame configuration before the compilation window appears.")
+
+(setq compilation-buffer-name-function
+      (lambda (foo)
+        "A hack to capture the frame configuration before the compilation window appears."
+        (setq pre-compilation-frames (current-frame-configuration))
+        (format "*Compilation from %s*" (buffer-name))))
+
+(defun jcgs/hide-successful-compilation (buffer manner)
+  "Handle a successful compilation.
+Argument BUFFER is ignored.
+Argument MANNER is used to decide what to do."
+  (when (and pre-compilation-frames (equal manner "finished"))
+    (set-frame-configuration pre-compilation-frames))
+  (message "Compilation %s" manner))
+
+(add-hook 'compilation-finish-functions 'jcgs/hide-successful-compilation)
+
 (defun ancestor-directory-containing (directory file)
   "Return the closest parent* directory of DIRECTORY that has FILE in it."
   (interactive
@@ -567,12 +586,47 @@ Ask for confirmation of the buffer, except with prefix arg NO-CONFIRM."
                             (concat "cd " directory "\n")))
       (comint-send-string (get-buffer-process shell-buffer) (concat command "\n")))))
 
+(defun jcgs/shell-command-records-run-in-same-shell-with-gdb (&optional no-confirm)
+  "Run the command on this line with gdb, in the same shell it was originally run in.
+Ask for confirmation of the buffer, except with prefix arg NO-CONFIRM."
+  (interactive "P")
+  (let* ((buffer-directory-command (save-excursion
+                                     (beginning-of-line 1)
+                                     (if (looking-at
+                                          jcgs/shell-command-record-regexp)
+                                         (list
+                                          (match-string-no-properties 1)
+                                          (match-string-no-properties 2)
+                                          (match-string-no-properties 3))
+                                       (error "Not on a shell history line"))))
+         (shell-buffer (nth 0 buffer-directory-command))
+         (directory (nth 1 buffer-directory-command))
+         (command-line-parts (split-string (nth 2 buffer-directory-command)))
+         (command (car command-line-parts))
+         (command-args (mapconcat 'identity
+                                  (cons "run" (cdr command-line-parts))
+                                  " ")))
+    (when (and shell-buffer (or no-confirm
+                                (y-or-n-p (format "Run %s in %s? (dir %s)"
+                                                  command
+                                                  shell-buffer
+                                                  directory))))
+      (switch-to-buffer shell-buffer)
+      (unless (equal directory default-directory)
+        (comint-send-string (get-buffer-process shell-buffer)
+                            (concat "cd " directory "\n")))
+      (kill-new command-args)
+      (message "run command %S is on the kill ring" command-args)
+      (comint-send-string (get-buffer-process shell-buffer)
+                          (concat "gdb " command "\n")))))
+
 (defvar jcgs/shell-command-records-mode-map
   (let ((map (make-keymap)))
     (suppress-keymap map)
     (define-key map "b" 'jcgs/shell-command-records-get-buffer)
     (define-key map "c" 'jcgs/shell-command-records-get-command)
     (define-key map "d" 'jcgs/shell-command-records-get-directory)
+    (define-key map "g" 'jcgs/shell-command-records-run-in-same-shell-with-gdb)
     (define-key map "B" 'jcgs/shell-command-records-set-buffer-other-window)
     (define-key map "C" 'jcgs/shell-command-records-insert-command-other-window)
     (define-key map "r" 'jcgs/shell-command-records-run-in-nearest-shell)
