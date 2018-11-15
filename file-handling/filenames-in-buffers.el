@@ -1,5 +1,5 @@
 ;;;; filenames-in-buffers.el
-;;; Time-stamp: <2005-11-16 11:34:08 jcgs>
+;;; Time-stamp: <2018-11-15 19:26:34 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -43,7 +43,7 @@
 	  (backward-char 1)
           (let ((start (point)))
 	    (if (looking-at ":\\([0-9]+\\)")
-		(string-to-int (match-string 1))
+		(string-to-number (match-string 1))
 	      nil)))
       nil)))
 

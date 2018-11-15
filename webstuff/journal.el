@@ -1,5 +1,5 @@
 ;;;; journal.el -- stuff for keeping a diary
-;;; Time-stamp: <2017-01-08 21:44:11 jcgs>
+;;; Time-stamp: <2018-11-15 19:22:16 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -122,11 +122,11 @@ Not a full implementation!"
 			 (list nil	; 0
 			       nil	; 1
 			       nil	; 2
-			       (string-to-int (match-string-no-properties 3)) ; 3 = day
+			       (string-to-number (match-string-no-properties 3)) ; 3 = day
 			       (cdr (assoc (match-string-no-properties 2) 
 					   journal-monthname-alist ; journal-monthname-alist
 					   )) ; 4 = month
-			       (string-to-int (match-string-no-properties 1)) ; 5 = year
+			       (string-to-number (match-string-no-properties 1)) ; 5 = year
 			       )
 		       nil)))
     found-date))
@@ -145,11 +145,11 @@ With optional argument, read two days to give a range within a month."
 			 (list nil	; 0
 			       nil	; 1
 			       nil	; 2
-			       (string-to-int (match-string-no-properties 3)) ; 3 = day
+			       (string-to-number (match-string-no-properties 3)) ; 3 = day
 			       (cdr (assoc (match-string-no-properties 2) 
 					   journal-monthname-alist ; journal-monthname-alist
 					   )) ; 4 = month
-			       (string-to-int (match-string-no-properties 1)) ; 5 = year
+			       (string-to-number (match-string-no-properties 1)) ; 5 = year
 			       )
 		       nil))
 	 ;; (thing (message "found-date=%S month=%S" found-date (match-string-no-properties 2)))
@@ -403,8 +403,8 @@ sObservations: ")
   (let ((fn (buffer-file-name)))
     (if (and fn
 	     (string-match "\\([0-9][0-9]\\)-\\([01][0-9]\\)\\.html" fn))
-	(cons (string-to-int (substring fn (match-beginning 1) (match-end 1)))
-	      (string-to-int (substring fn (match-beginning 2) (match-end 2))))
+	(cons (string-to-number (substring fn (match-beginning 1) (match-end 1)))
+	      (string-to-number (substring fn (match-beginning 2) (match-end 2))))
       nil)))
 
 (defun journal-month-next (year-month)
@@ -449,7 +449,7 @@ sObservations: ")
 	 (short-year-number (mod
 			     (if (numberp year)
 				 year
-			       (string-to-int year))
+			       (string-to-number year))
 			     100))
 	 (month-number (if (numberp month)
 			   month
@@ -466,10 +466,10 @@ sObservations: ")
   (let ((marker (format "<h2><a name=\"%02d\">[%04d-%s-%02d]</a></h2>"
 			(if (numberp day)
 			    day
-			  (string-to-int day))
+			  (string-to-number day))
 			(if (numberp year)
 			    year
-			  (string-to-int year))
+			  (string-to-number year))
 			(substring (cond
 				    ((numberp month)
 				     (car (rassoc month journal-monthname-alist)))
@@ -478,7 +478,7 @@ sObservations: ")
 				   0 3)
 			(if (numberp day)
 			    day
-			  (string-to-int day)))))
+			  (string-to-number day)))))
     ;; (message "Looking for %s" marker)
     (if (search-backward marker (point-min) t)
 	t
@@ -499,9 +499,9 @@ sObservations: ")
 ;;   (interactive)
 ;;   (save-excursion
 ;;     (if (re-search-backward "\\[\\([0-9]+\\)-\\([a-z]+\\)-\\([0-9]+\\)\\]" (point-min) t)
-;; 	(let* ((year (string-to-int (match-string-no-properties 1)))
+;; 	(let* ((year (string-to-number (match-string-no-properties 1)))
 ;; 	      (month (cdr (assoc (match-string-no-properties 2) journal-monthname-alist)))
-;; 	      (day (string-to-int (match-string-no-properties 3)))
+;; 	      (day (string-to-number (match-string-no-properties 3)))
 ;; 	      (dow (aref journal-weekday-full-names (nth 6 (decode-time (encode-time 0 0 0 day month year)))))
 ;; 	      )
 ;; 	  (message "%d-%d-%d is a %s" year month day dow)

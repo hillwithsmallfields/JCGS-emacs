@@ -50,7 +50,7 @@ Takes begin and end of region as arguments."
 nChapter: 
 sVerse: 
 sEnd verse: ")
-  (if (stringp chapter) (setq chapter (string-to-int chapter)))
+  (if (stringp chapter) (setq chapter (string-to-number chapter)))
   (let ((endstart (string-match "[-,]\\([0-9]+\\)$" start-verse)))
     (if (and endstart (null end-verse))
 	(progn
@@ -59,13 +59,13 @@ sEnd verse: ")
   (setq start-verse
 	(if (string= start-verse "")
 	    nil
-	  (string-to-int start-verse)))
+	  (string-to-number start-verse)))
   (if end-verse
       (progn
 	(setq end-verse
 	      (if (string= end-verse "")
 		  nil
-		(string-to-int end-verse)))
+		(string-to-number end-verse)))
 	(if (or (eq start-verse end-verse)
 		(zerop end-verse))
 	    (setq end-verse nil))))

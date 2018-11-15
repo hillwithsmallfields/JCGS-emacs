@@ -1,5 +1,5 @@
 ;;;; command-phrases.el -- convert text in a buffer into Emacs commands
-;;; Time-stamp: <2006-01-25 16:20:49 jcgs>
+;;; Time-stamp: <2018-11-15 19:26:34 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -226,7 +226,7 @@ FILTER modifies commands before they are made into embedded commands."
 
        ((looking-at "\\([0-9]+\\)")
 	;; number
-	(push (string-to-int (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
+	(push (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
 	      script)
 	(goto-char (match-end 1))
 	(when coph:split-lines

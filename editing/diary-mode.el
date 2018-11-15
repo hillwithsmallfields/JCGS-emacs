@@ -1,5 +1,5 @@
 ;;;; diary-mode.el
-;;; Time-stamp: <2006-01-23 16:45:58 john>
+;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
 ;;; smarten up a buffer for use with the emacs diary
 ;;; originally done mainly to colour things according to day of week
 
@@ -177,7 +177,7 @@ This re-does the colouring."
      (list month day)))
   (if (not (eq major-mode 'diary-mode))
       (find-file diary-file))
-  (if (stringp day) (setq day (string-to-int day)))
+  (if (stringp day) (setq day (string-to-number day)))
   (setq month (if (integerp month)
 		  (car (rassoc month monthabbrev-alist))
 		(substring month 0 3)))
@@ -251,10 +251,10 @@ This re-does the colouring."
 			(match-string 1)
 		      nil)))
 	   (day (if (looking-at day-regexp)
-		    (string-to-int (match-string 1))
+		    (string-to-number (match-string 1))
 		  nil))
 	   (year (if (looking-at year-regexp)
-		     (string-to-int (match-string 1))
+		     (string-to-number (match-string 1))
 		   (third (calendar-current-date)))))
       ;; (message "month=%d day=%d year=%d" the-month day year)
       (if (and the-month day year)

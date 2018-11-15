@@ -1,5 +1,5 @@
 ;;;; save-count.el -- count the number of saves of a file
-;;; Time-stamp: <2005-05-27 15:09:57 john>
+;;; Time-stamp: <2018-11-15 19:26:34 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -32,7 +32,7 @@ Meant to go on write-file-hook."
     (goto-char (point-min))
     (when (re-search-forward save-count-pattern (point-max) t)
       (message "got %s" (match-string 2))
-	(replace-match (int-to-string (1+ (string-to-int (match-string 2))))
+	(replace-match (int-to-string (1+ (string-to-number (match-string 2))))
 		       t t nil 2))
     nil))
 

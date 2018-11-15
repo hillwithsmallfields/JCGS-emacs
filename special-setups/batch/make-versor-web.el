@@ -1,5 +1,5 @@
 ;;;; make-versor-web.el -- set up the versor web pages
-;;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;;; Time-stamp: <2018-11-15 19:25:21 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -56,7 +56,7 @@
 	     (matched (string-match "-\\([0-9]+\\)\\.png" image))
 	     (number-string (match-string 1 image))
 	     (step-number (if (stringp number-string)
-			      (string-to-int number-string)
+			      (string-to-number number-string)
 			    0)))
 	(message "Processing step %d" step-number)
 	(find-file (expand-file-name (format "demo-step-%d.html" step-number)

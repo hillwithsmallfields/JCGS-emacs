@@ -1,5 +1,5 @@
 ;;;; filenames-in-buffers.el
-;;; Time-stamp: <2003-10-09 10:13:15 john>
+;;; Time-stamp: <2018-11-15 19:25:31 jcgs>
 
 (provide 'filenames-in-buffers)
 (require 'buffer-matched)
@@ -29,7 +29,7 @@
 	  (backward-char 1)
           (let ((start (point)))
 	    (if (looking-at ":\\([0-9]+\\)")
-		(string-to-int (buffer-matched 1))
+		(string-to-number (buffer-matched 1))
 	      nil)))
       nil)))
 

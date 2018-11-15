@@ -1,5 +1,5 @@
 ;;;; journal-pictures.el -- check that I've used all the pictures provided
-;;; Time-stamp: <2007-01-31 16:04:42 jcgs>
+;;; Time-stamp: <2018-11-15 19:25:21 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -124,8 +124,8 @@ Return them in emacs time format."
 			  "\" align=\"left\" alt=\"["
 			  (if (string-match "--\\([0-9]+\\)-\\([0-9]+\\)-" short-name)
 			      (format "At %02d:%02d"
-				      (string-to-int (match-string 1 short-name))
-				      (string-to-int (match-string 2 short-name)))
+				      (string-to-number (match-string 1 short-name))
+				      (string-to-number (match-string 2 short-name)))
 			    (subst-char-in-string ?_ 32
 						  (subst-char-in-string ?- 32 short-name)
 						  t))

@@ -1,5 +1,5 @@
 ;;;; dvi-view.el -- View a DVI file in an Emacs buffer
-;;; Time-stamp: <2007-08-22 19:18:37 jcgs>
+;;; Time-stamp: <2018-11-15 19:26:56 jcgs>
 
 ;; Copyright (C) 2007, John C. G. Sturdy
 
@@ -118,7 +118,7 @@ P")
 	(while (re-search-forward "\\[\\([0-9]+\\) ?\\(([0-9]+)\\)?\\]" (point-max) t)
 	  (let* ((page (match-string-no-properties 1))
 		 (page-file (concat base-name page ".png")))
-	    (push (cons (string-to-int page) page-file) pages)))
+	    (push (cons (string-to-number page) page-file) pages)))
 	(let ((view-buffer (get-buffer-create (format "*View of %s*" (file-name-nondirectory base-name)))))
 	  (set-buffer view-buffer)
 	  (setq buffer-read-only nil)
