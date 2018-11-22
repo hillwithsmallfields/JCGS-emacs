@@ -1,5 +1,5 @@
 ;;;; ps-stack-comments.el -- update stack comments in a PostScript file
-;;; Time-stamp: <2006-06-25 23:43:09 jcgs>
+;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -23,14 +23,14 @@
     (exch . (lambda (a b &rest z)
 	      (cons b (cons a z))))
     (roll . (lambda (affected-string movement-string &rest z)
-	      (let* ((affected (string-to-int affected-string))
-		     (movement (string-to-int movement-string))
+	      (let* ((affected (string-to-number affected-string))
+		     (movement (string-to-number movement-string))
 		     (unaffected (nthcdr affected-string z)))
 		;; todo: write this
 		)))
     (index . (lambda (i &rest z)
 	       (if (string-match "^[0-9]+$" i)
-		   (cons (nth (string-to-int i) z)
+		   (cons (nth (string-to-number i) z)
 			 z)
 		 (cons "?" z))))
     (copy . (lambda (amount &rest z)

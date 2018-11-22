@@ -1,5 +1,5 @@
 ;;;; swadesh-numbers.el -- further stuff for swadesh lists
-;;; Time-stamp: <2006-01-25 10:41:34 jcgs>
+;;; Time-stamp: <2018-11-15 19:26:35 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -239,7 +239,7 @@
   (while (not (eobp))
     (forward-line 1)
     (when (looking-at "^\\(\"[a-z]+\",\\)?\"?\\([0-9]+\\)\"?")
-      (let ((number (string-to-int (match-string-no-properties 2)))
+      (let ((number (string-to-number (match-string-no-properties 2)))
 	    (string (match-string-no-properties 1)))
 	(message "number=%d string=%s" number string)
 	(when string

@@ -1,6 +1,6 @@
 ;;;; bbdb-export-lists.el -- output various lists from my bbdb
 ;;; started by John Sturdy, 1999-01-07
-;;; Time-stamp: <2013-12-21 22:46:34 jcgs>
+;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
 
 (provide 'bbdb-export-lists)
 (require 'bbdb-iterators)
@@ -273,7 +273,7 @@ If a call to RECORD-INFO returns nil, it is not included in the result."
 
 (defun bbdb:make-Christmas-card-list (year)
   "Make my Christmas card list for YEAR."
-  (interactive (list (string-to-int (read-from-minibuffer "Year: "))))
+  (interactive (list (string-to-number (read-from-minibuffer "Year: "))))
   (switch-to-buffer (get-buffer-create "*Christmas card list*"))
   (erase-buffer)
   (let ((card-list
@@ -282,7 +282,7 @@ If a call to RECORD-INFO returns nil, it is not included in the result."
 	  (function
 	   (lambda (record)
 	     (let* ((recyear (bbdb-record-getprop record 'christmas-card))
-		    (nyear (string-to-int recyear)))
+		    (nyear (string-to-number recyear)))
 	       (if (or (not (numberp nyear)) (< nyear year))
 		   (vector (bbdb-record-title-and-name record)
 			   (bbdb:pick-one-address (bbdb-record-addresses record))
@@ -310,7 +310,7 @@ If a call to RECORD-INFO returns nil, it is not included in the result."
 
 (defun bbdb:mark-sent-Christmas-cards (year)
   "Prompt for names and mark that they have been sent a Christmas card this YEAR."
-  (interactive (list (string-to-int (read-from-minibuffer "Year: "))))
+  (interactive (list (string-to-number (read-from-minibuffer "Year: "))))
   (let ((records nil)
 	(year-string (int-to-string year)))
     (while
@@ -530,7 +530,7 @@ according to the second array slot of each of them."
     (let ((prev-date ""))
       (dolist (person people)
 	(let* ((raw-date (cdr person))
-	       (date (concat (calendar-month-name (string-to-int raw-date) t)
+	       (date (concat (calendar-month-name (string-to-number raw-date) t)
 			     " "
 			     (substring raw-date -2)))
 	       )

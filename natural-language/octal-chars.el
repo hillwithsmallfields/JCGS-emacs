@@ -1,5 +1,5 @@
 ;;;; octal-chars.el -- convert escape sequences in a file
-;;; Time-stamp: <2006-01-25 10:42:29 jcgs>
+;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -23,7 +23,7 @@
   (save-excursion
   (goto-char to)
   (while (re-search-backward "\\\\\\([0-7][0-7][0-7]\\)" from t)
-    (replace-match (char-to-string (string-to-int (match-string 1) 8))
+    (replace-match (char-to-string (string-to-number (match-string 1) 8))
 		   t t))))
 
 (defun convert-escape-sequences-buffer ()

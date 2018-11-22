@@ -1,5 +1,5 @@
 ;;;; journal-from-diary.el -- convert diary entries to journal entries
-;;; Time-stamp: <2005-01-18 19:04:55 jcgs>
+;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
 
 (provide 'journal-from-diary)
 
@@ -7,7 +7,7 @@
 (defun journal-from-diary (year-string)
   "Convert the lines of the current file into journal entries, assuming YEAR-STRING."
   (interactive "sYear: ")
-  (let ((year (string-to-int year-string)))
+  (let ((year (string-to-number year-string)))
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward
@@ -16,7 +16,7 @@
 	(let* ((month-string (match-string-no-properties 1))
 	       (month (cdr (assoc month-string journal-monthname-alist)))
 	       (day-string (match-string-no-properties 2))
-	       (day (string-to-int day-string))
+	       (day (string-to-number day-string))
 	       (dayofweek (match-string-no-properties 3))
 	       (time-string (match-string-no-properties 4))
 	       (text (match-string-no-properties 5)))

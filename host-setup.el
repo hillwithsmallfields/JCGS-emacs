@@ -1,5 +1,5 @@
 ;;; host-setup.el --- host-specific setups
-;; Time-stamp: <2007-06-20 13:13:57 jcgs>
+;; Time-stamp: <2018-11-15 19:23:59 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; (require 'screen-setups)
@@ -59,7 +59,7 @@ Emacs frame explicitly.")
   "Setup specific to Joel, my desktop linux at work."
   (setq vr-host "mayo.csis.ul.ie"
 	vr-port 50505
-	;; (string-to-int (read-from-minibuffer "Port for vr: " "0"))
+	;; (string-to-number (read-from-minibuffer "Port for vr: " "0"))
 	;; vr-command ""
 	vr-win-class "Emacs"
 	)

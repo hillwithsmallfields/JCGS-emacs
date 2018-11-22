@@ -1,5 +1,5 @@
 ;;;; journal-from-text.el -- convert plain-text journalling into html journal format
-;;; Time-stamp: <2017-12-10 16:40:23 jcgs>
+;;; Time-stamp: <2018-11-15 19:25:21 jcgs>
 
 (provide 'journal-from-text)
 (require 'journal)
@@ -36,7 +36,7 @@
 		(message "Given month %S, this-month=%S, given day %S" given-month-as-string this-month day)
 		(message "Given year %S, assumed year %S" given-year this-year)
 		(when given-year
-		  (setq this-year (string-to-int given-year)))
+		  (setq this-year (string-to-number given-year)))
 		(when (stringp given-month-as-string)
 		  (message "Got new month string %S" given-month-as-string)
 		  (setq this-month (cdr (assoc (substring given-month-as-string 0 3) journal-monthname-alist)))
@@ -44,7 +44,7 @@
 		(journal-new-day journal
 				 this-year
 				 this-month (substring (aref journal-month-full-names this-month) 0 3)
-				 (string-to-int day))
+				 (string-to-number day))
 		(message "Adding to buffer %S and setting journal-buffer to it" (current-buffer))
 		(setq journal-buffer (current-buffer)
 		      first-in-day t))))

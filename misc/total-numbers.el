@@ -1,5 +1,5 @@
 ;;;; total-numbers.el -- add up all the numbers found in matches for a given pattern
-;;; Time-stamp: <2005-08-12 14:44:40 jcgs>
+;;; Time-stamp: <2018-11-15 19:25:21 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -23,13 +23,13 @@
   (interactive
    (list (region-beginning) (region-end)
 	 (read-from-minibuffer "Pattern: " "\\([-0-9]+\\)")
-	 (string-to-int (read-from-minibuffer "Sub-pattern index: " "1"))))
+	 (string-to-number (read-from-minibuffer "Sub-pattern index: " "1"))))
   (save-excursion
     (goto-char begin)
     (let ((total 0)
 	  (count 0))
       (while (re-search-forward pattern end t)
-	(setq total (+ total (string-to-int (match-string-no-properties sub-index)))
+	(setq total (+ total (string-to-number (match-string-no-properties sub-index)))
 	      count (1+ count)))
       (message "%d numbers totalled %d" count total)
       total)))

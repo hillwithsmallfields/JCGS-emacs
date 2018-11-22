@@ -1,5 +1,5 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2016-04-04 16:40:44 johstu01>
+;;; Time-stamp: <2018-11-15 19:26:35 jcgs>
 
 (use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
@@ -92,7 +92,7 @@ The track numbers are at the start of the file name.  This is the
 output produced by cdda2ogg if given a suitable name suffix."
   (interactive "DRenumber tracks in directory:
 P")
-  (let* ((previous-disc-last-file (string-to-int
+  (let* ((previous-disc-last-file (string-to-number
 			    (car
 			     (nreverse
 			      (directory-files directory
@@ -112,7 +112,7 @@ P")
 	  (setq allow-skip nil)
 	(dolist (file file-list)
 	  (when (string-match "^\\([0-9][0-9]\\)" file)
-	    (let* ((original-number (string-to-int (match-string 1 file)))
+	    (let* ((original-number (string-to-number (match-string 1 file)))
 		   (old-name (expand-file-name file directory))
 		   (temp-name (expand-file-name
 			      (replace-match (int-to-string (+ previous-disc-last-file
@@ -165,7 +165,7 @@ nNumber to add to each number: ")
     (dolist (filename file-list)
       (let ((file (file-name-nondirectory filename)))
 	(when (string-match "^\\([0-9][0-9]\\)" file)
-	  (let* ((original-number (string-to-int (match-string 1 file)))
+	  (let* ((original-number (string-to-number (match-string 1 file)))
 		 (new-name (expand-file-name
 			    (replace-match (int-to-string (+ addendum
 							     original-number))

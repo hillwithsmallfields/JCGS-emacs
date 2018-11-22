@@ -23,7 +23,7 @@
 	(goto-char (point-min))
 	(setq x (cdr x))
 	(while (re-search-forward search (point-max) t)
-	  (let ((n (string-to-int (buffer-substring (match-beginning 1)
+	  (let ((n (string-to-number (buffer-substring (match-beginning 1)
 						    (match-end 1)))))
 	    (replace-match (format replace-format
 				   n (1- n) n n) t t)))))))

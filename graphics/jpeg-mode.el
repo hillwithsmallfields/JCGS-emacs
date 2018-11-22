@@ -1,5 +1,5 @@
 ;;;; jpeg-mode.el -- major mode for JPEG files
-;;; Time-stamp: <2006-03-22 16:06:49 john>
+;;; Time-stamp: <2018-11-15 19:25:21 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -278,7 +278,7 @@
   "*Whether to make raw data invisible when a converted version is displayed.")
 
 (defvar tiff-tag-data-recorders
-  '((tiff-tag-date-time-last-modified . (let* ((raw-time (mapcar 'string-to-int (split-string tag-lisp-data "[ :]")))
+  '((tiff-tag-date-time-last-modified . (let* ((raw-time (mapcar 'string-to-number (split-string tag-lisp-data "[ :]")))
 					       (encoded-time (apply 'encode-time (nreverse raw-time)))
 					       (time-string (current-time-string encoded-time)))
 					  (setq jpeg-details (cons (cons 
@@ -296,7 +296,7 @@
 										     (current-time-string encoded-time))
 									       jpeg-details))))))
 
-    (tiff-tag-date-time-original . (let* ((raw-time (mapcar 'string-to-int (split-string tag-lisp-data "[ :]")))
+    (tiff-tag-date-time-original . (let* ((raw-time (mapcar 'string-to-number (split-string tag-lisp-data "[ :]")))
 					(encoded-time (apply 'encode-time (nreverse raw-time)))
 					(time-string (current-time-string encoded-time)))
 				   (setq jpeg-details (cons (cons 
@@ -315,7 +315,7 @@
 									jpeg-details))))))
 
 
-    (tiff-tag-date-time-digitized . (let* ((raw-time (mapcar 'string-to-int (split-string tag-lisp-data "[ :]")))
+    (tiff-tag-date-time-digitized . (let* ((raw-time (mapcar 'string-to-number (split-string tag-lisp-data "[ :]")))
 					 (encoded-time (apply 'encode-time (nreverse raw-time)))
 					 (time-string (current-time-string encoded-time)))
 				    (setq jpeg-details (cons (cons 
