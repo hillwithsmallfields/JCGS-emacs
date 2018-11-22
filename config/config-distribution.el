@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-10-09 12:42:14 jcgs>
+;;; Time-stamp: <2018-11-22 11:20:13 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -9,6 +9,10 @@
 ;; Keywords: setup
 
 ;; This file is NOT part of GNU Emacs.
+
+;;;; General bits and pieces
+
+(add-to-list 'load-path "/usr/share/emacs/site-lisp")
 
 ;;;; Garbage collection
 
@@ -222,7 +226,8 @@ COUNT can be passed in to make it negative."
 	(other-window count)
 	(when (eq (selected-window) other-window-or-frame-starting-window)
 	  (other-frame count)
-          (setq other-window-or-frame-starting-window (selected-window))))
+          ;; (setq other-window-or-frame-starting-window (selected-window))
+          ))
     (setq other-window-or-frame-starting-window (selected-window))
     (other-window count)))
 
