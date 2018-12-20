@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-11-22 11:20:13 jcgs>
+;;; Time-stamp: <2018-11-22 11:46:29 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
 
@@ -13,6 +13,11 @@
 ;;;; General bits and pieces
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp")
+
+(defun string-to-int (str)
+  "Convert STR to an integer.
+To stop things whinging as this has been withdrawn from Emacs itself."
+  (floor (string-to-number str)))
 
 ;;;; Garbage collection
 
