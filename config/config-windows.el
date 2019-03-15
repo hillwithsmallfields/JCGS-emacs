@@ -44,6 +44,31 @@ of the buffer is not examined."
 		    (throw 'enough widest)))))))
       widest)))
 
+(defun remove-positioning (str)
+  "Remove within-file positioning from STR."
+  (let ((matched (string-match "^\\([^:]+\\):.+" str)))
+    (if matched
+        (match-string 1 str)
+      str)))
+
+(defun find-nearby-file-at-point ()
+  "Find a nearby file."
+  (interactive)
+  (let* ((name (file-name-nondirectory (remove-positioning (ffap-string-at-point))))
+         (search-from (directory-file-name default-directory))
+         (found (catch 'found
+                  (while (> (length search-from) 1)
+                    (let* ((command (format "find %s -name %s 2>&1 | grep -v \"Permission denied\"" search-from name))
+                           (found-here (split-string (shell-command-to-string command) "\n" t)))
+                      (when found-here
+                        (throw 'found found-here))
+                      (let ((more (string-match "\\(.+\\)/[^/]+$" search-from)))
+                        (if more
+                            (setq search-from (match-string 1 search-from))
+                          (throw 'found found-here))))))))
+    (let ((chosen (completing-read "Find file: " found
+                                   nil nil nil nil (car found))))
+      (find-file chosen))))
 
 (defun switch-to-buffer-other-window-jcgs (buffer &optional norecord
 						  force-split)
