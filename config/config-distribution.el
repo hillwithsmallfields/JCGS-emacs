@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2018-11-22 11:46:29 jcgs>
+;;; Time-stamp: <2019-03-27 09:48:11 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -236,7 +236,7 @@ COUNT can be passed in to make it negative."
     (setq other-window-or-frame-starting-window (selected-window))
     (other-window count)))
 
-(global-set-key "\C-xo" 'other-window-or-frame)
+;; (global-set-key "\C-xo" 'other-window-or-frame)
 
 ;;;; History
 
