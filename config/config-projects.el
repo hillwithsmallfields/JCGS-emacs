@@ -1,7 +1,7 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2018-07-05 13:52:22 jcgs>
+;;; Time-stamp: <2019-03-28 07:29:01 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -29,6 +29,11 @@
 
 (make-shell-for-directory-if-present "$OPEN_PROJECTS/muesli/"
 				     "-muesli-"
+				     ;; "make clean; ./configure; make\n"
+				     )
+
+(make-shell-for-directory-if-present "$COMMON/music/"
+				     "-music-"
 				     ;; "make clean; ./configure; make\n"
 				     )
 
