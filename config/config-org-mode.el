@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2017-12-18 09:53:59 jcgs>
+;;; Time-stamp: <2019-04-07 17:14:43 jcgs>
 
 (require 'org)
 
@@ -42,6 +42,7 @@
       org-agenda-columns-add-appointments-to-effort-sum t
       org-agenda-default-appointment-duration 60 ; minutes
       ;; org-agenda-overriding-columns-format ; should probably set this
+      org-enable-table-editor t
       org-directory (substitute-in-file-name "$ORG/")
       foo (message "org dir is %s" org-directory)
       org-default-notes-file (expand-file-name "new.org" org-directory)
