@@ -53,7 +53,11 @@
   base)
 
 (defun make-password-from-string (phrase)
-  "Make a password from some letters of PHRASE."
+  "Make a password from some letters of PHRASE.
+Note that if you use this interactively, and save
+your Emacs command history in a file, you will have
+left a good clue as to what you changed a password on 
+one of your systems to."
   (interactive "sPhrase to base password on: ")
   (let ((password (mapconcat (lambda (word)
                                (if (> (length word) 1)
@@ -84,6 +88,33 @@
       (message "Password \"%s\" (you should probably mangle this further)"
                password))
     password))
+
+(defun random-emacs-command ()
+  "Return the symbol naming a random Emacs command."
+  (let ((symbols nil))
+    (mapatoms (function
+               (lambda (atom)
+                 (when (commandp atom)
+                   (push atom symbols)))))
+    (nth (random (length symbols))
+         symbols)))
+
+(defun docstring-first-line (function-name)
+  "Return the short help string for a random Emacs command."
+  (car (split-string (documentation function-name) "\n")))
+
+(defun make-password-from-emacs-help (&optional copy)
+  "Make a password with a mnemonic phrase.
+The phrase is the first line of the help string for a random Emacs command.
+With non-nil COPY (prefix interactively), put the password into the kill ring."
+  (interactive "P")
+  (let* ((fname (random-emacs-command))
+         (mnemonic (docstring-first-line fname))
+         (password (make-password-from-string mnemonic)))
+    (when copy
+      (kill-new password))
+    (message "Password \"%s\" with mnemonic from %s \"%s\""
+             password fname mnemonic)))
 
 (provide 'make-password-from-text)
 ;;; make-password-from-text.el ends here
