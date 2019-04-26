@@ -1,6 +1,6 @@
 ;;; config-music.el --- anything to do with emacs and music  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  John Sturdy
+;; Copyright (C) 2018, 2019  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@grapeshot.com>
 ;; Keywords: multimedia
@@ -32,6 +32,25 @@ indentation or block comments.  It features easy compilation, error
 finding and viewing of a LilyPond source buffer or region." t)
 
 (add-to-list 'auto-mode-alist (cons ".ly" 'LilyPond-mode))
+
+(defun jcgs/lilypond-compile ()
+  "My wrapper around running Lilypond."
+  (interactive)
+  (LilyPond-command-lilypond)
+  (let* ((lilypond-pdf (concat (file-name-sans-extension (LilyPond-get-master-file))
+                      ".pdf")))
+    (walk-windows (function
+                   (lambda (window)
+                     (when (eq (buffer-file-name (window-buffer window))
+                               lilypond-pdf)
+                       (revert-buffer t t))))))
+  (LilyPond-command-current-midi))
+
+(defun jcgs/lilypond-mode-load-function ()
+  "My Lilypond extras."
+  (define-key LilyPond-mode-map "\C-c\C-a" 'jcgs/lilypond-compile))
+
+(add-to-list 'after-load-alist '(lilypond-mode jcgs/lilypond-mode-load-function))
 
 (provide 'config-music)
 ;;; config-music.el ends here
