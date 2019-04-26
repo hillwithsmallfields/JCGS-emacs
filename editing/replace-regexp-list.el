@@ -1,4 +1,4 @@
-;;; Time-stamp: <2017-01-08 21:32:50 jcgs>
+;;; Time-stamp: <2019-04-26 21:47:14 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -72,7 +72,9 @@ Optional argument VERBOSE produces a report on the alterations made."
 	       ((stringp replacement)
 		(replace-match replacement fixedcase literal))
 	       ((functionp replacement)
-		(replace-match (funcall replacement matched) fixedcase literal))
+		(replace-match (save-match-data
+                                 (funcall replacement matched))
+                               fixedcase literal))
 	       ((consp replacement)
 		(replace-match
 		 (mapconcat (lambda (replace-element)
@@ -81,7 +83,8 @@ Optional argument VERBOSE produces a report on the alterations made."
 			       ((stringp replace-element)
 				replace-element)
 			       ((functionp replace-element)
-				(funcall replace-element matched))
+				(save-match-data
+                                  (funcall replace-element matched)))
 			       ((integerp replace-element)
 				(match-string-no-properties replace-element))
 			       ((consp replace-element)
