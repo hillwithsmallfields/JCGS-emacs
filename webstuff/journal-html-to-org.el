@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2017-09-20 20:01:16 jcgs>
+;;; Time-stamp: <2019-04-26 22:13:55 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -89,17 +89,19 @@ With optional AS-TOKEN, replace spaces in result with underscores."
     ;; (message "(journal-html-get-file-person-name %S)" person-file)
     (let* ((pair (assoc person-file journal-html-file-person-names)))
       (unless pair
-	(find-file (expand-file-name person-file
-				     journal-people-directory))
-	(let ((name-from-file (save-excursion
-				(goto-char (point-min))
-				(if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
-				    (match-string-no-properties 1)
-				  person-file))))
-	  (setq pair (cons person-file name-from-file)
-		journal-html-file-person-names
-		(cons pair
-		      journal-html-file-person-names))))
+	(let ((person-file-name (expand-file-name person-file
+				                  journal-people-directory)))
+          (when (file-exists-p person-file-name)
+            (find-file person-file-name)
+	    (let ((name-from-file (save-excursion
+				    (goto-char (point-min))
+				    (if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
+				        (match-string-no-properties 1)
+				      person-file))))
+	      (setq pair (cons person-file name-from-file)
+		    journal-html-file-person-names
+		    (cons pair
+		          journal-html-file-person-names))))))
       (let ((base (cdr pair)))
 	(if as-token
 	    (subst-char-in-string 32 ?_ base)
@@ -117,10 +119,15 @@ With optional AS-TOKEN, replace spaces in result with underscores."
       (dolist (pair journal-html-file-person-names)
 	(princ (format fmt (car pair) (cdr pair)))))))
 
+(defun make-person-link (person)
+  "Make a link for PERSON."
+  (let* ((name (journal-html-get-file-person-name person t)))
+    (concat "people:" name)))
+
 (defvar journal-html-to-org-edits
   '(("<a href=\"../../people/\\([^\"]+\\)\">\\([^<]+\\)</a>"
-     "[[journal-people:"
-     (journal-html-get-file-person-name (match-string-no-properties 1) t)
+     "[["
+     (make-person-link (match-string-no-properties 1))
      "]["
      2
      "]]")
@@ -128,6 +135,14 @@ With optional AS-TOKEN, replace spaces in result with underscores."
     ("<a href=\"../[0-9][0-9][0-9][0-9]/\\([0-9][0-9]-[0-9][0-9]\\).html#\\([0-9][0-9]\\)\">\\([^<]+\\)</a>" . "[[journal-date:\\1-\\2][\\3]]")
     )
   "Edits to make to convert a journal file.")
+
+(defun get-html-attr-before (attr before)
+  "Get the value of ATTR if defined by BEFORE."
+  (save-excursion
+    (save-match-data
+      (if (re-search-forward (concat attr "=\"\([^\"]\)\"") before t)
+          (match-string-no-properties 1)
+        nil))))
 
 (defun journal-html-get-file-entries (file)
   "Return the journal entries in FILE, converted from html."
@@ -154,16 +169,30 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 	  ;; (message "Got %S at %d" date entry-start)
 	  (goto-char entry-end)
 	  (let ((paragraphs nil))
-	    (while (search-backward "</p>" entry-start t)
-	      (let ((para-end (point)))
-		(unless (search-backward "<p>" entry-start t)
-		  (error "Could not find start of paragraph ending at %d"
-			 para-end))
-		(let ((raw-para-text (buffer-substring-no-properties
-				      (+ (point) 3)
-				      para-end)))
-		  (subst-char-in-string ?\n 32 raw-para-text t)
-		  (push raw-para-text paragraphs))))
+	    (while (re-search-backward "<img\\|</p>" entry-start t)
+	      (cond
+               ((looking-at "</p>")
+                (let ((para-end (point)))
+		  (unless (search-backward "<p>" entry-start t)
+		    (error "Could not find start of paragraph ending at %d"
+			   para-end))
+		  (let ((raw-para-text (buffer-substring-no-properties
+				        (+ (point) 3)
+				        para-end)))
+		    (subst-char-in-string ?\n 32 raw-para-text t)
+		    (push raw-para-text paragraphs))))
+               ((looking-at "<img")
+                (let* ((img-start (point))
+                       (img-end (save-excursion
+                                  (search-forward ">" (point-max) t)))
+                       (src (get-html-attr-before "src" img-end))
+                       (alt (get-html-attr-before "alt" img-end)))
+                  (push (format "#+CAPTION: %s\n[[%s]]\n"
+                                alt
+                                src)
+                        paragraphs)
+                  ))
+               (t (message "Got other (shouldn't happen)"))))
 	    (push (cons date paragraphs)
 		  entries))
 	  (goto-char entry-start)
@@ -241,5 +270,8 @@ It always adds the new file at the end."
   (mapcar 'journal-html-to-org-directory
 	  (directory-files directory t
 			   "[0-9]\\{4\\}$")))
+
+;; to run:
+;; (journal-html-to-org-subdirectories "~/journal/dates/")
 
 (provide 'journal-html-to-org)
