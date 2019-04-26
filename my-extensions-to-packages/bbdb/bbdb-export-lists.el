@@ -1,6 +1,6 @@
 ;;;; bbdb-export-lists.el -- output various lists from my bbdb
 ;;; started by John Sturdy, 1999-01-07
-;;; Time-stamp: <2018-11-15 19:23:48 jcgs>
+;;; Time-stamp: <2019-02-23 19:50:35 jcgs>
 
 (provide 'bbdb-export-lists)
 (require 'bbdb-iterators)
@@ -542,6 +542,25 @@ according to the second array slot of each of them."
 	   (car person)
 	   "\n"))))
     (basic-save-buffer)))
+
+(defun bbdb:make-birth-dates-list ()
+  "Make a list of birth dates."
+  (interactive)
+  (find-file (substitute-in-file-name "$COMMON/var/birth-dates"))
+  (erase-buffer)
+  (let ((people nil))
+    (bbdb:apply-to-records-defining
+     (function
+      (lambda (record)
+	(let ((date (bbdb-record-getprop record 'birth-date)))
+	  (when (string-match "[0-9][0-9]-[0-9][0-9]$" date)
+	    (push (cons (bbdb-record-name record)
+			date)
+		  people)))
+	nil))
+     'birth-date)
+    (dolist (person people)
+      (insert (car person) "\t" (cdr person) "\n"))))
 
 (defun bbdb:make-all-filed-lists ()
   "Remake all the bbdb-derived files"
