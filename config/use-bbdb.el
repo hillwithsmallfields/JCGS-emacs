@@ -1,5 +1,10 @@
 ;;; use-bbdb.el --- setup for bbdb
-;;; Time-stamp: <2016-12-17 16:59:58 jcgs>
+;;; Time-stamp: <2018-12-19 16:49:03 jcgs>
+
+(defun string-to-int (str)
+  "A deprecated function still used by this package.e
+Argument STR is the string to parse as a number."
+  (floor (string-to-number str)))
 
 (use-package bbdb
 	     "$GATHERED/emacs/bbdb"
