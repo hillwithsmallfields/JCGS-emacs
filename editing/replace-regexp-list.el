@@ -1,4 +1,4 @@
-;;; Time-stamp: <2019-04-26 21:47:14 jcgs>
+;;; Time-stamp: <2019-04-27 14:47:23 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -88,7 +88,8 @@ Optional argument VERBOSE produces a report on the alterations made."
 			       ((integerp replace-element)
 				(match-string-no-properties replace-element))
 			       ((consp replace-element)
-				(eval replace-element))))
+				(save-match-data
+                                  (eval replace-element)))))
 			    replacement
 			    "")
 		 fixedcase literal))))
