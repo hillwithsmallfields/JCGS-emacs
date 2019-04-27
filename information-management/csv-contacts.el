@@ -71,8 +71,8 @@
       (when (or (null csv-contacts-name-to-id-hash)
                 (null csv-contacts-id-to-name-hash)
                 (> (buffer-modified-tick) csv-contacts-parsed-tick))
-        (setq csv-contacts-name-to-id-hash (make-hash-table)
-              csv-contacts-id-to-name-hash (make-hash-table)
+        (setq csv-contacts-name-to-id-hash (make-hash-table :test 'equal)
+              csv-contacts-id-to-name-hash (make-hash-table :test 'equal)
               csv-contacts-parsed-tick (buffer-modified-tick))
         (csv-contacts-raw-parse-buffer)
         (let ((given-name-column (cdr (assoc "Given name" csv-contacts-column-alist)))
@@ -105,10 +105,23 @@
   (setq csv-contacts-name-to-id-hash nil
         csv-contacts-id-to-name-hash nil))
 
+(defun car-string-less-than-car (a b)
+  "Return whether the car of A is less than the car of B."
+  (string< (car a) (car b)))
+
 (defun show-contacts-by-name ()
   "List the contacts by name."
   (interactive)
-  (maphash (lambda (k v)
-             (message "%S==>%S" k v)
-             )
-           csv-contacts-name-to-id))
+  (let ((pairs nil))
+    (maphash (lambda (k v)
+               (push (cons k v) pairs))
+             csv-contacts-name-to-id-hash)
+    (setq pairs (sort pairs 'car-string-less-than-car))
+    (with-output-to-temp-buffer "*Contacts by name*"
+      (let ((fmt (format "%%%ds %%s\n"
+                         (1+ (apply 'max
+                                    (mapcar 'length
+                                            (mapcar 'car
+                                                    pairs)))))))
+        (dolist (pair pairs)
+          (princ (format fmt (car pair) (cdr pair))))))))
