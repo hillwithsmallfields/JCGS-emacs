@@ -1,6 +1,10 @@
 ;; Emacs access to my contacts list
 ;; Compatible with the code in https://github.com/hillwithsmallfields/qs/tree/master/contacts
 
+;; Written by John Sturdy, 2019-04-26
+
+(provide 'csv-contacts)
+
 (defconst csv-contacts-column-names
   '("Given name" "Middle names" "Surname" "Title" "Old name" "AKA"
     "Birthday" "Died"
@@ -84,6 +88,7 @@
                                 (nth surname-column person)))
                   (id (nth id-column person)))
               (puthash name id csv-contacts-name-to-id-hash)
+              (puthash (subst-char-in-string 32 ?_ name) id csv-contacts-name-to-id-hash)
               (puthash id name csv-contacts-id-to-name-hash))))))))
 
 (defvar csv-contacts-file (substitute-in-file-name "$ORG/contacts.csv")
@@ -93,7 +98,7 @@
   "Get the ID corresponding to NAME."
   (csv-contacts-prepare csv-contacts-file)
   (gethash name csv-contacts-name-to-id-hash))
-  
+
 (defun csv-contacts-id-to-name (id)
   "Get the name correspoding to ID."
   (csv-contacts-prepare csv-contacts-file)
@@ -125,3 +130,4 @@
                                                     pairs)))))))
         (dolist (pair pairs)
           (princ (format fmt (car pair) (cdr pair))))))))
+
