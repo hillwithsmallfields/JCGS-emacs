@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2019-04-27 15:09:13 jcgs>
+;;; Time-stamp: <2019-04-27 19:17:00 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -137,6 +137,7 @@ With optional AS-TOKEN, replace spaces in result with underscores."
      "]]")
     ("<a href=\"\\([0-9][0-9]-[0-9][0-9]\\).html#\\([0-9][0-9]\\)\">\\([^<]+\\)</a>" . "[[journal-date:\\1-\\2][\\3]]")
     ("<a href=\"../[0-9][0-9][0-9][0-9]/\\([0-9][0-9]-[0-9][0-9]\\).html#\\([0-9][0-9]\\)\">\\([^<]+\\)</a>" . "[[journal-date:\\1-\\2][\\3]]")
+    ("&eacute" . "é")
     )
   "Edits to make to convert a journal file.")
 
@@ -144,18 +145,19 @@ With optional AS-TOKEN, replace spaces in result with underscores."
   "Get the value of ATTR if defined by BEFORE."
   (save-excursion
     (save-match-data
-      (if (re-search-forward (concat attr "=\"\([^\"]\)\"") before t)
+      (if (re-search-forward (concat attr "=\"\\([^\"]+\\)\"") before t)
           (match-string-no-properties 1)
         nil))))
 
-(defun journal-html-get-file-entries (file)
-  "Return the journal entries in FILE, converted from html."
+(defun journal-html-get-file-entries (file &optional extra-regexp extra-action)
+  "Return the journal entries in FILE, converted from html.
+Optional argument EXTRA-REGEXP describes extra things to look for.
+Optional argument EXTRA-ACTION describes what to do with the extra things."
   (save-excursion
     (switch-to-buffer (get-buffer-create " *Conversion*"))
     (erase-buffer)
     (message "Converting contents of file %s" file)
     (insert-file-contents file)
-    ;; (replace-regexp-alist journal-html-to-org-edits)
     (goto-char (point-max))
     (unless (or (re-search-backward "^.*<hr>" (- (point-min) 400) t)
 		(progn
@@ -163,7 +165,8 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 		  (re-search-backward "^.*\\[<a href.+Next month" (- (point-min) 400) t)))
       (error "Could not find realistic end of journal in %s" file))
     (let ((entry-end (point))
-	  (entries nil))
+	  (entries nil)
+          (section-regexp (concat "<img\\|</p>" (or extra-regexp ""))))
       (while (re-search-backward journal-html-html-date-header-regexp
 				 (point-min) t)
 	;; (message "Found one starting at %d" (point))
@@ -173,30 +176,33 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 	  ;; (message "Got %S at %d" date entry-start)
 	  (goto-char entry-end)
 	  (let ((paragraphs nil))
-	    (while (re-search-backward "<img\\|</p>" entry-start t)
+	    (while (re-search-backward section-regexp entry-start t)
 	      (cond
                ((looking-at "</p>")
                 (let ((para-end (point)))
 		  (unless (search-backward "<p>" entry-start t)
 		    (error "Could not find start of paragraph ending at %d"
 			   para-end))
-		  (let ((raw-para-text (buffer-substring-no-properties
-				        (+ (point) 3)
-				        para-end)))
-		    (subst-char-in-string ?\n 32 raw-para-text t)
-		    (push raw-para-text paragraphs))))
+		  (let* ((raw-para-text (buffer-substring-no-properties
+				         (+ (point) 3)
+				         para-end))
+                         (para-as-line (subst-char-in-string ?\n 32 raw-para-text t)))
+		    (push para-as-line paragraphs))))
                ((looking-at "<img")
                 (let* ((img-start (point))
                        (img-end (save-excursion
                                   (search-forward ">" (point-max) t)))
                        (src (get-html-attr-before "src" img-end))
                        (alt (get-html-attr-before "alt" img-end)))
-                  (push (format "#+CAPTION: %s\n[[%s]]\n"
+                  (push (format "#+CAPTION: %s\n    [[%s]]\n"
                                 alt
                                 src)
                         paragraphs)
                   ))
-               (t (message "Got other (shouldn't happen)"))))
+               (t (if extra-action
+                      (push (or (funcall extra-action) "")
+                            paragraphs)
+                    (message "Got other (shouldn't happen)")))))
 	    (push (cons date paragraphs)
 		  entries))
 	  (goto-char entry-start)
@@ -211,20 +217,28 @@ With optional AS-TOKEN, replace spaces in result with underscores."
   "Add ENTRIES to the current file."
   (dolist (entry entries)
     (apply 'jcgs/org-journal-open-date (car entry))
-    (insert "\n")
     (dolist (para (cdr entry))
-      (insert "   " para "\n\n"))))
+      (insert "   ")
+      (let ((para-start (point)))
+        (insert para)
+        (save-excursion
+          (replace-regexp-alist journal-html-to-org-edits
+                                para-start (point))
+          (goto-char para-start)
+          (fill-paragraph)))
+      (insert "\n\n"))))
 
-(defun journal-html-to-org-add-file (org-file html-file)
+(defun journal-html-to-org-add-file (org-file html-file &optional extra-regexp extra-action)
   "Into ORG-FILE add HTML-FILE.
-It always adds the new file at the end."
+It always adds the new file at the end.
+Optional argument EXTRA-REGEXP describes extra things to look for.
+Optional argument EXTRA-ACTION describes what to do with the extra things."
   (interactive "FOrg file: \nfHTML file: \n")
   (message "(journal-html-to-org-add-file %S %S)" org-file html-file)
   (find-file org-file)
   (goto-char (point-max))
   (journal-html-to-org-add-entries
-   (journal-html-get-file-entries html-file))
-  (replace-regexp-alist journal-html-to-org-edits)
+   (journal-html-get-file-entries html-file extra-regexp extra-action))
   (fill-individual-paragraphs (point-min) (point-max)))
 
 (defun file-name-last-directory (directory)
@@ -233,8 +247,10 @@ It always adds the new file at the end."
       (match-string 1 directory)
     directory))
 
-(defun journal-html-to-org-directory (directory)
-  "Make up an org version of the journal files in DIRECTORY."
+(defun journal-html-to-org-directory (directory &optional extra-regexp extra-action)
+  "Make up an org version of the journal files in DIRECTORY.
+Optional argument EXTRA-REGEXP describes extra things to look for.
+Optional argument EXTRA-ACTION describes what to do with the extra things."
   (interactive "DConvert journal in directory: ")
   (when (file-directory-p directory)
     (let* ((dir-dirname (file-name-last-directory directory))
@@ -244,21 +260,28 @@ It always adds the new file at the end."
 					    (file-name-nondirectory directory)
 					    ".org") output-directory))
 	   (html-files (directory-files directory t "[0-9][0-9]-[0-9][0-9]\\.html$")))
-      (message "Scanning files %S in dir-dirname %S, output dir %S, org file %S" html-files dir-dirname output-directory org-filename)
       (find-file org-filename)
       (erase-buffer)
       (journal-html-to-org-add-entries
        (apply 'concatenate 'list
-	      (mapcar 'journal-html-get-file-entries
-		      html-files)))
-      (replace-regexp-alist journal-html-to-org-edits)
+	      (mapcar
+               (function
+                (lambda (file)
+                  (journal-html-get-file-entries
+                   file
+                   extra-regexp extra-action)))
+	       html-files)))
       (fill-individual-paragraphs (point-min) (point-max))
       (basic-save-buffer))))
 
-(defun journal-html-to-org-subdirectories (directory)
-  "Make up org versions of subdirectories of DIRECTORY."
+(defun journal-html-to-org-subdirectories (directory &optional extra-regexp extra-action)
+  "Make up org versions of subdirectories of DIRECTORY.
+Optional argument EXTRA-REGEXP describes extra things to look for.
+Optional argument EXTRA-ACTION describes what to do with the extra things."
   (interactive "DConvert journal in subdirectories of: ")
-  (mapcar 'journal-html-to-org-directory
+  (mapcar (function
+           (lambda (file)
+             (journal-html-to-org-directory file extra-regexp extra-action)))
 	  (directory-files directory t
 			   "[0-9]\\{4\\}$")))
 
