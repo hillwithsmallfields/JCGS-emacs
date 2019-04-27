@@ -1,9 +1,10 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2019-04-26 22:13:55 jcgs>
+;;; Time-stamp: <2019-04-27 15:09:13 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
 (require 'journal-bio)			; for journal-people-directory
+(require 'csv-contacts)                 ; for csv-contacts-name-to-id
 
 (defvar journal-html-html-date-regexp
     "\\([0-9]\\{4\\}\\)-\\([a-z]\\{3\\}\\)-\\([0-9]\\{2\\}\\)"
@@ -121,8 +122,11 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 
 (defun make-person-link (person)
   "Make a link for PERSON."
-  (let* ((name (journal-html-get-file-person-name person t)))
-    (concat "people:" name)))
+  (let* ((name (journal-html-get-file-person-name person t))
+         (id (csv-contacts-name-to-id name)))
+    (if id
+        (concat "contact:" id)
+      (concat "people:" name))))
 
 (defvar journal-html-to-org-edits
   '(("<a href=\"../../people/\\([^\"]+\\)\">\\([^<]+\\)</a>"
@@ -202,19 +206,6 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 	  ))
       (bury-buffer)
       entries)))
-
-;; (defun journal-html-to-org-test (input-file)
-;;   "Test the reader.
-;; Argument INPUT-FILE is the input file."
-;;   (interactive "fInput file: ")
-;;   (let ((entries (journal-html-get-file-entries input-file)))
-;;     (with-output-to-temp-buffer "*Entries*"
-;;       (dolist (entry entries)
-;; 	(princ (format "\n\n%S:\n" (car entry)))
-;; 	(dolist (para (cdr entry))
-;; 	  (princ (format "    %s\n\n" para)))))
-;;     (find-file "/tmp/journal.org")
-;;     (journal-html-to-org-add-entries entries)))
 
 (defun journal-html-to-org-add-entries (entries)
   "Add ENTRIES to the current file."
