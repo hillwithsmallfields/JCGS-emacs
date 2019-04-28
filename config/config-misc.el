@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2018-02-23 08:37:11 jcgs>
+;;; Time-stamp: <2019-04-28 20:33:14 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -168,36 +168,36 @@ FWrite region to file: ")
 			    "(frame :number 4 :x 1400 :y 810 :width 520 :height 390 :screenw 1920 :screenh 1200 :window 20971618 :last-access 315 :dedicated 0) 1"
 			    "")
 		","))
-    (let ((frame-name (file-name-nondirectory
-		       (file-name-sans-extension (car jcgs/org-journal-files)))))
-      (message "setting up journalling frame")
-      (ratpoison-fselect 1)
-      (find-file (car jcgs/org-journal-files))
-      (setq frame-for-work-log
-	    (or (get-frame frame-name)
-		(make-frame-on-display ":0.1"
-				       '((title . "Work log")
-					 (name . "Work log")))))
-      (display-buffer (find-buffer-visiting (car jcgs/org-journal-files))
-		      nil
-		      frame-for-work-log))
+    ;; (let ((frame-name (file-name-nondirectory
+    ;;     	       (file-name-sans-extension (car jcgs/org-journal-files)))))
+    ;;   (message "setting up journalling frame")
+    ;;   (ratpoison-fselect 1)
+    ;;   (find-file (car jcgs/org-journal-files))
+    ;;   (setq frame-for-work-log
+    ;;         (or (get-frame frame-name)
+    ;;     	(make-frame-on-display ":0.1"
+    ;;     			       '((title . "Work log")
+    ;;     				 (name . "Work log")))))
+    ;;   (display-buffer (find-buffer-visiting (car jcgs/org-journal-files))
+    ;;     	      nil
+    ;;     	      frame-for-work-log))
 
-    (when (and (boundp 'work-agenda-file)
-	       (stringp work-agenda-file)
-	       (file-exists-p work-agenda-file))
-      (let ((frame-name (file-name-nondirectory
-			 (file-name-sans-extension work-agenda-file))))
-	(message "setting up work.org frame")
-	(ratpoison-fselect 2)
-	(find-file work-agenda-file)
-	(setq frame-for-work-org
-	      (or (get-frame frame-name)
-		  (make-frame-on-display ":0.1"
-					 '((title . "Tasks")
-					   (name . "Work agenda")))))
-	(display-buffer (find-buffer-visiting work-agenda-file)
-			nil
-			frame-for-work-org)))
+    ;; (when (and (boundp 'work-agenda-file)
+    ;;            (stringp work-agenda-file)
+    ;;            (file-exists-p work-agenda-file))
+    ;;   (let ((frame-name (file-name-nondirectory
+    ;;     		 (file-name-sans-extension work-agenda-file))))
+    ;;     (message "setting up work.org frame")
+    ;;     (ratpoison-fselect 2)
+    ;;     (find-file work-agenda-file)
+    ;;     (setq frame-for-work-org
+    ;;           (or (get-frame frame-name)
+    ;;     	  (make-frame-on-display ":0.1"
+    ;;     				 '((title . "Tasks")
+    ;;     				   (name . "Work agenda")))))
+    ;;     (display-buffer (find-buffer-visiting work-agenda-file)
+    ;;     		nil
+    ;;     		frame-for-work-org)))
     
     (message "setting up erc frame")
     (ratpoison-fselect 3)
