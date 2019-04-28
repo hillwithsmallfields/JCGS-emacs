@@ -1,5 +1,5 @@
 ;;;; journal-html-to-org.el --- convert my old HTML journals to org-mode
-;;; Time-stamp: <2019-04-27 19:17:00 jcgs>
+;;; Time-stamp: <2019-04-28 19:49:41 jcgs>
 
 (require 'journal)
 (require 'replace-regexp-list)
@@ -93,16 +93,19 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 	(let ((person-file-name (expand-file-name person-file
 				                  journal-people-directory)))
           (when (file-exists-p person-file-name)
-            (find-file person-file-name)
-	    (let ((name-from-file (save-excursion
-				    (goto-char (point-min))
-				    (if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
-				        (match-string-no-properties 1)
-				      person-file))))
-	      (setq pair (cons person-file name-from-file)
-		    journal-html-file-person-names
-		    (cons pair
-		          journal-html-file-person-names))))))
+            (let ((already-visited (find-buffer-visiting person-file-name)))
+              (find-file person-file-name)
+	      (let ((name-from-file (save-excursion
+				      (goto-char (point-min))
+				      (if (re-search-forward "<h1>\\([^<]+\\)</h1>" (point-max) t)
+				          (match-string-no-properties 1)
+				        person-file))))
+	        (setq pair (cons person-file name-from-file)
+		      journal-html-file-person-names
+		      (cons pair
+		            journal-html-file-person-names)))
+              (unless already-visited
+                (kill-buffer))))))
       (let ((base (cdr pair)))
 	(if as-token
 	    (subst-char-in-string 32 ?_ base)
@@ -152,7 +155,9 @@ With optional AS-TOKEN, replace spaces in result with underscores."
 (defun journal-html-get-file-entries (file &optional extra-regexp extra-action)
   "Return the journal entries in FILE, converted from html.
 Optional argument EXTRA-REGEXP describes extra things to look for.
-Optional argument EXTRA-ACTION describes what to do with the extra things."
+Optional argument EXTRA-ACTION describes what to do with the extra things.
+It should be a parameterless function returning a cons of text and properties,
+the properties being an alist."
   (save-excursion
     (switch-to-buffer (get-buffer-create " *Conversion*"))
     (erase-buffer)
@@ -175,7 +180,8 @@ Optional argument EXTRA-ACTION describes what to do with the extra things."
 	       (date (journal-html-to-org-date raw-date)))
 	  ;; (message "Got %S at %d" date entry-start)
 	  (goto-char entry-end)
-	  (let ((paragraphs nil))
+	  (let ((paragraphs nil)
+                (properties nil))
 	    (while (re-search-backward section-regexp entry-start t)
 	      (cond
                ((looking-at "</p>")
@@ -200,10 +206,15 @@ Optional argument EXTRA-ACTION describes what to do with the extra things."
                         paragraphs)
                   ))
                (t (if extra-action
-                      (push (or (funcall extra-action) "")
-                            paragraphs)
+                      (let* ((extras (funcall extra-action))
+                             (extra-text (car extras))
+                             (extra-properties (cdr extras)))
+                        (when extra-text
+                          (push extra-text paragraphs))
+                        (when extra-properties
+                          (push extra-properties properties)))
                     (message "Got other (shouldn't happen)")))))
-	    (push (cons date paragraphs)
+	    (push (list date paragraphs properties)
 		  entries))
 	  (goto-char entry-start)
 	  (beginning-of-line 1)
@@ -213,20 +224,27 @@ Optional argument EXTRA-ACTION describes what to do with the extra things."
       (bury-buffer)
       entries)))
 
-(defun journal-html-to-org-add-entries (entries)
-  "Add ENTRIES to the current file."
-  (dolist (entry entries)
-    (apply 'jcgs/org-journal-open-date (car entry))
-    (dolist (para (cdr entry))
-      (insert "   ")
-      (let ((para-start (point)))
-        (insert para)
-        (save-excursion
-          (replace-regexp-alist journal-html-to-org-edits
-                                para-start (point))
-          (goto-char para-start)
-          (fill-paragraph)))
-      (insert "\n\n"))))
+(defun journal-html-to-org-add-entries (entries &optional origin-directory)
+  "Add ENTRIES to the current file.
+Optional argument ORIGIN-DIRECTORY is where pictures will have come from."
+  (let ((edits journal-html-to-org-edits))
+    (when origin-directory
+      (push (cons "\\[\\[\\([^.]+.jpg\\);\\]\\]" (concat "[[" origin-directory "/\\1]]"))
+            edits))
+    (dolist (entry entries)
+      (apply 'jcgs/org-journal-open-date (car entry))
+      (dolist (para (cadr entry))
+        (insert "    ")
+        (let ((para-start (point)))
+          (insert para)
+          (save-excursion
+            (replace-regexp-alist edits
+                                  para-start (point))
+            (goto-char para-start)
+            (fill-paragraph)))
+        (insert "\n\n"))
+      (dolist (prop (caddr entry))
+        (org-set-property (car prop) (cdr prop))))))
 
 (defun journal-html-to-org-add-file (org-file html-file &optional extra-regexp extra-action)
   "Into ORG-FILE add HTML-FILE.
@@ -253,12 +271,11 @@ Optional argument EXTRA-REGEXP describes extra things to look for.
 Optional argument EXTRA-ACTION describes what to do with the extra things."
   (interactive "DConvert journal in directory: ")
   (when (file-directory-p directory)
-    (let* ((dir-dirname (file-name-last-directory directory))
-	   (output-directory (expand-file-name ".." directory))
+    (let* ((output-directory (expand-file-name ".." directory))
 	   (org-filename (expand-file-name (concat
-					    ;; dir-dirname
 					    (file-name-nondirectory directory)
-					    ".org") output-directory))
+					    ".org")
+                                           output-directory))
 	   (html-files (directory-files directory t "[0-9][0-9]-[0-9][0-9]\\.html$")))
       (find-file org-filename)
       (erase-buffer)
@@ -270,7 +287,8 @@ Optional argument EXTRA-ACTION describes what to do with the extra things."
                   (journal-html-get-file-entries
                    file
                    extra-regexp extra-action)))
-	       html-files)))
+	       html-files))
+       (file-name-nondirectory directory))
       (fill-individual-paragraphs (point-min) (point-max))
       (basic-save-buffer))))
 
