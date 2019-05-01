@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2019-05-01 08:52:31 jcgs>
+;;; Time-stamp: <2019-05-01 21:35:36 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
@@ -198,7 +198,7 @@ This should be a list of three parts:
 (defvar work-log-file (expand-file-name
 		       (if (at-work-p)
 			   "~/work-org/work.journal"
-			 "~/common/notes/hackery.org-log"))
+			 "~/common/notes/hacking.journal"))
   "The name of the file containing my work log.")
 
 (message "before loading config, load-path=%S and user-emacs-directory=%S" load-path user-emacs-directory)
