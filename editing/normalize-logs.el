@@ -1,6 +1,6 @@
 ;;; normalize-logs.el --- edit log files to change commonly uninteresting variable text to constant text
 
-;; Copyright (C) 2012, 2013  John Sturdy
+;; Copyright (C) 2012, 2013, 2019  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -44,6 +44,7 @@
     ("uuid [-0-9a-f]+" . "uuid <uuid>")
     ("domid [0-9]+" . "domid 42")
     ("\\[[0-9][0-9]/[a-z][a-z][a-z]/[0-9][0-9][0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9][0-9] [-+][0-9]+\\]" . "[timestamp]")
+    ("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][ T][0-9][0-9]:[0-9][0-9]\\(:[0-9][0-9]\\)?" . "isodatetime")
     ("u'[-0-9a-f]+'" . "u'uuid'")
     ("ID [0-9a-f]+" . "ID <id>")
     ("\\(apache access.log [0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\) [-0-9a-f]+" . "\\1 <uuid>")
