@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2018-07-05 13:52:24 jcgs>
+;;; Time-stamp: <2019-05-01 08:52:31 jcgs>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -197,7 +197,7 @@ This should be a list of three parts:
 
 (defvar work-log-file (expand-file-name
 		       (if (at-work-p)
-			   "~/work-org/work.org-log"
+			   "~/work-org/work.journal"
 			 "~/common/notes/hackery.org-log"))
   "The name of the file containing my work log.")
 
