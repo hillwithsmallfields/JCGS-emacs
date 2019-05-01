@@ -1,8 +1,8 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2018-09-18 17:01:45 jcgs>
+;;; Time-stamp: <2019-05-01 08:53:45 jcgs>
 
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -27,13 +27,15 @@
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
 
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'c++-mode-hook
-	  (lambda ()
-	    (define-key c++-mode-map "\C-cc" 'compile)
-	    (when (file-exists-p "../Makefile")
-	      (make-local-variable 'compile-command)
-	      (setq compile-command "cd ..; make -k "))))
+(defun jcgs-c++-mode-hook ()
+  "My hook for setting up C++ mode."
+  (define-key c++-mode-map "\C-cc" 'compile)
+  (when (file-exists-p "../Makefile")
+    (make-local-variable 'compile-command)
+    (setq compile-command "cd ..; make -k "))
+  (jcgs-c-mode-hook))
+
+(add-hook 'c++-mode-hook 'jcgs-c++-mode-hook)
 
 ;;;; cflow-mode
 
