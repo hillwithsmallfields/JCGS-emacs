@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2019-03-27 09:48:11 jcgs>
+;;; Time-stamp: <2019-04-24 10:53:27 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
@@ -18,6 +18,8 @@
   "Convert STR to an integer.
 To stop things whinging as this has been withdrawn from Emacs itself."
   (floor (string-to-number str)))
+
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;;;; Garbage collection
 
@@ -57,6 +59,7 @@ To stop things whinging as this has been withdrawn from Emacs itself."
 ;;;; editing
 
 (setq kill-whole-line t
+      save-interprogram-paste-before-kill t
       parens-require-spaces nil)
 
 (set-default 'indent-tabs-mode nil)
