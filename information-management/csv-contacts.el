@@ -63,6 +63,14 @@
   nil
   "Hash table mapping contact IDs to names.")
 
+(defvar csv-contacts-given-name-alist
+  nil
+  "Alist of given names to surnames.")
+
+(defvar csv-contacts-given-name-regexp
+  nil
+  "Regexp matching the given names of any of my contacts.")
+
 (defvar csv-contacts-parsed-tick 0
   "For re-reading the data.")
 
@@ -74,6 +82,7 @@
       (find-file file)
       (when (or (null csv-contacts-name-to-id-hash)
                 (null csv-contacts-id-to-name-hash)
+                (null csv-contacts-given-name-alist)
                 (> (buffer-modified-tick) csv-contacts-parsed-tick))
         (setq csv-contacts-name-to-id-hash (make-hash-table :test 'equal)
               csv-contacts-id-to-name-hash (make-hash-table :test 'equal)
@@ -83,13 +92,24 @@
               (surname-column (cdr (assoc "Surname" csv-contacts-column-alist)))
               (id-column (cdr (assoc "ID" csv-contacts-column-alist))))
           (dolist (person csv-contacts-raw-data)
-            (let ((name (concat (nth given-name-column person)
-                                " "
-                                (nth surname-column person)))
-                  (id (nth id-column person)))
+            (let* ((given-name (nth given-name-column person))
+                   (by-given-name-pair (assoc given-name csv-contacts-given-name-alist))
+                   (surname (nth surname-column person))
+                   (name (concat given-name " " surname))
+                   (id (nth id-column person)))
               (puthash name id csv-contacts-name-to-id-hash)
               (puthash (subst-char-in-string 32 ?_ name) id csv-contacts-name-to-id-hash)
-              (puthash id name csv-contacts-id-to-name-hash))))))))
+              (puthash id name csv-contacts-id-to-name-hash)
+              (unless by-given-name-pair
+                (setq by-given-name-pair (cons given-name nil))
+                (push by-given-name-pair csv-contacts-given-name-alist))
+              (rplacd by-given-name-pair
+                      (cons (list surname name id)
+                            (cdr by-given-name-pair)))
+              ;; todo: also put the nicknames, maiden names, etc in
+              ))))))
+  (setq csv-contacts-given-name-regexp
+        (regexp-opt (mapcar 'car csv-contacts-given-name-alist) 'words)))
 
 (defvar csv-contacts-file (substitute-in-file-name "$ORG/contacts.csv")
   "The default location for my contacts data.")
@@ -108,7 +128,8 @@
   "Make the contacts data be re-read next time it is used."
   (interactive)
   (setq csv-contacts-name-to-id-hash nil
-        csv-contacts-id-to-name-hash nil))
+        csv-contacts-id-to-name-hash nil
+        csv-contacts-given-name-alist nil))
 
 (defun car-string-less-than-car (a b)
   "Return whether the car of A is less than the car of B."
@@ -131,3 +152,30 @@
         (dolist (pair pairs)
           (princ (format fmt (car pair) (cdr pair))))))))
 
+(defun handle-contacts-region (begin end)
+  "Handle all contacts between BEGIN and END."
+  (interactive "r")
+  (setq end (copy-marker end))
+  (save-excursion
+    (goto-char begin)
+    (while (re-search-forward csv-contacts-given-name-regexp end t)
+      (let* ((found-name (match-string 0))
+             (by-surname (assoc found-name csv-contacts-given-name-alist))
+             (chosen (if (= (length by-surname) 1) ; todo: I don't think this branch works
+                         (car by-surname)
+                       (let* ((next-word
+                               (save-excursion
+                                 (forward-word 1)
+                                 (let ((next-word-end (point)))
+                                   (backward-word 1)
+                                   (buffer-substring-no-properties (point) next-word-end))))
+                              (next-word-found (assoc next-word by-surname)))
+                         (if next-word-found
+                             (cdr next-word-found)
+                           "ask"        ; todo: completing-read
+                           )))))
+        (message "Got %S, possibilities are %S, chosen is %S" found-name by-surname chosen)
+        ;; todo: call a supplied function
+        )
+      )
+    ))
