@@ -204,48 +204,51 @@
     (save-excursion
       (goto-char begin)
       (while (re-search-forward csv-contacts-given-name-regexp end t)
-        (move-marker name-start (match-beginning 0))
-        (move-marker name-end (point))
-        (let* ((found-name (match-string-no-properties 0))
-               (by-surname (cdr (assoc found-name csv-contacts-given-name-alist)))
-               (chosen (let* ((next-word-end nil)
-                              (next-word
-                               (save-excursion
-                                 (forward-word 1)
-                                 (setq next-word-end (point))
-                                 (backward-word 1)
-                                 (buffer-substring-no-properties (point) next-word-end)))
-                              (next-word-found (assoc next-word by-surname)))
-                         (if next-word-found
-                             (progn
-                               (message "%s disambiguated by next word %s" found-name next-word)
-                               (move-marker name-end next-word-end)
-                               (cdr next-word-found))
-                           (if (= (length by-surname) 1)
+        (unless (save-excursion
+                  (goto-char (match-beginning 0))
+                  (looking-back "people:"))
+          (move-marker name-start (match-beginning 0))
+          (move-marker name-end (point))
+          (let* ((found-name (match-string-no-properties 0))
+                 (by-surname (cdr (assoc found-name csv-contacts-given-name-alist)))
+                 (chosen (let* ((next-word-end nil)
+                                (next-word
+                                 (save-excursion
+                                   (forward-word 1)
+                                   (setq next-word-end (point))
+                                   (backward-word 1)
+                                   (buffer-substring-no-properties (point) next-word-end)))
+                                (next-word-found (assoc next-word by-surname)))
+                           (if next-word-found
                                (progn
-                                 (message "Only possibility is %S" (car by-surname))
-                                 (cdar by-surname))
-                             (message "Asking user")
-                             (move-overlay current-name-overlay name-start name-end)
-                             (let* ((default-for-name (gethash found-name latest-surnames-for-names))
-                                    (completion-ignore-case t)
-                                    (surname (completing-read (if default-for-name
-                                                                  (format "%s (default %s): " found-name default-for-name)
-                                                                (format "%s: " found-name))
-                                                              (cons (list "-")
-                                                                    by-surname)
-                                                              nil ; predicate
-                                                              t ; require-match
-                                                              nil ; initial-input
-                                                              nil ; history
-                                                              default-for-name)))
-                               (if (string= surname "-")
-                                   nil
-                                 (puthash found-name surname latest-surnames-for-names)
-                                 (message "Stored %s as default for %s, returning user choice" surname found-name)
-                                 (cdr (assoc surname by-surname)))))))))
-          (message "Got %S, possibilities were %S, chosen is %S" found-name by-surname chosen)
-          (funcall callback name-start name-end)))
+                                 (message "%s disambiguated by next word %s" found-name next-word)
+                                 (move-marker name-end next-word-end)
+                                 (cdr next-word-found))
+                             (if (= (length by-surname) 1)
+                                 (progn
+                                   (message "Only possibility is %S" (car by-surname))
+                                   (cdar by-surname))
+                               (message "Asking user")
+                               (move-overlay current-name-overlay name-start name-end)
+                               (let* ((default-for-name (gethash found-name latest-surnames-for-names))
+                                      (completion-ignore-case t)
+                                      (surname (completing-read (if default-for-name
+                                                                    (format "%s (default %s): " found-name default-for-name)
+                                                                  (format "%s: " found-name))
+                                                                (cons (list "-")
+                                                                      by-surname)
+                                                                nil ; predicate
+                                                                t ; require-match
+                                                                nil ; initial-input
+                                                                nil ; history
+                                                                default-for-name)))
+                                 (if (string= surname "-")
+                                     nil
+                                   (puthash found-name surname latest-surnames-for-names)
+                                   (message "Stored %s as default for %s, returning user choice" surname found-name)
+                                   (cdr (assoc surname by-surname)))))))))
+            (message "Got %S, possibilities were %S, chosen is %S" found-name by-surname chosen)
+            (funcall callback name-start name-end))))
       (delete-overlay current-name-overlay))))
 
 (defun test-contact-scanning ()
