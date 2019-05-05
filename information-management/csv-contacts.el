@@ -206,7 +206,8 @@
       (while (re-search-forward csv-contacts-given-name-regexp end t)
         (unless (save-excursion
                   (goto-char (match-beginning 0))
-                  (looking-back "people:"))
+                  (or (= (char-before (point)) 91)
+                  (looking-back "people:")))
           (move-marker name-start (match-beginning 0))
           (move-marker name-end (point))
           (let* ((found-name (match-string-no-properties 0))
@@ -248,16 +249,31 @@
                                    (message "Stored %s as default for %s, returning user choice" surname found-name)
                                    (cdr (assoc surname by-surname)))))))))
             (message "Got %S, possibilities were %S, chosen is %S" found-name by-surname chosen)
-            (funcall callback name-start name-end))))
+            (save-excursion
+              (funcall callback name-start name-end chosen)))))
       (delete-overlay current-name-overlay))))
+
+(defun surround-contact-name (begin end data)
+  "Surround contact name between BEGIN and END, using DATA."
+  (when data
+    (goto-char begin)
+    (insert "[[contact:" (cadr data) "][")
+    (goto-char end)
+    (insert "]]")))
+
+(defun surround-contact-names ()
+  "Surround contact names in the current buffer, with contact links."
+  (interactive)
+  (handle-contacts-region (point-min) (point-max)
+                          'surround-contact-name))
 
 (defun test-contact-scanning ()
   "Use the current buffer to test contact scanning."
   (interactive)
-  (handle-contacts-region
-   (point-min) (point-max)
-   (lambda (begin end)
-     (message "got %d %d %s"
-              (marker-position begin)
-              (marker-position end)
-              (buffer-substring-no-properties begin end)))))
+  (handle-contacts-region (point-min) (point-max)
+                          (lambda (begin end data)
+                            (message "got %d %d %s %S"
+                                     (marker-position begin)
+                                     (marker-position end)
+                                     (buffer-substring-no-properties begin end)
+                                     data))))
