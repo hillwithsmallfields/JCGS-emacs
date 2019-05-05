@@ -198,7 +198,9 @@
   (setq end (copy-marker end))
   (let ((name-start (make-marker))
         (name-end (make-marker))
+        (current-name-overlay (make-overlay (point-min) (point-min)))
         (case-fold-search nil))
+    (overlay-put current-name-overlay 'face 'hi-yellow)
     (save-excursion
       (goto-char begin)
       (while (re-search-forward csv-contacts-given-name-regexp end t)
@@ -224,6 +226,7 @@
                                  (message "Only possibility is %S" (car by-surname))
                                  (cdar by-surname))
                              (message "Asking user")
+                             (move-overlay current-name-overlay name-start name-end)
                              (let* ((default-for-name (gethash found-name latest-surnames-for-names))
                                     (completion-ignore-case t)
                                     (surname (completing-read (if default-for-name
@@ -242,7 +245,8 @@
                                  (message "Stored %s as default for %s, returning user choice" surname found-name)
                                  (cdr (assoc surname by-surname)))))))))
           (message "Got %S, possibilities were %S, chosen is %S" found-name by-surname chosen)
-          (funcall callback name-start name-end))))))
+          (funcall callback name-start name-end)))
+      (delete-overlay current-name-overlay))))
 
 (defun test-contact-scanning ()
   "Use the current buffer to test contact scanning."
