@@ -193,9 +193,8 @@
 (defvar latest-surnames-for-names (make-hash-table :test 'equal)
   "Lookup of the latest surname for a given name.")
 
-(defun handle-contacts-region (begin end)
-  "Handle all contacts between BEGIN and END."
-  (interactive "r")
+(defun handle-contacts-region (begin end callback)
+  "Handle all contacts between BEGIN and END, using CALLBACK."
   (setq end (copy-marker end))
   (let ((name-start (make-marker))
         (name-end (make-marker))
@@ -243,5 +242,15 @@
                                  (message "Stored %s as default for %s, returning user choice" surname found-name)
                                  (cdr (assoc surname by-surname)))))))))
           (message "Got %S, possibilities were %S, chosen is %S" found-name by-surname chosen)
-          ;; todo: call a supplied function
-          )))))
+          (funcall callback name-start name-end))))))
+
+(defun test-contact-scanning ()
+  "Use the current buffer to test contact scanning."
+  (interactive)
+  (handle-contacts-region
+   (point-min) (point-max)
+   (lambda (begin end)
+     (message "got %d %d %s"
+              (marker-position begin)
+              (marker-position end)
+              (buffer-substring-no-properties begin end)))))
