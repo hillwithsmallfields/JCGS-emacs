@@ -74,6 +74,28 @@
 (defvar csv-contacts-parsed-tick 0
   "For re-reading the data.")
 
+(defun csv-contacts-register-name-pair (given-name surname id)
+  "Register that GIVEN-NAME may be followed by SURNAME and they refer to ID."
+  (let ((by-given-name-pair (assoc given-name csv-contacts-given-name-alist)))
+    (unless by-given-name-pair
+      (setq by-given-name-pair (cons given-name nil))
+      (push by-given-name-pair csv-contacts-given-name-alist))
+    (unless (assoc surname (cdr by-given-name-pair))
+      (rplacd by-given-name-pair
+            (cons (list surname name id)
+                  (cdr by-given-name-pair))))))
+
+(defun csv-contacts-add-other-names-to-tree (other-names-string id)
+  "Parse OTHER-NAMES-STRING and add them all with ID."
+  (let ((other-names (split-string other-names-string ";" t " +")))
+    (dolist (other-name other-names)
+      (puthash other-name id csv-contacts-name-to-id-hash)
+      (let ((as-list (split-string other-name)))
+        (csv-contacts-register-name-pair
+         (car as-list)
+         (mapconcat 'identity (cdr as-list) " ")
+         id)))))
+
 (defun csv-contacts-prepare (file)
   "Prepare the contacts lists based on FILE."
   (interactive "fContacts file: ")
@@ -90,24 +112,24 @@
         (csv-contacts-raw-parse-buffer)
         (let ((given-name-column (cdr (assoc "Given name" csv-contacts-column-alist)))
               (surname-column (cdr (assoc "Surname" csv-contacts-column-alist)))
+              (old-names-column (cdr (assoc "Old name" csv-contacts-column-alist)))
+              (aka-column (cdr (assoc "AKA" csv-contacts-column-alist)))
               (id-column (cdr (assoc "ID" csv-contacts-column-alist))))
           (dolist (person csv-contacts-raw-data)
             (let* ((given-name (nth given-name-column person))
-                   (by-given-name-pair (assoc given-name csv-contacts-given-name-alist))
                    (surname (nth surname-column person))
                    (name (concat given-name " " surname))
+                   (old-names-string (nth old-names-column person))
+                   (other-names-string (nth aka-column person))
                    (id (nth id-column person)))
               (puthash name id csv-contacts-name-to-id-hash)
               (puthash (subst-char-in-string 32 ?_ name) id csv-contacts-name-to-id-hash)
               (puthash id name csv-contacts-id-to-name-hash)
-              (unless by-given-name-pair
-                (setq by-given-name-pair (cons given-name nil))
-                (push by-given-name-pair csv-contacts-given-name-alist))
-              (rplacd by-given-name-pair
-                      (cons (list surname name id)
-                            (cdr by-given-name-pair)))
-              ;; todo: also put the nicknames, maiden names, etc in
-              ))))))
+              (csv-contacts-register-name-pair given-name surname id)
+              (when old-names-string
+                (csv-contacts-add-other-names-to-tree old-names-string id))
+              (when other-names-string
+                (csv-contacts-add-other-names-to-tree other-names-string id))))))))
   (setq csv-contacts-given-name-regexp
         (regexp-opt (mapcar 'car csv-contacts-given-name-alist) 'words)))
 
@@ -151,6 +173,22 @@
                                                     pairs)))))))
         (dolist (pair pairs)
           (princ (format fmt (car pair) (cdr pair))))))))
+
+(defun show-name-tree ()
+  "Show the registered names, as a tree."
+  (interactive)
+  (setq csv-contacts-given-name-alist
+        (sort csv-contacts-given-name-alist
+              'car-string-less-than-car))
+  (dolist (subtree csv-contacts-given-name-alist)
+    (rplacd subtree (sort (cdr subtree) 'car-string-less-than-car)))
+  (with-output-to-temp-buffer "*Name tree*"
+  (dolist (subtree csv-contacts-given-name-alist)
+    (princ (car subtree))
+    (princ ":")
+    (dolist (leaf (cdr subtree))
+      (princ "\n  ") (princ (car leaf)))
+    (princ "\n"))))
 
 (defun handle-contacts-region (begin end)
   "Handle all contacts between BEGIN and END."
