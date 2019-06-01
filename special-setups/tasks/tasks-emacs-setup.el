@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2018-07-05 13:51:37 jcgs>
+;;; Time-stamp: <2019-06-01 13:09:58 jcgs>
 
 (setq debug-on-error t)
 
@@ -25,14 +25,6 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
-(when (at-work-p)
-      (dolist (file '("work-tasks"))
-	(add-to-list 'org-agenda-files
-		     (substitute-in-file-name (format "/nethome/johstu01/work-org/%s.org"
-						      file))
-		     t))
-      (add-to-list 'jcgs/org-journal-files "/nethome/johstu01/work-org/work-log.org"))
-
 (when (at-home-p)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
@@ -55,7 +47,6 @@
   (org-mode))
 
 (mapc (lambda (file)
-	;; at work, I don't have all my non-work files readable
 	(when (file-readable-p file)
 	  (find-file file)))
       org-agenda-files)
