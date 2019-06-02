@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2019-06-01 13:09:58 jcgs>
+;;; Time-stamp: <2019-06-02 07:29:53 jcgs>
 
 (setq debug-on-error t)
 
@@ -25,6 +25,9 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
+(add-to-list 'load-path (substitute-in-file-name "$ORGLISP"))
+(require 'org-jcgs-journal)
+
 (when (at-home-p)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
@@ -37,14 +40,14 @@
 				  (mapcar (lambda (file)
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org")))))
-  (let ((journal-incoming "~/common/jottings/for-journal.txt"))
+  (let ((journal-incoming "~/common/journal/incoming.journal"))
     (when (file-exists-p journal-incoming)
       (find-file journal-incoming))))
 
-(mapcar 'find-file jcgs/org-journal-files)
-(if (fboundp 'jcgs/org-journal-mode)
-    (jcgs/org-journal-mode)
-  (org-mode))
+;; (mapcar 'find-file jcgs/org-journal-files)
+;; (if (fboundp 'jcgs/org-journal-mode)
+;;     (jcgs/org-journal-mode)
+;;   (org-mode))
 
 (mapc (lambda (file)
 	(when (file-readable-p file)
