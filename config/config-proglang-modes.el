@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2019-05-01 08:53:45 jcgs>
+;;; Time-stamp: <2019-05-05 21:35:04 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
@@ -124,6 +124,7 @@
   (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
   (when (jcgs/pylint-available)
     (unless buffer-read-only
+      (require 'flymake)
       ;; (setq flymake-log-level 3)
       (message "Setting flymake mode for buffer %S" (current-buffer))
       (flymake-find-file-hook)

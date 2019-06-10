@@ -14,6 +14,7 @@
 (add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
+(add-to-list 'org-modules 'org-habit)
 
 (let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
   (when (file-directory-p omd)
@@ -39,6 +40,7 @@
       org-agenda-start-with-follow-mode t
       org-agenda-start-with-clockreport-mode t
       org-agenda-start-on-weekday 0
+      org-agenda-skip-scheduled-if-done t
       org-agenda-columns-add-appointments-to-effort-sum t
       org-agenda-default-appointment-duration 60 ; minutes
       ;; org-agenda-overriding-columns-format ; should probably set this
