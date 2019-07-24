@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2019-06-01 13:09:58 jcgs>
+;;; Time-stamp: <2019-07-24 23:00:12 jcgs>
 
 (setq debug-on-error t)
 
@@ -25,6 +25,9 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
+(unless (boundp 'jcgs/org-journal-files)
+  (setq jcgs/org-journal-files nil))
+
 (when (at-home-p)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
@@ -37,20 +40,22 @@
 				  (mapcar (lambda (file)
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org")))))
-  (let ((journal-incoming "~/common/jottings/for-journal.txt"))
-    (when (file-exists-p journal-incoming)
-      (find-file journal-incoming))))
+  (let ((incoming-journal "~/common/journal/incoming.journal"))
+    (when (file-exists-p incoming-journal)
+      (push incoming-journal jcgs/org-journal-files))))
 
-(mapcar 'find-file jcgs/org-journal-files)
-(if (fboundp 'jcgs/org-journal-mode)
-    (jcgs/org-journal-mode)
-  (org-mode))
+(let ((hacking-journal "~/common/journal/hacking.journal"))
+    (when (file-exists-p hacking-journal)
+      (push hacking-journal jcgs/org-journal-files)))
 
+(when (boundp 'jcgs/org-journal-files)
+  (mapcar 'find-file jcgs/org-journal-files))
+
+(setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (mapc (lambda (file)
 	(when (file-readable-p file)
 	  (find-file file)))
       org-agenda-files)
-(setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
