@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2019-04-28 20:33:14 jcgs>
+;;; Time-stamp: <2019-07-19 10:01:19 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -508,5 +508,21 @@ run in a buffer, or when called with a prefix argument."
   t)
 
 (set-default 'rad-kill-previous-buffers t)
+
+;;;; graphviz
+
+(defvar default-tab-width 8
+  "No longer defined.")
+
+(autoload 'graphviz-dot-mode "graphics/graphviz-dot-mode.el"
+  "Major mode for the dot language."
+  t)
+
+(add-to-list 'auto-mode-alist (cons "\\.gv" 'graphviz-dot-mode))
+
+;;;; daily standup, for work
+
+(when (at-work-p)
+  (require 'standup-report))
 
 ;;; end of config-misc.el
