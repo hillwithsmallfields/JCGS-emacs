@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2019-06-10 10:57:25 jcgs>
+;;; Time-stamp: <2019-06-11 11:29:07 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
@@ -524,6 +524,7 @@ read-only (although I don't think I'd changed anything related)
         (insert (match-string 0))
       (error "Could not find anything that looked like a JIRA ticket"))))
 
+(add-to-list 'load-path (expand-file-name "~/JCGS-org-mode/lisp/"))
 (require 'org-shell-command-records)
 
 (defun jcgs/shell-mode-setup ()
