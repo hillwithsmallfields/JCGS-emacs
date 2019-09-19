@@ -1,5 +1,9 @@
 ;;;; Emacs setup for task management and noticeboard only
+<<<<<<< HEAD
 ;;; Time-stamp: <2019-07-24 23:00:12 jcgs>
+=======
+;;; Time-stamp: <2019-06-02 07:29:53 jcgs>
+>>>>>>> acd62f2d59c4385a506dc78ad5eb56e9ad682479
 
 (setq debug-on-error t)
 
@@ -25,8 +29,13 @@
 
 (find-file (expand-file-name "special-setups/tasks/tasks-emacs-setup.el" user-emacs-directory))
 
+<<<<<<< HEAD
 (unless (boundp 'jcgs/org-journal-files)
   (setq jcgs/org-journal-files nil))
+=======
+(add-to-list 'load-path (substitute-in-file-name "$ORGLISP"))
+(require 'org-jcgs-journal)
+>>>>>>> acd62f2d59c4385a506dc78ad5eb56e9ad682479
 
 (when (at-home-p)
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
@@ -40,6 +49,7 @@
 				  (mapcar (lambda (file)
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org")))))
+<<<<<<< HEAD
   (let ((incoming-journal "~/common/journal/incoming.journal"))
     (when (file-exists-p incoming-journal)
       (push incoming-journal jcgs/org-journal-files))))
@@ -50,6 +60,16 @@
 
 (when (boundp 'jcgs/org-journal-files)
   (mapcar 'find-file jcgs/org-journal-files))
+=======
+  (let ((journal-incoming "~/common/journal/incoming.journal"))
+    (when (file-exists-p journal-incoming)
+      (find-file journal-incoming))))
+
+;; (mapcar 'find-file jcgs/org-journal-files)
+;; (if (fboundp 'jcgs/org-journal-mode)
+;;     (jcgs/org-journal-mode)
+;;   (org-mode))
+>>>>>>> acd62f2d59c4385a506dc78ad5eb56e9ad682479
 
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (mapc (lambda (file)

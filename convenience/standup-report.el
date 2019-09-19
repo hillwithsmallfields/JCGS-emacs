@@ -105,6 +105,8 @@ Then move onto the next line."
 For my work environment for now."
   (interactive)
   (delete-other-windows)
+  (jcgs/org-journal-open-journal "shell-commands")
+  (jcgs/org-journal-last-day nil)
   (jcgs/org-journal-open-journal "work")
   (jcgs/org-journal-last-day t)
   (jcgs/org-journal-open-date)
