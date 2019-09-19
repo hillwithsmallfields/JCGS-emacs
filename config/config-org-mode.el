@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2019-04-07 17:14:43 jcgs>
+;;; Time-stamp: <2019-07-12 20:16:14 jcgs>
 
 (require 'org)
 
@@ -208,8 +208,8 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "weekEnd" "E" 'tags-todo "weekend")
 (jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "PRIORITY=\"A\"")
 						   (tags-todo "urgent")))
-(jcgs/def-org-agenda-custom-command "Soon" "s" '((tags-todo "soon")))
-(jcgs/def-org-agenda-custom-command "B Priority" "B" '((tags-todo "PRIORITY=\"B\"")))
+(jcgs/def-org-agenda-custom-command "Soon" "s" 'tags-todo "soon")
+(jcgs/def-org-agenda-custom-command "B Priority" "B" 'tags-todo "PRIORITY=\"B\"")
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
 (jcgs/def-org-agenda-custom-command "maKespace" "K" 'tags-todo "@Makespace")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
