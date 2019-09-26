@@ -1,6 +1,7 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
 ;;; Time-stamp: <2019-09-09 11:22:37 jcgs>
 
+
 (require 'org)
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs"))
@@ -208,8 +209,8 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "weekEnd" "E" 'tags-todo "weekend")
 (jcgs/def-org-agenda-custom-command "Urgent" "u" '((tags-todo "PRIORITY=\"A\"")
 						   (tags-todo "urgent")))
-(jcgs/def-org-agenda-custom-command "Soon" "s" '((tags-todo "soon")))
-(jcgs/def-org-agenda-custom-command "B Priority" "B" '((tags-todo "PRIORITY=\"B\"")))
+(jcgs/def-org-agenda-custom-command "Soon" "s" 'tags-todo "soon")
+(jcgs/def-org-agenda-custom-command "B Priority" "B" 'tags-todo "PRIORITY=\"B\"")
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
 (jcgs/def-org-agenda-custom-command "maKespace" "K" 'tags-todo "@Makespace")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
