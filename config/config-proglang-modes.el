@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2019-05-05 21:35:04 jcgs>
+;;; Time-stamp: <2019-09-26 16:19:44 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
@@ -278,5 +278,15 @@ When started, runs `scala-mode-hook'." t)
 ;;;;;;;;;;;;;;;
 
 (add-to-list 'auto-mode-alist (cons "\\.bp" 'javascript-mode))
+
+;;;;;;;;;;;;;
+;; haskell ;;
+;;;;;;;;;;;;;
+
+(defun jcgs/haskell-mode-setup ()
+  "Set up my haskell mode parameters."
+  (set (make-local-variable 'compile-command) "cabal build "))
+
+(add-hook 'haskell-mode-hook 'jcgs/haskell-mode-setup)
 
 ;;;; config-proglang-modes.el ends here
