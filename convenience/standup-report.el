@@ -56,16 +56,18 @@ Then move onto the next line."
     (save-excursion
       (goto-char (point-min))
       (end-of-line 1)
-      (just-one-space)
       (let ((dest-start (point)))
         (insert text)
+        ;; Regularize whitespace (including collapsing newlines and margins) in the added text
         (let ((dest-end (point-marker)))
           (goto-char dest-start)
           (while (re-search-forward "\\s-+" dest-end t)
             (replace-match " "))
           (goto-char dest-start)
           (while (search-forward ". " dest-end t)
-            (replace-match ".  ")))))))
+            (replace-match ".  ")))
+        (goto-char dest-start)
+        (just-one-space)))))
 
 ;;;; Buffer setup
 
