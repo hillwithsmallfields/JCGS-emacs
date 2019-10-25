@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2019-05-21 08:15:40 jcgs>
+;;; Time-stamp: <2019-10-11 20:06:38 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
 
@@ -43,10 +43,10 @@
 (make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
                                      "-makers-")
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/JCGS_py_server/"
+(make-shell-for-directory-if-present "$OPEN_PROJECTS/Simple_client_server/"
                                      "-server-")
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/JCGS_py_server/"
+(make-shell-for-directory-if-present "$OPEN_PROJECTS/Simple_client_server/"
                                      "-client-")
 
 (unless (at-work-p)
