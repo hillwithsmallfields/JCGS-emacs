@@ -1,4 +1,4 @@
-;;; Time-stamp: <2016-10-06 11:40:21 johstu01>
+;;; Time-stamp: <2019-11-10 14:14:52 jcgs>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -54,6 +54,10 @@ DDirectory to start %s in: ")
 (defun make-shell-for-directory-if-present (directory &optional name command)
   "Make a shell for DIRECTORY, called NAME, if DIRECTORY exists.
 If COMMAND is given, send it that command too."
+  (interactive
+   (let ((shell-dir (read-directory-name "Start shell in directory: ")))
+     (list shell-dir (format "-%s-"
+                             (file-name-nondirectory (string-remove-suffix "/" shell-dir))))))
   (unless (or (null name)
 	      (get-buffer name))
     (setq directory (substitute-in-file-name directory))
