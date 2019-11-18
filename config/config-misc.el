@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2019-07-19 10:01:19 jcgs>
+;;; Time-stamp: <2019-11-18 10:11:56 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -524,5 +524,22 @@ run in a buffer, or when called with a prefix argument."
 
 (when (at-work-p)
   (require 'standup-report))
+
+;;;; Compensate for small fonts
+
+(defun jcgs/set-default-font ()
+  "Set the default font.
+Done because on these high-resolution screens, Emacs comes up with something very small."
+  (interactive)
+  (set-frame-font
+   ;; "-b&h-lucidatypewriter-medium-r-normal-sans-20-*-75-75-m-*-iso10646-1"
+   ;; "-b&h-lucidatypewriter-medium-r-normal-sans-18-*-75-75-m-110-iso10646-1"
+   ;; "-b&h-lucidatypewriter-medium-r-normal-sans-12-*-75-75-m-70-iso10646-1"
+    "-b&h-lucidatypewriter-medium-r-normal-sans-24-*-75-75-m-140-iso10646-1"
+    nil nil)
+  (set-frame-parameter nil 'fullscreen nil)
+  (sit-for 1)
+  (set-frame-parameter nil 'fullscreen 'maximized)
+  )
 
 ;;; end of config-misc.el
