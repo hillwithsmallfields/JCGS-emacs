@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2019-09-09 11:22:37 jcgs>
+;;; Time-stamp: <2019-11-22 22:44:45 jcgs>
 
 
 (require 'org)
@@ -53,7 +53,7 @@
       org-agenda-files (append (mapcar (function
 					(lambda (file)
 					  (expand-file-name (format "%s.org" file) org-directory)))
-				       '("habits"
+				       '(;; "habits"
 					 "general"
 					 "shopping"
 					 ;; "eating"
@@ -62,16 +62,8 @@
 					 "projects"
 					 "learning"
 					 "improvement"
-					 "goals"
-					 "inventory"))
-			       (list (substitute-in-file-name "$VEHICLES/Marmalade/Marmalade-work.org")
-				     ;; (substitute-in-file-name "$VEHICLES/Marmalade/170.org")
-				     )
-			       (mapcar (function
-					(lambda (file)
-					  (expand-file-name (format "Cat-Imp-%s.org" file)
-							    (substitute-in-file-name "$DROPBOX/Categorical_Imperative"))))
-				       '("work" "purchasing")))
+					 "goals"))
+			       (list (substitute-in-file-name "$VEHICLES/Marmalade/Marmalade-work.org")))
       bar (message "agenda files %s" org-agenda-files)
       org-capture-templates '(("p" "Personal todo" entry
 			       (file+headline
@@ -159,7 +151,9 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
     (mapcar (lambda (extension)
 	      (expand-file-name (concat name-base extension)
 				jcgs/org-agenda-store-directory))
-	    '("" ".html" ".org" ".ps"))))
+	    ;; '("" ".html" ".org" ".ps")
+            '("org")
+            )))
 
 (setq jcgs/org-agenda-current-matcher
       (let* ((earlies (jcgs/org-agenda-make-early-extra-matcher))
@@ -638,5 +632,28 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (eval-after-load "ox"
   '(add-hook 'org-export-filter-final-output-functions
 	     'jcgs/org-export-html-open-in-new-tabs))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; new export system ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-generate-soon-list ()
+  "Generate a list of tasks to do soon."
+  (interactive)
+  (let* ((header "Things to do soon")
+         (items (org-ql (org-agenda-files)
+                  (and (or (todo "TODO") (todo "OPEN") (todo "CURRENT") (todo "BUY"))
+                       (or (priority >= "B") (tags "soon")))
+                  :action (cons (org-get-heading 'no-tags) (org-entry-get (point) "ID")))))
+    (find-file "/tmp/soon.org")
+    (erase-buffer)
+    (dolist (item items)
+      (message "Adding %S" item)
+      (org-insert-heading)
+      (insert (car item))
+      (goto-char (point-max))
+      (when (cdr item)
+        (org-set-property "ID" (cdr item))))
+    (basic-save-buffer)))
 
 ;;; config-org-mode.el ends here
