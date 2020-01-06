@@ -320,7 +320,7 @@
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (global-auto-revert-mode 1)
   (let ((no-versor t))
-    (load-file "$EMACS/special-setups/tasks/tasks-emacs-setup.el"))
+    (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
   (jcgs/org-agenda-monitor-start)
   (org-agenda-kiosk-files-list))
 

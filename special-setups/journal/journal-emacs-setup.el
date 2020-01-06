@@ -9,7 +9,7 @@
 (require 'time-stamp)
 
 (setq user-emacs-directory (expand-file-name
-			    (concat (getenv "EMACS")
+			    (concat (getenv "MY_ELISP")
 				    "/")))
 
 (add-to-list 'load-path (expand-file-name "emacs/html-helper-mode" (getenv "GATHERED")))

@@ -1,7 +1,7 @@
 ;;;; Emacs setup for scraping transactions from my online banking page
 ;;; Time-stamp: <2014-11-22 20:40:42 jcgs>
 
-(load-file "$EMACS/basics/jcgs-common-setup.el")
+(load-file "$MY_ELISP/basics/jcgs-common-setup.el")
 
 (load-file (substitute-in-file-name "$GATHERED/emacs/csv/csv-mode.el"))
 (load-file (substitute-in-file-name "$GATHERED/emacs/csv/csv.el"))

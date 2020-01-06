@@ -347,7 +347,7 @@ Optional argument NO-ASK says not to ask, but revert anyway." t)
 
 ;;;; find the buffer visiting the nearest file of a given name
 
-(add-to-list 'load-path (substitute-in-file-name "$EMACS/convenience"))
+(add-to-list 'load-path (substitute-in-file-name "$MY_ELISP/convenience"))
 
 (autoload 'switch-to-nearest-file-buffer "nearest-file"
   "Switch to the buffer visiting the nearest file called NAME.
