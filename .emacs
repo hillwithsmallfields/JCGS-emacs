@@ -45,7 +45,9 @@
 	      (expand-file-name "basics" user-emacs-directory)))
   (setq user-emacs-directory
 	(catch 'found
-	  (dolist (raw-dir '("$HOME/JCGS-emacs"
+	  (dolist (raw-dir '("$MY_ELISP"
+			     "$EHOME/JCGS-emacs"
+			     "$HOME/JCGS-emacs"
 			     ;; strange site-specific directories used
 			     ;; as honorary home in strange sites may
 			     ;; go here
@@ -132,17 +134,9 @@ This should be a list of three parts:
      '("GATHERED" "library-files.el" ("~/library"
 				      "/mnt/library"
 				      "/work/johstu01/library"
+				      "/home/jsturdy/library"
 				      "/media/disk/library"
-				      "h:/library"
-				      "i:/library"
-				      "j:/users/jcgs/library"
-				      "i:"
-				      "h:"
 				      "/library"
-				      ;; this one for Oralux on my home machine
-				      "/mnt/hda6/users/jcgs/library"
-				      ;; this one for Fedora on my home machine
-				      "/mnt/share1/users/jcgs/library"
 				      )))
   (unless (file-directory-p "~/library")
     (make-directory "~/library"))

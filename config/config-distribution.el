@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2019-06-11 11:29:07 jcgs>
+;;; Time-stamp: <2020-01-08 13:45:55 jsturdy>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -476,7 +476,7 @@ The nearest FILE is used."
 ;;;; Mail
 
 (setq mail-self-blind t
-      user-mail-address "john.sturdy@grapeshot.com")
+      user-mail-address "jsturdy@ccsl.com")
 
 ;;;; Comint
 
@@ -524,7 +524,7 @@ read-only (although I don't think I'd changed anything related)
         (insert (match-string 0))
       (error "Could not find anything that looked like a JIRA ticket"))))
 
-(add-to-list 'load-path (expand-file-name "~/JCGS-org-mode/lisp/"))
+(add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/JCGS-org-mode/lisp/"))
 (require 'org-shell-command-records)
 
 (defun jcgs/shell-mode-setup ()

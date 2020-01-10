@@ -3,12 +3,12 @@
 
 (setq debug-on-error t)
 
-(load-file "$EMACS/basics/jcgs-common-setup.el")
-(load-file "$EMACS/basics/host.el")
+(load-file "$MY_ELISP/basics/jcgs-common-setup.el")
+(load-file "$MY_ELISP/basics/host.el")
 (require 'cl)
 
 (setq user-emacs-directory (expand-file-name
-			    (concat (getenv "EMACS")
+			    (concat (getenv "MY_ELISP")
 				    "/")))
 
 (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))

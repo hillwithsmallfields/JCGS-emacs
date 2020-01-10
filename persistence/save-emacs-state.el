@@ -14,8 +14,8 @@ write their state files into.")
 
 (defun save-emacs-context ()
   "Save your emacs context.
-First run the saver files in $/EMACS/savers1/*.el then those in
-$EMACS/savers2/*.el. savers1 should save specialized things such as
+First run the saver files in $/MY_ELISP/savers1/*.el then those in
+$MY_ELISP/savers2/*.el. savers1 should save specialized things such as
 RMAIL buffers, that the relevant generalized saver would get wrong,
 and savers2 should do generic saves such as ordinary file buffers."
   (interactive)

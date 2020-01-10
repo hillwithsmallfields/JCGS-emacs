@@ -37,7 +37,7 @@
 				     ;; "make clean; ./configure; make\n"
 				     )
 
-(make-shell-for-directory-if-present "$EMACS"
+(make-shell-for-directory-if-present "$MY_ELISP"
 				     "-emacs-")
 
 (make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
