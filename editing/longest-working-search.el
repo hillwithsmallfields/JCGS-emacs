@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2020  John Sturdy
 
-;; Author: John Sturdy <john.sturdy@grapeshot.com>
+;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: convenience
 
 ;; This program is free software; you can redistribute it and/or modify
