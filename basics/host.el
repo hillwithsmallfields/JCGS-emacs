@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2018-07-05 13:51:10 jcgs>
+;; Time-stamp: <2020-01-10 12:02:32 jsturdy>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -34,9 +34,10 @@
     ;; "ezekiel.csis.ul.ie"
     ;; "blasket.cam.xci-test.com"
     ;; "mayo"
-    "e104804-lin.cambridge.arm.com"
-    "isaiah.cam.xci-test.com"
-    "duralium"
+    ;; "e104804-lin.cambridge.arm.com"
+    "isaiah"
+    ;; "duralium"
+    "ccsdt68-woc"
     )
   "List of system names on which Emacs should load the pedal software on startup.")
 
@@ -61,7 +62,7 @@
 			  "glg.csisdmz.ul.ie"
 			  )))
 
-(defvar employer-domain "grapeshot"
+(defvar employer-domain "ccsl"
   "The domain of my employer.
 Used for determining whether this Emacs is running at work.")
 
