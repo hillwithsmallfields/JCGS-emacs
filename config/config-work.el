@@ -1,6 +1,6 @@
 ;;; config-work.el --- set up stuff for my work      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018  John Sturdy
+;; Copyright (C) 2017, 2018, 2020  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: convenience
@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(let ((work-real-config-file "/home/jcgs/work-scripts/at-grapeshot.el"))
+(let ((work-real-config-file (expand-file-name "~/work-scripts/at-work.el")))
   (when (file-readable-p work-real-config-file)
     (load-file work-real-config-file)))
 
