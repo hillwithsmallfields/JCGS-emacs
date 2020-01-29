@@ -34,7 +34,7 @@
         (push (match-string-no-properties 1) exports)))
     (setq exports (nreverse exports))
     (when (interactive-p)
-      (with-output-to-temp-buffer "*Exports*"
+      (with-output-to-temp-buffer (format "*Exports from %s*" (buffer-name))
         (dolist (exp exports)
           (princ (format "%s\n" exp)))))
     exports))
