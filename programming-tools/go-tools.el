@@ -39,5 +39,15 @@
           (princ (format "%s\n" exp)))))
     exports))
 
+(defun go-callers-in-repo ()
+  "List the files that use functions exported from this buffer."
+  (interactive)
+  (grep (format "grep -r -f %s -F %s"
+                (make-temp-file "go-exports-" nil nil
+                                (mapconcat 'identity
+                                           (go-exports-buffer)
+                                           "\n"))
+                (locate-dominating-file "." ".git"))))
+
 (provide 'go-tools)
 ;;; go-tools.el ends here
