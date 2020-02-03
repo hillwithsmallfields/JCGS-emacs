@@ -1,7 +1,7 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2019-10-11 20:06:38 jcgs>
+;;; Time-stamp: <2020-02-03 10:17:18 jsturdy>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -38,7 +38,7 @@
 				     )
 
 (make-shell-for-directory-if-present "$MY_ELISP"
-				     "-emacs-")
+				     "-gnuemacs-")
 
 (make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
                                      "-makers-")
