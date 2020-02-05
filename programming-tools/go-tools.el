@@ -24,20 +24,50 @@
 
 ;;; Code:
 
-(defun go-exports-buffer ()
-  "List the exports from the current buffer."
+(defun go-exports-buffer (&optional format-string combining)
+  "List the exports from the current buffer.
+If interactive, output it to a temporary buffer.
+If optional FORMAT-STRING is given, use that for the output.
+With optional COMBINING, output to ambient stdout instead of its own buffer."
   (interactive)
-  (let ((exports nil))
+  (let ((case-fold-search nil)
+        (exports nil)
+        (package (save-excursion
+                   (goto-char (point-min))
+                   (if (re-search-forward "package\\s-+\\(.+\\)" (point-max) t)
+                       (match-string-no-properties 1)
+                     "unknown"))))
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward "func\\s-+\\(?:([^)]+)\\)\\s-*\\([A-Z][A-Za-z_]+\\)" (point-max) t)
-        (push (match-string-no-properties 1) exports)))
+        (push (concat package "." (match-string-no-properties 1)) exports)))
     (setq exports (nreverse exports))
-    (when (interactive-p)
-      (with-output-to-temp-buffer (format "*Exports from %s*" (buffer-name))
+    (unless format-string
+      (setq format-string "%s\n"))
+    (if combining
+        (princ "outputting to stdout\n")
         (dolist (exp exports)
-          (princ (format "%s\n" exp)))))
+          (princ (format format-string exp)))
+      (when (interactive-p)
+        (with-output-to-temp-buffer (format "*Exports from %s*" (buffer-name))
+          (dolist (exp exports)
+            (princ (format format-string exp))))))
     exports))
+
+(defun go-exports-directory (dir &optional format-string)
+  "Output the exports from go files in DIR using FORMAT-STRING."
+  (interactive "DList exports from directory: ")
+  (let ((outputter (function
+                    (lambda (dir format-string)
+                      (dolist (file (directory-files dir t "\\.go$"))
+                        (save-excursion
+                          (find-file file)
+                          (princ (format "Exports from %s\n" file))
+                          (go-exports-buffer (current-buffer) format-string)))))))
+    (if (interactive-p)
+        (with-output-to-temp-buffer (format "*Exports from %s*" dir)
+          (funcall outputter dir format-string))
+      (funcall outputter dir format-string))))
 
 (defun go-callers-in-repo ()
   "List the files that use functions exported from this buffer."
