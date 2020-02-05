@@ -1,6 +1,4 @@
 ;;;; Configuration for project-specific things
-;;; Time-stamp: <2020-02-03 10:17:18 jsturdy>
-
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
@@ -16,18 +14,18 @@
 
 (unless (or (at-work-p)
 	    (on-small-machine))
-  (dolist (pair '(("-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/")
-		  ("-examples-for-grevo-" . "$OPEN_PROJECTS/GrEvo/trunk/examples/")
-		  ("-ulga-" . "$OPEN_PROJECTS/ULGA/trunk/")
-		  ("-libGE-" . "$OPEN_PROJECTS/libGE/trunk/")))
+  (dolist (pair '(("-grevo-" . "$MY_PROJECTS/GrEvo/trunk/")
+		  ("-examples-for-grevo-" . "$MY_PROJECTS/GrEvo/trunk/examples/")
+		  ("-ulga-" . "$MY_PROJECTS/ULGA/trunk/")
+		  ("-libGE-" . "$MY_PROJECTS/libGE/trunk/")))
     (make-named-shell (car pair) (cdr pair)))
-  ;; ( "-rtl-" . "$OPEN_PROJECTS/libRTL/trunk/" )
+  ;; ( "-rtl-" . "$MY_PROJECTS/libRTL/trunk/" )
   (when nil
     (make-named-shell "-ephemerals-"
 		      "$COMMON/research/bds/grevo/ephemerals/"
 		      )))
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/muesli/"
+(make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
 				     "-muesli-"
 				     ;; "make clean; ./configure; make\n"
 				     )
@@ -40,21 +38,21 @@
 (make-shell-for-directory-if-present "$MY_ELISP"
 				     "-gnuemacs-")
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/makers/"
+(make-shell-for-directory-if-present "$MY_PROJECTS/makers/"
                                      "-makers-")
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/Simple_client_server/"
+(make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
                                      "-server-")
 
-(make-shell-for-directory-if-present "$OPEN_PROJECTS/Simple_client_server/"
+(make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
                                      "-client-")
 
 (unless (at-work-p)
-  (make-shell-for-directory-if-present "$OPEN_PROJECTS/gos/"
+  (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"
 				       "-gos-"
 				       ;; "make clean; ./configure; make\n"
 				       )
-  (make-shell-for-directory-if-present "$OPEN_PROJECTS/mulvoc/mulvoc/"
+  (make-shell-for-directory-if-present "$MY_PROJECTS/mulvoc/mulvoc/"
 				       "-mulvoc-"
 				       ;; "make clean; ./configure; make\n"
 				       )
@@ -63,7 +61,7 @@
 					 "-khanate-"
 					 ;; "latex last-khan.tex\n"
 					 ))
-  (make-shell-for-directory-if-present "/home/jcgs/open-projects/qs/qs"
+  (make-shell-for-directory-if-present "$MY_PROJECTS/qs/qs"
 				       "-qs-")
   )
 

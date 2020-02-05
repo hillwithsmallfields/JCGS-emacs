@@ -1,8 +1,8 @@
 ;;; config-packages.el --- set up my packages downloads  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2018  John Sturdy
+;; Copyright (C) 2016, 2018, 2019  John Sturdy
 
-;; Time-stamp: <2018-10-16 15:42:53 jcgs>
+;; Time-stamp: <2019-11-22 20:00:47 jcgs>
 
 ;; Author: John Sturdy <john.sturdy@arm.com>
 ;; Keywords: 
@@ -95,6 +95,7 @@
 			org-page
 			org-password-manager
 			org-pomodoro
+                        org-ql
 			org-random-todo
 			org-tracktable
 			org-webpage

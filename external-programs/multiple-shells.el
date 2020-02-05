@@ -1,4 +1,4 @@
-;;; Time-stamp: <2019-11-10 14:14:52 jcgs>
+;;; Time-stamp: <2019-11-12 19:35:01 jcgs>
 ;;; originated 95/11/09?
 
 ;; Start shells on various machines and in various directories.
@@ -17,6 +17,7 @@
 ;;  with this program; if not, write to the Free Software Foundation, Inc.,
 ;;  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
+(require 'subr-x)
 (provide 'multiple-shells)
 
 (defun make-named-shell (name &optional directory host command)
