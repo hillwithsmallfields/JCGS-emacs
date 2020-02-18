@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2020-01-27 10:26:37 jsturdy>
+;;; Time-stamp: <2020-02-06 11:14:05 jsturdy>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -462,6 +462,8 @@ Argument DAYS is the number of days to fast for."
       (error "Could not find commit"))))
 
 (add-to-list 'auto-mode-alist '("\\.gitdiffs" . diff-mode))
+
+(setenv "PAGER" "cat")
 
 ;;;; ledger
 
