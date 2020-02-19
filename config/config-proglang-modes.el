@@ -1,8 +1,8 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2019-09-26 16:19:44 jcgs>
+;;; Time-stamp: <2020-02-19 14:19:21 jsturdy>
 
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -10,6 +10,25 @@
 ;; Keywords: setup
 
 ;; This file is NOT part of GNU Emacs.
+
+;;;;;;;;;;;;;
+;; General ;;
+;;;;;;;;;;;;;
+
+(defun jcgs/regularize-whitespace ()
+  "Regularize whitespace, typically before saving a file."
+  (let* ((tabs (count-matches "	" (point-min) (point-max)))
+	 (lines (count-lines (point-min) (point-max)))
+	 (delete-trailing-lines t))
+    ;; untabify only if there are just a few tabs
+    (when (> (* tabs 24) lines)
+      (untabify (point-min) (point-max)))
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward "\n\n\n" (point-max) t)
+        (forward-line -1)
+        (delete-blank-lines)))
+    (delete-trailing-whitespace)))
 
 ;;;;;;;;;;;;
 ;; c-mode ;;
@@ -23,7 +42,6 @@
   (define-key c-mode-map "\C-cf" 'cflow-file)
   (setq c-basic-offset 4)
   (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
-  )
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
 
@@ -103,21 +121,6 @@
   "Return whether pylint is available."
   (not (zerop (length (shell-command-to-string "which epylint")))))
 
-(defun jcgs/regularize-whitespace ()
-  "Regularize whitespace, typically before saving a file."
-  (let* ((tabs (count-matches "	" (point-min) (point-max)))
-	 (lines (count-lines (point-min) (point-max)))
-	 (delete-trailing-lines t))
-    ;; untabify only if there are just a few tabs
-    (when (> (* tabs 24) lines)
-      (untabify (point-min) (point-max)))
-    (save-excursion
-      (goto-char (point-min))
-      (while (search-forward "\n\n\n" (point-max) t)
-        (forward-line -1)
-        (delete-blank-lines)))
-    (delete-trailing-whitespace)))
-
 (defun jcgs/python-mode-hook ()
   "My hook for setting up python mode."
   (message "In jcgs/python-mode-hook for buffer=%S buffer-read-only=%S file=%S directory=%S" (current-buffer) buffer-read-only (buffer-file-name) default-directory)
@@ -181,12 +184,13 @@
   (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
   (require 'go-mode))
 
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key "\M-." 'godef-jump)
-			  (local-set-key "\C-c\C-c" 'compile)
-			  (when (string-match "unisched" default-directory)
-			    (set (make-local-variable 'compile-command)
-				 "pb_var_exec -- go install -v arm.com/uniSched..."))))
+(defun jcgs/go-mode-hook-function ()
+  "My setup function for golang buffers."
+  (local-set-key "\M-." 'godef-jump)
+  (local-set-key "\C-c\C-c" 'compile)
+  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t))
+
+(add-hook 'go-mode-hook 'jcgs/go-mode-hook-function)
 
 ;;;;;;;;;;;;;;;;;;
 ;; arduino-mode ;;
