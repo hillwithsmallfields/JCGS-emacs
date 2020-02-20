@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2020-02-19 14:19:21 jsturdy>
+;;; Time-stamp: <2020-02-20 09:57:32 jsturdy>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
@@ -41,7 +41,7 @@
   (define-key c-mode-map "\C-cc" 'compile)
   (define-key c-mode-map "\C-cf" 'cflow-file)
   (setq c-basic-offset 4)
-  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
+  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t))
 
 (add-hook 'c-mode-hook 'jcgs-c-mode-hook)
 
