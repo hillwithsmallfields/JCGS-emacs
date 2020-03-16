@@ -1,5 +1,5 @@
 ;;;; JCGS's common emacs setup
-;;; Time-stamp: <2017-11-11 18:43:42 jcgs>
+;;; Time-stamp: <2020-02-23 18:59:13 jcgs>
 ;;;
 ;;; Things I want even in most of my specialized emacsen
 
@@ -20,15 +20,7 @@
 	     (file-directory-p user-emacs-directory)
 	     (file-directory-p
 	      (expand-file-name "basics" user-emacs-directory)))
-  (setq user-emacs-directory
-	(catch 'found
-	  (dolist (raw-dir '("$HOME/JCGS-emacs" "/work/johstu01/JCGS-emacs"))
-	    (let ((dir (substitute-in-file-name raw-dir)))
-	      (when (and (stringp dir)
-			 (file-directory-p dir)
-			 (file-directory-p
-			  (expand-file-name "basics" dir)))
-		(throw 'found dir)))))))
+  (setq user-emacs-directory (substitute-in-file-name "$MY_ELISP")))
 
 (display-time)
 (when (member (system-name)
@@ -40,6 +32,8 @@
 
 (when (string-match "isaiah" (system-name))
   (setq printer-name "JCGS_print_scan_1"))
+
+(message "user-emacs-directory is %S" user-emacs-directory)
 
 (dolist (dir '("config" "editing"))
   (add-to-list 'load-path
