@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2020-01-08 13:45:55 jsturdy>
+;;; Time-stamp: <2020-03-16 14:23:58 jsturdy>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
@@ -651,55 +651,56 @@ and moves the prompt overlay."
 
 ;;;; my own colour themes
 
-(setq custom-theme-directory (expand-file-name "themes" user-emacs-directory))
+(when window-system
+  (setq custom-theme-directory (expand-file-name "themes" user-emacs-directory))
 
-(defun color-theme-vellum ()
-  "Brightly illuminated vellum manuscript theme.
+  (defun color-theme-vellum ()
+    "Brightly illuminated vellum manuscript theme.
 John Sturdy <john@cb1.com>"
-  (interactive)
-  (color-theme-standard)
-  (let ((color-theme-is-cumulative t))
-    (color-theme-install
-     '(color-theme-vellum
-       ((background-color . "Wheat"))
-       (modeline ((t (:foreground "brown" :background "black"))))
-       (font-lock-keyword-face ((t (:foreground "purple4"))))
-       (font-lock-string-face ((t (:foreground "Brown"))))
-       )))
+    (interactive)
+    (color-theme-standard)
+    (let ((color-theme-is-cumulative t))
+      (color-theme-install
+       '(color-theme-vellum
+         ((background-color . "Wheat"))
+         (modeline ((t (:foreground "brown" :background "black"))))
+         (font-lock-keyword-face ((t (:foreground "purple4"))))
+         (font-lock-string-face ((t (:foreground "Brown"))))
+         )))
 
 
   
-  ;; (color-theme-install
-  ;;  '(color-theme-vellum
-  ;;    ;; frame parameters
-  ;;    ((foreground-color . "brown")
-  ;;     (background-color . "wheat")
-  ;;     (cursor-color . "red")
-  ;;     (mouse-color . "red")
-  ;;     )
-  ;;    ;; variable settings
-  ;;    (
-  ;;     )
-  ;;    ;; face definitions
-  ;;    (modeline ((t (:background "purple"
-  ;; 				:foreground "dark red"
-  ;; 				:height 0.9
-  ;; 				:bold t))))
-  ;;    (font-lock-comment-face ((t (:foreground "purple" :italic t))))
-  ;;    (font-lock-function-name-face ((t (:background "gold"
-  ;; 						    :foreground "red"
-  ;; 						    :height 1.25
-  ;; 						    :bold t
-  ;; 						    :box (:color "dark green"
-  ;; 								 :style released-button
-  ;; 								 :width 2)))))
-  ;;    (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
-  ;;    (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
-  ;;    (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
-  ;;    (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
-  ;;    (font-lock-warning-face ((t (:foreground "orange" :bold t))))
-  ;;    ))
-  )
+    ;; (color-theme-install
+    ;;  '(color-theme-vellum
+    ;;    ;; frame parameters
+    ;;    ((foreground-color . "brown")
+    ;;     (background-color . "wheat")
+    ;;     (cursor-color . "red")
+    ;;     (mouse-color . "red")
+    ;;     )
+    ;;    ;; variable settings
+    ;;    (
+    ;;     )
+    ;;    ;; face definitions
+    ;;    (modeline ((t (:background "purple"
+    ;; 				:foreground "dark red"
+    ;; 				:height 0.9
+    ;; 				:bold t))))
+    ;;    (font-lock-comment-face ((t (:foreground "purple" :italic t))))
+    ;;    (font-lock-function-name-face ((t (:background "gold"
+    ;; 						    :foreground "red"
+    ;; 						    :height 1.25
+    ;; 						    :bold t
+    ;; 						    :box (:color "dark green"
+    ;; 								 :style released-button
+    ;; 								 :width 2)))))
+    ;;    (font-lock-variable-name-face ((t (:background "yellow" :foreground "green"))))
+    ;;    (font-lock-type-face ((t (:background "yellow" :foreground "blue"))))
+    ;;    (font-lock-builtin-face ((t (:foreground "DarkBlue"))))
+    ;;    (font-lock-string-face ((t (:foreground "DarkSlateBlue" :italic t))))
+    ;;    (font-lock-warning-face ((t (:foreground "orange" :bold t))))
+    ;;    ))
+    ))
 
 ;;;; colour in the tty interface
 
@@ -785,5 +786,19 @@ John Sturdy <john@cb1.com>"
 (let ((case-fold-search t))
   (when (string-match "ubuntu" (shell-command-to-string "uname -a"))
     (global-set-key "\C-z" 'suspend-frame-with-query)))
+
+;;; coloured logs
+
+(require 'ansi-color)
+
+(defun display-ansi-colors ()
+  "Apply terminal escape codes indicating console colours."
+  ;; from https://stackoverflow.com/questions/23378271/how-do-i-display-ansi-color-codes-in-emacs-for-any-mode
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(add-to-list 'auto-mode-alist '("\\.log\\'" . display-ansi-colors))
+(add-to-list 'auto-mode-alist '("\\.err\\'" . display-ansi-colors))
 
 ;;; end of config-distribution.el
