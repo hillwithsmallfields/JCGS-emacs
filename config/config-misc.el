@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2020-02-06 11:14:05 jsturdy>
+;;; Time-stamp: <2020-03-20 10:12:45 jsturdy>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -522,7 +522,8 @@ run in a buffer, or when called with a prefix argument."
 
 (add-to-list 'auto-mode-alist (cons "\\.gv" 'graphviz-dot-mode))
 
-(setq graphviz-dot-view-command "dotview")
+(setq graphviz-dot-view-command "dotview"
+      graphviz-dot-auto-indent-on-semi nil)
 
 ;;;; daily standup, for work
 
