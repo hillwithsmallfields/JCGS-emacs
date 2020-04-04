@@ -29,7 +29,10 @@
 (require 'org-jcgs-journal)
 
 (when (at-home-p)
-  (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
+  (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
+    (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+      (find-file (expand-file-name file health-dir))
+      (goto-char (point-max))))  (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
 						  file))
