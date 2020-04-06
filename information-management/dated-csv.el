@@ -25,6 +25,8 @@
 
 ;;; Code:
 
+(require 'csv-mode)
+
 (defun force-row-timestamp (from to)
   "Make the line being changed start with a date string.
 This is in ISO format, followed by a comma, suitable for
