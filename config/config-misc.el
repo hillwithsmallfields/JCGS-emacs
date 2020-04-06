@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2020-03-20 10:12:45 jsturdy>
+;;; Time-stamp: <2020-04-06 21:39:40 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -524,6 +524,16 @@ run in a buffer, or when called with a prefix argument."
 
 (setq graphviz-dot-view-command "dotview"
       graphviz-dot-auto-indent-on-semi nil)
+
+;;;; csv-mode (now forked)
+
+;; needs information-management directory to be on path
+
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing files of comma-separated value type."
+  t)
+
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 
 ;;;; daily standup, for work
 
