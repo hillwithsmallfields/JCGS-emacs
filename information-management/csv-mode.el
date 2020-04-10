@@ -5,7 +5,7 @@
 ;; Forked by John C. G. Sturdy to avoid some obsolete dependencies
 
 ;; Author: Francis J. Wright <F.J.Wright at qmul.ac.uk>
-;; Time-stamp: <2020-04-06 20:57:36 jcgs>
+;; Time-stamp: <2020-04-10 06:08:09 jcgs>
 ;; URL: http://centaur.maths.qmul.ac.uk/Emacs/
 ;; Version: $Id: csv-mode.el,v 1.50 2004/08/23 17:51:26 fjw Exp $
 ;; Keywords: convenience
@@ -304,7 +304,7 @@ CSV mode provides the following specific keyboard key bindings:
   (setq
    ;; Font locking -- separator plus syntactic:
    font-lock-defaults '(csv-font-lock-keywords)
-   buffer-invisibility-spec csv-invisibility-default
+   buffer-invisibility-spec csv-invisibility-default)
   ;; Enable or disable `csv-field-index-mode' (could probably do this
   ;; a bit more efficiently):
   (csv-field-index-mode (symbol-value 'csv-field-index-mode)))
