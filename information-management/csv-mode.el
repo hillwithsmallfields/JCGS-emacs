@@ -5,8 +5,7 @@
 ;; Forked by John C. G. Sturdy to avoid some obsolete dependencies
 
 ;; Author: Francis J. Wright <F.J.Wright at qmul.ac.uk>
-;; Time-stamp: <2020-04-06 22:35:37 jcgs>
-
+;; Time-stamp: <2020-04-10 09:13:32 jcgs>
 ;; URL: http://centaur.maths.qmul.ac.uk/Emacs/
 ;; Version: $Id: csv-mode.el,v 1.50 2004/08/23 17:51:26 fjw Exp $
 ;; Keywords: convenience
