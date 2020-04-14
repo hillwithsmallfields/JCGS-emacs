@@ -50,8 +50,9 @@ on `before-change-functions'."
   "CSV mode with ISO dates in the first column.
 When you start typing in the last row, today's date is inserted
 at the start of the row if it is not already there."
-  (make-local-variable 'before-change-functions)
-  (add-hook 'before-change-functions 'force-row-timestamp))
+  (add-hook 'before-change-functions 'force-row-timestamp nil t)
+  (make-local-variable 'require-final-newline)
+  (setq require-final-newline t))
 
 (provide 'dated-csv)
 ;;; dated-csv.el ends here
