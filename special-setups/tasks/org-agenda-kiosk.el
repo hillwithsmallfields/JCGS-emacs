@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2019-06-01 13:16:32 jcgs>
+;;; Time-stamp: <2020-04-04 09:08:37 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -11,17 +11,6 @@
 ;;; agenda.
 
 (require 'org)
-
-;;;;;;;;;;;;;
-;; Storage ;;
-;;;;;;;;;;;;;
-
-(let ((coimealta (expand-file-name "coimealta"
-                                   (substitute-in-file-name
-                                    "$OPEN_PROJECTS"))))
-  (when (file-directory-p coimealta)
-    (add-to-list 'load-path (expand-file-name "inventory" coimealta))
-    (autoload 'storage-locate-item "storage" "Locate ITEM." t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Using a keypad to navigate my agenda tree ;;

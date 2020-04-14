@@ -1,9 +1,13 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2019-09-19 22:00:31 jcgs>
+;;; Time-stamp: <2020-04-04 09:15:18 jcgs>
 
 (setq debug-on-error t)
 
 (setq weather-loadable nil)
+
+;;;;;;;;;;;;;;;;;;;;
+;; Load libraries ;;
+;;;;;;;;;;;;;;;;;;;;
 
 (load-file "$MY_ELISP/basics/jcgs-common-setup.el")
 (load-file "$MY_ELISP/basics/host.el")
@@ -19,7 +23,7 @@
 (load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
 
 (load-file (expand-file-name "basics/use-package.el" user-emacs-directory))
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-pedals"))
+(add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/emacs-pedals"))
 (unless (and (boundp 'no-versor) no-versor)
   (load-file (expand-file-name "config/use-versor.el" user-emacs-directory)))
 
@@ -28,7 +32,15 @@
 (add-to-list 'load-path (substitute-in-file-name "$ORGLISP"))
 (require 'org-jcgs-journal)
 
+;;;;;;;;;;;;;;;;;;;
+;; For home only ;;
+;;;;;;;;;;;;;;;;;;;
+
 (when (at-home-p)
+  (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
+    (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+      (find-file (expand-file-name file health-dir))
+      (goto-char (point-max))))
   (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
@@ -41,8 +53,31 @@
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org"))))))
 
-(when (boundp 'jcgs/org-journal-files)
-  (mapcar 'find-file jcgs/org-journal-files))
+;;;;;;;;;;;;;
+;; Storage ;;
+;;;;;;;;;;;;;
+
+(let ((coimealta (expand-file-name "coimealta"
+                                   (substitute-in-file-name
+                                    "$MY_PROJECTS"))))
+  (when (file-directory-p coimealta)
+    (add-to-list 'load-path (expand-file-name "inventory" coimealta))
+    (autoload 'storage-locate-item "storage" "Locate ITEM." t)))
+
+;;;;;;;;;;;;;;
+;; Journals ;;
+;;;;;;;;;;;;;;
+
+(when (boundp 'jcgs/org-journals)
+  (dolist (file-descr jcgs/org-journals)
+    (let ((file (cdr file-descr)))
+      (when (file-exists-p file)
+	(find-file file)
+	(jcgs/org-journal-last-day t)))))
+
+;;;;;;;;;;;;
+;; Agenda ;;
+;;;;;;;;;;;;
 
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (mapc (lambda (file)
@@ -52,6 +87,10 @@
 (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pre-set system shutdown ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun jcgs/emacs-pre-shutdown-function ()
   "Function to run soon before shutdown."
