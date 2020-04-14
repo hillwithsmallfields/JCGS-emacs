@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2020-04-06 22:24:11 jcgs>
+;;; Time-stamp: <2020-04-14 21:55:22 jcgs>
 
 (setq debug-on-error t)
 
@@ -31,6 +31,7 @@
 
 (add-to-list 'load-path (substitute-in-file-name "$ORGLISP"))
 (require 'org-jcgs-journal)
+(add-hook 'jcgs/org-journal-mode-hook 'auto-fill-mode)
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/JCGS-emacs/information-management"))
 (require 'dated-csv)
 
@@ -39,8 +40,9 @@
 ;;;;;;;;;;;;;;;;;;;
 
 (when (at-home-p)
-  (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
-    (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+  (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+    (add-to-list 'auto-mode-alist (cons (concat health-dir ".+\\.csv") 'dated-csv-mode))
+    (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
       (find-file (expand-file-name file health-dir))
       (goto-char (point-max))
       (dated-csv-mode)))
