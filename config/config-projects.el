@@ -14,55 +14,55 @@
 
 (unless (or (at-work-p)
 	    (on-small-machine))
-  (dolist (pair '(("-grevo-" . "$MY_PROJECTS/GrEvo/trunk/")
-		  ("-examples-for-grevo-" . "$MY_PROJECTS/GrEvo/trunk/examples/")
-		  ("-ulga-" . "$MY_PROJECTS/ULGA/trunk/")
-		  ("-libGE-" . "$MY_PROJECTS/libGE/trunk/")))
+  (dolist (pair '(("/grevo/" . "$MY_PROJECTS/GrEvo/trunk/")
+		  ("/examples-for-grevo/" . "$MY_PROJECTS/GrEvo/trunk/examples/")
+		  ("/ulga/" . "$MY_PROJECTS/ULGA/trunk/")
+		  ("/libGE/" . "$MY_PROJECTS/libGE/trunk/")))
     (make-named-shell (car pair) (cdr pair)))
-  ;; ( "-rtl-" . "$MY_PROJECTS/libRTL/trunk/" )
+  ;; ( "/rtl/" . "$MY_PROJECTS/libRTL/trunk/" )
   (when nil
-    (make-named-shell "-ephemerals-"
+    (make-named-shell "/ephemerals/"
 		      "$COMMON/research/bds/grevo/ephemerals/"
 		      )))
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
-				     "-muesli-"
+				     "/muesli/"
 				     ;; "make clean; ./configure; make\n"
 				     )
 
 (make-shell-for-directory-if-present "$COMMON/music/"
-				     "-music-"
+				     "/music/"
 				     ;; "make clean; ./configure; make\n"
 				     )
 
 (make-shell-for-directory-if-present "$MY_ELISP"
-				     "-gnuemacs-")
+				     "/gnuemacs/")
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/makers/"
-                                     "-makers-")
+                                     "/makers/")
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-                                     "-server-")
+                                     "/server/")
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-                                     "-client-")
+                                     "/client/")
 
 (unless (at-work-p)
   (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"
-				       "-gos-"
+				       "/gos/"
 				       ;; "make clean; ./configure; make\n"
 				       )
   (make-shell-for-directory-if-present "$MY_PROJECTS/mulvoc/mulvoc/"
-				       "-mulvoc-"
+				       "/mulvoc/"
 				       ;; "make clean; ./configure; make\n"
 				       )
   (when t
     (make-shell-for-directory-if-present "$WRITING/fiction/last-khan/"
-					 "-khanate-"
+					 "/khanate/"
 					 ;; "latex last-khan.tex\n"
 					 ))
   (make-shell-for-directory-if-present "$MY_PROJECTS/qs/qs"
-				       "-qs-")
+				       "/qs/")
   )
 
 (defun run-command-in-shell-buffer (command buffer)
