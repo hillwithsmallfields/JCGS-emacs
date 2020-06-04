@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2020-02-20 09:57:32 jsturdy>
+;;; Time-stamp: <2020-03-25 16:46:27 jsturdy>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
@@ -15,13 +15,16 @@
 ;; General ;;
 ;;;;;;;;;;;;;
 
+(defvar jcgs/leave-tabs-alone nil)
+
 (defun jcgs/regularize-whitespace ()
   "Regularize whitespace, typically before saving a file."
   (let* ((tabs (count-matches "	" (point-min) (point-max)))
 	 (lines (count-lines (point-min) (point-max)))
 	 (delete-trailing-lines t))
     ;; untabify only if there are just a few tabs
-    (when (> (* tabs 24) lines)
+    (when (and (not jcgs/leave-tabs-alone)
+               (> (* tabs 24) lines))
       (untabify (point-min) (point-max)))
     (save-excursion
       (goto-char (point-min))
@@ -188,6 +191,8 @@
   "My setup function for golang buffers."
   (local-set-key "\M-." 'godef-jump)
   (local-set-key "\C-c\C-c" 'compile)
+  (make-local-variable 'jcgs/leave-tabs-alone)
+  (setq jcgs/leave-tabs-alone t)
   (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t))
 
 (add-hook 'go-mode-hook 'jcgs/go-mode-hook-function)
