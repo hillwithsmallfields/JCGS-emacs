@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2020-03-16 14:23:58 jsturdy>
+;;; Time-stamp: <2020-05-13 10:53:58 jsturdy>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
@@ -283,14 +283,14 @@ COUNT can be passed in to make it negative."
 
 (add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
 
-(add-to-list 'default-frame-alist (cons 'font "6x10"))
+;; (add-to-list 'default-frame-alist (cons 'font "6x10"))
 
 (defun jcgs/frame-setup ()
   "Set up a frame the way I usually like it."
   (interactive)
   (when window-system
     ;; (set-face-font 'mode-line "6x10") ; is this included in set-frame-font?
-    (set-frame-font "6x10")
+    ;; (set-frame-font "6x10")
     ;; (set-face-font 'mode-line "-misc-fixed-medium-r-normal-*-8-*-*-*-c-*-iso10646-*") ; probably too small
     (set-face-background 'mode-line "brown")
     (set-face-foreground 'mode-line "white")
@@ -800,5 +800,15 @@ John Sturdy <john@cb1.com>"
 
 (add-to-list 'auto-mode-alist '("\\.log\\'" . display-ansi-colors))
 (add-to-list 'auto-mode-alist '("\\.err\\'" . display-ansi-colors))
+
+;;; cover for a removed function
+
+(defun plist-to-alist (pl)
+  (let ((al nil))
+    (while pl
+      (setq al (cons (cons (car pl) (cadr pl))
+                     al)
+            pl (cddr pl)))
+    al))
 
 ;;; end of config-distribution.el
