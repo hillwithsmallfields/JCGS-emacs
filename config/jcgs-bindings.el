@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2018-09-14 15:45:45 jcgs>
+;;; Time-stamp: <2020-05-29 11:52:22 jsturdy>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -64,6 +64,7 @@ directory."
 (global-set-key "\C-cf" 'find-file-at-point)
 (global-set-key "\C-cl" 'find-place)
 (global-set-key "\C-cL" 'find-place-forward)
+(global-set-key "\C-x\M-o" 'other-frame)
 
 (defun grep-this (command-args)
   "Run grep on the current symbol.
