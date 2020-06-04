@@ -1,5 +1,5 @@
 ;;; host-setup.el --- host-specific setups
-;; Time-stamp: <2018-11-15 19:23:59 jcgs>
+;; Time-stamp: <2020-05-13 09:38:36 jsturdy>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; (require 'screen-setups)
@@ -74,14 +74,14 @@ Emacs frame explicitly.")
 	    '(("normal" "-Adobe-Courier-Medium-R-Normal--17-120-100-100-M-100-ISO8859-1"
 	       134 64			; 98 46
 	       )
-	      ("quite compact" "6x10"
-	       225 96			; 160 69
-	       )
+	      ;; ("quite compact" "6x10"
+	      ;;  225 96			; 160 69
+	      ;;  )
 	      ("compact" "-*-lucidatypewriter-medium-r-*-*-8-*-*-*-*-*-*-*"
 	       269 96			;  194 69
 	       ))
 	    default-screen-setup "normal")
-      (set-face-font 'mode-line "6x10")
+      ;; (set-face-font 'mode-line "6x10")
       (set-face-background 'mode-line "brown")
       (set-face-foreground 'mode-line "white"))
      (t nil))))
@@ -128,7 +128,7 @@ Emacs frame explicitly.")
 	  screen-on-compact-setting t
 	  screen-setups
 	  (if screen-on-compact-setting
-	      '(("normal" "6x10" 177 55)
+	      '(;; ("normal" "6x10" 177 55)
 		;; ("big mono" "12x16" 80 24)
 		("Kelt" "-outline-Kelt UNICODE-bold-r-normal-normal-*-*-96-96-p-*-iso10646-1" 207 54)
 		("Gaeilge" "-outline-Gaeilge UNICODE-normal-r-normal-normal-*-*-96-96-p-*-iso10646-1": 111 40)
@@ -150,7 +150,7 @@ Emacs frame explicitly.")
 		("ugly old terminal" "-raster-Terminal-normal-r-normal-normal-12-90-96-96-c-160-ms-oem")
 
 		)
-	    '(("normal" "6x10" 102 38)
+	    '(;; ("normal" "6x10" 102 38)
 	      ("compact" "-*-Terminal-normal-r-*-*-8-60-*-*-c-*-*-oem-" 131 70)
 	      ("more compact" "-raster-Small Fonts-normal-r-normal-normal-9-67-96-96-p-50-iso10646-1" 151 51)
 	      ("tiny" "-raster-Small Fonts-normal-r-normal-normal-8-60-96-96-p-40-iso10646-1" 190 57)
@@ -195,7 +195,7 @@ Emacs frame explicitly.")
   (cond
    ((eq window-system 'w32)
     (setq screen-setups
-	  '(("dreadful" "6x10" 100 35)
+	  '(;; ("dreadful" "6x10" 100 35)
 	    ("chunky" "-outline-Bitstream Vera Sans Mono-bold-r-normal-normal-*-*-96-96-c-*-iso10646-1" 96 34)
 	    ("normal" "-*-Courier New-normal-r-*-*-13-*-*-*-c-*-iso8859-1" 124 41)
 	    ("compact" "-*-Terminal-normal-r-*-*-8-60-*-*-c-*-*-oem-" 131 70)
