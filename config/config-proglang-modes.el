@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2020-02-20 09:57:32 jsturdy>
+;;; Time-stamp: <2020-05-29 21:19:20 jcgs>
 
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
@@ -15,6 +15,16 @@
 ;; General ;;
 ;;;;;;;;;;;;;
 
+(defvar jcgs/leave-multiple-blank-lines nil
+  "Suppress my usual tidying of multiple blank lines.")
+
+(defun jcgs/leave-multiple-blank-lines (arg)
+  "Set suppression of blank line tidying according to ARG."
+  (interactive "p")
+  (setq jcgs/leave-multiple-blank-lines (and (numberp arg) (> arg 0))))
+
+(make-variable-buffer-local 'jcgs/leave-multiple-blank-lines)
+
 (defun jcgs/regularize-whitespace ()
   "Regularize whitespace, typically before saving a file."
   (let* ((tabs (count-matches "	" (point-min) (point-max)))
@@ -23,11 +33,12 @@
     ;; untabify only if there are just a few tabs
     (when (> (* tabs 24) lines)
       (untabify (point-min) (point-max)))
-    (save-excursion
-      (goto-char (point-min))
-      (while (search-forward "\n\n\n" (point-max) t)
-        (forward-line -1)
-        (delete-blank-lines)))
+    (unless jcgs/leave-multiple-blank-lines
+      (save-excursion
+        (goto-char (point-min))
+        (while (search-forward "\n\n\n" (point-max) t)
+          (forward-line -1)
+          (delete-blank-lines))))
     (delete-trailing-whitespace)))
 
 ;;;;;;;;;;;;
