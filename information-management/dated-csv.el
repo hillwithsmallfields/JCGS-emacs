@@ -27,29 +27,42 @@
 
 (require 'csv-mode)
 
-(defun force-row-timestamp (from to)
-  "Make the line being changed start with a date string.
+(defmacro def-row-timestamper (name time-format)
+  "Make a row timestamping function called NAME using TIME-FORMAT."
+  `(defun ,name (from to)
+     "Make the line being changed start with a date string.
 This is in ISO format, followed by a comma, suitable for
 use in a CSV file.
 Arguments FROM and TO mark the area being changed, for use
 on `before-change-functions'."
-  (when (or (eobp)
-            (save-excursion
-              (beginning-of-line 2)
-              (eobp)))
-    (let ((date-string (format-time-string "%F,")))
-      (unless (save-excursion
-                (goto-char from)
-                (beginning-of-line)
-                (looking-at date-string))
-        (beginning-of-line)
-        (insert date-string)
-        (end-of-line)))))
+     (when (or (eobp)
+               (save-excursion
+                 (beginning-of-line 2)
+                 (eobp)))
+       (let ((date-string (format-time-string ,time-format)))
+         (unless (save-excursion
+                   (goto-char from)
+                   (beginning-of-line)
+                   (looking-at date-string))
+           (beginning-of-line)
+           (insert date-string)
+           (end-of-line))))))
+
+(def-row-timestamper force-row-datestamp "%F,")
+(def-row-timestamper force-row-timestamp "%FT%R,")
 
 (define-derived-mode dated-csv-mode csv-mode "Dated CSV"
   "CSV mode with ISO dates in the first column.
 When you start typing in the last row, today's date is inserted
 at the start of the row if it is not already there."
+  (add-hook 'before-change-functions 'force-row-datestamp nil t)
+  (make-local-variable 'require-final-newline)
+  (setq require-final-newline t))
+
+(define-derived-mode timed-csv-mode csv-mode "Timed CSV"
+  "CSV mode with ISO timedates in the first column.
+When you start typing in the last row, this minute's timedate is
+inserted at the start of the row if it is not already there."
   (add-hook 'before-change-functions 'force-row-timestamp nil t)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
