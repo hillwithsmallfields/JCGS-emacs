@@ -27,8 +27,9 @@
 
 (require 'csv-mode)
 
-(defmacro def-row-timestamper (name time-format)
-  "Make a row timestamping function called NAME using TIME-FORMAT."
+(defmacro def-row-timestamper (name time-format &optional time-pattern)
+  "Make a row timestamping function called NAME using TIME-FORMAT.
+Optional argument TIME-PATTERN is a pattern to see whether this line has already been annotated."
   `(defun ,name (from to)
      "Make the line being changed start with a date string.
 This is in ISO format, followed by a comma, suitable for
@@ -39,17 +40,19 @@ on `before-change-functions'."
                (save-excursion
                  (beginning-of-line 2)
                  (eobp)))
-       (let ((date-string (format-time-string ,time-format)))
+       (let ((date-pattern (format-time-string ,(or time-pattern time-format)))
+             (date-string (format-time-string ,time-format)))
+         (message "date-pattern=%S date-string=%S" date-pattern date-string)
          (unless (save-excursion
                    (goto-char from)
                    (beginning-of-line)
-                   (looking-at date-string))
+                   (looking-at date-pattern))
            (beginning-of-line)
            (insert date-string)
            (end-of-line))))))
 
 (def-row-timestamper force-row-datestamp "%F,")
-(def-row-timestamper force-row-timestamp "%FT%R,")
+(def-row-timestamper force-row-timestamp "%FT%R,," "%FT%R,[:0-9]*,")
 
 (define-derived-mode dated-csv-mode csv-mode "Dated CSV"
   "CSV mode with ISO dates in the first column.
@@ -66,6 +69,32 @@ inserted at the start of the row if it is not already there."
   (add-hook 'before-change-functions 'force-row-timestamp nil t)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
+
+(defun time-tracking-csv-mode-fill-in-durations ()
+  "Fill in durations in a time-tracking CSV file."
+  (interactive)
+  (save-excursion
+    (goto-line 2)
+    (while (re-search-forward "\\(^[-0-9]+T[:0-9]+\\),," (point-max) t)
+      (let ((end-time-string (match-string-no-properties 1))
+            (where-to-write-duration (+ (match-end 1) 1)))
+        (when (save-excursion
+                (beginning-of-line 0)
+                (looking-at "\\(^[-0-9]+T[:0-9]+\\),"))
+          (let* ((start-time (parse-iso8601-time-string (concat (match-string-no-properties 1) ":00")))
+                 (end-time (parse-iso8601-time-string (concat end-time-string ":00")))
+                 (duration-string (format-seconds "%h:%m" (time-to-seconds (time-subtract end-time start-time)))))
+            (goto-char where-to-write-duration)
+            (insert duration-string))))))
+  nil                                   ; say we haven't written it
+  )
+
+(define-derived-mode time-tracking-csv-mode timed-csv-mode "Time-tracking CSV"
+  "CSV mode with ISO timedates in the first column.
+When you start typing in the last row, this minute's timedate is
+inserted at the start of the row if it is not already there.
+When you save the file, durations are filled in in the second column."
+  (add-hook 'write-file-functions 'time-tracking-csv-mode-fill-in-durations))
 
 (provide 'dated-csv)
 ;;; dated-csv.el ends here
