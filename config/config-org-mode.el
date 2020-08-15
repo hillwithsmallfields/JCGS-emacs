@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2020-08-15 12:18:34 jcgs>
+;;; Time-stamp: <2020-08-15 12:22:32 jcgs>
 
 
 (require 'org)
@@ -47,6 +47,7 @@
       ;; org-agenda-overriding-columns-format ; should probably set this
       org-enable-table-editor t
       org-special-ctrl-k t
+      org-yank-adjusted-subtrees t
       org-directory (substitute-in-file-name "$ORG/")
       foo (message "org dir is %s" org-directory)
       org-default-notes-file (expand-file-name "new.org" org-directory)
@@ -269,19 +270,6 @@ The filenames to save in are added by this function"
 (defvar jcgs/shell-mode-accumulated-command-history-file
   (substitute-in-file-name "$ORG/shell-command-history.org")
   "My accumulated command history.")
-
-(defun planner-to-org ()
-  "Convert text from planner format to org format."
-  (interactive)
-  (goto-char (point-min)) (replace-regexp "^#[ABC] " "")
-  (goto-char (point-min)) (replace-regexp " {{Tasks:[0-9]+}}" "")
-  (goto-char (point-min)) (replace-regexp " (\\[\\[[0-9.]+\\]\\])$" "")
-  (goto-char (point-min)) (replace-string "pos:" "file:")
-  (goto-char (point-min)) (replace-regexp "#[0-9]+" "")
-  (goto-char (point-min)) (replace-regexp "^o" "CURRENT")
-  (goto-char (point-min)) (replace-regexp "^_" "TODO")
-  (goto-char (point-min)) (replace-regexp "^X" "DONE")
-  (goto-char (point-min)) (replace-regexp "^" "** "))
 
 (defvar source-file-names-pattern "\\(.el\\|\\.c\\|\\.h\\)$"
   "Pattern describing the files to record.")
@@ -557,20 +545,6 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (define-key org-agenda-mode-map [ f8 ] 'jcgs/org-agenda-task-today)
 (define-key org-agenda-mode-map [ f9 ] 'jcgs/org-agenda-task-tomorrow)
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; separate log files ;;
-;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (make-variable-buffer-local 'tracking-org-file)
-
-;; (defun jcgs-select-work-log ()
-;;   "This function is meant to go on `find-file-hook'."
-;;   (cond
-;;    ((string-match (substitute-in-file-name "$COMMON/Marmalade") default-directory)
-;;     (setq tracking-org-file (substitute-in-file-name "$COMMON/Marmalade/Marmalade-work.log")))))
-
-;; (add-hook 'find-file-hook 'jcgs-select-work-log)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Transfer from and to mobile ;;
