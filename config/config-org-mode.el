@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2020-08-15 12:22:32 jcgs>
+;;; Time-stamp: <2020-08-15 12:42:55 jcgs>
 
 
 (require 'org)
@@ -630,5 +630,52 @@ An argument can change the number of days ahead, 1 being tomorrow."
       (when (cdr item)
         (org-set-property "ID" (cdr item))))
     (basic-save-buffer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; handle tags when moving trees around ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun jcgs/org-tags-to-text-property (beg end)
+  "Copy the org tags to a text property between BEG and END."
+  (interactive "r")
+  (save-excursion
+    (goto-char beg)
+    (while (< (point) end)
+      (put-text-property (line-beginning-position) (line-end-position)
+                         'org-copied-tags
+                         (org-get-tags))
+      (beginning-of-line 2))))
+
+;; (defun jcgs/org-kill-line (&optional _arg)
+;;   "Kill line, to tags or end of line.
+;; Org tags in the text killed are stored in a text property."
+;;   (interactive)
+;;   (jcgs/org-tags-to-text-property ....) ;; how do I find the end of the region?
+;;   (org-kill-line arg))
+
+;; (define-key org-mode-map "\C-k" 'jcgs/org-kill-line)
+
+(defun jcgs/text-property-to-org-tags (beg end)
+  "Set the org tags from a text property between BEG and END."
+  (interactive "r")
+  (save-excursion
+    (goto-char beg)
+    (while (< (point) end)
+      (let ((line-beginning (line-beginning-position))
+            (line-end (line-end-position))
+            (tags-already-in-org (org-get-tags)))
+        (dolist (incoming-tag (get-text-property (point) 'org-copied-tags))
+          (unless (member incoming-tag tags-already-in-org)
+            (org-change-tag-in-region line-beginning line-end incoming-tag nil))))
+      (beginning-of-line 2))))
+
+;; (defun jcgs/org-yank (&optional arg)
+;;   "Do `org-yank', then convert the tags text property back to tags."
+;;   (interactive "P")
+;;   (org-yank arg)
+;;   (jcgs/text-property-to-org-tags ...)  ; how do I find the end of the region?
+;;   )
+
+;; (define-key org-mode-map "\C-y" 'jcgs/org-yank)
 
 ;;; config-org-mode.el ends here
