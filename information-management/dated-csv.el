@@ -21,7 +21,7 @@
 ;;; Commentary:
 
 ;; When you start changing a row of the CSV file, this mode makes sure
-;; that today's date is at the start of that line.
+;; that today's date is at the start of that line.x
 
 ;;; Code:
 
@@ -75,14 +75,14 @@ inserted at the start of the row if it is not already there."
   (interactive)
   (save-excursion
     (goto-line 2)
-    (while (re-search-forward "\\(^[-0-9]+T[:0-9]+\\),," (point-max) t)
-      (let ((end-time-string (match-string-no-properties 1))
+    (while (re-search-forward "^\\([-0-9]+T[:0-9]+\\),," (point-max) t)
+      (let ((start-time-string (match-string-no-properties 1))
             (where-to-write-duration (+ (match-end 1) 1)))
         (when (save-excursion
-                (beginning-of-line 0)
-                (looking-at "\\(^[-0-9]+T[:0-9]+\\),"))
-          (let* ((start-time (parse-iso8601-time-string (concat (match-string-no-properties 1) ":00")))
-                 (end-time (parse-iso8601-time-string (concat end-time-string ":00")))
+                (beginning-of-line 2)
+                (looking-at "^\\([-0-9]+T[:0-9]+\\),"))
+          (let* ((end-time (parse-iso8601-time-string (concat (match-string-no-properties 1) ":00")))
+                 (start-time (parse-iso8601-time-string (concat start-time-string ":00")))
                  (duration-string (format-seconds "%h:%m" (time-to-seconds (time-subtract end-time start-time)))))
             (goto-char where-to-write-duration)
             (insert duration-string))))))
