@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2020-05-29 19:41:22 jcgs>
+;;; Time-stamp: <2020-08-19 20:38:36 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -537,7 +537,8 @@ run in a buffer, or when called with a prefix argument."
 
 (defun jcgs/csv-mode-hook ()
   "My setup for CSV mode."
-  (csv-field-index-mode -1))
+  (csv-field-index-mode -1)
+  (auto-fill-mode -1))
 
 (add-hook 'csv-mode-hook 'jcgs/csv-mode-hook)
 
