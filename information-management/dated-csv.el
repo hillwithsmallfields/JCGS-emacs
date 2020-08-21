@@ -52,7 +52,8 @@ on `before-change-functions'."
            (end-of-line))))))
 
 (def-row-timestamper force-row-datestamp "%F,")
-(def-row-timestamper force-row-timestamp "%FT%R,," "%FT%R,[:0-9]*,")
+(def-row-timestamper force-row-timestamp "%FT%R,,"
+  "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9],,")
 
 (define-derived-mode dated-csv-mode csv-mode "Dated CSV"
   "CSV mode with ISO dates in the first column.
