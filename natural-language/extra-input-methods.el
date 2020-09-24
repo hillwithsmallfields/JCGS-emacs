@@ -1,5 +1,5 @@
 ;;;; extra-input-methods.el -- my own input methods -*- coding: iso-2022-7bit; -*-
-;;; Time-stamp: <2010-07-07 23:01:44 jcgs>
+;;; Time-stamp: <2020-09-24 21:28:15 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -373,5 +373,14 @@ Niqqud are included
  ("/H" ?,C!(B)
  (".z" ?,B?(B)
  (".Z" ?,B/(B))
+
+(quail-define-package
+ "albanian-prefix" "Albanian" "SHQ>" t
+ "Albanian input method with prefix modifiers."
+ nil t nil nil nil nil nil nil nil nil t)
+
+(quail-define-rules
+ (",c" ?,Ag(B)
+ ("\"e" ?,Ak(B))
 
 ;;; end of extra-input-methods.el
