@@ -1,5 +1,5 @@
 ;;;; extra-input-methods.el -- my own input methods -*- coding: iso-2022-7bit; -*-
-;;; Time-stamp: <2020-09-25 20:40:54 jcgs>
+;;; Time-stamp: <2020-09-30 21:48:34 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -383,6 +383,10 @@ Niqqud are included
  (",c" ?,Ag(B)
  ("\"e" ?,Ak(B)
  (",C" ?,AG(B)
- ("\"E" ?,AK(B))
+ ("\"E" ?,AK(B)
+ ("/c" ?,Ag(B)
+ ("/e" ?,Ak(B)
+ ("/C" ?,AG(B)
+ ("/E" ?,AK(B))
 
 ;;; end of extra-input-methods.el
