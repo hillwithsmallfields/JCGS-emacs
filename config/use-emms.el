@@ -1,7 +1,9 @@
 ;;;; find, load and configure emms
-;;; Time-stamp: <2018-11-15 19:26:35 jcgs>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
-(use-package emms
+(require 'jcgs-use-package)
+
+(jcgs-use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
 	     nil
 	     ((emms "emms-playlist-mode"

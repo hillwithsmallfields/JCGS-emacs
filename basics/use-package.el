@@ -1,7 +1,7 @@
-;;;; use-package.el -- Arrange use of an elisp package
-;;; Time-stamp: <2012-11-19 13:54:03 johnstu>
+;;;; jcgs-use-package.el -- Arrange use of an elisp package
+;;; Time-stamp: <2020-11-11 20:51:07 jcgs>
 
-;; Copyright (C) 2007, 2008, 2012, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2012, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -28,7 +28,7 @@
 ;;; Commentary:
 ;; 
 
-;;; use-package provides a way for you to gather together all the
+;;; jcgs/use-package provides a way for you to gather together all the
 ;;; information about your configuration of a package, and how to
 ;;; fetch and install that package.  It defines and uses an
 ;;; `autofetch' facility, similar to `autoload', for fetching and
@@ -51,7 +51,7 @@
 ;;; probably do that separately anyway.
 
 ;;; Code:
-(defun use-package-fetch-file (url file)
+(defun jcgs/use-package-fetch-file (url file)
   "Fetch URL into FILE."
   (message "Fetching %s into %s" url file)
   (cond
@@ -73,7 +73,7 @@
    (t
     (message "Don't know how to fetch %s" url))))
 
-(defun use-package-unpack-file (bundle-file lisp-directory
+(defun jcgs/use-package-unpack-file (bundle-file lisp-directory
 					    recognizable-file
 					    &optional after-form)
   "Unpack BUNDLE-FILE to LISP-DIRECTORY, giving RECOGNIZABLE-FILE among others.
@@ -107,7 +107,7 @@ RECOGNIZABLE-FILE."
    (t (error "Don't know how to unpack %S into %S" bundle-file lisp-directory)))
   (when after-form
     (let ((default-directory lisp-directory))
-      (when use-package-verbose
+      (when jcgs/use-package-verbose
 	(message "Evaluating post-processing %S in directory %S"
 		 after-form default-directory))
       (eval after-form)))
@@ -129,7 +129,7 @@ PATTERN is matched against the last part of the name only."
 	      (push file files))))
 	files)))
 
-(defun use-package-preferable-subdirectory (a b)
+(defun jcgs/use-package-preferable-subdirectory (a b)
   "Return whether directory A is preferable to directory B.
 This sort predicate is designed to favour shorter directory
 names (hence avoiding version control subdirectories like
@@ -152,7 +152,7 @@ subdirectory of the directory you specify to unpack it in,
 typically with a version number somewhere in the directory name."
   (when (symbolp file)
     (setq file (symbol-name file)))
-  (when use-package-verbose
+  (when jcgs/use-package-verbose
     (message "Looking in %S for %S" directory file))
   (if (not (and (stringp directory)
 		(file-directory-p directory)))
@@ -174,8 +174,8 @@ typically with a version number somewhere in the directory name."
 	   (possibilities
 	    (sort (mapcar 'file-name-directory
 			  (files-matching-in-subdirs pattern directory))
-		  'use-package-preferable-subdirectory)))
-      (when use-package-verbose
+		  'jcgs/use-package-preferable-subdirectory)))
+      (when jcgs/use-package-verbose
 	(message "Picking the best of %S" possibilities))
       (car possibilities))))
 
@@ -197,14 +197,14 @@ typically with a version number somewhere in the directory name."
 (defun autofetch-fetch-it (directory getter recognizable-file)
   "Populate DIRECTORY using GETTER, expecting RECOGNIZABLE-FILE to appear under it."
   (unless (file-directory-p directory)
-    (when use-package-verbose
+    (when jcgs/use-package-verbose
       (message "do-autofetch creating directory %S" directory))
     (make-directory directory t))
-  (let ((lisp-actual-directory (use-package-get-package directory
+  (let ((lisp-actual-directory (jcgs/use-package-get-package directory
 							getter
 							recognizable-file)))
     (unless (member lisp-actual-directory load-path)
-      (when use-package-verbose
+      (when jcgs/use-package-verbose
 	(message "do-autofetch adding %S to load path" lisp-actual-directory))
       (push lisp-actual-directory load-path))))
 
@@ -256,13 +256,13 @@ Like autoload, but downloads the file first.
 Optional arguments DOC and INTERACTIVE are as for `autoload'."
   `(autofetch1 ',symbol ,file ,directory ,getter ,doc ,interactive))
 
-(defun use-package-get-package (lisp-directory getter recognizable-file)
+(defun jcgs/use-package-get-package (lisp-directory getter recognizable-file)
   "Populate LISP-DIRECTORY according to GETTER, producing RECOGNIZABLE-FILE.
 \(Other files may also appear there.\)
 Should return an updated value for LISP-DIRECTORY, found by searching
 the directories below LISP-DIRECTORY for an occurrence of
 RECOGNIZABLE-FILE.
-See `use-package' for description of GETTER."
+See `jcgs/use-package' for description of GETTER."
   (if (functionp getter)
       (funcall getter)
     (let* ((url (cond
@@ -283,9 +283,9 @@ See `use-package' for description of GETTER."
 		      (t nil)))
 	   (last-part (file-name-nondirectory url))
 	   (staging nil)
-	   (dirs use-package-download-path))
-      (when use-package-verbose
-	(message "use-package-get-package on URL %S; last-part %S; dirs %S"
+	   (dirs jcgs/use-package-download-path))
+      (when jcgs/use-package-verbose
+	(message "jcgs/use-package-get-package on URL %S; last-part %S; dirs %S"
 		 url last-part dirs))
       ;; first, see whether the tarball or whatever has been downloaded
       (while dirs
@@ -297,104 +297,104 @@ See `use-package' for description of GETTER."
 		    dirs nil)
 	    (setq dirs (cdr dirs)))))
       ;; if it hasn't been downloaded yet, find a place to download it
-      (when use-package-verbose
+      (when jcgs/use-package-verbose
 	(message "Staging %S" staging))
       (unless staging
-	(when use-package-verbose
+	(when jcgs/use-package-verbose
 	  (message "Looking for suitable staging directory (writable directory for temporary files)"))
-	(setq dirs use-package-download-path)
+	(setq dirs jcgs/use-package-download-path)
 	(while dirs
-	  (when use-package-verbose
+	  (when jcgs/use-package-verbose
 	    (message "Trying %S as staging" (car dirs)))
 	  (if (and (file-directory-p (car dirs))
 		   (file-writable-p (car dirs)))
 	      (setq staging (car dirs)
 		    dirs nil)
 	    (setq dirs (cdr dirs))))
-	(when use-package-verbose
+	(when jcgs/use-package-verbose
 	  (message "Staging now %S" staging))
 	(when (null staging)
-	  (when use-package-verbose
+	  (when jcgs/use-package-verbose
 	    (message "Null staging, creating one"))
-	  (make-directory (car use-package-download-path) t)
-	  (setq staging (car use-package-download-path))))
+	  (make-directory (car jcgs/use-package-download-path) t)
+	  (setq staging (car jcgs/use-package-download-path))))
       (let ((stage-file (expand-file-name last-part staging)))
-	(when use-package-verbose
+	(when jcgs/use-package-verbose
 	  (message "Using staging directory %S; fetching %S into %S"
 		   staging url stage-file))
 	(if (stringp url)
-	    (use-package-fetch-file url stage-file)
+	    (jcgs/use-package-fetch-file url stage-file)
 	  (while (and url
 		      (not (file-readable-p stage-file)))
-	    (use-package-fetch-file (car url) stage-file)
+	    (jcgs/use-package-fetch-file (car url) stage-file)
 	    (setq url (cdr url))))
 	;; check it is ready, and unpack it if OK
 	(if (file-readable-p stage-file)
-	    (when use-package-verbose
+	    (when jcgs/use-package-verbose
 	      (message "Successfully downloaded %S" stage-file))
 	  (error "Failed to download %s" url))
-	(when use-package-verbose
+	(when jcgs/use-package-verbose
 	  (message "Unpacking %S into %S with %S postprocessing"
 		   stage-file lisp-directory after-form))
-	(use-package-unpack-file stage-file
+	(jcgs/use-package-unpack-file stage-file
 				 lisp-directory
 				 recognizable-file
 				 after-form)))))
 
-(defgroup use-package nil
+(defgroup jcgs/use-package nil
   "Package use control.")
 
-(defcustom use-package-download-path '("~/downloaded" "/tmp")
+(defcustom jcgs/use-package-download-path '("~/downloaded" "/tmp")
   "Directories in which downloaded packages may appear.
-If `use-package' finds a file matching the nondirectory part of the url
+If `jcgs/use-package' finds a file matching the nondirectory part of the url
 it has been given, existing in any of these directories, it takes that
 file as being the downloaded data.  Otherwise, it uses the first
 writable directory on this list as the download area for getting the
 URL."
-  :group 'use-package)
+  :group 'jcgs/use-package)
 
-(defcustom use-package-only-these nil
+(defcustom jcgs/use-package-only-these nil
   "If this is non-nil, only the packages on this list will be loaded."
-  :group 'use-package)
+  :group 'jcgs/use-package)
 
-(defcustom use-package-skip-these nil
+(defcustom jcgs/use-package-skip-these nil
   "List of packages not to load even if asked to.
 You could set this if one of them is causing trouble from your .emacs,
 while you get it debugged, for example."
-  :group 'use-package)
+  :group 'jcgs/use-package)
 
-(defcustom use-package-check-function nil
+(defcustom jcgs/use-package-check-function nil
   "If non-nil, apply this function to each package name for whether to load it.
 You could set it to something like
   \(lambda (package) (y-or-n-p (format \"load %s\" package)))"
-  :group 'use-package)
+  :group 'jcgs/use-package)
 
-(defcustom use-package-verbose nil
-  "Whether `use-package' should output message about what it is doing."
-  :group 'use-package
+(defcustom jcgs/use-package-verbose nil
+  "Whether `jcgs/use-package' should output message about what it is doing."
+  :group 'jcgs/use-package
   :type 'boolean)
 
 (defcustom downloaded-emacs-directory nil
-  "Directory for files downloaded by autofetch and `use-package'.
+  "Directory for files downloaded by autofetch and `jcgs/use-package'.
 If this is nil, `user-emacs-directory' is used instead."
-  :group 'use-package
+  :group 'jcgs/use-package
   :type 'directory)
 
-(defun use-package-1 (package
+(defun jcgs/use-package-1 (package
 		      lisp-directory
 		      getter
 		      configuration
 		      init-forms)
   ;; checkdoc-params: (package lisp-directory getter configuration init-forms)
-  "Helper function for `use-package', which see."
-  (when (and (not (memq package use-package-skip-these))
-	     (or (null use-package-only-these)
-		 (memq package use-package-only-these))
-	     (or (null use-package-check-function)
-		 (funcall use-package-check-function package)))
+  "Helper function for `jcgs/use-package', which see."
+  (when (and (not (memq package jcgs/use-package-skip-these))
+	     (or (null jcgs/use-package-only-these)
+		 (memq package jcgs/use-package-only-these))
+	     (or (null jcgs/use-package-check-function)
+		 (funcall jcgs/use-package-check-function package)))
     (when (and (consp package)
 	       (eq (car package) 'quote))
-      ;; I meant it not to use quote (via the macro use-package) but
+      ;; I meant it not to use quote (via the macro jcgs/use-package) but
       ;; found I kept putting quote there myself, it sometimes seemed
       ;; natural. So allow either.
       (setq package (cadr package)))
@@ -420,17 +420,17 @@ If this is nil, `user-emacs-directory' is used instead."
 		      (expand-file-name
 		       (concat main-file ".elc")
 		       lisp-actual-directory))))
-	(when use-package-verbose
-	  (message "use-package %s: adding %S to load-path"
+	(when jcgs/use-package-verbose
+	  (message "jcgs/use-package %s: adding %S to load-path"
 		   package lisp-actual-directory))
 	(add-to-list 'load-path lisp-actual-directory)
 	(when nil (directory-files lisp-actual-directory nil "\\.info$")
 	      (require 'info)
 	      (add-to-list 'Info-directory-list lisp-actual-directory)
-	      (when use-package-verbose
-		(message "use-package %s: adding %S to Info-directory-list"
+	      (when jcgs/use-package-verbose
+		(message "jcgs/use-package %s: adding %S to Info-directory-list"
 			 package lisp-actual-directory))))
-      ;; Now go through the configuration parameters; see use-package
+      ;; Now go through the configuration parameters; see jcgs/use-package
       ;; for description.
       (dolist (config configuration)
 	(cond
@@ -441,8 +441,8 @@ If this is nil, `user-emacs-directory' is used instead."
 		       (expand-file-name (substitute-in-file-name config)
 					 lisp-actual-directory)
 		       t)
-	  (when use-package-verbose
-	    (message "use-package %s: adding extra directory %S to load-path"
+	  (when jcgs/use-package-verbose
+	    (message "jcgs/use-package %s: adding extra directory %S to load-path"
 		     package (substitute-in-file-name config))))
 	 ((and (symbolp (car config))
 	       (consp (cdr config))
@@ -457,14 +457,14 @@ If this is nil, `user-emacs-directory' is used instead."
 			getter
 			(third config)	 ; docstring
 			(fourth config))) ; interactive
-	  (when use-package-verbose
-	    (message "use-package %s: arranging autoload of %s from %S"
+	  (when jcgs/use-package-verbose
+	    (message "jcgs/use-package %s: arranging autoload of %s from %S"
 		     package (car config) (cadr config))))
 	 ((and (symbolp (car config))
 	       (symbolp (cdr config)))
 	  (add-hook (car config) (cdr config))
-	  (when use-package-verbose
-	    (message "use-package %s: adding %s to hook %s" package (cdr config) (car config))))
+	  (when jcgs/use-package-verbose
+	    (message "jcgs/use-package %s: adding %s to hook %s" package (cdr config) (car config))))
 	 ((and (eq (car config) 'require)
 	       (consp (cdr config)))
 	  (eval-after-load main-file
@@ -476,8 +476,8 @@ If this is nil, `user-emacs-directory' is used instead."
 	 ((and (stringp (car config))
 	       (symbolp (cdr config))
 	       (string-match "-mode$" (symbol-name (cdr config))))
-	  (when use-package-verbose
-	    (message "use-package %s: adding auto-mode %S" package config))
+	  (when jcgs/use-package-verbose
+	    (message "jcgs/use-package %s: adding auto-mode %S" package config))
 	  (if (assoc (car config) auto-mode-alist)
 	      (rplacd (assoc (car config) auto-mode-alist)
 		      (cdr config))
@@ -485,31 +485,31 @@ If this is nil, `user-emacs-directory' is used instead."
 	 ((and (vectorp (car config))
 	       (symbolp (cdr config)))
 	  (global-set-key (car config) (cdr config))
-	  (when use-package-verbose
-	    (message "use-package %s: binding %s to %s" package (car config) (cdr config))))
+	  (when jcgs/use-package-verbose
+	    (message "jcgs/use-package %s: binding %s to %s" package (car config) (cdr config))))
 	 (t (error "Unknown configuration element %S" config))))
       ;; After the configuration parameters come any forms to be
       ;; evaluated on loading the package.
-      (when use-package-verbose
-	(message "use-package %s: Adding init forms %S" package init-forms)
+      (when jcgs/use-package-verbose
+	(message "jcgs/use-package %s: Adding init forms %S" package init-forms)
 	(setq init-forms (append
-			  `((message ,(format "use-package %s: starting init-forms"
+			  `((message ,(format "jcgs/use-package %s: starting init-forms"
 					      package)))
 			  init-forms
-			  `((message ,(format "use-package %s: ending init-forms"
+			  `((message ,(format "jcgs/use-package %s: ending init-forms"
 					      package))))))
       (eval-after-load main-file
 	`(progn ,@init-forms))
       (when load-now
-	(when use-package-verbose
-	  (message "use-package %s: loading immediately" package))
+	(when jcgs/use-package-verbose
+	  (message "jcgs/use-package %s: loading immediately" package))
 	(unless (or lisp-actual-directory
 		    (eq lisp-directory t))
 	  (autofetch-fetch-it lisp-directory getter main-file))
 	(require package)))))
 
 ;;;###autoload
-(defmacro use-package (package
+(defmacro jcgs/use-package (package
 		       lisp-directory
 		       getter
 		       configuration
@@ -530,10 +530,10 @@ different machines you use.  It may also be nil, in which case
 `user-emacs-directory' is used.
 
 The files may be in a subdirectory of LISP-DIRECTORY, and
-`use-package' will find them for you.  This is because when you
+`jcgs/use-package' will find them for you.  This is because when you
 unpack a tarball, the files you need will not necessarily be at
 the top level.  You can redefine the function
-'use-package-preferable-subdirectory' to control how it chooses
+'jcgs/use-package-preferable-subdirectory' to control how it chooses
 the subdirectory if there are several containing the file.
 
 If the package is not present, GETTER describes how to get it.
@@ -553,7 +553,7 @@ GETTER can be:
 * nil, indicating that the package is not expected to be fetched;
   for example, it might be part of the Emacs distribution
 
-See `use-package-download-path' for more about getting the file.
+See `jcgs/use-package-download-path' for more about getting the file.
 
 CONFIGURATION indicates the use of the package: it is a list of
 various types of element, many of them lists or pairs.  The types
@@ -599,10 +599,10 @@ by passing them to `eval-after-load'. These are done when the
 package is loaded, or immediately if it has already been
 loaded (see `eval-after-load').
 
-See `use-package-only-these', `use-package-skip-these' and
-`use-package-check-function' for ways to load packages
+See `jcgs/use-package-only-these', `jcgs/use-package-skip-these' and
+`jcgs/use-package-check-function' for ways to load packages
 selectively."
-  `(use-package-1 ',package ,lisp-directory ',getter
+  `(jcgs/use-package-1 ',package ,lisp-directory ',getter
 		  ',configuration ',init-forms))
 
 ;;;###autoload
@@ -621,7 +621,7 @@ Directives obeyed are:
   load and require forms that have been replaced with a ;;;###include
 These directives must be at the start of a line.
 
-This command was originally designed to go with use-package, so you
+This command was originally designed to go with jcgs/use-package, so you
 can condense your emacs initialization down to a single file and have
 that file haul the rest across the internet or from a removable storage
 device."
@@ -685,10 +685,6 @@ device."
 	  "\n")
   (write-file outfile))
 
-(provide 'use-package)
+(provide 'jcgs-use-package)
 
-;;; end of use-package.el
-
-(provide 'use-package)
-
-;;; use-package.el ends here
+;;; jcgs-use-package.el ends here

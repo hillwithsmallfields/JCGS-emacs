@@ -1,9 +1,11 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2014-10-05 22:56:25 jcgs>
+;;; Time-stamp: <2020-11-11 20:56:07 jcgs>
+
+(require 'jcgs-use-package)
 
 (add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
 
-(use-package vm
+(jcgs-use-package vm
 	     ;; "$GATHERED/emacs/vm/vm-7.19"
 	     ;; "$GATHERED/emacs/vm/vm-8.0.11"
 	     "$GATHERED/emacs/vm/vm-8.1.1"

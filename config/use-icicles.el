@@ -1,7 +1,9 @@
 ;;;; use-icicles.el -- find and use icicles
-;;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
-(use-package icicles
+(require 'jcgs-use-package)
+
+(jcgs-use-package icicles
 	     "$GATHERED/emacs/icicles/"
 	     "http://www.emacswiki.org/cgi-bin/wiki/Icicles" ; todo: find the real download place
 	     ;; todo: also needs ~/library/emacs/doremi/ring+.el

@@ -1,9 +1,9 @@
 ;;;; find, load and configure timeclock
-;;; Time-stamp: <2007-06-23 19:52:08 jcgs>
+;;; Time-stamp: <2020-11-11 20:51:08 jcgs>
 
 (unless (fboundp 'first) (require 'cl))
 
-(use-package timeclock
+(jcgs/use-package timeclock
 	     t
 	     "http://www.planner.org/timeclock.el" ; todo: get the real URL
 	     ((timeclock-in "timeclock"
