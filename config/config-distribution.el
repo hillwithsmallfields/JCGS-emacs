@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2020-05-13 10:53:58 jsturdy>
+;;; Time-stamp: <2020-10-04 16:07:44 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
@@ -54,7 +54,9 @@ To stop things whinging as this has been withdrawn from Emacs itself."
   (add-to-list 'safe-local-variable-values
 	       (cons 'parser 'read))
   (add-to-list 'safe-local-variable-values
-	       (cons 'TeX-Master t)))
+	       (cons 'TeX-Master t))
+  (add-to-list 'safe-local-variable-values
+               (cons 'output-directory "../local-www")))
 
 ;;;; editing
 
