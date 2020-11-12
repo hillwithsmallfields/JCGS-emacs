@@ -3,7 +3,7 @@
 
 (require 'jcgs-use-package)
 
-(jcgs-use-package 'vr-mode
+(jcgs/use-package 'vr-mode
 	     (expand-file-name "voice" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/lisp/voice/vr-mode.el"
 	     ("$GATHERED/emacs/voice/vrmode/"

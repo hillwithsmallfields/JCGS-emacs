@@ -9,7 +9,7 @@
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/auctex/installed/"))
 (load-file "$GATHERED/emacs/auctex/installed/tex-site.el")
 
-(jcgs-use-package tex-site
+(jcgs/use-package tex-site
 	     "$GATHERED/emacs/auctex/installed"
 	     nil
 	     (("\\.tex$" . tex-mode)

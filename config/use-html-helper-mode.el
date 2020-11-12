@@ -11,7 +11,7 @@
 (add-to-list 'load-path (expand-file-name "my-extensions-to-packages/emacspeak"
 					  user-emacs-directory))
 
-(jcgs-use-package html-helper-mode
+(jcgs/use-package html-helper-mode
 	     "$GATHERED/emacs/html-helper-mode"
 	     "http://www.santafe.edu/~nelson/tools/html-helper-mode.el"
 	     ((expand-file-name "webstuff" user-emacs-directory)

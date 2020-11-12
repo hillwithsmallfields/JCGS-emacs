@@ -7,7 +7,7 @@
 (define-key context-keymap "l" 'context-load)
 (if (null (key-binding "\e&")) (define-key esc-map "&" context-keymap))
 
-(jcgs-use-package contexts
+(jcgs/use-package contexts
 	     (expand-file-name "persistence" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/lisp/persistence/contexts.el"
 	     ((expand-file-name "misc" user-emacs-directory)

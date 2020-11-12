@@ -3,7 +3,7 @@
 
 (require 'jcgs-use-package)
 
-(jcgs-use-package 'removable-media
+(jcgs/use-package 'removable-media
 	     (expand-file-name "file-handling" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/file-handling/removable-media.el"
 	     ((expand-file-name "webstuff" user-emacs-directory)

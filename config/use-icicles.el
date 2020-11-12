@@ -3,7 +3,7 @@
 
 (require 'jcgs-use-package)
 
-(jcgs-use-package icicles
+(jcgs/use-package icicles
 	     "$GATHERED/emacs/icicles/"
 	     "http://www.emacswiki.org/cgi-bin/wiki/Icicles" ; todo: find the real download place
 	     ;; todo: also needs ~/library/emacs/doremi/ring+.el

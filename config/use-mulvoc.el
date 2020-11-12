@@ -16,7 +16,7 @@
 
 (when nil
   (require 'jcgs-use-package)
-(jcgs-use-package mulvoc
+(jcgs/use-package mulvoc
 	       "$OPEN_PROJECTS/mulvoc/mulvoc/lisp"
 	       "http://sourceforge.net/project/showfiles.php?group_id=165695"
 	       ((expand-file-name "natural-language" user-emacs-directory)

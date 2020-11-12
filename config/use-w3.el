@@ -1,8 +1,8 @@
 ;;;; find, load and configure w3
 ;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
-;; (require 'jcgs-use-package)
-;; (jcgs-use-package w3
+;; (require 'jcgs/use-package)
+;; (jcgs/use-package w3
 ;; 	     "$GATHERED/emacs/w3/w3-4.0pre.47/lisp/"
 ;; 	     "http://www.cs.indiana.edu/elisp/w3" ; todo: find the full URL
 ;; 	     ((w3-fetch "w3"

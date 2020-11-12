@@ -3,7 +3,7 @@
 
 (require 'jcgs-use-package)
 
-(jcgs-use-package emms
+(jcgs/use-package emms
 	     "$GATHERED/emacs/emms/emms-3.0/"
 	     nil
 	     ((emms "emms-playlist-mode"

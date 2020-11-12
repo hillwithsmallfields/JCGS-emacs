@@ -3,7 +3,7 @@
 
 (require 'jcgs-use-package)
 
-(jcgs-use-package magit
+(jcgs/use-package magit
 	     "$GATHERED/emacs/magit/magit-1.0/magit-1.0.0"
 	     "https://github.com/downloads/magit/magit/magit-1.0.0.tar.gz"
 	     ((magit-status "magit" "The main entry point for magit." t))

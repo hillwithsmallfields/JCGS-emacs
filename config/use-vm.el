@@ -5,7 +5,7 @@
 
 (add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
 
-(jcgs-use-package vm
+(jcgs/use-package vm
 	     ;; "$GATHERED/emacs/vm/vm-7.19"
 	     ;; "$GATHERED/emacs/vm/vm-8.0.11"
 	     "$GATHERED/emacs/vm/vm-8.1.1"

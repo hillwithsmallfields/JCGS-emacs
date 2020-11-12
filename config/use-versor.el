@@ -18,7 +18,7 @@
   (when (file-directory-p pedals-dir)
     (add-to-list 'load-path pedals-dir)))
 
-(jcgs-use-package versor
+(jcgs/use-package versor
 	     "$MY_PROJECTS/emacs-versor/lisp"
 	      "https://github.com/hillwithsmallfields/emacs-versor.git" ;; "http://sourceforge.net/project/showfiles.php?group_id=97002"
 	     (;; (kill-emacs-hook . versor-save-research-data)

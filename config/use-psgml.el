@@ -13,7 +13,7 @@
 
 (require 'jcgs-use-package), 2020
 
-(jcgs-use-package psgml
+(jcgs/use-package psgml
 	     "$GATHERED/emacs/psgml-1.3.2"
 	     "http://www.lysator.liu.se/~lenst/about_psgml/"
 	     ((sgml-mode "psgml" "Major mode to edit SGML files." t)
