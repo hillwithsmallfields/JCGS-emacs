@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2020-11-28 21:43:18 jcgs>
+;;; Time-stamp: <2020-11-28 21:44:06 jcgs>
 
 
 (require 'org)
@@ -29,7 +29,7 @@
 (add-to-list 'auto-mode-alist (cons "\\.org\\.txt" 'org-mode))
 
 (setq org-todo-keywords
-      '((sequence "SOMETIME(s) TODO(t)" "BLOCKED(b)" "CURRENT(c)" "OPEN(o)"
+      '((sequence "SOMETIME(s)" "TODO(t)" "BLOCKED(b)" "CURRENT(c)" "OPEN(o)"
 		  "|"
 		  "DONE(d)" "CANCELLED(x)"))
       org-clock-in-switch-to-state "CURRENT"
