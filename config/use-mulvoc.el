@@ -1,5 +1,5 @@
 ;;;; find, load and configure mulvoc
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2020-11-11 20:56:07 jcgs>
 
 ;; Set these here, because they're needed during the loading of
 ;; mulvoc, and so eval-after-load is too late
@@ -15,7 +15,8 @@
 ;; (setq mulvoc-displayed-languages (aref daily-languages (nth 6 (decode-time))))
 
 (when nil
-(use-package mulvoc
+  (require 'jcgs-use-package)
+(jcgs/use-package mulvoc
 	       "$OPEN_PROJECTS/mulvoc/mulvoc/lisp"
 	       "http://sourceforge.net/project/showfiles.php?group_id=165695"
 	       ((expand-file-name "natural-language" user-emacs-directory)

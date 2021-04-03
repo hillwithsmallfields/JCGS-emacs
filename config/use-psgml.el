@@ -1,5 +1,5 @@
 ;;;; use-psgml.el -- load and configure psgml
-;;; Time-stamp: <2007-08-23 15:18:56 jcgs>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
 ;; Copyright (C) 2007, John C. G. Sturdy
 
@@ -11,7 +11,9 @@
 
 ;; (fmakunbound 'xml-mode)			; force loading of new one
 
-(use-package psgml
+(require 'jcgs-use-package), 2020
+
+(jcgs/use-package psgml
 	     "$GATHERED/emacs/psgml-1.3.2"
 	     "http://www.lysator.liu.se/~lenst/about_psgml/"
 	     ((sgml-mode "psgml" "Major mode to edit SGML files." t)

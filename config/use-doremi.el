@@ -5,7 +5,7 @@
 ;; ring+
 
 ;; not yet usable, because it needs frame-fns.el
-;; (use-package doremi
+;; (jcgs/use-package doremi
 ;; 	     "$GATHERED/emacs/doremi/"
 ;; 	     "http://www.emacswiki.org/cgi-bin/wiki/doremi.el"
 ;; 	     ((require 'doremi-cmd)

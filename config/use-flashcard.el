@@ -1,5 +1,5 @@
 ;;; use-flashcard.el --- load flashcards
-;; Time-stamp: <2014-01-05 13:33:43 jcgs>
+;; Time-stamp: <2020-11-11 20:51:08 jcgs>
 
 (defvar flashcard-questions-answered 0
   "How many questions the user has answered in this session.")
@@ -407,9 +407,9 @@ This refers to CARD and the given ANSWER."
 	flashcard-method-correct-p-function 'flashcard-method-sm5-js-correct-p)
   (define-key flashcard-mode-map [ PinkieBtn-up ] 'flashcard-input))
 
-(require 'use-package)
+(require 'jcgs-use-package)
 
-(use-package flashcard
+(jcgs/use-package flashcard
 	     "$GATHERED/emacs/flashcard/"
 	     "http://repose.cx/flashcard/"
 	     ("$GATHERED/emacs/flashcard/"

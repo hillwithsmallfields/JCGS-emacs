@@ -1,5 +1,7 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2020-01-10 11:13:48 jsturdy>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+
+(require 'jcgs-use-package)
 
 (setq joystick-graphical nil)
 
@@ -16,7 +18,7 @@
   (when (file-directory-p pedals-dir)
     (add-to-list 'load-path pedals-dir)))
 
-(use-package versor
+(jcgs/use-package versor
 	     "$MY_PROJECTS/emacs-versor/lisp"
 	      "https://github.com/hillwithsmallfields/emacs-versor.git" ;; "http://sourceforge.net/project/showfiles.php?group_id=97002"
 	     (;; (kill-emacs-hook . versor-save-research-data)

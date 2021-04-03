@@ -1,12 +1,12 @@
 ;;; use-bbdb.el --- setup for bbdb
-;;; Time-stamp: <2018-12-19 16:49:03 jcgs>
+;;; Time-stamp: <2020-11-11 20:51:08 jcgs>
 
 (defun string-to-int (str)
   "A deprecated function still used by this package.e
 Argument STR is the string to parse as a number."
   (floor (string-to-number str)))
 
-(use-package bbdb
+(jcgs/use-package bbdb
 	     "$GATHERED/emacs/bbdb"
 	     nil
 	     ((bbdb-name "bbdb-com"

@@ -1,7 +1,9 @@
 ;;;; use-journal.el -- configure my journal system
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
-(use-package journal
+(require 'jcgs-use-package)
+
+(jcgs/use-package journal
 	     (expand-file-name "webstuff" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/lisp/webstuff/journal.el"
 	     ((journal-new-day "journal"

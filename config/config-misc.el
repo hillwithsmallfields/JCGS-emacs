@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2020-08-19 20:38:36 jcgs>
+;;; Time-stamp: <2020-12-14 22:38:57 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -563,5 +563,11 @@ Done because on these high-resolution screens, Emacs comes up with something ver
   (sit-for 1)
   (set-frame-parameter nil 'fullscreen 'maximized)
   )
+
+;;;; Load finances entry
+
+(when (at-home-p)
+  (load-file (substitute-in-file-name
+              "$MY_PROJECTS/qs/qs/finances-entry.el")))
 
 ;;; end of config-misc.el

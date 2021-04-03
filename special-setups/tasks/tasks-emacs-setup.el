@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2020-04-14 21:55:22 jcgs>
+;;; Time-stamp: <2020-12-08 21:12:55 jcgs>
 
 (setq debug-on-error t)
 
@@ -22,7 +22,7 @@
 (message "org-agenda-files is %S" org-agenda-files)
 (load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
 
-(load-file (expand-file-name "basics/use-package.el" user-emacs-directory))
+(load-file (expand-file-name "basics/jcgs-use-package.el" user-emacs-directory))
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/emacs-pedals"))
 (unless (and (boundp 'no-versor) no-versor)
   (load-file (expand-file-name "config/use-versor.el" user-emacs-directory)))
@@ -92,6 +92,14 @@
 (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
+
+;;;;;;;;;;;;;;
+;; finances ;;
+;;;;;;;;;;;;;;
+
+(let ((fin-entry-el (substitute-in-file-name "$MY_PROJECTS/qs/qs/finances-entry.el")))
+  (when (file-exists-p fin-entry-el)
+    (load-file fin-entry-el)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pre-set system shutdown ;;

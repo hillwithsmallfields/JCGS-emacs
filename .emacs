@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2019-07-23 10:36:13 jcgs>
+;;; Time-stamp: <2020-11-11 21:23:42 jcgs>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -32,7 +32,7 @@
       print-length 2048 eval-expression-print-length 2048
       print-level 128 eval-expression-print-level 128
       inhibit-startup-message t
-      use-package-verbose t)
+      jcgs/use-package-verbose t)
 
 (unless (and (getenv "EHOME")
 	     (getenv "OPEN_PROJECTS")
@@ -157,7 +157,7 @@ This should be a list of three parts:
 
 ;;;###include basics/host.el
 ;;;###include basics/add-lispdir.el
-;;;###include basics/use-package.el
+;;;###include basics/jcgs-use-package.el
 ;;;###include basics/load-directory.el
 
 ;;;###if nil
@@ -172,7 +172,7 @@ This should be a list of three parts:
 	    "host"
 	    "jcgs-common-setup"
             "add-lispdir"
-	    "use-package"
+	    "jcgs-use-package"
             ;; "modes"
             "load-directory"
             ;; "startup-messages"
@@ -181,11 +181,11 @@ This should be a list of three parts:
 
 (add-tree-to-load-path user-emacs-directory)
 
-(setq use-package-skip-these nil)
+(setq jcgs/use-package-skip-these nil)
 
-;; (add-to-list 'use-package-skip-these 'vr-mode)
-;; (add-to-list 'use-package-skip-these 'icicles)
-;; (add-to-list 'use-package-skip-these 'mulvoc)
+;; (add-to-list 'jcgs/use-package-skip-these 'vr-mode)
+;; (add-to-list 'jcgs/use-package-skip-these 'icicles)
+;; (add-to-list 'jcgs/use-package-skip-these 'mulvoc)
 
 ;; set some variables used from several of the config files
 

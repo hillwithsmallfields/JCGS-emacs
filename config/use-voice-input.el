@@ -1,7 +1,9 @@
 ;;;; use-voice-input.el -- find and configure voice input
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2020-11-11 20:56:07 jcgs>
 
-(use-package 'vr-mode
+(require 'jcgs-use-package)
+
+(jcgs/use-package 'vr-mode
 	     (expand-file-name "voice" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/lisp/voice/vr-mode.el"
 	     ("$GATHERED/emacs/voice/vrmode/"

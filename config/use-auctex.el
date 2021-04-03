@@ -1,5 +1,7 @@
 ;;;; find, load and configure auctex
-;;; Time-stamp: <2017-09-20 20:39:55 jcgs>
+;;; Time-stamp: <2020-11-11 20:56:07 jcgs>
+
+(require 'jcgs-use-package)
 
 (fset 'tex-mode nil)
 (fset 'latex-mode nil)
@@ -7,7 +9,7 @@
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/auctex/installed/"))
 (load-file "$GATHERED/emacs/auctex/installed/tex-site.el")
 
-(use-package tex-site
+(jcgs/use-package tex-site
 	     "$GATHERED/emacs/auctex/installed"
 	     nil
 	     (("\\.tex$" . tex-mode)

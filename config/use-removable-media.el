@@ -1,7 +1,9 @@
 ;;;; use-removable-media.el -- look for USB keys etc
-;;; Time-stamp: <2013-10-15 12:22:17 johnstu>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
 
-(use-package 'removable-media
+(require 'jcgs-use-package)
+
+(jcgs/use-package 'removable-media
 	     (expand-file-name "file-handling" user-emacs-directory)
 	     "http://www.cb1.com/~john/computing/emacs/file-handling/removable-media.el"
 	     ((expand-file-name "webstuff" user-emacs-directory)

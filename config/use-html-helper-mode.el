@@ -1,5 +1,7 @@
 ;;;; find, load and configure html-helper-mode
-;;; Time-stamp: <2013-12-10 22:40:59 jcgs>
+;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+
+(require 'jcgs-use-package)
 
 (defun john-html-helper-write-hook ()
   "Fancy stuff on writing an HTML file."
@@ -9,7 +11,7 @@
 (add-to-list 'load-path (expand-file-name "my-extensions-to-packages/emacspeak"
 					  user-emacs-directory))
 
-(use-package html-helper-mode
+(jcgs/use-package html-helper-mode
 	     "$GATHERED/emacs/html-helper-mode"
 	     "http://www.santafe.edu/~nelson/tools/html-helper-mode.el"
 	     ((expand-file-name "webstuff" user-emacs-directory)

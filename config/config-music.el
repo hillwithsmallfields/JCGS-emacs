@@ -1,6 +1,6 @@
 ;;; config-music.el --- anything to do with emacs and music  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018, 2019  John Sturdy
+;; Copyright (C) 2018, 2019, 2020  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@grapeshot.com>
 ;; Keywords: multimedia
@@ -31,7 +31,7 @@ This mode knows about LilyPond keywords and line comments, not about
 indentation or block comments.  It features easy compilation, error
 finding and viewing of a LilyPond source buffer or region." t)
 
-(add-to-list 'auto-mode-alist (cons ".ly" 'LilyPond-mode))
+(add-to-list 'auto-mode-alist (cons "\\.ly" 'LilyPond-mode))
 
 (defun jcgs/lilypond-compile ()
   "My wrapper around running Lilypond."
