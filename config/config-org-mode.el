@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2020-11-28 21:44:06 jcgs>
+;;; Time-stamp: <2021-05-26 18:31:10 jcgs>
 
 
 (require 'org)
@@ -630,5 +630,33 @@ An argument can change the number of days ahead, 1 being tomorrow."
       (when (cdr item)
         (org-set-property "ID" (cdr item))))
     (basic-save-buffer)))
+
+;;;;;;;;;;;;
+;; org-ql ;;
+;;;;;;;;;;;;
+
+(defun jcgs/org-ql-defview (name &rest definition)
+  "Define a view calleed NAME with &DEFINITION."
+  (map-put org-ql-views (if (symbolp name)
+                            (symbol-name name)
+                          name)
+           definition #'equal)
+  (customize-set-variable 'org-ql-views org-ql-views)
+  (customize-mark-to-save 'org-ql-views))
+
+(jcgs/org-ql-defview "Current"
+                     :title "Current"
+                     :sort 'todo
+                     :super-groups '((:auto-parent))
+                     ;; :groups '(tags)
+                     :buffers-files org-agenda-files
+                     :query '(or (and
+                                  (not (done))
+                                  (tags "soon"))
+                                 (habit)
+                                 (deadline auto)
+                                 (scheduled :to today)
+                                 (ts-active :on today))
+                     :sort '(todo priority date))
 
 ;;; config-org-mode.el ends here
