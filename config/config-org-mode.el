@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-05-26 18:31:10 jcgs>
+;;; Time-stamp: <2021-05-26 18:31:59 jcgs>
 
 
 (require 'org)
@@ -16,6 +16,7 @@
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-habit)
+(add-to-list 'org-modules 'org-ql)
 
 (let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
   (when (file-directory-p omd)
