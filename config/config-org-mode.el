@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-04-03 20:52:54 jcgs>
+;;; Time-stamp: <2021-05-26 19:52:15 jcgs>
 
 
 (require 'org)
@@ -153,8 +153,11 @@ EARLY-MATCHES shows what we've already found to go earlier in the list."
     (mapcar (lambda (extension)
 	      (expand-file-name (concat name-base extension)
 				jcgs/org-agenda-store-directory))
-	    ;; '("" ".html" ".org" ".ps")
-            '("org")
+	    '(""
+              ".html"
+              ".org"
+              ;; ".ps"
+              )
             )))
 
 (setq jcgs/org-agenda-current-matcher
@@ -644,19 +647,34 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (customize-set-variable 'org-ql-views org-ql-views)
   (customize-mark-to-save 'org-ql-views))
 
-(jcgs/org-ql-defview "Current"
-                     :title "Current"
-                     :sort 'todo
-                     :super-groups '((:auto-parent))
-                     ;; :groups '(tags)
-                     :buffers-files org-agenda-files
-                     :query '(or (and
-                                  (not (done))
-                                  (tags "soon"))
-                                 (habit)
-                                 (deadline auto)
-                                 (scheduled :to today)
-                                 (ts-active :on today))
-                     :sort '(todo priority date))
+(when (boundp 'org-ql-views)
+  (jcgs/org-ql-defview "Current"
+                       :title "Current"
+                       :sort 'todo
+                       :super-groups '((:auto-parent))
+                       ;; :groups '(tags)
+                       :buffers-files 'org-agenda-files
+                       :query '(or (and
+                                    (not (done))
+                                    (tags "soon"))
+                                   (habit)
+                                   (deadline auto)
+                                   (scheduled :to today)
+                                   (ts-active :on today))
+                       :sort '(todo priority date)))
+
+;; (defun jcgs/org-super-agenda-defgroup (name &rest definition)
+;;   "Define a super-agenda group NAME with DEFINITION."
+;;   (setq org-super-agenda-groups
+;;         (map-put org-super-agenda-groups
+;;                  name
+;;                  definition
+;;                  (lambda (a b) (message "a %s b %s" a b) (eql a b)))))
+
+(setq org-super-agenda-groups
+      '((:name "Important"
+                :priority "A")
+        (:name "In post"
+               :todo "ORDERED")))
 
 ;;; config-org-mode.el ends here
