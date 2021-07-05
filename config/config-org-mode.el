@@ -16,6 +16,7 @@
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-habit)
+(add-to-list 'org-modules 'org-ql)
 
 (let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
   (when (file-directory-p omd)
