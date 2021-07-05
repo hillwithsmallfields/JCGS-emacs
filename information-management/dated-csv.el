@@ -1,6 +1,6 @@
 ;;; dated-csv.el --- functions for CSV files with dates in the first column  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020  John Sturdy
+;; Copyright (C) 2020, 2021  John Sturdy
 
 ;; Author: John Sturdy <jsturdy@ccsl.com>
 ;; Keywords: convenience, data
@@ -63,11 +63,16 @@ at the start of the row if it is not already there."
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
 
+(defun set-overwrite-column (begin end)
+  "If in the first 16 columns, overwrite instead of inserting."
+  (overwrite-mode (> (current-column) 16)))
+
 (define-derived-mode timed-csv-mode csv-mode "Timed CSV"
   "CSV mode with ISO timedates in the first column.
 When you start typing in the last row, this minute's timedate is
 inserted at the start of the row if it is not already there."
   (add-hook 'before-change-functions 'force-row-timestamp nil t)
+  ;; (add-hook 'before-change-functions 'set-overwrite-column nil t)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
 
