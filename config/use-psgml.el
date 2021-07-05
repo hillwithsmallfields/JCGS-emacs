@@ -1,5 +1,5 @@
 ;;;; use-psgml.el -- load and configure psgml
-;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+;;; Time-stamp: <2021-02-12 20:11:42 jcgs>
 
 ;; Copyright (C) 2007, John C. G. Sturdy
 
@@ -11,7 +11,7 @@
 
 ;; (fmakunbound 'xml-mode)			; force loading of new one
 
-(require 'jcgs-use-package), 2020
+(require 'jcgs-use-package)
 
 (jcgs/use-package psgml
 	     "$GATHERED/emacs/psgml-1.3.2"
