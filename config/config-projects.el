@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -61,9 +61,12 @@
 					 "/khanate/"
 					 ;; "latex last-khan.tex\n"
 					 ))
-  (make-shell-for-directory-if-present "$MY_PROJECTS/qs/qs"
+  (make-shell-for-directory-if-present "$MY_PROJECTS/qs"
 				       "/qs/")
-  )
+  (make-shell-for-directory-if-present "$MY_PROJECTS/noticeboard"
+				       "/noticeboard/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/coimealta"
+				       "/coimealta/")  )
 
 (defun run-command-in-shell-buffer (command buffer)
   "Run COMMAND in BUFFER and return the result."
