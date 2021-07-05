@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-05-26 19:52:15 jcgs>
+;;; Time-stamp: <2021-05-29 19:32:49 jcgs>
 
 
 (require 'org)
@@ -232,7 +232,7 @@ The filenames to save in are added by this function"
 (global-set-key "\C-cm" 'org-tags-view-todo-only)
 
 ;; todo: make at least some of these into autoloads
-(require 'work-tasks)
+;; (require 'work-tasks)
 (require 'org-jcgs-journal)
 (require 'org-upwards-propagation)
 (add-hook 'org-clock-in-prepare-hook 'jcgs/org-propagate-openness-upward)
@@ -661,7 +661,39 @@ An argument can change the number of days ahead, 1 being tomorrow."
                                    (deadline auto)
                                    (scheduled :to today)
                                    (ts-active :on today))
-                       :sort '(todo priority date)))
+                       :sort '(todo priority date))
+  (jcgs/org-ql-defview "Supermarket"
+                       :title "Supermarket"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$COMMON/org/shopping.org"))
+                       :query '(and (tags "supermarket")
+                                    (todo "BUY")))
+  (jcgs/org-ql-defview "Physical making"
+                       :title "Physical making"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$COMMON/org/projects.org"))
+                       :query '(and (tags "physical_making")
+                                    (or (todo "TODO")
+                                        (todo "OPEN")))
+                       :sort '(todo priority date))
+  (jcgs/org-ql-defview "Programming"
+                       :title "Programming"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$COMMON/org/projects.org"))
+                       :query '(and (tags "programming")
+                                    (or (todo "TODO")
+                                        (todo "OPEN")))
+                       :sort '(todo priority date))
+  (jcgs/org-ql-defview "Mending"
+                       :title "Mending"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$COMMON/org/projects.org"
+                                                "$COMMON/org/general.org"
+                                                "$COMMON/vehicles/Marmalade/Marmalade-work.org"))
+                       :query '(and (or (tags "physical_fixing")
+                                        (tags "mending"))
+                                    (or (todo "TODO")
+                                        (todo "OPEN")))))
 
 ;; (defun jcgs/org-super-agenda-defgroup (name &rest definition)
 ;;   "Define a super-agenda group NAME with DEFINITION."
