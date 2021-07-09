@@ -66,7 +66,9 @@
   (make-shell-for-directory-if-present "$MY_PROJECTS/noticeboard"
 				       "/noticeboard/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/coimealta"
-				       "/coimealta/")  )
+				       "/coimealta/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/textualosm"
+				       "/osm/"))
 
 (defun run-command-in-shell-buffer (command buffer)
   "Run COMMAND in BUFFER and return the result."
