@@ -20,7 +20,8 @@
 
 ;;; Commentary:
 
-;; 
+;; The Emacs part of updating my dashboard
+;; (https://github.com/hillwithsmallfields/qs/tree/master/dashboard)
 
 ;;; Code:
 
@@ -44,6 +45,7 @@
 (message "loaded org-ql")
 (setq package-user-dir (substitute-in-file-name "$EHOME/emacs-packages"))
 (load-file (substitute-in-file-name "$MY_ELISP/information-management/metoffice.el"))
+(load-file (substitute-in-file-name "$MY_PROJECTS/JCGS-org-mode/lisp/org-parcels.el"))
 (load-file (substitute-in-file-name "$MY_PROJECTS/JCGS-org-mode/lisp/org-ql-to-json.el"))
 (message "(boundp 'org-ql-views) = %s" (boundp 'org-ql-views))
 (load-file (substitute-in-file-name "$MY_ELISP/config/config-org-mode.el"))
@@ -54,6 +56,8 @@
                              "Physical making"
                              "Programming"
                              "Mending"))
+
+(jcgs/org-expected-dates-to-json-file (substitute-in-file-name "$COMMON/var/parcels-expected.json"))
 
 (provide 'dashboard-emacs-query)
 ;;; dashboard-emacs-query.el ends here
