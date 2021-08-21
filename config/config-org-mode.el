@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-05-29 19:32:49 jcgs>
+;;; Time-stamp: <2021-08-21 17:38:08 jcgs>
 
 
 (require 'org)
@@ -257,6 +257,7 @@ The filenames to save in are added by this function"
 (add-hook 'org-mode-hook 'jcgs-org-mouse-stuff)
 (require 'org-timestamps)
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-update-timestamp)
+(require 'org-parcels)
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -668,6 +669,12 @@ An argument can change the number of days ahead, 1 being tomorrow."
                        :buffers-files (mapcar 'substitute-in-file-name
                                               '("$COMMON/org/shopping.org"))
                        :query '(and (tags "supermarket")
+                                    (todo "BUY")))
+  (jcgs/org-ql-defview "Online"
+                       :title "Online"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$COMMON/org/shopping.org"))
+                       :query '(and (tags "online")
                                     (todo "BUY")))
   (jcgs/org-ql-defview "Physical making"
                        :title "Physical making"
