@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-08-21 17:38:08 jcgs>
+;;; Time-stamp: <2021-09-14 20:26:25 jcgs>
 
 
 (require 'org)
@@ -11,6 +11,7 @@
   (when (file-directory-p dir)
     (add-to-list 'load-path dir)))
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "~/emacs-packages/org-ql-20191105.2141"))
 
 (add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
@@ -96,13 +97,8 @@
     )
   "Alist mapping wireless networks to tags.")
 
-(require 'metoffice)
-
-(defvar weather-loadable (and (file-readable-p metoffice-config-file)
-			      (condition-case weather-problem
-				  (load-file metoffice-config-file)
-				(error (message "Could not load weather config")
-				       nil)))
+(defvar weather-loadable nil
+  ;; TODO: replace metoffice access with openweather
   "Whether we have a chance of getting the weather data.")
 
 (require 'calendar)
