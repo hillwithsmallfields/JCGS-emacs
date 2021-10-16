@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-10 18:12:52 jcgs>
+;;; Time-stamp: <2021-10-10 18:19:46 jcgs>
 
 (setq debug-on-error t)
 
@@ -91,7 +91,7 @@
       org-agenda-files)
 (setq org-mobile-directory (expand-file-name "~/public_html/org-mobile"))
 (unless (file-directory-p org-mobile-directory)
-  (make-directory org-mobile-directory))
+  (make-directory org-mobile-directory t))
 (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
