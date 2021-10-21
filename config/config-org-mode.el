@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-09-14 20:26:25 jcgs>
+;;; Time-stamp: <2021-10-21 19:27:32 jcgs>
 
 
 (require 'org)
@@ -11,7 +11,7 @@
   (when (file-directory-p dir)
     (add-to-list 'load-path dir)))
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "~/emacs-packages/org-ql-20191105.2141"))
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/alphapapa/org-ql/"))
 
 (add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
