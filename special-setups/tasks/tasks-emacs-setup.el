@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-10 18:19:46 jcgs>
+;;; Time-stamp: <2021-10-25 21:26:45 jcgs>
 
 (setq debug-on-error t)
 
@@ -16,11 +16,16 @@
 
 (setq user-emacs-directory (expand-file-name
 			    (concat (getenv "MY_ELISP")
-				    "/")))
+				    "/"))
+      org-directory (getenv "ORG")
+)
 
-(load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
-(message "org-agenda-files is %S" org-agenda-files)
-(load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
+(if (not (file-directory-p org-directory))
+    (message "org-directory %s does not exist", org-directory)
+
+  (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
+  (message "org-agenda-files is %S" org-agenda-files)
+  (load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory)))
 
 (load-file (expand-file-name "basics/jcgs-use-package.el" user-emacs-directory))
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/emacs-pedals"))
@@ -86,13 +91,14 @@
 
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (mapc (lambda (file)
-	(when (file-readable-p file)
+	(when (and file (file-readable-p file))
 	  (find-file file)))
       org-agenda-files)
+;; TODO: replace org-mobile with orgzly
 (setq org-mobile-directory (expand-file-name "~/public_html/org-mobile"))
-(unless (file-directory-p org-mobile-directory)
-  (make-directory org-mobile-directory t))
-(org-mobile-pull)
+;; (unless (file-directory-p org-mobile-directory)
+;;   (make-directory org-mobile-directory t))
+;; (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
 
@@ -132,7 +138,7 @@
       (run-at-time before-string nil 'jcgs/emacs-pre-shutdown-function)
       )))
 
-(add-hook 'kill-emacs-hook 'jcgs/emacs-pre-shutdown-function)
+(add-hook 'kill-emacs-hook 'jcgs/emacs-pre-shutdown-function))
 
 (setq debug-on-error nil)
 

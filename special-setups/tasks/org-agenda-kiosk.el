@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2020-04-04 09:08:37 jcgs>
+;;; Time-stamp: <2021-10-25 21:27:57 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -310,8 +310,10 @@
   (global-auto-revert-mode 1)
   (let ((no-versor t))
     (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
-  (jcgs/org-agenda-monitor-start)
-  (org-agenda-kiosk-files-list))
+  (if (not (file-directory-p org-directory))
+      (message "org-directory %s does not exist", org-directory)
+    (jcgs/org-agenda-monitor-start)
+    (org-agenda-kiosk-files-list)))
 
 ;; temporary load, until I work out how to get it there using the
 ;; package system
