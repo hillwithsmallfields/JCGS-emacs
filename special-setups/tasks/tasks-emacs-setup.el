@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-26 19:24:16 jcgs>
+;;; Time-stamp: <2021-10-26 19:54:29 jcgs>
 
 (setq debug-on-error t)
 
@@ -118,6 +118,9 @@
 (let ((fin-entry-el-dir (substitute-in-file-name "$MY_PROJECTS/qs/financial")))
   (when (file-directory-p fin-entry-el-dir)
     (add-to-list 'load-path fin-entry-el-dir)
+    (autoload 'finances-read-completions "finances-entry"
+      "Read the completions tables for finances columns.
+With optional FORCE, do it even if it seems unnecessary." t)
     (autoload 'finances-enter-from-shopping-list "finances-entry"
       "Add a finances entry from PAYEE for ITEM in CATEGORY.")))
 
