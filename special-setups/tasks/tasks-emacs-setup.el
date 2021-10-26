@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-25 21:26:45 jcgs>
+;;; Time-stamp: <2021-10-26 19:01:29 jcgs>
 
 (setq debug-on-error t)
 
@@ -39,6 +39,8 @@
 (add-hook 'jcgs/org-journal-mode-hook 'auto-fill-mode)
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/JCGS-emacs/information-management"))
 (require 'dated-csv)
+(add-to-list 'auto-mode-alist ("weight.csv" . dated-csv-mode))
+(add-to-list 'auto-mode-alist ("temperature.csv" . dated-csv-mode))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; For home only ;;
@@ -72,7 +74,16 @@
                                     "$MY_PROJECTS"))))
   (when (file-directory-p coimealta)
     (add-to-list 'load-path (expand-file-name "inventory" coimealta))
-    (autoload 'storage-locate-item "storage" "Locate ITEM." t)))
+    (autoload 'storage-locate-item "storage"
+      "Locate ITEM."
+      t)
+    (autoload 'storage-add-item "storage"
+      "Add an ITEM to the inventory, in CATEGORY at PRICE from SUPPLIER."
+      t)
+
+    (autoload 'storage-add-part "storage"
+      "Add an ITEM to parts storage, in CATEGORY at PRICE."
+      t)))
 
 ;;;;;;;;;;;;;;
 ;; Journals ;;
@@ -106,9 +117,11 @@
 ;; finances ;;
 ;;;;;;;;;;;;;;
 
-(let ((fin-entry-el (substitute-in-file-name "$MY_PROJECTS/qs/qs/finances-entry.el")))
+(let ((fin-entry-el (substitute-in-file-name "$MY_PROJECTS/qs/financial/finances-entry.el")))
   (when (file-exists-p fin-entry-el)
-    (load-file fin-entry-el)))
+    (add-to-list 'load-path fin-entry-el)
+    (autoload 'finances-enter-from-shopping-list "finances-entry"
+      "Add a finances entry from PAYEE for ITEM in CATEGORY.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pre-set system shutdown ;;
@@ -138,7 +151,7 @@
       (run-at-time before-string nil 'jcgs/emacs-pre-shutdown-function)
       )))
 
-(add-hook 'kill-emacs-hook 'jcgs/emacs-pre-shutdown-function))
+(add-hook 'kill-emacs-hook 'jcgs/emacs-pre-shutdown-function)
 
 (setq debug-on-error nil)
 
