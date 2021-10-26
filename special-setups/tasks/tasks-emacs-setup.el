@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-26 19:09:58 jcgs>
+;;; Time-stamp: <2021-10-26 19:24:16 jcgs>
 
 (setq debug-on-error t)
 
@@ -115,9 +115,9 @@
 ;; finances ;;
 ;;;;;;;;;;;;;;
 
-(let ((fin-entry-el (substitute-in-file-name "$MY_PROJECTS/qs/financial/finances-entry.el")))
-  (when (file-exists-p fin-entry-el)
-    (add-to-list 'load-path fin-entry-el)
+(let ((fin-entry-el-dir (substitute-in-file-name "$MY_PROJECTS/qs/financial")))
+  (when (file-directory-p fin-entry-el-dir)
+    (add-to-list 'load-path fin-entry-el-dir)
     (autoload 'finances-enter-from-shopping-list "finances-entry"
       "Add a finances entry from PAYEE for ITEM in CATEGORY.")))
 
