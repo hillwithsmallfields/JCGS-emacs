@@ -53,6 +53,7 @@
 (jcgs/org-ql-views-to-json (substitute-in-file-name "$COMMON/var/views.json")
                            '("Current"
                              "Supermarket"
+                             "Online"
                              "Physical making"
                              "Programming"
                              "Mending"))
