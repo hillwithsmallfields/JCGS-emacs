@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2021-02-12 20:18:14 jcgs>
+;; Time-stamp: <2021-10-26 19:12:52 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -78,12 +78,16 @@ machine is on some other network connection.")
       (string-match employer-laptop
 		    (system-name))))
 
+(defconst home-systems '("isaiah" "shtogu" "whinberry" "whortleberry" "fragaria" "elijah" "ezra")
+  "System names of my home machines.")
+
 (defun at-home-p ()
   "Return whether I'm on a home system.
 Currently looks for whether one of my Raspberry Pis is reachable
 through a local address."
-  (string-match "1 packets transmitted, 1 received"
-                (shell-command-to-string "ping -W 1 -c 1 whortleberry")))
+  (or (member (system-name) home-systems)
+      (string-match "1 packets transmitted, 1 received"
+                    (shell-command-to-string "ping -W 1 -c 1 shtogu"))))
 
 (defun on-small-machine ()
   "Whether I'm on some small machine, such as a laptop."

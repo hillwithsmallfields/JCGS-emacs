@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2020-04-04 09:08:37 jcgs>
+;;; Time-stamp: <2021-10-26 19:50:05 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -291,17 +291,19 @@
   "Turn kiosk mode on in this buffer."
   (org-agenda-kiosk-mode 1))
 
+(defconst noticeboard-host-regexp  "^shtogu")
+
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
   (interactive)
   (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
   (setq org-startup-folded t)
-  (cond ((and (string-match "^whortleberry" (system-name))
+  (cond ((and (string-match noticeboard-host-regexp (system-name))
 	      (getenv "DISPLAY"))
 	 (setq server-name "noticeboard")
 	 (server-start))
-	((not (string-match "^whortleberry" (system-name)))
+	((not (string-match noticeboard-host-regexp (system-name)))
 	 (setq server-name "remote-kiosk")
 	 (server-start)))
   (keypad-setup 'none)
@@ -310,8 +312,11 @@
   (global-auto-revert-mode 1)
   (let ((no-versor t))
     (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
-  (jcgs/org-agenda-monitor-start)
-  (org-agenda-kiosk-files-list))
+  (if (not (file-directory-p org-directory))
+      (message "org-directory %s does not exist", org-directory)
+    (jcgs/org-agenda-monitor-start)
+    (org-agenda-kiosk-files-list))
+  (set-frame-parameter nil 'fullscreen 'fullboth))
 
 ;; temporary load, until I work out how to get it there using the
 ;; package system

@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-10 18:19:42 jcgs>
+;;; Time-stamp: <2021-10-26 19:54:29 jcgs>
 
 (setq debug-on-error t)
 
@@ -16,11 +16,16 @@
 
 (setq user-emacs-directory (expand-file-name
 			    (concat (getenv "MY_ELISP")
-				    "/")))
+				    "/"))
+      org-directory (getenv "ORG")
+)
 
-(load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
-(message "org-agenda-files is %S" org-agenda-files)
-(load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory))
+(if (not (file-directory-p org-directory))
+    (message "org-directory %s does not exist", org-directory)
+
+  (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
+  (message "org-agenda-files is %S" org-agenda-files)
+  (load-file (expand-file-name "config/config-calendar-diary.el" user-emacs-directory)))
 
 (load-file (expand-file-name "basics/jcgs-use-package.el" user-emacs-directory))
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/emacs-pedals"))
@@ -33,13 +38,13 @@
 (require 'org-jcgs-journal)
 (add-hook 'jcgs/org-journal-mode-hook 'auto-fill-mode)
 (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/JCGS-emacs/information-management"))
-(require 'dated-csv)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; For home only ;;
 ;;;;;;;;;;;;;;;;;;;
 
 (when (at-home-p)
+  (require 'dated-csv)
   (let ((health-dir (substitute-in-file-name "$COMMON/health")))
     (add-to-list 'auto-mode-alist (cons (concat health-dir ".+\\.csv") 'dated-csv-mode))
     (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
@@ -67,7 +72,16 @@
                                     "$MY_PROJECTS"))))
   (when (file-directory-p coimealta)
     (add-to-list 'load-path (expand-file-name "inventory" coimealta))
-    (autoload 'storage-locate-item "storage" "Locate ITEM." t)))
+    (autoload 'storage-locate-item "storage"
+      "Locate ITEM."
+      t)
+    (autoload 'storage-add-item "storage"
+      "Add an ITEM to the inventory, in CATEGORY at PRICE from SUPPLIER."
+      t)
+
+    (autoload 'storage-add-part "storage"
+      "Add an ITEM to parts storage, in CATEGORY at PRICE."
+      t)))
 
 ;;;;;;;;;;;;;;
 ;; Journals ;;
@@ -86,13 +100,14 @@
 
 (setq org-agenda-files (delete-if-not 'file-exists-p org-agenda-files))
 (mapc (lambda (file)
-	(when (file-readable-p file)
+	(when (and file (file-readable-p file))
 	  (find-file file)))
       org-agenda-files)
+;; TODO: replace org-mobile with orgzly
 (setq org-mobile-directory (expand-file-name "~/public_html/org-mobile"))
-(unless (file-directory-p org-mobile-directory)
-  (make-directory org-mobile-directory t))
-(org-mobile-pull)
+;; (unless (file-directory-p org-mobile-directory)
+;;   (make-directory org-mobile-directory t))
+;; (org-mobile-pull)
 ;; (org-agenda-list)
 (org-agenda nil "c")
 
@@ -100,9 +115,14 @@
 ;; finances ;;
 ;;;;;;;;;;;;;;
 
-(let ((fin-entry-el (substitute-in-file-name "$MY_PROJECTS/qs/qs/finances-entry.el")))
-  (when (file-exists-p fin-entry-el)
-    (load-file fin-entry-el)))
+(let ((fin-entry-el-dir (substitute-in-file-name "$MY_PROJECTS/qs/financial")))
+  (when (file-directory-p fin-entry-el-dir)
+    (add-to-list 'load-path fin-entry-el-dir)
+    (autoload 'finances-read-completions "finances-entry"
+      "Read the completions tables for finances columns.
+With optional FORCE, do it even if it seems unnecessary." t)
+    (autoload 'finances-enter-from-shopping-list "finances-entry"
+      "Add a finances entry from PAYEE for ITEM in CATEGORY.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pre-set system shutdown ;;

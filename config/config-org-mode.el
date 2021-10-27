@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-09-14 20:26:25 jcgs>
+;;; Time-stamp: <2021-10-21 20:47:46 jcgs>
 
 
 (require 'org)
@@ -11,12 +11,15 @@
   (when (file-directory-p dir)
     (add-to-list 'load-path dir)))
 (add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "~/emacs-packages/org-ql-20191105.2141"))
 
 (add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-habit)
+
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/alphapapa/org-ql"))
+;; things needed by org-ql: (dash "2.18.1") (f "0.17.2") (map "2.1") (org "9.0") (org-super-agenda "1.2") (ov "1.0.6") (peg "1.0") (s "1.12.0") (transient "0.1") (ts "0.2-pre"))
+
 (add-to-list 'org-modules 'org-ql)
 
 (let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
@@ -25,7 +28,9 @@
     (setq
      org-mobile-directory omd
      org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory))))
+(message "About to load org modules, load-path is %s" load-path)
 (org-load-modules-maybe t)
+(message "Loaded org modules")
 
 ;; so I can exchange files with non-emacs users and still have their systems pick a text editor:
 (add-to-list 'auto-mode-alist (cons "\\.org\\.txt" 'org-mode))
