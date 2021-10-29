@@ -12,10 +12,10 @@
 *** kill-sexp
 *** transpose-sexp
 ** defuns (upper left white group bottom row)
-*** mark defun
+*** mark-defun
 *** beginning-of-defun
 *** end-of-defun
-*** narrow to defun
+*** narrow-to-defun
 
 * stacked movement and copying (lower left black group top row)
 ** wander-yank
@@ -26,8 +26,8 @@
 * expression editing (lower left black group middle row)
 ** change parentheses
 ** raise-sexp
-** surround with parentheses
-** surround with quotes
+** insert-parentheses
+** insert-quotes
    
 * kill-ring (lower left black group bottom row)
 ** kill-region
@@ -36,10 +36,10 @@
 ** yank-pop
 
 * misc (upper right black group top row)
-** no space
-** delete
-** one space
-** collapse vertical space
+** delete-horizontal-space
+** delete-backward-char
+** just-one-space
+** delete-blank-lines
 
 * prefix multipliers (upper right black group middle row)
 ** times minus one
@@ -50,7 +50,7 @@
 * command history (upper right black group bottom row)
 ** undo
 ** repeat-complex-command
-** send/eval
+** eval-defun
 ** enter
 
 * text movement (lower right white group top row)
@@ -68,6 +68,6 @@
 * other movement (lower right white group bottom row)
 ** beginning-of-buffer
 ** move in or out of quotes
-** move to name
+** sexp-preceding-next-parenthesis
 ** end-of-buffer
 

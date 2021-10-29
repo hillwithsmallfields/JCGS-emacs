@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2018-07-05 14:12:18 jcgs>
+;;; Time-stamp: <2021-10-29 20:19:45 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -82,5 +82,10 @@ the recursive edit."
     (insert "\"")
     (forward-sexp n)
     (insert "\"")))
+
+(defun move-in-or-out-of-string ()
+  "Move to before the most recent string quote."
+  (interactive)
+  (search-backward "\""))
 
 ;;; end of /harlqn/usr/users/jcgs/emacs/handy-lisp.el

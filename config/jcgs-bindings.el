@@ -1,9 +1,9 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2020-05-29 11:52:22 jsturdy>
+;;; Time-stamp: <2021-10-29 20:21:20 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
-(autoload 'smart-repeat-complex-command "smart-repeat" 
+(autoload 'smart-repeat-complex-command "smart-repeat"
   "Like repeat-complex-command, but may skip the first one if it would do nothing."
   t)
 
@@ -185,8 +185,8 @@ Returns how many buffers it brought up." t)
   (global-set-key [   C-f1 ] 'delete-other-windows)
   (global-set-key [ C-M-f1 ] 'delete-window)
 
-  (global-set-key [     f2 ] 'other-window)
-  (global-set-key [   C-f2 ] 'split-window-horizontally)
+  ;; (global-set-key [     f2 ] 'other-window)
+  ;; (global-set-key [   C-f2 ] 'split-window-horizontally)
 
   (global-set-key [     f3 ] 'other-frame)
 
@@ -249,6 +249,84 @@ This copies some awkward M- bindings to C-."
   (global-set-key (kbd "s-}") 'exit-recursive-edit)
   (global-set-key (kbd "s-n") 'sexp-preceding-next-parenthesis)
   (global-set-key (kbd "s-o") 'other-window))
+
+(defvar jcgs-grid-upper-map (make-keymap)
+  "Keymap for the upper half of my grid keyboard.")
+
+(fset 'jcgs-grid-upper-map jcgs-grid-upper-map)
+
+(defvar jcgs-grid-lower-map (make-keymap)
+  "Keymap for the lower half of my grid keyboard.")
+
+(fset 'jcgs-grid-lower-map jcgs-grid-lower-map)
+
+(defun jcgs-keys:setup-grid-keyboard-map ()
+  "Bind the keys for the grid command keyboard."
+  (interactive)
+  (global-set-key [ S-f2 ] 'jcgs-grid-upper-map)
+
+  (define-key jcgs-grid-upper-map "A" 'backward-up-list)
+  (define-key jcgs-grid-upper-map "B" 'backward-sexp)
+  (define-key jcgs-grid-upper-map "C" 'forward-sexp)
+  (define-key jcgs-grid-upper-map "D" 'down-list)
+
+  (define-key jcgs-grid-upper-map "I" 'mark-sexp)
+  (define-key jcgs-grid-upper-map "J" 'copy-sexp)
+  (define-key jcgs-grid-upper-map "K" 'kill-sexp)
+  (define-key jcgs-grid-upper-map "L" 'transpose-sexp)
+
+  (define-key jcgs-grid-upper-map "Q" 'mark-defun)
+  (define-key jcgs-grid-upper-map "R" 'beginning-of-defun)
+  (define-key jcgs-grid-upper-map "S" 'end-of-defun)
+  (define-key jcgs-grid-upper-map "T" 'narrow-to-defun)
+
+  (define-key jcgs-grid-upper-map "E" 'delete-horizontal-space)
+  (define-key jcgs-grid-upper-map "F" 'delete-backward-char)
+  (define-key jcgs-grid-upper-map "G" 'just-one-space)
+  (define-key jcgs-grid-upper-map "H" 'delete-blank-lines)
+
+  (define-key jcgs-grid-upper-map "M" 'universal-prefix-minus)
+  (define-key jcgs-grid-upper-map "N" 'universal-prefix-two)
+  (define-key jcgs-grid-upper-map "O" 'universal-prefix-three)
+  (define-key jcgs-grid-upper-map "P" 'universal-prefix-five)
+
+  (define-key jcgs-grid-upper-map "U" 'undo)
+  (define-key jcgs-grid-upper-map "V" 'repeat-complex-command)
+  (define-key jcgs-grid-upper-map "W" 'eval-defun)
+  (define-key jcgs-grid-upper-map "X" 'newline)
+
+  (global-set-key [   f2 ] 'jcgs-grid-lower-map)
+
+  (define-key jcgs-grid-lower-map "a" 'wander-yank)
+  (define-key jcgs-grid-lower-map "b" 'wander)
+  (define-key jcgs-grid-lower-map "c" 'exit-recursive-edit)
+  (define-key jcgs-grid-lower-map "d" 'pick-up-sexp-at-point)
+
+  (define-key jcgs-grid-lower-map "i" 'change-parentheses)
+  (define-key jcgs-grid-lower-map "j" 'raise-sexp)
+  (define-key jcgs-grid-lower-map "k" 'insert-parentheses)
+  (define-key jcgs-grid-lower-map "l" 'insert-quotes)
+
+  (define-key jcgs-grid-lower-map "q" 'kill-region)
+  (define-key jcgs-grid-lower-map "r" 'kill-ring-save)
+  (define-key jcgs-grid-lower-map "s" 'yank)
+  (define-key jcgs-grid-lower-map "t" 'yank-pop)
+
+  (define-key jcgs-grid-lower-map "e" 'backward-sentence)
+  (define-key jcgs-grid-lower-map "f" 'backward-word)
+  (define-key jcgs-grid-lower-map "g" 'forward-word)
+  (define-key jcgs-grid-lower-map "h" 'forward-sentence)
+
+  (define-key jcgs-grid-lower-map "m" 'other-window)
+  (define-key jcgs-grid-lower-map "n" 'other-frame)
+  (define-key jcgs-grid-lower-map "o" 'next-buffer)
+  (define-key jcgs-grid-lower-map "p" 'electric-buffer-list)
+
+  (define-key jcgs-grid-lower-map "u" 'beginning-of-buffer)
+  (define-key jcgs-grid-lower-map "v" 'move-in-or-out-of-string)
+  (define-key jcgs-grid-lower-map "w" 'sexp-preceding-next-parenthesis)
+  (define-key jcgs-grid-lower-map "x" 'end-of-buffer)
+  )
 
 (require 'structure-edit)
 (jcgs-keys:jcgs-function-keys)
