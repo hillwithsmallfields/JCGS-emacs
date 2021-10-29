@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-10-29 20:21:20 jcgs>
+;;; Time-stamp: <2021-10-29 20:59:32 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -57,6 +57,28 @@ directory."
   ;; 		  nextpairs (cdr pairs))))))
   ;;   (rplacd function-key-map (cdr holder)))
   )
+
+(defun universal-argument-n (arg n)
+  "Set or multiply the prefix ARG by a fixed factor of N."
+  (prefix-command-preserve-state)
+  (setq prefix-arg (cond ((integerp arg)
+                          (* arg n))
+                         (t n))))
+
+(defun universal-prefix-two (arg)
+  "Set or multiply the prefix ARG by two."
+  (interactive "P")
+  (universal-argument-n arg 2))
+
+(defun universal-prefix-three (arg)
+  "Set or multiply the prefix ARG by three."
+  (interactive "P")
+  (universal-argument-n arg 3))
+
+(defun universal-prefix-five (arg)
+  "Set or multiply the prefix ARG by five."
+  (interactive "P")
+  (universal-argument-n arg 5))
 
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
 (global-set-key "\C-x\C-y" 'browse-yank)
@@ -285,7 +307,7 @@ This copies some awkward M- bindings to C-."
   (define-key jcgs-grid-upper-map "G" 'just-one-space)
   (define-key jcgs-grid-upper-map "H" 'delete-blank-lines)
 
-  (define-key jcgs-grid-upper-map "M" 'universal-prefix-minus)
+  (define-key jcgs-grid-upper-map "M" 'negative-argument)
   (define-key jcgs-grid-upper-map "N" 'universal-prefix-two)
   (define-key jcgs-grid-upper-map "O" 'universal-prefix-three)
   (define-key jcgs-grid-upper-map "P" 'universal-prefix-five)
