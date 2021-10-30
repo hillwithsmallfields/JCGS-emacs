@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2021-03-20 14:55:18 jcgs>
+;;; Time-stamp: <2021-10-30 15:31:23 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
 
@@ -307,5 +307,18 @@ When started, runs `scala-mode-hook'." t)
   (set (make-local-variable 'compile-command) "cabal build "))
 
 (add-hook 'haskell-mode-hook 'jcgs/haskell-mode-setup)
+
+;;;;;;;;;;
+;; rust ;;
+;;;;;;;;;;
+
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/rust-lang/rust-mode"))
+
+(autoload 'rust-mode "rust-mode"
+  "Major mode for Rust code.
+
+\\{rust-mode-map}" t)
+
+(add-to-list 'auto-mode-alist (cons "\\.rs\\'" 'rust-mode))
 
 ;;;; config-proglang-modes.el ends here
