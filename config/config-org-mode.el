@@ -1,6 +1,22 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-10-21 20:47:46 jcgs>
+;;; Time-stamp: <2021-11-06 19:01:59 jcgs>
 
+(defconst jcgs-org-supporting-libraries
+  '(("org-ql" .  "alphapapa/org-ql")
+    ("dash" . "magnars/dash.el")
+    ("dash-functional" . "magnars/dash.el")
+    ("ts" . "alphapapa/ts.el")
+    ("s" . "magnars/s.el")
+    ("peg" . "emacsmirror/peg")
+    ("org-super-agenda" . "alphapapa/org-super-agenda")
+    ("ht" . "Wilfred/ht.el")
+    ("ov" . "emacsorphanage/ov"))
+  "Alist of libraries needed for my org-mode setup and where to find them.
+Done when I gave up on the Emacs package manager for now.")
+
+(dolist (lib-spec jcgs-org-supporting-libraries)
+  (unless (locate-file (concat (car lib-spec) ".el"))
+    (add-to-list 'load-path (substitute-in-file-name (expand-file-name (cdr lib-spec) "$EHOME/open-projects")))))
 
 (require 'org)
 
@@ -41,6 +57,7 @@
 		  "DONE(d)" "CANCELLED(x)"))
       org-clock-in-switch-to-state "CURRENT"
       org-use-fast-todo-selection nil
+      org-startup-folded t
       org-log-done 'time
       org-log-into-drawer t
       org-agenda-include-diary t
@@ -191,6 +208,7 @@ The filenames to save in are added by this function"
 	 (jcgs/org-make-custom-agenda-file-names description))))
 
 (jcgs/def-org-agenda-custom-command "mackaYs shopping" "y" 'tags-todo "Mackays")
+(jcgs/def-org-agenda-custom-command "Imminent" "i" 'tags-todo "imminent")
 (jcgs/def-org-agenda-custom-command "supermarKet shopping" "k" 'tags-todo "supermarket")
 (jcgs/def-org-agenda-custom-command "Daily Bread" "d" 'tags-todo "daily_bread")
 (jcgs/def-org-agenda-custom-command "Online" "o" 'tags-todo "online")
