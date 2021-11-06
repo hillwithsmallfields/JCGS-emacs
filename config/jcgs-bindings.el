@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-10-29 20:59:32 jcgs>
+;;; Time-stamp: <2021-11-06 18:11:30 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -86,6 +86,7 @@ directory."
 (global-set-key "\C-cf" 'find-file-at-point)
 (global-set-key "\C-cl" 'find-place)
 (global-set-key "\C-cL" 'find-place-forward)
+(global-set-key "\C-cx" 'finances-enter) ; mnemonic eXpenditure
 (global-set-key "\C-x\M-o" 'other-frame)
 
 (defun grep-this (command-args)
@@ -282,20 +283,30 @@ This copies some awkward M- bindings to C-."
 
 (fset 'jcgs-grid-lower-map jcgs-grid-lower-map)
 
+(defvar jcgs-org-grid-upper-map (make-keymap)
+  "Keymap for the upper half of my grid keyboard in org-mode.")
+
+(fset 'jcgs-org-grid-upper-map jcgs-org-grid-upper-map)
+
+(defvar jcgs-org-grid-lower-map (make-keymap)
+  "Keymap for the lower half of my grid keyboard in org-mode.")
+
+(fset 'jcgs-org-grid-lower-map jcgs-org-grid-lower-map)
+
 (defun jcgs-keys:setup-grid-keyboard-map ()
   "Bind the keys for the grid command keyboard."
   (interactive)
   (global-set-key [ S-f2 ] 'jcgs-grid-upper-map)
 
-  (define-key jcgs-grid-upper-map "A" 'backward-up-list)
-  (define-key jcgs-grid-upper-map "B" 'backward-sexp)
-  (define-key jcgs-grid-upper-map "C" 'forward-sexp)
-  (define-key jcgs-grid-upper-map "D" 'down-list)
+  (define-key jcgs-grid-upper-map "A" 'mark-sexp)
+  (define-key jcgs-grid-upper-map "B" 'copy-sexp)
+  (define-key jcgs-grid-upper-map "C" 'kill-sexp)
+  (define-key jcgs-grid-upper-map "D" 'transpose-sexp)
 
-  (define-key jcgs-grid-upper-map "I" 'mark-sexp)
-  (define-key jcgs-grid-upper-map "J" 'copy-sexp)
-  (define-key jcgs-grid-upper-map "K" 'kill-sexp)
-  (define-key jcgs-grid-upper-map "L" 'transpose-sexp)
+  (define-key jcgs-grid-upper-map "I" 'backward-up-list)
+  (define-key jcgs-grid-upper-map "J" 'backward-sexp)
+  (define-key jcgs-grid-upper-map "K" 'forward-sexp)
+  (define-key jcgs-grid-upper-map "L" 'down-list)
 
   (define-key jcgs-grid-upper-map "Q" 'mark-defun)
   (define-key jcgs-grid-upper-map "R" 'beginning-of-defun)
@@ -317,17 +328,17 @@ This copies some awkward M- bindings to C-."
   (define-key jcgs-grid-upper-map "W" 'eval-defun)
   (define-key jcgs-grid-upper-map "X" 'newline)
 
-  (global-set-key [   f2 ] 'jcgs-grid-lower-map)
+  (global-set-key [ f2 ] 'jcgs-grid-lower-map)
+  
+  (define-key jcgs-grid-lower-map "a" 'change-parentheses)
+  (define-key jcgs-grid-lower-map "b" 'raise-sexp)
+  (define-key jcgs-grid-lower-map "c" 'insert-parentheses)
+  (define-key jcgs-grid-lower-map "d" 'insert-quotes)
 
-  (define-key jcgs-grid-lower-map "a" 'wander-yank)
-  (define-key jcgs-grid-lower-map "b" 'wander)
-  (define-key jcgs-grid-lower-map "c" 'exit-recursive-edit)
-  (define-key jcgs-grid-lower-map "d" 'pick-up-sexp-at-point)
-
-  (define-key jcgs-grid-lower-map "i" 'change-parentheses)
-  (define-key jcgs-grid-lower-map "j" 'raise-sexp)
-  (define-key jcgs-grid-lower-map "k" 'insert-parentheses)
-  (define-key jcgs-grid-lower-map "l" 'insert-quotes)
+  (define-key jcgs-grid-lower-map "i" 'wander-yank)
+  (define-key jcgs-grid-lower-map "j" 'wander)
+  (define-key jcgs-grid-lower-map "k" 'exit-recursive-edit)
+  (define-key jcgs-grid-lower-map "l" 'pick-up-sexp-at-point)
 
   (define-key jcgs-grid-lower-map "q" 'kill-region)
   (define-key jcgs-grid-lower-map "r" 'kill-ring-save)
@@ -348,6 +359,24 @@ This copies some awkward M- bindings to C-."
   (define-key jcgs-grid-lower-map "v" 'move-in-or-out-of-string)
   (define-key jcgs-grid-lower-map "w" 'sexp-preceding-next-parenthesis)
   (define-key jcgs-grid-lower-map "x" 'end-of-buffer)
+
+  (define-key org-mode-map [ S-f2 ] 'jcgs-org-grid-upper-map)
+  (define-key org-mode-map [ f2 ] 'jcgs-org-grid-lower-map)
+
+  (define-key jcgs-org-grid-upper-map "A" 'org-ctrl-c-ctrl-c)
+  (define-key jcgs-org-grid-upper-map "B" 'org-metaup)
+  (define-key jcgs-org-grid-upper-map "C" 'org-metadown)
+  ;; (define-key jcgs-org-grid-upper-map "D" ')
+
+  (define-key jcgs-org-grid-upper-map "I" 'outline-up-heading)
+  (define-key jcgs-org-grid-upper-map "J" 'backward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "K" 'forward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "L" 'next-line)
+
+  (define-key jcgs-org-grid-upper-map "Q" 'org-shiftup)
+  (define-key jcgs-org-grid-upper-map "R" 'org-shiftleft)
+  (define-key jcgs-org-grid-upper-map "S" 'org-shiftright)
+  (define-key jcgs-org-grid-upper-map "T" 'org-shiftdown)
   )
 
 (require 'structure-edit)

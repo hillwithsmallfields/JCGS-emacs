@@ -23,12 +23,14 @@ font-family: monospace;
 <body>
 <h1>Command grid keyboard</h1>
 
+<h2>Global bindings</h2>
+
 <table>
   <tr>
-    <td class="key white-key">up sexp</td>
-    <td class="key white-key">back sexp</td>
-    <td class="key white-key">forward sexp</td>
-    <td class="key white-key">down sexp</td>
+    <td class="key white-key">mark sexp</td>
+    <td class="key white-key">copy sexp</td>
+    <td class="key white-key">kill sexp</td>
+    <td class="key white-key">transpose sexp</td>
 
     <td class="key black-key">no space</td>
     <td class="key black-key">del back</td>
@@ -36,10 +38,10 @@ font-family: monospace;
     <td class="key black-key">del blanks</td>
   </tr>
   <tr>
-    <td class="key white-key">mark sexp</td>
-    <td class="key white-key">copy sexp</td>
-    <td class="key white-key">kill sexp</td>
-    <td class="key white-key">transpose sexp</td>
+    <td class="key white-key">up sexp</td>
+    <td class="key white-key">back sexp</td>
+    <td class="key white-key">forward sexp</td>
+    <td class="key white-key">down sexp</td>
 
     <td class="key black-key">-</td>
     <td class="key black-key">2</td>
@@ -58,10 +60,10 @@ font-family: monospace;
     <td class="key black-key">newline</td>
   </tr>
   <tr>
-    <td class="key black-key">wander yank</td>
-    <td class="key black-key">wander</td>
-    <td class="key black-key">exit</td>
-    <td class="key black-key">pickup</td>
+    <td class="key black-key">change paren</td>
+    <td class="key black-key">raise sexp</td>
+    <td class="key black-key">insert parens</td>
+    <td class="key black-key">insert quotes</td>
 
     <td class="key white-key">back sent</td>
     <td class="key white-key">back word</td>
@@ -69,10 +71,10 @@ font-family: monospace;
     <td class="key white-key">fwd sent</td>
   </tr>
   <tr>
-    <td class="key black-key">change paren</td>
-    <td class="key black-key">raise sexp</td>
-    <td class="key black-key">insert parens</td>
-    <td class="key black-key">insert quotes</td>
+    <td class="key black-key">wander yank</td>
+    <td class="key black-key">wander</td>
+    <td class="key black-key">exit</td>
+    <td class="key black-key">pickup</td>
 
     <td class="key white-key">other window</td>
     <td class="key white-key">other frame</td>
@@ -87,9 +89,152 @@ font-family: monospace;
 
     <td class="key white-key">beg buffer</td>
     <td class="key white-key">in/out str</td>
-    <td class="key white-key">next buffer</td>
+    <td class="key white-key">go to name</td>
     <td class="key white-key">end buffer</td>
   </tr>
 </table>
 
+<h2>org-mode bindings</h2>
+
+<table>
+  <tr>
+    <td class="key white-key">action</td>
+    <td class="key white-key">drag up</td>
+    <td class="key white-key">drag down</td>
+    <td class="key white-key"></td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key white-key">up level</td>
+    <td class="key white-key">back at level</td>
+    <td class="key white-key">fwd at level</td>
+    <td class="key white-key"></td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key white-key">up</td>
+    <td class="key white-key">previous</td>
+    <td class="key white-key">next</td>
+    <td class="key white-key">down</td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+</table>
+
+<!--
+<h2>?-mode bindings</h2>
+
+<table>
+  <tr>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key white-key">out level</td>
+    <td class="key white-key">back at level</td>
+    <td class="key white-key">forward at level</td>
+    <td class="key white-key"></td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+  <tr>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+    <td class="key black-key"></td>
+
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+    <td class="key white-key"></td>
+  </tr>
+</table>
+-->
 </body> </html>
