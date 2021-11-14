@@ -1,4 +1,4 @@
-;;; Time-stamp: <2007-11-12 15:40:26 jcgs>
+;;; Time-stamp: <2021-11-14 18:30:53 jcgs>
 
 ;;; By John C G Sturdy <john@cb1.com>
 ;;; My emacs startup file
@@ -93,47 +93,47 @@ This should be a list of three parts:
 (setq source-directory (substitute-in-file-name "$GATHERED/source/emacs/emacs"))
 
 (defvar startup-load-directories
-  '("$COMMON/emacs/autoload"		; just lots of autoload stubs
-    "$COMMON/emacs/general-setups"
-    "$COMMON/emacs/mode-setups"	; these will typically trigger autoloads
-    "$COMMON/emacs/startup"	; assorted things to start
+  '("$SYNCED/emacs/autoload"		; just lots of autoload stubs
+    "$SYNCED/emacs/general-setups"
+    "$SYNCED/emacs/mode-setups"	; these will typically trigger autoloads
+    "$SYNCED/emacs/startup"	; assorted things to start
     ;; vr works OK this far
-    "$COMMON/emacs/patches"	; functions I replace
-    "$COMMON/var/emacsrestore"	; re-load saved state
+    "$SYNCED/emacs/patches"	; functions I replace
+    "$SYNCED/var/emacsrestore"	; re-load saved state
     )
   "Directories to load on startup.")
 
 (defvar jcgs-load-path-directories
-  '("$COMMON/emacs"		     ; general "stuff", some of it for
+  '("$SYNCED/emacs"		     ; general "stuff", some of it for
 					; autoloading, will come in from here
-    "$COMMON/emacs/editing"
-    "$COMMON/emacs/elisp-dev-tools"
-    "$COMMON/emacs/requirable-setups"
-    "$COMMON/emacs/file-handling"
-    "$COMMON/emacs/misc"
-    "$COMMON/emacs/data-structures"
-    "$COMMON/emacs/email"
-    "$COMMON/emacs/playpen"	      ; stuff I'm still tinkering with
-    "$COMMON/emacs/persistence"
-    "$COMMON/emacs/appearance"
-    "$COMMON/emacs/well-being"
-    "$COMMON/csis-www/research-elisp"
-    "$COMMON/open-projects/emacs-versor/lisp/"
-    "$COMMON/projects/focloir"
-    "$COMMON/emacs/my-extensions-to-packages/emacspeak"
-    "$COMMON/emacs/games"
-    "$COMMON/emacs/graphics"
+    "$SYNCED/emacs/editing"
+    "$SYNCED/emacs/elisp-dev-tools"
+    "$SYNCED/emacs/requirable-setups"
+    "$SYNCED/emacs/file-handling"
+    "$SYNCED/emacs/misc"
+    "$SYNCED/emacs/data-structures"
+    "$SYNCED/emacs/email"
+    "$SYNCED/emacs/playpen"	      ; stuff I'm still tinkering with
+    "$SYNCED/emacs/persistence"
+    "$SYNCED/emacs/appearance"
+    "$SYNCED/emacs/well-being"
+    "$SYNCED/csis-www/research-elisp"
+    "$SYNCED/open-projects/emacs-versor/lisp/"
+    "$SYNCED/projects/focloir"
+    "$SYNCED/emacs/my-extensions-to-packages/emacspeak"
+    "$SYNCED/emacs/games"
+    "$SYNCED/emacs/graphics"
     ;; This one has people's names for email sorting etc, that I
     ;; don't want to publish as part of my emacs collection!
-    ;; ($COMMON/emacs and $COMMON/csis-www get copied onto my
+    ;; ($SYNCED/emacs and $SYNCED/csis-www get copied onto my
     ;; web site at intervals)
-    "$COMMON/emacs-non-public-setup" 
+    "$SYNCED/emacs-non-public-setup" 
     )
   "Directories to put on my load path.")
 
 ;; I would use load-directory here, except that here is where I load load-directory
 
-(let ((basics (substitute-in-file-name "$COMMON/emacs/basics")))
+(let ((basics (substitute-in-file-name "$SYNCED/emacs/basics")))
   (mapcar (function (lambda (basic) (load-file (expand-file-name basic basics))))
           '("version-patches.el"
 	    "host.el"
@@ -150,7 +150,7 @@ This should be a list of three parts:
         (nreverse			; put the major ones at the top
 	 jcgs-load-path-directories))
 
-(load-file "$COMMON/emacs/host-setup.el")       ; further setup may depend on what this finds
+(load-file "$SYNCED/emacs/host-setup.el")       ; further setup may depend on what this finds
 
 ;; (defvar debug-arrow-setup-data nil)
 
@@ -202,4 +202,4 @@ This should be a list of three parts:
 
 (message "Emacs is ready")
 
-;;; end of $COMMON/emacs/.emacs
+;;; end of $SYNCED/emacs/.emacs

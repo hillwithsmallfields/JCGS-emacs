@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-11-14 17:40:34 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:08 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -691,19 +691,19 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (jcgs/org-ql-defview "Supermarket"
                        :title "Supermarket"
                        :buffers-files (mapcar 'substitute-in-file-name
-                                              '("$COMMON/org/shopping.org"))
+                                              '("$SYNCED/org/shopping.org"))
                        :query '(and (tags "supermarket")
                                     (todo "BUY")))
   (jcgs/org-ql-defview "Online"
                        :title "Online"
                        :buffers-files (mapcar 'substitute-in-file-name
-                                              '("$COMMON/org/shopping.org"))
+                                              '("$SYNCED/org/shopping.org"))
                        :query '(and (tags "online")
                                     (todo "BUY")))
   (jcgs/org-ql-defview "Physical making"
                        :title "Physical making"
                        :buffers-files (mapcar 'substitute-in-file-name
-                                              '("$COMMON/org/projects.org"))
+                                              '("$SYNCED/org/projects.org"))
                        :query '(and (tags "physical_making")
                                     (or (todo "TODO")
                                         (todo "OPEN")))
@@ -711,7 +711,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (jcgs/org-ql-defview "Programming"
                        :title "Programming"
                        :buffers-files (mapcar 'substitute-in-file-name
-                                              '("$COMMON/org/projects.org"))
+                                              '("$SYNCED/org/projects.org"))
                        :query '(and (tags "programming")
                                     (or (todo "TODO")
                                         (todo "OPEN")))
@@ -719,9 +719,9 @@ An argument can change the number of days ahead, 1 being tomorrow."
   (jcgs/org-ql-defview "Mending"
                        :title "Mending"
                        :buffers-files (mapcar 'substitute-in-file-name
-                                              '("$COMMON/org/projects.org"
-                                                "$COMMON/org/general.org"
-                                                "$COMMON/vehicles/Marmalade/Marmalade-work.org"))
+                                              '("$SYNCED/org/projects.org"
+                                                "$SYNCED/org/general.org"
+                                                "$SYNCED/vehicles/Marmalade/Marmalade-work.org"))
                        :query '(and (or (tags "physical_fixing")
                                         (tags "mending"))
                                     (or (todo "TODO")

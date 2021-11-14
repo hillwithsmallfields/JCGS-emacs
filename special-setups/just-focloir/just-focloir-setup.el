@@ -1,8 +1,8 @@
-;;; Time-stamp: <2007-05-01 17:01:35 jcgs>
+;;; Time-stamp: <2021-11-14 18:34:19 jcgs>
 
 (setq stack-trace-on-error t)
 
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 
-(load-file (substitute-in-file-name "$COMMON/projects/focloir/duinnin.el"))
+(load-file (substitute-in-file-name "$SYNCED/projects/focloir/duinnin.el"))

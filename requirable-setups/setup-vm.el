@@ -1,9 +1,9 @@
-;;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;;; Time-stamp: <2021-11-14 18:31:28 jcgs>
 ;;; John's configuration stuff for vm (View Mail)
 
 (provide 'setup-vm)
 
-(message "In $COMMON/emacs/requirable-setups/setup-vm.el, path is %S" load-path)
+(message "In $SYNCED/emacs/requirable-setups/setup-vm.el, path is %S" load-path)
 
 (when (and (boundp 'vm-host) vm-host)
   (let* ((load-vm-version 

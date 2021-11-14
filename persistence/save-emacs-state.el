@@ -1,4 +1,4 @@
-;;; Time-stamp: <2013-10-15 12:22:07 johnstu>
+;;; Time-stamp: <2021-11-14 18:24:27 jcgs>
 
 (provide 'save-emacs-state)
 (require 'load-directory)
@@ -7,7 +7,7 @@
 ;;; multiple contexts
 
 (defvar emacs-save-restorers 
-  (substitute-in-file-name "$COMMON/var/emacsrestore")
+  (substitute-in-file-name "$SYNCED/var/emacsrestore")
   "The directory to write restorer files in.
 This variable should be used by saver modules to determine where to
 write their state files into.")

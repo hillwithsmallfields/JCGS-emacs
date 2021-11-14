@@ -22,7 +22,7 @@
   ;; ( "/rtl/" . "$MY_PROJECTS/libRTL/trunk/" )
   (when nil
     (make-named-shell "/ephemerals/"
-		      "$COMMON/research/bds/grevo/ephemerals/"
+		      "$SYNCED/research/bds/grevo/ephemerals/"
 		      )))
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
@@ -30,7 +30,7 @@
 				     ;; "make clean; ./configure; make\n"
 				     )
 
-(make-shell-for-directory-if-present "$COMMON/music/"
+(make-shell-for-directory-if-present "$SYNCED/music/"
 				     "/music/"
 				     ;; "make clean; ./configure; make\n"
 				     )

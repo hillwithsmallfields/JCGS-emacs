@@ -1,5 +1,5 @@
 ;;;; setup-sidebrain.el -- setup for my use of sidebrain
-;;; Time-stamp: <2013-10-15 12:02:47 johnstu>
+;;; Time-stamp: <2021-11-14 18:31:26 jcgs>
 
 (message "Loading sidebrain setup")
 
@@ -10,8 +10,8 @@
 (require 'filenames-in-env)
 (require 'sidebrain-planner)
 
-(setq sidebrain-file-name (substitute-in-file-name "$COMMON/var/sidebrain.xml")
-      sidebrain-history-file-name (substitute-in-file-name "$COMMON/var/sidebrain-history.xml")
+(setq sidebrain-file-name (substitute-in-file-name "$SYNCED/var/sidebrain.xml")
+      sidebrain-history-file-name (substitute-in-file-name "$SYNCED/var/sidebrain-history.xml")
       )
 
 (defun sidebrain-buffer-persistence-hook-function ()

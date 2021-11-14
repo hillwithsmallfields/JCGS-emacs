@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-26 19:54:29 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:18 jcgs>
 
 (setq debug-on-error t)
 
@@ -45,7 +45,7 @@
 
 (when (at-home-p)
   (require 'dated-csv)
-  (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+  (let ((health-dir (substitute-in-file-name "$SYNCED/health")))
     (add-to-list 'auto-mode-alist (cons (concat health-dir ".+\\.csv") 'dated-csv-mode))
     (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
       (find-file (expand-file-name file health-dir))
@@ -58,7 +58,7 @@
 		 t))
   (setq org-reading-files (cons (substitute-in-file-name "$ORG/guide.org")
 				(let ((reading-dir (substitute-in-file-name
-						    "$COMMON/noticeboard-reading")))
+						    "$SYNCED/noticeboard-reading")))
 				  (mapcar (lambda (file)
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org"))))))

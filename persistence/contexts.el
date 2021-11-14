@@ -1,4 +1,4 @@
-;;; Time-stamp: <2007-03-19 10:01:25 jcgs>
+;;; Time-stamp: <2021-11-14 18:24:28 jcgs>
 ;;;; contexts.el -- manipulate sets of buffers for particular contexts
 ;;; This is connected with my save-emacs-context code.
 
@@ -15,7 +15,7 @@
 		      context-list-mode-keymap
 		      context-annotation))
 
-(defvar context-contexts-directory (substitute-in-file-name "$COMMON/var/emacscontexts")
+(defvar context-contexts-directory (substitute-in-file-name "$SYNCED/var/emacscontexts")
   "The directory for holding context files.
 Each context file is the elisp to run to load that context.
 This requires the restorebuffer package, and calls context-mark-loaded

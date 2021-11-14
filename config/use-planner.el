@@ -1,7 +1,7 @@
 ;; ;;;; find, load and configure planner
-;; ;;; Time-stamp: <2014-07-04 16:17:42 johstu01>
+;; ;;; Time-stamp: <2021-11-14 18:34:16 jcgs>
 
-;; ;; Copyright (C) 2007, 2014, John C. G. Sturdy
+;; ;; Copyright (C) 2007, 2014, 2021, John C. G. Sturdy
 
 ;; ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -35,18 +35,18 @@
 
 ;; (setq planner-project "WikiPlanner"
 ;;       muse-project-alist (cons `("WikiPlanner"
-;; 				 (,(substitute-in-file-name "$COMMON/var/plans")
+;; 				 (,(substitute-in-file-name "$SYNCED/var/plans")
 ;; 				  :default "TaskPool"
 ;; 				  :major-mode planner-mode
 ;; 				  :visit-link planner-visit-link)
 ;; 				 (:base "planner-xhtml"
 ;; 				  :path ,(substitute-in-file-name
-;; 					  "$COMMON/local-www/plans")
+;; 					  "$SYNCED/local-www/plans")
 ;; 				  :jcgs-before-function 'jcgs-planner-pre-publish-function))
 ;; 			       (when (boundp 'muse-project-alist)
 ;; 				 muse-project-alist
 ;; 				 nil))
-;;       timeclock-file (substitute-in-file-name "$COMMON/var/timelog"))
+;;       timeclock-file (substitute-in-file-name "$SYNCED/var/timelog"))
 
 ;; (use-package planner
 ;; 	     "$GATHERED/emacs/planner/planner-3.40"
@@ -94,11 +94,11 @@
 ;; 		   planner-diary-number-of-days 3
 ;; 		   planner-diary-file diary-file
 ;; 		   planner-tasks-file-behavior 'save
-;; 		   remember-data-file (substitute-in-file-name "$COMMON/var/notes")
+;; 		   remember-data-file (substitute-in-file-name "$SYNCED/var/notes")
 ;; 		   remember-handler-functions '(remember-planner-append)
 ;; 		   remember-annotation-functions planner-annotation-functions
 ;; 		   jcgs-use-planner-id t
-;; 		   planner-cyclic-diary-file (substitute-in-file-name "$COMMON/var/diary-cyclic-tasks")
+;; 		   planner-cyclic-diary-file (substitute-in-file-name "$SYNCED/var/diary-cyclic-tasks")
 ;; 		   planner-cyclic-diary-nag nil
 ;; 		   planner-trunk-rule-list
 ;; 		   '(("." "Done" ("Focloir\\|Cursa-Scriobh-Ilmhean"
@@ -116,7 +116,7 @@
 
 ;; 		   planner-annotation-use-relative-file (function
 ;; 							 (lambda (file)
-;; 							   (let ((common (getenv "COMMON")))
+;; 							   (let ((common (getenv "SYNCED")))
 ;; 							     (string= common
 ;; 								      (substring file 0 (length common))))))
 ;; 		   planner-annotation-strip-directory t
@@ -148,7 +148,7 @@
 
 ;; 	     (when jcgs-use-planner-id
 ;; 	       (require 'planner-id)
-;; 	       (setq planner-id-tracking-file (substitute-in-file-name "$COMMON/var/planner-ids"))
+;; 	       (setq planner-id-tracking-file (substitute-in-file-name "$SYNCED/var/planner-ids"))
 ;; 	       (set-face-foreground 'planner-id-face "darkgray")
 ;; 	       (setq planner-id-update-automatically nil)
 ;; 	       (make-variable-buffer-local 'planner-id-update-automatically)

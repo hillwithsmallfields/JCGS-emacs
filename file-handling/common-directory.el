@@ -1,6 +1,6 @@
 ;;;; common-directory.el -- Special handling of my common directory
 ;; -*- emacs-lisp-mode -*-
-;;; Time-stamp: <2006-04-21 19:05:37 jcgs>
+;;; Time-stamp: <2021-11-14 18:34:47 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -19,10 +19,10 @@
 (provide 'common-directory)
 
 (defun common-file-mark-deleted (file)
-  "If FILE is in the directory $COMMON, make a corresponding entry in s:common:uncommon:"
+  "If FILE is in the directory $SYNCED, make a corresponding entry in s:common:uncommon:"
   (when nil
     (let ((file-full-and-true (file-truename (expand-file-name file)))
-	(common-full-and-true (file-truename (expand-file-name (getenv "COMMON")))))
+	(common-full-and-true (file-truename (expand-file-name (getenv "SYNCED")))))
     (when (string= (substring file-full-and-true 0 (length common-full-and-true))
 		   common-full-and-true)
       (let ((find-file-not-found-hooks nil)
@@ -160,7 +160,7 @@ Apply optional COMMAND to each -- by default, a reporting function."
   (interactive)
   (when minibuffer-completing-file-name
     (delete-region (point-at-bol) (point-at-eol))
-    (let ((name (expand-file-name (getenv "COMMON"))))
+    (let ((name (expand-file-name (getenv "SYNCED"))))
       (insert name)
       (unless (string-match "/$" name)
 	(insert "/")))))

@@ -1,6 +1,6 @@
 ;;; elisp-admin.el --- JCGS' header checking
 
-;; Copyright (C) 2007  John Sturdy
+;; Copyright (C) 2007, 2021  John Sturdy
 
 ;; Author: John Sturdy <jcgs@hosea>
 ;; Keywords: maint
@@ -49,7 +49,7 @@
   (interactive)
   (when (and (stringp (buffer-file-name))
 	     (eq major-mode 'emacs-lisp-mode)
-	     (string-match (file-truename (substitute-in-file-name "$COMMON"))
+	     (string-match (file-truename (substitute-in-file-name "$SYNCED"))
 			   (file-truename (buffer-file-name)))
 	     (not (member (file-name-nondirectory (buffer-file-name))
 			  boilerplate-excused))

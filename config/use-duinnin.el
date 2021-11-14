@@ -1,8 +1,8 @@
 ;;;; use-duinnin.el -- load duinnin processing
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2021-11-14 18:31:06 jcgs>
 
 ;; (use-package duinnin
-;; 	     "$COMMON/projects/focloir"
+;; 	     "$SYNCED/projects/focloir"
 ;; 	     "http://glg.csisdmz.ul.ie/fgb/bogearrai/duinnin.taz"
 ;; 	     ((expand-file-name "data-structures" user-emacs-directory)
 ;; 	      (xml-find "xml-find"

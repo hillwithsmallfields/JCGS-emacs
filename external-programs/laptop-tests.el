@@ -1,6 +1,6 @@
 ;;; laptop-tests.el --- xenclient laptop testing
 
-;; Copyright (C) 2012  John Sturdy
+;; Copyright (C) 2012, 2021  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -155,7 +155,7 @@
   "For CONFIG, get ATTR."
   (cdr (assoc attr config)))
 
-(define-tracked-command "load-laptop" "$COMMON/projects/xen/scripts/desk/"
+(define-tracked-command "load-laptop" "$SYNCED/projects/xen/scripts/desk/"
   (lambda (command) (list (setq current-laptop (prompt-for-laptop "Load laptop: "))))
   (lambda (laptop) (let* ((pxedir (xc-latest-loaded-pxedir laptop))
 			  (xc-config (xc-get-config pxedir))
@@ -177,16 +177,16 @@
 			    (cons "qemu" "default")))
 		     (laptop-state-record laptop))))
 
-(define-tracked-command "load-guest" "$COMMON/projects/xen/scripts/desk/"
+(define-tracked-command "load-guest" "$SYNCED/projects/xen/scripts/desk/"
   (lambda (command) (list (setq current-guest (prompt-for-ipaddr "Load guest at IP address: ")))))
 
-(define-tracked-command "pxe-setup-laptop" "$COMMON/projects/xen/scripts/desk/"
+(define-tracked-command "pxe-setup-laptop" "$SYNCED/projects/xen/scripts/desk/"
   (lambda (command) (list (setq current-laptop (prompt-for-laptop "PXE setup for laptop: "))))
   (lambda (laptop) (laptop-state-put-alist
 		    laptop
 		    '(("xen" . "default-pxe")))))
 
-(define-tracked-command "pxe-from-saved" "$COMMON/projects/xen/scripts/desk/"
+(define-tracked-command "pxe-from-saved" "$SYNCED/projects/xen/scripts/desk/"
   (lambda (command) (list (yes-or-no-p "Use originals? ")
 		   (prompt-for-version "Use saved version: "
 				       current-laptop)))
@@ -194,7 +194,7 @@
     (laptop-state-put current-laptop "xen" (concat (if original "original-" "changed-")
 						   version))))
 
-(define-tracked-command "qemu-to-laptop" "$COMMON/projects/xen/scripts/desk/"
+(define-tracked-command "qemu-to-laptop" "$SYNCED/projects/xen/scripts/desk/"
   (lambda (command)
     (list (yes-or-no-p "Use original? ")
 	  (setq current-laptop (prompt-for-laptop "Load qemu onto laptop: "))))

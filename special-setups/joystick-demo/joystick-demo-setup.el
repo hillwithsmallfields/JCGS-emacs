@@ -1,15 +1,15 @@
 ;;; joystick-demo-setup.el --- configuration for demoing versor with gamepad
-;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;; Time-stamp: <2021-11-14 18:34:19 jcgs>
 
 (setq stack-trace-on-error t
       inhibit-splash-screen t
       message-log-max t)
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "~/common"))
 (unless (getenv "GATHERED")
   (setenv "GATHERED" "~/library"))
 
-(message "COMMON=%S GATHERED=%S" (getenv "COMMON") (getenv "GATHERED"))
+(message "COMMON=%S GATHERED=%S" (getenv "SYNCED") (getenv "GATHERED"))
 
 (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/lisp"))
 (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/joylisp/"))

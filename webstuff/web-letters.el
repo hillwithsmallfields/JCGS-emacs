@@ -1,10 +1,10 @@
 ;;;; web-letters.el -- use HTML for preparing printed letters, using templates
-;;; Time-stamp: <2004-11-01 11:48:03 john>
+;;; Time-stamp: <2021-11-14 18:30:56 jcgs>
 
-(defvar web-letters-template-directory (substitute-in-file-name "$COMMON/www/letters/templates")
+(defvar web-letters-template-directory (substitute-in-file-name "$SYNCED/www/letters/templates")
   "*Where to find web letter templates.")
 
-(defvar web-letters-directory (substitute-in-file-name "$COMMON/www/letters")
+(defvar web-letters-directory (substitute-in-file-name "$SYNCED/www/letters")
   "*Where to put web letters.")
 
 (defvar web-letters-source-buffer nil

@@ -38,7 +38,7 @@
 (message "(boundp 'org-ql-views) = %s" (boundp 'org-ql-views))
 (load-file (substitute-in-file-name "$MY_ELISP/config/config-org-mode.el"))
 
-(jcgs/org-ql-views-to-json (substitute-in-file-name "$COMMON/var/views.json")
+(jcgs/org-ql-views-to-json (substitute-in-file-name "$SYNCED/var/views.json")
                            '("Current"
                              "Supermarket"
                              "Online"
@@ -46,7 +46,7 @@
                              "Programming"
                              "Mending"))
 
-(jcgs/org-expected-dates-to-json-file (substitute-in-file-name "$COMMON/var/parcels-expected.json"))
+(jcgs/org-expected-dates-to-json-file (substitute-in-file-name "$SYNCED/var/parcels-expected.json"))
 
 (provide 'dashboard-emacs-query)
 ;;; dashboard-emacs-query.el ends here

@@ -1,5 +1,5 @@
 ;;;; journal.el -- stuff for keeping a diary
-;;; Time-stamp: <2018-11-15 19:22:16 jcgs>
+;;; Time-stamp: <2021-11-14 18:30:57 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -32,9 +32,9 @@
 
 ;;;###autoload
 (defvar journal-dates-directories
-  '(("research" . (substitute-in-file-name "$COMMON/research/log/"))
-    ("asr33 restoration" . (substitute-in-file-name "$COMMON/www/computing/asr33/"))
-    ("talks" . (substitute-in-file-name "$COMMON/www/talks")))
+  '(("research" . (substitute-in-file-name "$SYNCED/research/log/"))
+    ("asr33 restoration" . (substitute-in-file-name "$SYNCED/www/computing/asr33/"))
+    ("talks" . (substitute-in-file-name "$SYNCED/www/talks")))
   "*The directories for diary files for each journal.
 This is an alist from the journal name, to a lisp form to eval to get
 the directory.  Thus, finding the directory can be delayed until that

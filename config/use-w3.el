@@ -1,5 +1,5 @@
 ;;;; find, load and configure w3
-;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:05 jcgs>
 
 ;; (require 'jcgs/use-package)
 ;; (jcgs/use-package w3
@@ -14,9 +14,9 @@
 ;; 		   (cond
 ;; 		    (nil "http://www.cb1.com/~john")
 ;; 		    (t (substitute-in-file-name
-;; 			"$COMMON/local-www/index.html")))
+;; 			"$SYNCED/local-www/index.html")))
 ;; 		   w3-configuration-directory
-;; 		   (substitute-in-file-name "$COMMON/var/w3")
+;; 		   (substitute-in-file-name "$SYNCED/var/w3")
 ;; 		   w3-user-colors-take-precedence t
 ;; 		   w3-strict-width 77)
 

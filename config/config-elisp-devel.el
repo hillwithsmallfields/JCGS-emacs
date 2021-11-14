@@ -1,7 +1,7 @@
 ;;;; config-elisp-devel.el -- set up my emacs-lisp development
-;;; Time-stamp: <2014-06-23 11:47:31 johstu01>
+;;; Time-stamp: <2021-11-14 18:31:04 jcgs>
 
-;; Copyright (C) 2007, 2014, John C. G. Sturdy
+;; Copyright (C) 2007, 2014, 2021, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -12,7 +12,7 @@
 
 (setq downloaded-emacs-directory (substitute-in-file-name "~/downloaded/emacs/")
       source-annotations-directory (file-truename
-				    (substitute-in-file-name "$COMMON/www/computing/emacs")))
+				    (substitute-in-file-name "$SYNCED/www/computing/emacs")))
 
 (add-lispdir (expand-file-name "file-handling" user-emacs-directory))
 

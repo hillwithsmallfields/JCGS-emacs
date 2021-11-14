@@ -1,7 +1,7 @@
 ;;;; just-platypus-setup.el -- setup for running platypus in an emacs of its own
-;;; Time-stamp: <2013-10-15 12:02:47 johnstu>
+;;; Time-stamp: <2021-11-14 18:34:18 jcgs>
 
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 
 (setq stack-trace-on-error t
@@ -35,9 +35,9 @@
 		(latex-mode "structural" "exprs")
 		)))
 
-(mapcar 'find-file (directory-files (substitute-in-file-name "$COMMON/research/proglang/platypus06/")
+(mapcar 'find-file (directory-files (substitute-in-file-name "$SYNCED/research/proglang/platypus06/")
 				    t "\\.el$"))
 
-(load-file (substitute-in-file-name "$COMMON/research/proglang/platypus06/platypus.el"))
+(load-file (substitute-in-file-name "$SYNCED/research/proglang/platypus06/platypus.el"))
 
 ;;; end of just-platypus-setup.el

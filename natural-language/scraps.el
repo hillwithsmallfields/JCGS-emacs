@@ -1,5 +1,5 @@
 ;;;; scraps.el -- scraps taken from other files in this directory
-;;; Time-stamp: <2006-03-11 12:40:27 jcgs>
+;;; Time-stamp: <2021-11-14 18:30:59 jcgs>
 
 (defun mulvo-test-set-symbol-language-type-meaning ()
   (interactive)
@@ -30,7 +30,7 @@
   (erase-buffer)
   (mulvo-clear-dictionary)
   (let ((mulvo-dictionaries-directories
-	 (list (substitute-in-file-name "$COMMON/dictionaries")))
+	 (list (substitute-in-file-name "$SYNCED/dictionaries")))
 	(mulvo-dictionaries-pattern "test.\\.csv$")
 	(mulvo-debug t)
 	(stack-trace-on-error t))

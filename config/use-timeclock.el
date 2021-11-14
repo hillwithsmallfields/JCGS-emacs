@@ -1,5 +1,5 @@
 ;;;; find, load and configure timeclock
-;;; Time-stamp: <2020-11-11 20:51:08 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:10 jcgs>
 
 (unless (fboundp 'first) (require 'cl))
 
@@ -10,7 +10,7 @@
 			    "Clock in, recording the time in the timelog."
 			    t))
 	     (setq timeclock-file (substitute-in-file-name
-				   "$COMMON/var/timelog")
+				   "$SYNCED/var/timelog")
 		   ;; 6 hours at the computer is probably enough
 		   timeclock-workday (* 6 60 60)))
 

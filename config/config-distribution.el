@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2020-10-04 16:07:44 jcgs>
+;;; Time-stamp: <2021-11-14 18:34:13 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -98,7 +98,7 @@ This command assumes point is not in a string or comment."
 
 (setq version-control t)
 (add-to-list 'backup-directory-alist
-	     (cons (or (getenv "COMMON")
+	     (cons (or (getenv "SYNCED")
 		       (expand-file-name "~/common"))
 		   (expand-file-name "~/common-backups")))
 
@@ -347,7 +347,7 @@ COUNT can be passed in to make it negative."
 ;;;; Bookmarks
 
 (setq bookmark-default-file (substitute-in-file-name
-			     "$COMMON/var/bookmarks.bmk")
+			     "$SYNCED/var/bookmarks.bmk")
       bookmark-save-flag 1
       bookmark-bmenu-toggle-filenames nil
       bookmark-automatically-show-annotations t
@@ -366,7 +366,7 @@ COUNT can be passed in to make it negative."
 (setq desktop-restore-eager t ; 8
       confirm-kill-emacs 'yes-or-no-p
       savehist-coding-system 'utf-8
-      savehist-file (substitute-in-file-name "$COMMON/var/emacs-history")
+      savehist-file (substitute-in-file-name "$SYNCED/var/emacs-history")
       savehist-file-modes nil		; can't set them on FAT file systems
       desktop-dirname (substitute-in-file-name "$HOME")
       )

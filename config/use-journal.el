@@ -1,5 +1,5 @@
 ;;;; use-journal.el -- configure my journal system
-;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:09 jcgs>
 
 (require 'jcgs-use-package)
 
@@ -11,8 +11,8 @@
 An optional extra argument gives where in the buffer the previous day was found."
 			       t))
 	     (setq journal-dates-directories
-		   '(("research" substitute-in-file-name "$COMMON/research/log/")
-		     ("asr33 restoration" substitute-in-file-name "$COMMON/www/computing/asr33/")
-		     ("talks" substitute-in-file-name "$COMMON/www/talks"))))
+		   '(("research" substitute-in-file-name "$SYNCED/research/log/")
+		     ("asr33 restoration" substitute-in-file-name "$SYNCED/www/computing/asr33/")
+		     ("talks" substitute-in-file-name "$SYNCED/www/talks"))))
 
 ;;; end of use-journal.el
