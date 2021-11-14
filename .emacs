@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2021-11-12 11:25:45 jcgs>
+;;; Time-stamp: <2021-11-14 16:22:48 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
 
@@ -279,7 +279,7 @@ This should be a list of three parts:
   (when (file-exists-p patches-file)
     (load-file patches-file)))
 
-(when (= (system-name) "isaiah")
+(when (string= (system-name) "isaiah")
   (jcgs-keys:setup-grid-keyboard-map))
 
 ;;; end of .emacs
