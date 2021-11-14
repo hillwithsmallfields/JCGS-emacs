@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-11-06 18:11:30 jcgs>
+;;; Time-stamp: <2021-11-14 16:56:52 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -360,6 +360,7 @@ This copies some awkward M- bindings to C-."
   (define-key jcgs-grid-lower-map "w" 'sexp-preceding-next-parenthesis)
   (define-key jcgs-grid-lower-map "x" 'end-of-buffer)
 
+  (require 'org)
   (define-key org-mode-map [ S-f2 ] 'jcgs-org-grid-upper-map)
   (define-key org-mode-map [ f2 ] 'jcgs-org-grid-lower-map)
 

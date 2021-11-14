@@ -1,22 +1,27 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-11-06 19:01:59 jcgs>
+;;; Time-stamp: <2021-11-14 17:40:34 jcgs>
 
 (defconst jcgs-org-supporting-libraries
-  '(("org-ql" .  "alphapapa/org-ql")
-    ("dash" . "magnars/dash.el")
-    ("dash-functional" . "magnars/dash.el")
-    ("ts" . "alphapapa/ts.el")
-    ("s" . "magnars/s.el")
-    ("peg" . "emacsmirror/peg")
-    ("org-super-agenda" . "alphapapa/org-super-agenda")
-    ("ht" . "Wilfred/ht.el")
-    ("ov" . "emacsorphanage/ov"))
+  '(("org-ql" . "github.com/alphapapa/org-ql")
+    ("dash" . "github.com/magnars/dash.el")
+    ("dash-functional" . "github.com/magnars/dash.el")
+    ("ts" . "github.com/alphapapa/ts.el")
+    ("s" . "github.com/magnars/s.el")
+    ("peg" . "github.com/emacsmirror/peg")
+    ("org-super-agenda" . "github.com/alphapapa/org-super-agenda")
+    ("ht" . "github.com/Wilfred/ht.el")
+    ("ov" . "github.com/emacsorphanage/ov"))
   "Alist of libraries needed for my org-mode setup and where to find them.
 Done when I gave up on the Emacs package manager for now.")
 
 (dolist (lib-spec jcgs-org-supporting-libraries)
-  (unless (locate-file (concat (car lib-spec) ".el"))
-    (add-to-list 'load-path (substitute-in-file-name (expand-file-name (cdr lib-spec) "$EHOME/open-projects")))))
+  (message "locating %s" lib-spec)
+  (unless (locate-file (car lib-spec) load-path
+                       '("" ".el" ".elc" ".el.gz"))
+    (add-to-list 'load-path
+                 (substitute-in-file-name
+                  (expand-file-name (cdr lib-spec)
+                                    "$EHOME/open-projects")))))
 
 (require 'org)
 
