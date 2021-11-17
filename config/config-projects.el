@@ -72,7 +72,9 @@
   (make-shell-for-directory-if-present "$MY_PROJECTS/boxes"
 				       "/boxes/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/land"
-				       "/land/"))
+				       "/land/")
+  (make-shell-for-directory-if-present "$SYNCED/learning"
+				       "/learning/"))
 
 (defun run-command-in-shell-buffer (command buffer)
   "Run COMMAND in BUFFER and return the result."
