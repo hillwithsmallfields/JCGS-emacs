@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-11-14 16:56:52 jcgs>
+;;; Time-stamp: <2021-11-22 20:41:07 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -370,8 +370,8 @@ This copies some awkward M- bindings to C-."
   ;; (define-key jcgs-org-grid-upper-map "D" ')
 
   (define-key jcgs-org-grid-upper-map "I" 'outline-up-heading)
-  (define-key jcgs-org-grid-upper-map "J" 'backward-heading-same-level)
-  (define-key jcgs-org-grid-upper-map "K" 'forward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "J" 'org-backward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "K" 'org-forward-heading-same-level)
   (define-key jcgs-org-grid-upper-map "L" 'next-line)
 
   (define-key jcgs-org-grid-upper-map "Q" 'org-shiftup)
