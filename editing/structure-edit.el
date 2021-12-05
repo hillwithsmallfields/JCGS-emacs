@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2021-10-29 21:42:23 jcgs>
+;;; Time-stamp: <2021-12-05 19:11:29 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -76,7 +76,7 @@ the recursive edit."
 
 (defconst paren-pairs
   '((?( . ?))
-    (?[ . ?])
+    (?\[ . ?\])
     (?{ . ?})
     (?< . ?>)))
 
@@ -103,6 +103,26 @@ the recursive edit."
            (insert (cdr pair))))
         (t (error "Not on parentheses"))))
 
+(defun next-parentheses-type ()
+  "Change the parentheses at point to the next type."
+  (interactive)
+  (let* ((old (char-after))
+         (pairs paren-pairs)
+         (new-pair (catch 'found
+                       (while pairs
+                         (if (eq (caar pairs) old)
+                             (throw 'found (cadr pairs))
+                           (setq pairs (cdr pairs)))))))
+    (unless new-pair
+      (setq new-pair (car paren-pairs)))
+    (save-excursion
+      (forward-sexp 1)
+      (backward-char 1)
+      (delete-char 1)
+      (insert (cdr new-pair)))
+    (delete-char 1)
+    (insert (car new-pair))))
+
 (defun insert-quotes (n)
   "Insert quotes.  With argument, surround N sexps with quotes."
   (interactive "p")
@@ -115,6 +135,17 @@ the recursive edit."
 (defun move-in-or-out-of-string ()
   "Move to before the most recent string quote."
   (interactive)
-  (search-backward "\""))
+  (re-search-forward "[\"']+")
+  (forward-sexp -1))
+
+(defun copy-sexp (&optional arg)
+  "Copy the sexp (balanced expression) following point.
+With ARG, copy that many sexps after point.
+Negative arg -N means copy N sexps before point.
+This command assumes point is not in a string or comment."
+  (interactive "p")
+  (let ((opoint (point)))
+    (forward-sexp (or arg 1))
+    (copy-region-as-kill opoint (point))))
 
 ;;; end of /harlqn/usr/users/jcgs/emacs/handy-lisp.el

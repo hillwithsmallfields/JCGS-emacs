@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-11-22 20:41:07 jcgs>
+;;; Time-stamp: <2021-12-05 19:11:49 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -79,6 +79,18 @@ directory."
   "Set or multiply the prefix ARG by five."
   (interactive "P")
   (universal-argument-n arg 5))
+
+(defun toggle-narrow-to-defun (&optional include-comments)
+  "Toggle whether we are narrowed to a defun."
+  (interactive (list narrow-to-defun-include-comments))
+  (let ((begin (point-min))
+        (end (point-max)))
+    (if (save-restriction
+          (widen)
+          (and (= (point-min) begin)
+               (= (point-max) end)))
+        (narrow-to-defun include-comments)
+      (widen))))
 
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
 (global-set-key "\C-x\C-y" 'browse-yank)
@@ -176,6 +188,9 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map-1 "q" 'revert-quickly)
   (define-key jcgs-map-1 "r" 'remember)
 
+  ;; (eval-after-load "org-mode"
+  ;;   (define-key org-mode-map "\C-cb" 'jcgs/org-buy-for-project-and-block))
+  
   (define-key jcgs-task-tracking-map "a" 'jcgs/org-start-answering)
   (define-key jcgs-task-tracking-map "b" 'jcgs/org-start-break-or-browsing)
   (define-key jcgs-task-tracking-map "c" 'org-capture)
@@ -311,7 +326,7 @@ This copies some awkward M- bindings to C-."
   (define-key jcgs-grid-upper-map "Q" 'mark-defun)
   (define-key jcgs-grid-upper-map "R" 'beginning-of-defun)
   (define-key jcgs-grid-upper-map "S" 'end-of-defun)
-  (define-key jcgs-grid-upper-map "T" 'narrow-to-defun)
+  (define-key jcgs-grid-upper-map "T" 'toggle-narrow-to-defun)
 
   (define-key jcgs-grid-upper-map "E" 'delete-horizontal-space)
   (define-key jcgs-grid-upper-map "F" 'delete-backward-char)
@@ -330,7 +345,7 @@ This copies some awkward M- bindings to C-."
 
   (global-set-key [ f2 ] 'jcgs-grid-lower-map)
   
-  (define-key jcgs-grid-lower-map "a" 'change-parentheses)
+  (define-key jcgs-grid-lower-map "a" 'next-parentheses-type)
   (define-key jcgs-grid-lower-map "b" 'raise-sexp)
   (define-key jcgs-grid-lower-map "c" 'insert-parentheses)
   (define-key jcgs-grid-lower-map "d" 'insert-quotes)
