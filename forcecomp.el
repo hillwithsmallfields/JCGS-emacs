@@ -50,6 +50,6 @@
 		  ;; "$GATHERED/emacs/vm/vm-6.79/"
 		  "$GATHERED/emacs/voice/vrmode"
 		  "$GATHERED/emacs/w3/w3-4.0pre.46/lisp"))
-(byte-recompile-directory "$COMMON/emacs" 0 )
+(byte-recompile-directory "$SYNCED/emacs" 0 )
 (switch-to-buffer "*Compile-Log*")
 (goto-char (point-max))

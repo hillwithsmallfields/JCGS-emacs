@@ -1,6 +1,6 @@
 ;;; post-sync-catchup.el --- pick up files that might have been transferred to/from phone
 
-;; Copyright (C) 2013  John Sturdy
+;; Copyright (C) 2013, 2021  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience
@@ -36,7 +36,7 @@
   "Pattern for finding the files that the sync script changes.
 The first recorded match string is used.")
 
-(defvar post-sync-catchup-tree (substitute-in-file-name "$COMMON")
+(defvar post-sync-catchup-tree (substitute-in-file-name "$SYNCED")
   "Directory tree which the filenames to sync are to be resolved.")
 
 (defun post-sync-catchup ()

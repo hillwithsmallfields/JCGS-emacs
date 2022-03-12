@@ -1,5 +1,5 @@
 ;;;; filenames-in-env.el -- put environment variables into filenames where possible
-;;; Time-stamp: <2006-05-01 11:54:57 jcgs>
+;;; Time-stamp: <2021-11-14 18:36:12 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -19,7 +19,7 @@
 
 ;; todo: look at using abbreviate-file-name and directory-abbrev-alist for this
 
-(defvar reverse-environment-variables '("HOME" "COMMON" "GATHERED")
+(defvar reverse-environment-variables '("HOME" "SYNCED" "GATHERED")
   "Environment variables that we want unsubstitute-in-file-name to unsub.")
 
 (defvar reverse-env-directories-alist nil

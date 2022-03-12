@@ -1,5 +1,5 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2020-11-11 20:56:07 jcgs>
+;;; Time-stamp: <2021-11-14 18:31:12 jcgs>
 
 (require 'jcgs-use-package)
 
@@ -26,14 +26,14 @@ Also shows diary and to-do list." t)
 	      ([ M-C-f11 ] . vm-continue-composing-message)
 	      (vm "vm" "Run the VM mail reader" t)
 	      ("~/vm" . vm-mode)
-	      ("$COMMON/vm" . vm-mode))
+	      ("$SYNCED/vm" . vm-mode))
 	     (setq vm-mutable-frames nil
 		   bbdb-completion-type 'primary-or-name
 		   read-mail-command 'vm
 		   vm-folder-directory (if (file-directory-p
 					    (expand-file-name "~/vm/"))
 					   (expand-file-name "~/vm/")
-					 (substitute-in-file-name "$COMMON/vm/"))
+					 (substitute-in-file-name "$SYNCED/vm/"))
 		   vm-primary-inbox (expand-file-name "john" vm-folder-directory)
 		   my-summary-name (concat (file-name-nondirectory vm-primary-inbox) " Summary")
 		   vm-imap-messages-per-session 128

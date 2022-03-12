@@ -1,5 +1,5 @@
 ;;;; type-break-log.el
-;;; Time-stamp: <2004-06-18 15:17:09 john>
+;;; Time-stamp: <2021-11-14 18:24:30 jcgs>
 
 (provide 'type-break-log)
 (require 'handsfree-read-number)
@@ -221,7 +221,7 @@
 (defun type-break-log-to-spreadsheet ()
   "Output the typing break info to a spreadsheet import format"
   (interactive)
-  (find-file (substitute-in-file-name "$COMMON/www/work/log.csv"))
+  (find-file (substitute-in-file-name "$SYNCED/www/work/log.csv"))
   (erase-buffer)
   (dolist (entry (type-break-log-points-for-plotting))
     (dolist (cell entry)

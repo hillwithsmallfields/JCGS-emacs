@@ -1,6 +1,6 @@
 ;;; annotation.el --- Manage annotation of source files in projects
 
-;; Copyright (C) 2011  John Sturdy
+;; Copyright (C) 2011, 2021  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: docs
@@ -76,7 +76,8 @@ different projects.")
 
 (add-hook 'annotation-directory-description-functions
 	  (lambda (dir)
-	    (if (string-match "common/emacs/\\([^/]+\\)/" dir)
+	    (if (string-match (substitute-in-file-name
+                               "$SYNCED/emacs/\\([^/]+\\)/") dir)
 		(concat "emacs/" (match-string 1 dir))
 		nil)))
 

@@ -1,5 +1,5 @@
 ;;;; relocate-page.el -- move a page, adjusting (local) URLs in it
-;;; Time-stamp: <2005-01-18 12:05:56 john>
+;;; Time-stamp: <2021-11-14 18:30:58 jcgs>
 
 (provide 'relocate-page)
 (require 'cl)
@@ -92,8 +92,8 @@ sNew URL template: ")
 ;;; sample big move
 (defun dothemove ()
   (interactive)
-  (let ((fromdir  "$COMMON/www.acedb.org/Development/")
-        (todir "$COMMON/www.acedb.org/Downloads/release-notes/"))
+  (let ((fromdir  "$SYNCED/www.acedb.org/Development/")
+        (todir "$SYNCED/www.acedb.org/Downloads/release-notes/"))
     (dolist (page (directory-files fromdir nil "release.notes.*.shtml" t))
       (when (string-match "release.notes.\\(......\\).shtml" page)
 	(let* ((usedname (substring page (match-beginning 1) (match-end 1)))
@@ -111,8 +111,8 @@ sNew URL template: ")
 
 (defun move-release-notes-again ()
   (interactive)
-  (let ((fromdir "$COMMON/www.acedb.org/htdocs/Downloads/release-notes/")
-        (todir "$COMMON/www.acedb.org/htdocs/Software/Downloads/release-notes/"))
+  (let ((fromdir "$SYNCED/www.acedb.org/htdocs/Downloads/release-notes/")
+        (todir "$SYNCED/www.acedb.org/htdocs/Software/Downloads/release-notes/"))
     (dolist (page (directory-files fromdir nil ".shtml$" t))
       (let ((fromfile (expand-file-name page fromdir))
 	    (tofile (expand-file-name page todir)))

@@ -1,6 +1,6 @@
 ;;;; bbdb-export-lists.el -- output various lists from my bbdb
 ;;; started by John Sturdy, 1999-01-07
-;;; Time-stamp: <2019-02-23 19:50:35 jcgs>
+;;; Time-stamp: <2021-11-14 18:24:30 jcgs>
 
 (provide 'bbdb-export-lists)
 (require 'bbdb-iterators)
@@ -442,7 +442,7 @@ according to the second array slot of each of them."
 (defun bbdb:make-family-contact-page ()
   "Make a web page containing family contact details."
   (interactive)
-  (let ((file (substitute-in-file-name "$COMMON/www/famcon.html")))
+  (let ((file (substitute-in-file-name "$SYNCED/www/famcon.html")))
     (find-file file)
     (erase-buffer)
     (let ((family (bbdb:extract-info 'phone-list "family" 'bbdb:record-as-family))
@@ -511,7 +511,7 @@ according to the second array slot of each of them."
 (defun bbdb:make-birthdays-list ()
   "Make my birthdays list."
   (interactive)
-  (find-file (substitute-in-file-name "$COMMON/var/birthdays"))
+  (find-file (substitute-in-file-name "$SYNCED/var/birthdays"))
   (erase-buffer)
   (let ((people nil))
     (bbdb:apply-to-records-defining
@@ -546,7 +546,7 @@ according to the second array slot of each of them."
 (defun bbdb:make-birth-dates-list ()
   "Make a list of birth dates."
   (interactive)
-  (find-file (substitute-in-file-name "$COMMON/var/birth-dates"))
+  (find-file (substitute-in-file-name "$SYNCED/var/birth-dates"))
   (erase-buffer)
   (let ((people nil))
     (bbdb:apply-to-records-defining

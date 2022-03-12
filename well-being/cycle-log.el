@@ -1,4 +1,4 @@
-;;; Time-stamp: <2006-08-02 12:06:09 john>
+;;; Time-stamp: <2021-11-14 18:31:02 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -25,7 +25,7 @@ sDistance:
 sComment: ")
   (if (string-match "^1:[0-5][0-9]$" etime)
       (setq etime (concat etime ":00")))
-  (find-file (substitute-in-file-name "$COMMON/var/cycle-log"))
+  (find-file (substitute-in-file-name "$SYNCED/var/cycle-log"))
   (goto-char (point-max))
   (let ((date (decode-time)))
     (insert "(\"" (format "%04d-%02d-%02d" (nth 5 date) (nth 4 date) (nth 3 date)) "\" "

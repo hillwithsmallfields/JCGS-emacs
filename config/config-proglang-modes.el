@@ -1,7 +1,7 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2021-03-20 14:55:18 jcgs>
+;;; Time-stamp: <2022-01-18 15:07:47 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -267,6 +267,7 @@ When started, runs `scala-mode-hook'." t)
   (when (file-directory-p clojure-mode-directory)
     (add-to-list 'load-path clojure-mode-directory)
     (add-to-list 'auto-mode-alist (cons "\\.clj" 'clojure-mode))
+    (add-to-list 'auto-mode-alist (cons "\\.cljs" 'clojurescript-mode))
     (autoload 'clojure-mode "clojure-mode"
       "Major mode for editing Clojure code." t)
     (let ((open-projects-cider-directory ; https://github.com/clojure-emacs/cider.git
@@ -307,5 +308,18 @@ When started, runs `scala-mode-hook'." t)
   (set (make-local-variable 'compile-command) "cabal build "))
 
 (add-hook 'haskell-mode-hook 'jcgs/haskell-mode-setup)
+
+;;;;;;;;;;
+;; rust ;;
+;;;;;;;;;;
+
+(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/rust-lang/rust-mode"))
+
+(autoload 'rust-mode "rust-mode"
+  "Major mode for Rust code.
+
+\\{rust-mode-map}" t)
+
+(add-to-list 'auto-mode-alist (cons "\\.rs\\'" 'rust-mode))
 
 ;;;; config-proglang-modes.el ends here

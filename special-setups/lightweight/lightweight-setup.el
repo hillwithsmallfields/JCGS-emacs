@@ -1,13 +1,13 @@
-;;; Time-stamp: <2013-10-15 12:02:47 johnstu>
+;;; Time-stamp: <2021-11-14 18:34:21 jcgs>
 
 (setq stack-trace-on-error t
       message-log-max t)
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 (unless (getenv "GATHERED")
   (setenv "GATHERED" "j:/users/jcgs/library"))
 
-(message "COMMON=%S GATHERED=%S" (getenv "COMMON") (getenv "GATHERED"))
+(message "COMMON=%S GATHERED=%S" (getenv "SYNCED") (getenv "GATHERED"))
 
 (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/emacs-versor/lisp"))
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/html-helper-mode/"))

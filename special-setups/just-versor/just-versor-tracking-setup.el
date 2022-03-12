@@ -1,11 +1,11 @@
-;;; Time-stamp: <2006-07-07 14:49:04 john>
+;;; Time-stamp: <2021-11-14 18:34:46 jcgs>
 
 (setq stack-trace-on-error t
       message-log-max t)
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 
-(add-to-list 'load-path (substitute-in-file-name "$COMMON/open-projects/emacs-versor/lisp"))
+(add-to-list 'load-path (substitute-in-file-name "$SYNCED/open-projects/emacs-versor/lisp"))
 
 (global-font-lock-mode)
 
@@ -35,7 +35,7 @@
 		(latex-mode "structural" "exprs")
 		)))
 
-(setq recorded-demo-html-directory (substitute-in-file-name "$COMMON/open-projects/emacs-versor/htdocs/new-demo"))
+(setq recorded-demo-html-directory (substitute-in-file-name "$SYNCED/open-projects/emacs-versor/htdocs/new-demo"))
 
 (defun take-screenshots ()
   (interactive)

@@ -1,5 +1,5 @@
 ;;;; misc-patchup.el -- various mending of pages
-;;; Time-stamp: <2004-11-20 12:06:30 jcgs>
+;;; Time-stamp: <2021-11-14 18:30:58 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -122,6 +122,6 @@ Returns the result of the re-search-forward that succeeded."
 
 
 
-$COMMON
+$SYNCED
 
 ;;; end of misc-patchup.el

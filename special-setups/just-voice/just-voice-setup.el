@@ -1,11 +1,11 @@
 ;;;; just-voice-setup.el
-;;; Time-stamp: <2013-10-15 12:22:08 johnstu>
+;;; Time-stamp: <2021-11-14 18:34:17 jcgs>
 
 (require 'cl)
 
 (setq stack-trace-on-error t
       message-log-max t)
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 (unless (getenv "GATHERED")
   (setenv "GATHERED" "j:/users/jcgs/library"))
@@ -49,7 +49,7 @@
   (message "just a message: %S" (substitute-in-file-name "$GATHERED/emacs/voice/elisp/vr-mode-commands.el"))
   (load-and-find-file (substitute-in-file-name "$GATHERED/emacs/voice/elisp/vr-mode-commands.el"))
 
-;   (add-lispdir "$COMMON/emacs/my-extensions-to-packages/voice")
+;   (add-lispdir "$SYNCED/emacs/my-extensions-to-packages/voice")
 ;   ;; (add-lispdir "$GATHERED/emacs/voice/else")
 ;   (add-lispdir "$GATHERED/emacs/voice/elisp")
 ;   ;; (add-lispdir "$GATHERED/emacs/voice/voicegrip/EmacsMacros")

@@ -1,9 +1,9 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2020-05-29 11:52:22 jsturdy>
+;;; Time-stamp: <2021-12-20 11:48:11 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
-(autoload 'smart-repeat-complex-command "smart-repeat" 
+(autoload 'smart-repeat-complex-command "smart-repeat"
   "Like repeat-complex-command, but may skip the first one if it would do nothing."
   t)
 
@@ -58,12 +58,50 @@ directory."
   ;;   (rplacd function-key-map (cdr holder)))
   )
 
+(defun universal-argument-n (arg n)
+  "Set or multiply the prefix ARG by a fixed factor of N."
+  (prefix-command-preserve-state)
+  (setq prefix-arg (cond ((integerp arg)
+                          (* arg n))
+                         (t n))))
+
+(defun universal-prefix-two (arg)
+  "Set or multiply the prefix ARG by two."
+  (interactive "P")
+  (universal-argument-n arg 2))
+
+(defun universal-prefix-three (arg)
+  "Set or multiply the prefix ARG by three."
+  (interactive "P")
+  (universal-argument-n arg 3))
+
+(defun universal-prefix-five (arg)
+  "Set or multiply the prefix ARG by five."
+  (interactive "P")
+  (universal-argument-n arg 5))
+
+(defun toggle-narrow-to-defun (&optional include-comments)
+  "Toggle whether we are narrowed to a defun."
+  (interactive (list narrow-to-defun-include-comments))
+  (let ((begin (point-min))
+        (end (point-max)))
+    (if (save-restriction
+          (widen)
+          (and (= (point-min) begin)
+               (= (point-max) end)))
+        (narrow-to-defun include-comments)
+      (widen))))
+
+(global-set-key "\M-\"" 'insert-quotes)
+(global-set-key "\M-[" 'insert-square-brackets)
+
 (global-set-key "\C-x\C-b" 'electric-buffer-list)
 (global-set-key "\C-x\C-y" 'browse-yank)
 (global-set-key "\C-cd" 'ediff-buffers)
 (global-set-key "\C-cf" 'find-file-at-point)
 (global-set-key "\C-cl" 'find-place)
 (global-set-key "\C-cL" 'find-place-forward)
+(global-set-key "\C-cx" 'finances-enter) ; mnemonic eXpenditure
 (global-set-key "\C-x\M-o" 'other-frame)
 
 (defun grep-this (command-args)
@@ -153,6 +191,9 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-map-1 "q" 'revert-quickly)
   (define-key jcgs-map-1 "r" 'remember)
 
+  ;; (eval-after-load "org-mode"
+  ;;   (define-key org-mode-map "\C-cb" 'jcgs/org-buy-for-project-and-block))
+  
   (define-key jcgs-task-tracking-map "a" 'jcgs/org-start-answering)
   (define-key jcgs-task-tracking-map "b" 'jcgs/org-start-break-or-browsing)
   (define-key jcgs-task-tracking-map "c" 'org-capture)
@@ -185,8 +226,8 @@ Returns how many buffers it brought up." t)
   (global-set-key [   C-f1 ] 'delete-other-windows)
   (global-set-key [ C-M-f1 ] 'delete-window)
 
-  (global-set-key [     f2 ] 'other-window)
-  (global-set-key [   C-f2 ] 'split-window-horizontally)
+  ;; (global-set-key [     f2 ] 'other-window)
+  ;; (global-set-key [   C-f2 ] 'split-window-horizontally)
 
   (global-set-key [     f3 ] 'other-frame)
 
@@ -249,6 +290,127 @@ This copies some awkward M- bindings to C-."
   (global-set-key (kbd "s-}") 'exit-recursive-edit)
   (global-set-key (kbd "s-n") 'sexp-preceding-next-parenthesis)
   (global-set-key (kbd "s-o") 'other-window))
+
+(defvar jcgs-grid-upper-map (make-keymap)
+  "Keymap for the upper half of my grid keyboard.")
+
+(fset 'jcgs-grid-upper-map jcgs-grid-upper-map)
+
+(defvar jcgs-grid-lower-map (make-keymap)
+  "Keymap for the lower half of my grid keyboard.")
+
+(fset 'jcgs-grid-lower-map jcgs-grid-lower-map)
+
+(defvar jcgs-org-grid-upper-map (make-keymap)
+  "Keymap for the upper half of my grid keyboard in org-mode.")
+
+(fset 'jcgs-org-grid-upper-map jcgs-org-grid-upper-map)
+
+(defvar jcgs-org-grid-lower-map (make-keymap)
+  "Keymap for the lower half of my grid keyboard in org-mode.")
+
+(fset 'jcgs-org-grid-lower-map jcgs-org-grid-lower-map)
+
+(defun jcgs-keys:setup-grid-keyboard-map ()
+  "Bind the keys for the grid command keyboard."
+  (interactive)
+  (global-set-key [ S-f2 ] 'jcgs-grid-upper-map)
+
+  (define-key jcgs-grid-upper-map "A" 'transpose-sexp)
+  (define-key jcgs-grid-upper-map "B" 'copy-sexp)
+  (define-key jcgs-grid-upper-map "C" 'kill-sexp)
+  (define-key jcgs-grid-upper-map "D" 'mark-sexp)
+
+  (define-key jcgs-grid-upper-map "I" 'backward-up-list)
+  (define-key jcgs-grid-upper-map "J" 'backward-sexp)
+  (define-key jcgs-grid-upper-map "K" 'forward-sexp)
+  (define-key jcgs-grid-upper-map "L" 'down-list)
+
+  (define-key jcgs-grid-upper-map "Q" 'toggle-narrow-to-defun)
+  (define-key jcgs-grid-upper-map "R" 'beginning-of-defun)
+  (define-key jcgs-grid-upper-map "S" 'end-of-defun)
+  (define-key jcgs-grid-upper-map "T" 'mark-defun)
+
+  (define-key jcgs-grid-upper-map "E" 'delete-backward-char)
+  (define-key jcgs-grid-upper-map "F" 'delete-blank-lines)
+  (define-key jcgs-grid-upper-map "G" 'just-one-space)
+  (define-key jcgs-grid-upper-map "H" 'delete-horizontal-space)
+
+  (define-key jcgs-grid-upper-map "M" 'negative-argument)
+  (define-key jcgs-grid-upper-map "N" 'universal-prefix-two)
+  (define-key jcgs-grid-upper-map "O" 'universal-prefix-three)
+  (define-key jcgs-grid-upper-map "P" 'universal-prefix-five)
+
+  (define-key jcgs-grid-upper-map "U" 'undo)
+  (define-key jcgs-grid-upper-map "V" 'smart-repeat-complex-command)
+  (define-key minibuffer-local-map [ S-f2 V ] 'previous-history-element)
+  (define-key jcgs-grid-upper-map "W" 'eval-defun)
+  (define-key jcgs-grid-upper-map "X" 'newline)
+
+  (global-set-key [ f2 ] 'jcgs-grid-lower-map)
+  
+  (define-key jcgs-grid-lower-map "a" 'next-parentheses-type)
+  (define-key jcgs-grid-lower-map "b" 'raise-sexp)
+  (define-key jcgs-grid-lower-map "c" 'insert-parentheses)
+  (define-key jcgs-grid-lower-map "d" 'insert-quotes)
+
+  (define-key jcgs-grid-lower-map "i" 'wander-yank)
+  (define-key jcgs-grid-lower-map "j" 'wander)
+  (define-key jcgs-grid-lower-map "k" 'exit-recursive-edit)
+  (define-key jcgs-grid-lower-map "l" 'pick-up-sexp-at-point)
+
+  (define-key jcgs-grid-lower-map "q" 'kill-region)
+  (define-key jcgs-grid-lower-map "r" 'kill-ring-save)
+  (define-key jcgs-grid-lower-map "s" 'yank)
+  (define-key jcgs-grid-lower-map "t" 'yank-pop)
+
+  (define-key jcgs-grid-lower-map "e" 'backward-sentence)
+  (define-key jcgs-grid-lower-map "f" 'backward-word)
+  (define-key jcgs-grid-lower-map "g" 'forward-word)
+  (define-key jcgs-grid-lower-map "h" 'forward-sentence)
+
+  (define-key jcgs-grid-lower-map "m" 'electric-buffer-list)
+  (define-key jcgs-grid-lower-map "n" 'next-buffer)
+  (define-key jcgs-grid-lower-map "o" 'other-window)
+  (define-key jcgs-grid-lower-map "p" 'other-frame)
+
+  (define-key jcgs-grid-lower-map "u" 'beginning-of-buffer)
+  (define-key jcgs-grid-lower-map "v" 'move-in-or-out-of-string)
+  (define-key jcgs-grid-lower-map "w" 'sexp-preceding-next-parenthesis)
+  (define-key jcgs-grid-lower-map "x" 'end-of-buffer)
+
+  (require 'org)
+  (define-key org-mode-map [ S-f2 ] 'jcgs-org-grid-upper-map)
+  (define-key org-mode-map [ f2 ] 'jcgs-org-grid-lower-map)
+
+  (define-key jcgs-org-grid-upper-map "A" 'org-ctrl-c-ctrl-c)
+  (define-key jcgs-org-grid-upper-map "B" 'org-metaup)
+  (define-key jcgs-org-grid-upper-map "C" 'org-metadown)
+  (define-key jcgs-org-grid-upper-map "D" 'org-todo)
+
+  (define-key jcgs-org-grid-upper-map "I" 'outline-up-heading)
+  (define-key jcgs-org-grid-upper-map "J" 'org-backward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "K" 'org-forward-heading-same-level)
+  (define-key jcgs-org-grid-upper-map "L" 'next-line)
+
+  (define-key jcgs-org-grid-upper-map "Q" 'org-shiftup)
+  (define-key jcgs-org-grid-upper-map "R" 'org-shiftleft)
+  (define-key jcgs-org-grid-upper-map "S" 'org-shiftright)
+  (define-key jcgs-org-grid-upper-map "T" 'org-shiftdown)
+
+  (define-key jcgs-org-grid-lower-map "a" 'org-demote-subtree)
+  (define-key jcgs-org-grid-lower-map "b" 'org-demote)
+  (define-key jcgs-org-grid-lower-map "c" 'org-promote)
+  (define-key jcgs-org-grid-lower-map "d" 'org-promote-subtree)
+
+  (define-key jcgs-org-grid-lower-map "g" 'org-clock-in)
+  (define-key jcgs-org-grid-lower-map "h" 'org-clock-out)
+
+  (define-key jcgs-org-grid-lower-map "m" 'org-set-property)
+
+  (define-key jcgs-org-grid-lower-map "w" 'org-insert-heading
+  (define-key jcgs-org-grid-lower-map "x" 'org-insert-todo-heading)
+  )
 
 (require 'structure-edit)
 (jcgs-keys:jcgs-function-keys)

@@ -1,5 +1,5 @@
 ;;;; list-all-files.el -- list emacs source files
-;;; Time-stamp: <2007-08-13 18:01:29 john>
+;;; Time-stamp: <2021-11-14 18:24:26 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -33,7 +33,7 @@ sPattern: ")
 
 (defun fill-all-files ()
   (interactive)
-  (find-file "~/common/www/computing/emacs/source-notes.html")
+  (find-file (substitute-in-file-name "$SYNCED/www/computing/emacs/source-notes.html"))
   (goto-char (point-min))
   (while (re-search-forward "<a href=\"\\(.+\\.html\\)\">\\(.+\\)/</a>"
 			    (point-max) t)

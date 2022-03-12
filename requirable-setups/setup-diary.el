@@ -1,4 +1,4 @@
-;;; Time-stamp: <2006-10-31 15:21:59 john>
+;;; Time-stamp: <2021-11-14 18:31:27 jcgs>
 
 ;; (add-hook 'diary-mode-hook 'mulvo-decorate-words-buffer)
 
@@ -7,7 +7,7 @@
       diary-display-hook 'fancy-diary-display
       list-diary-entries-hook '(include-other-diary-files sort-diary-entries)
       all-christian-calendar-holidays t
-      diary-file (substitute-in-file-name "$COMMON/var/diary")
+      diary-file (substitute-in-file-name "$SYNCED/var/diary")
 )
 
 ;; (european-calendar)

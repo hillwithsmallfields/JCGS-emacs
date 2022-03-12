@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-10-26 19:54:29 jcgs>
+;;; Time-stamp: <2022-03-11 21:25:03 jcgs>
 
 (setq debug-on-error t)
 
@@ -21,7 +21,7 @@
 )
 
 (if (not (file-directory-p org-directory))
-    (message "org-directory %s does not exist", org-directory)
+    (message "org-directory %s does not exist" org-directory)
 
   (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
   (message "org-agenda-files is %S" org-agenda-files)
@@ -45,7 +45,7 @@
 
 (when (at-home-p)
   (require 'dated-csv)
-  (let ((health-dir (substitute-in-file-name "$COMMON/health")))
+  (let ((health-dir (substitute-in-file-name "$SYNCED/health")))
     (add-to-list 'auto-mode-alist (cons (concat health-dir ".+\\.csv") 'dated-csv-mode))
     (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv"))
       (find-file (expand-file-name file health-dir))
@@ -58,7 +58,7 @@
 		 t))
   (setq org-reading-files (cons (substitute-in-file-name "$ORG/guide.org")
 				(let ((reading-dir (substitute-in-file-name
-						    "$COMMON/noticeboard-reading")))
+						    "$SYNCED/noticeboard-reading")))
 				  (mapcar (lambda (file)
 					    (expand-file-name file reading-dir))
 					  '("advices-and-queries.org"))))))

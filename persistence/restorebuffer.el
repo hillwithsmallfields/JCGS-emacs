@@ -1,4 +1,4 @@
-;;; Time-stamp: <2013-10-15 12:22:07 johnstu>
+;;; Time-stamp: <2021-11-14 18:24:27 jcgs>
 
 (provide 'restorebuffer)
 (require 'load-directory)		; implicit requirement
@@ -16,7 +16,7 @@
 
 (defun restorebuffer-show-dirs ()
   "Show what the path etc are while restoring files from previous session."
-  (message "common while restoring buffers is %S" (getenv "COMMON"))
+  (message "synced while restoring buffers is %S" (getenv "SYNCED"))
   (message "home while restoring buffers is %S" (getenv "HOME"))
   (message "load-path while restoring buffers is %S" load-path))
 

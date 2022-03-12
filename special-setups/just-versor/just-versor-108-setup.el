@@ -1,8 +1,8 @@
-;;; Time-stamp: <2006-07-03 16:44:18 john>
+;;; Time-stamp: <2021-11-14 18:34:37 jcgs>
 
 (setq stack-trace-on-error t
       message-log-max t)
-(unless (getenv "COMMON")
+(unless (getenv "SYNCED")
   (setenv "COMMON" "i:/common"))
 
 (add-to-list 'load-path (substitute-in-file-name "~/versor-versions/emacs-versor_1.08/lisp/"))

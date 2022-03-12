@@ -1,6 +1,6 @@
 (setq stack-trace-on-error t)
 
-(setenv "COMMON" "i:/common")
+(setenv "SYNCED" "i:/common")
 (setenv "GATHERED" "j:/users/jcgs/library")
 
 (mapcar (lambda (dir)

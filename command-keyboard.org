@@ -1,0 +1,73 @@
+#+TITLE: Commands to put on an extra grid keyboard
+
+* structured (upper left white group)
+** movement by expression (upper left white group top row)
+*** backward-up-list
+*** backward-sexp
+*** forward-sexp
+*** down-list
+** action by expression (upper left white group middle row)
+*** mark-sexp
+*** copy-sexp
+*** kill-sexp
+*** transpose-sexp
+** defuns (upper left white group bottom row)
+*** mark-defun
+*** beginning-of-defun
+*** end-of-defun
+*** narrow-to-defun
+
+* stacked movement and copying (lower left black group top row)
+** wander-yank
+** recursive-edit
+** exit-recursive-edit
+** pick-up-sexp-at-point
+
+* expression editing (lower left black group middle row)
+** change parentheses
+** raise-sexp
+** insert-parentheses
+** insert-quotes
+   
+* kill-ring (lower left black group bottom row)
+** kill-region
+** kill-ring-save
+** yank
+** yank-pop
+
+* misc (upper right black group top row)
+** delete-horizontal-space
+** delete-backward-char
+** just-one-space
+** delete-blank-lines
+
+* prefix multipliers (upper right black group middle row)
+** times minus one
+** times two
+** times three
+** times five
+
+* command history (upper right black group bottom row)
+** undo
+** repeat-complex-command
+** eval-defun
+** enter
+
+* text movement (lower right white group top row)
+** backward-sentence
+** backward-word
+** forward-word
+** forward-sentence
+   
+* windows and buffers (lower right white group middle row)
+** other-window
+** other-frame
+** next-buffer
+** electric-buffer-list
+
+* other movement (lower right white group bottom row)
+** beginning-of-buffer
+** move in or out of quotes
+** sexp-preceding-next-parenthesis
+** end-of-buffer
+
