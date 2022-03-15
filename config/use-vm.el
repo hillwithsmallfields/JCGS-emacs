@@ -1,10 +1,11 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2021-11-14 18:31:12 jcgs>
+;;; Time-stamp: <2022-03-15 10:44:51 jcgs>
 
 (require 'jcgs-use-package)
 
 (add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
 
+(when (file-directory-p "$GATHERED/emacs/vm/vm-8.1.1")
 (jcgs/use-package vm
 	     ;; "$GATHERED/emacs/vm/vm-7.19"
 	     ;; "$GATHERED/emacs/vm/vm-8.0.11"
@@ -344,7 +345,7 @@ message contains an appointment, don't make a diary entry."
 		(save-buffer))))
 	  (throw 'finished t)))))
   nil)
-
+)
 
 
 ;;; end of use-vm.el
