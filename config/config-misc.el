@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2021-10-04 19:41:54 jcgs>
+;;; Time-stamp: <2022-03-15 10:21:29 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -566,9 +566,10 @@ Done because on these high-resolution screens, Emacs comes up with something ver
 
 ;;;; Load finances entry
 
-(when (or t (at-home-p))
-  (load-file (substitute-in-file-name
-              "$MY_PROJECTS/qs/financial/finances-entry.el")))
+(let ((fin-entry-file "$MY_PROJECTS/qs/financial/finances-entry.el"))
+  (when (and (or t (at-home-p))
+             (file-exists-p fin-entry-file))
+    (load-file (substitute-in-file-name fin-entry-file))))
 
 ;;; end of config-misc.el
 
