@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2021-11-14 18:34:13 jcgs>
+;;; Time-stamp: <2021-12-21 12:02:59 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
 
@@ -478,7 +478,7 @@ The nearest FILE is used."
 ;;;; Mail
 
 (setq mail-self-blind t
-      user-mail-address "jsturdy@ccsl.com")
+      user-mail-address "jcg.sturdy@gmail.com")
 
 ;;;; Comint
 
