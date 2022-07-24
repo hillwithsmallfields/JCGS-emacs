@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2021-10-26 19:50:05 jcgs>
+;;; Time-stamp: <2022-07-24 17:53:48 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -169,6 +169,12 @@
 (defvar org-reading-files nil
   "Files to put on my reading and reference list.")
 
+(defvar org-health-directory
+  (expand-file-name "health" (getenv "SYNCED")))
+
+(defvar org-tracking-files
+  '("weight" "peak-flow" "temperature"))
+
 (defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
   (interactive)
@@ -185,6 +191,11 @@
       (let ((title-string (format "** %s\n" (second agenda-command))))
 	(put-text-property 0 (length title-string) 'command-key (first agenda-command) title-string)
 	(insert title-string)))
+    (insert "* Tracking\n")
+    (org-agenda-kiosk-insert-file-index
+     (mapcar (lambda (name)
+               (expand-file-name (concat name ".csv") org-health-directory))
+             org-tracking-files))
     (insert "* Reading\n")
     (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
