@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2022-07-24 17:53:48 jcgs>
+;;; Time-stamp: <2022-07-24 18:58:33 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -49,6 +49,20 @@
 	  (show-children 1)
 	  (goto-char child-level))
       (org-show-entry))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Minor mode for getting back to top level ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar org-agenda-return-to-top-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [ left ] 'org-agenda-kiosk-files-list)
+    map))
+
+(define-minor-mode org-agenda-return-to-top-mode
+  "Minor mode with means to get back to the top of the tree."
+  " agenda return"
+  'org-agenda-return-to-top-mode-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode for use over org-mode ;;
@@ -219,6 +233,7 @@
 	(if (file-exists-p file)
 	    (progn
 	      (find-file file)
+              (org-agenda-return-to-top-mode 1)
 	      (org-overview))
 	  (error "File %s is missing" file))
       (let ((command-key (get-text-property (point) 'command-key)))
@@ -226,6 +241,7 @@
 	    (progn
 	      (message "Preparing agenda...")
 	      (org-agenda nil command-key) ; todo: put it in a new mode that will define the keys, including one to get back to here, like using org-agenda-kiosk-on
+              (org-agenda-return-to-top-mode 1)
 	      (message "Preparing agenda... done"))
 	  (error "Neither file nor agenda specified here"))))))
 
