@@ -130,6 +130,9 @@
 
 (message "Setting up python-mode")
 
+(defvar jcgs/use-python-flymake nil
+  "Whether to use flymake for python.")
+
 (defun jcgs/pylint-available ()
   "Return whether pylint is available."
   (not (zerop (length (shell-command-to-string "which epylint")))))
@@ -138,7 +141,7 @@
   "My hook for setting up python mode."
   (message "In jcgs/python-mode-hook for buffer=%S buffer-read-only=%S file=%S directory=%S" (current-buffer) buffer-read-only (buffer-file-name) default-directory)
   (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t)
-  (when (jcgs/pylint-available)
+  (when (and jcgs/use-python-flymake (jcgs/pylint-available))
     (unless buffer-read-only
       (require 'flymake)
       ;; (setq flymake-log-level 3)
@@ -156,10 +159,11 @@
 		      (file-name-directory buffer-file-name))))
     (list "epylint" (list local-file))))
 
-(eval-after-load "flymake"
-  '(add-to-list 'flymake-allowed-file-name-masks
-		;; from http://www.emacswiki.org/emacs/?action=browse;oldid=PythonMode;id=PythonProgrammingInEmacs#toc13
-		'("\\.py\\'" flymake-pylint-init)))
+(when jcgs/use-python-flymake
+  (eval-after-load "flymake"
+    '(add-to-list 'flymake-allowed-file-name-masks
+		  ;; from http://www.emacswiki.org/emacs/?action=browse;oldid=PythonMode;id=PythonProgrammingInEmacs#toc13
+		  '("\\.py\\'" flymake-pylint-init))))
 
 (add-hook 'python-mode-hook 'jcgs/python-mode-hook)
 
