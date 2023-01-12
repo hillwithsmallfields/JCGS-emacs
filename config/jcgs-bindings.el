@@ -1,5 +1,5 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2021-12-20 11:48:11 jcgs>
+;;; Time-stamp: <2022-06-14 20:24:42 jcgs>
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 
@@ -408,7 +408,7 @@ This copies some awkward M- bindings to C-."
 
   (define-key jcgs-org-grid-lower-map "m" 'org-set-property)
 
-  (define-key jcgs-org-grid-lower-map "w" 'org-insert-heading
+  (define-key jcgs-org-grid-lower-map "w" 'org-insert-heading)
   (define-key jcgs-org-grid-lower-map "x" 'org-insert-todo-heading)
   )
 
