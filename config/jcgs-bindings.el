@@ -1,5 +1,7 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
-;;; Time-stamp: <2022-06-14 20:24:42 jcgs>
+
+;;; Time-stamp: <2022-07-24 18:24:44 jcgs>
+
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
 

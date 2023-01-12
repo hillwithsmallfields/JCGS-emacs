@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2021-11-14 18:31:18 jcgs>
+;;; Time-stamp: <2022-03-11 21:25:03 jcgs>
 
 (setq debug-on-error t)
 
@@ -21,7 +21,7 @@
 )
 
 (if (not (file-directory-p org-directory))
-    (message "org-directory %s does not exist", org-directory)
+    (message "org-directory %s does not exist" org-directory)
 
   (load-file (expand-file-name "config/config-org-mode.el" user-emacs-directory))
   (message "org-agenda-files is %S" org-agenda-files)

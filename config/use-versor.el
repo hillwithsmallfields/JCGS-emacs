@@ -1,12 +1,12 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2020-11-11 20:56:08 jcgs>
+;;; Time-stamp: <2021-12-03 21:14:52 jcgs>
 
 (require 'jcgs-use-package)
 
 (setq joystick-graphical nil)
 
 (when (and (or (file-exists-p "/dev/js0") (file-exists-p "/dev/input/js0"))
-	   ;; (or (file-exists-p "/dev/js1") (file-exists-p "/dev/input/js1"))
+	   (or (file-exists-p "/dev/js1") (file-exists-p "/dev/input/js1"))
 	   )
   (add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/emacs-versor/joylisp/"))
   (when (and (or (file-exists-p "/dev/js0") (file-exists-p "/dev/input/js0"))
