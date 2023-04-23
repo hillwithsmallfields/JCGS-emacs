@@ -1,6 +1,6 @@
 ;;; config-ergonomics.el --- set up ergonomic improvements  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022  John Sturdy
+;; Copyright (C) 2022, 2023  John Sturdy
 
 ;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: convenience, extensions
@@ -40,31 +40,32 @@
 		      :foreground "#404148"
 		      :background "#efefef"))
 
-(let ((god-mode-dir (substitute-in-file-name "$OPEN_PROJECTS/github.com/emacsorphanage/god-mode")))
-  (when (file-directory-p god-mode-dir)
+(when nil
+  (let ((god-mode-dir (substitute-in-file-name "$OPEN_PROJECTS/github.com/emacsorphanage/god-mode")))
+    (when (file-directory-p god-mode-dir)
 
-    (setq god-mode-enable-function-key-translation nil)
+      (setq god-mode-enable-function-key-translation nil)
 
-    (add-to-list 'load-path god-mode-dir)
-    (require 'god-mode)
+      (add-to-list 'load-path god-mode-dir)
+      (require 'god-mode)
 
-    (global-set-key (kbd "<escape>") #'god-mode-all)
-    (require 'god-mode-isearch)
+      (global-set-key (kbd "<escape>") #'god-mode-all)
+      (require 'god-mode-isearch)
 
-    (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-    (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-    (define-key god-local-mode-map (kbd "z") #'repeat)
-    (define-key god-local-mode-map (kbd "i") #'god-local-mode)
-    (global-set-key (kbd "C-x C-1") #'delete-other-windows)
-    (global-set-key (kbd "C-x C-2") #'split-window-below)
-    (global-set-key (kbd "C-x C-3") #'split-window-right)
-    (global-set-key (kbd "C-x C-0") #'delete-window)
-    (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-    (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
-    (add-hook 'god-mode-enabled-hook 'jcgs/god-mode-enabled-function)
-    (add-hook 'god-mode-disabled-hook 'jcgs/god-mode-disabled-function)
-    (let ((c-m (assoc "G" god-mode-alist)))
-      (when c-m (rplaca c-m "h")))))
+      (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
+      (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
+      (define-key god-local-mode-map (kbd "z") #'repeat)
+      (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+      (global-set-key (kbd "C-x C-1") #'delete-other-windows)
+      (global-set-key (kbd "C-x C-2") #'split-window-below)
+      (global-set-key (kbd "C-x C-3") #'split-window-right)
+      (global-set-key (kbd "C-x C-0") #'delete-window)
+      (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+      (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+      (add-hook 'god-mode-enabled-hook 'jcgs/god-mode-enabled-function)
+      (add-hook 'god-mode-disabled-hook 'jcgs/god-mode-disabled-function)
+      (let ((c-m (assoc "G" god-mode-alist)))
+        (when c-m (rplaca c-m "h"))))))
 
 (provide 'config-ergonomics)
 ;;; config-ergonomics.el ends here
