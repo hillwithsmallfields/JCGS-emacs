@@ -79,5 +79,16 @@ With a negative argument, select the Nth from the right."
     (select-window middle-window)
     (switch-to-buffer my-buffer)))
 
+(defun widescreen-move-buffer-right ()
+  "Swap the buffer of the currently selected window with that of the next one."
+  (interactive)
+  (let* ((current-window (selected-window))
+         (my-buffer (window-buffer))
+         (target-window (next-window))
+         (target-buffer (window-buffer target-window)))
+    (switch-to-buffer target-buffer)
+    (select-window target-window)
+    (switch-to-buffer my-buffer)))
+
 (provide 'config-widescreen)
 ;;; config-widescreen.el ends here
