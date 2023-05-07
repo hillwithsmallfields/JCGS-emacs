@@ -54,5 +54,30 @@ is selected."
      (nth (widescreen-index-for-position n n) buffers-in-order) nil))
   (other-window (+ (/ n 2) (if (evenp n) 0 1))))
 
+(defun widescreen-nth-window (n)
+  "Return the Nth window."
+  (let ((w (window-at 0 0)))
+    (dotimes (i n)
+      (setq w (next-window w)))
+    w))
+
+(defun widescreen-select-nth-window (n)
+    "Select the Nth window from the left.
+With a negative argument, select the Nth from the right."
+    (interactive "p")
+    (select-window (window-at 0 0))
+    (other-window n))
+
+(defun widescreen-swap-buffer-to-middle ()
+  "Swap the buffer of the currently selected window with that of the middle one."
+  (interactive)
+  (let* ((current-window (selected-window))
+         (my-buffer (window-buffer))
+         (middle-window (widescreen-nth-window (/ (1- (count-windows)) 2)))
+         (middle-buffer (window-buffer middle-window)))
+    (switch-to-buffer middle-buffer)
+    (select-window middle-window)
+    (switch-to-buffer my-buffer)))
+
 (provide 'config-widescreen)
 ;;; config-widescreen.el ends here
