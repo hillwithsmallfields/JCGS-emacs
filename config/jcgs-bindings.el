@@ -1,6 +1,6 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
 
-;;; Time-stamp: <2022-07-24 18:24:44 jcgs>
+;;; Time-stamp: <2023-03-20 21:04:26 jcgs>
 
 
 (add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
@@ -318,7 +318,7 @@ This copies some awkward M- bindings to C-."
   (interactive)
   (global-set-key [ S-f2 ] 'jcgs-grid-upper-map)
 
-  (define-key jcgs-grid-upper-map "A" 'transpose-sexp)
+  (define-key jcgs-grid-upper-map "A" 'transpose-sexps)
   (define-key jcgs-grid-upper-map "B" 'copy-sexp)
   (define-key jcgs-grid-upper-map "C" 'kill-sexp)
   (define-key jcgs-grid-upper-map "D" 'mark-sexp)
