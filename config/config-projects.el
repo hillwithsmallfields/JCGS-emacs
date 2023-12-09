@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -46,6 +46,10 @@
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
                                      "/client/")
+(make-shell-for-directory-if-present "$MY_PROJECTS/utils"
+                                     "/utils/")
+(make-shell-for-directory-if-present "$MY_PROJECTS/expressive"
+                                     "/expressive/")
 
 (unless (at-work-p)
   (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"
