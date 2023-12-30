@@ -46,10 +46,10 @@
 
 (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
                                      "/client/")
-(make-shell-for-directory-if-present "$MY_PROJECTS/utils"
-                                     "/utils/")
-(make-shell-for-directory-if-present "$MY_PROJECTS/expressive"
-                                     "/expressive/")
+(make-shell-for-directory-if-present "$MY_PROJECTS/dobishem"
+                                     "/dobishem/")
+(make-shell-for-directory-if-present "$MY_PROJECTS/expressionive"
+                                     "/expressionive/")
 
 (unless (at-work-p)
   (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"

@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2021-11-21 18:27:23 jcgs>
+;;; Time-stamp: <2023-12-30 11:48:11 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -270,10 +270,10 @@ The filenames to save in are added by this function"
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-after-todo-state-change-move-next-marker)
 (add-hook 'org-after-todo-state-change-hook 'jcgs/org-maybe-chain-task)
 (require 'org-linked-tasks)
-(require 'org-task-colours)
-(add-hook 'org-clock-in-hook 'jcgs/org-nice-appearance)
-(add-hook 'org-clock-out-hook 'jcgs/org-dull-appearance)
-(jcgs/org-dull-appearance)
+;; (require 'org-task-colours)
+;; (add-hook 'org-clock-in-hook 'jcgs/org-nice-appearance)
+;; (add-hook 'org-clock-out-hook 'jcgs/org-dull-appearance)
+;; (jcgs/org-dull-appearance)
 (require 'org-pomodoros)
 (require 'org-jira)
 (require 'org-log-tasks)
@@ -669,7 +669,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;;;;;;;;;;;;
 
 (defun jcgs/org-ql-defview (name &rest definition)
-  "Define a view calleed NAME with &DEFINITION."
+  "Define a view called NAME with &DEFINITION."
   (map-put org-ql-views (if (symbolp name)
                             (symbol-name name)
                           name)
@@ -692,6 +692,36 @@ An argument can change the number of days ahead, 1 being tomorrow."
                                    (scheduled :to today)
                                    (ts-active :on today))
                        :sort '(todo priority date))
+  (jcgs/org-ql-defview "Imminent"
+                       :title "Imminent"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$SYNCED/org/projects.org"
+                                                "$SYNCED/org/general.org"
+                                                "$SYNCED/vehicles/Marmalade/Marmalade-work.org"
+                                                "$SYNCED/org/shopping.org"))
+                       :query '(and (or (tags "imminent"))
+                                    (or (todo "TODO")
+                                        (todo "OPEN"))))
+  (jcgs/org-ql-defview "Today"
+                       :title "Today"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$SYNCED/org/projects.org"
+                                                "$SYNCED/org/general.org"
+                                                "$SYNCED/vehicles/Marmalade/Marmalade-work.org"
+                                                "$SYNCED/org/shopping.org"))
+                       :query '(and (or (tags "today"))
+                                    (or (todo "TODO")
+                                        (todo "OPEN"))))
+  (jcgs/org-ql-defview "Weekend"
+                       :title "Weekend"
+                       :buffers-files (mapcar 'substitute-in-file-name
+                                              '("$SYNCED/org/projects.org"
+                                                "$SYNCED/org/general.org"
+                                                "$SYNCED/vehicles/Marmalade/Marmalade-work.org"
+                                                "$SYNCED/org/shopping.org"))
+                       :query '(and (or (tags "weekend"))
+                                    (or (todo "TODO")
+                                        (todo "OPEN"))))
   (jcgs/org-ql-defview "Supermarket"
                        :title "Supermarket"
                        :buffers-files (mapcar 'substitute-in-file-name
