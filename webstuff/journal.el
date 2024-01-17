@@ -1,5 +1,5 @@
 ;;;; journal.el -- stuff for keeping a diary
-;;; Time-stamp: <2021-11-14 18:30:57 jcgs>
+;;; Time-stamp: <2023-05-14 11:45:18 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -508,49 +508,5 @@ sObservations: ")
 ;; 	  (list year month day dow))
 ;;       nil)))
 
-(defun journal-reflection ()
-  "Add a reflection section to the journal."
-  (interactive)
-  (tempo-template-html-blockquote)
-  (tempo-template-html-italic))
-
-(require 'html-helper-mode)
-(require 'generic-text)
-
-;; copy across all the properties of html-helper-mode particularly
-;; because I want all the modal functions that I define in
-;; generic-text (which is why I require generic-text, above)
-(let ((props (symbol-plist 'html-helper-mode)))
-  (while props
-    (put 'html-journal-helper-mode
-	 (car props)
-	 (cadr props))
-    (setq props (cddr props))))
-
-(defvar html-journal-helper-map (copy-keymap html-helper-mode-map)
-  "Keymap for html journal mode.")
-
-(define-key html-journal-helper-map "\C-c\C-dn" 'journal-new-day)
-
-(defvar journal-abbrev-table (make-abbrev-table)
-  "Abbrev table for journal mode.
-Causes insertion of links to other files where available.")
-
-(defvar html-journal-helper-mode-hook nil
-  "Functions to run when going into html-journal-helper-mode.")
-
-;;;###autoload
-(defun html-journal-helper-mode ()
-  "A variant of HTML helper mode, for keeping journals (records, diaries)."
-  (interactive)
-  (html-helper-mode)
-  (setq major-mode 'html-journal-helper-mode
-	mode-name "HTML Journal"
-	local-abbrev-table journal-abbrev-table
-	)
-  (run-hooks 'html-journal-helper-mode-hook)
-  (use-local-map html-journal-helper-map)
-  (abbrev-mode 1)
-  )
 
 ;;; end of journal.el
