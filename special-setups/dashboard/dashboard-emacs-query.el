@@ -1,6 +1,6 @@
 ;;; dashboard-emacs-query.el --- batch driver for dashboard queries  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021, 2023  John Sturdy
+;; Copyright (C) 2021, 2023, 2024  John Sturdy
 
 ;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: 
@@ -64,6 +64,7 @@
                              "Today"
                              "Imminent"
                              "Weekend"
+                             "Marmalade"
                              "Physical making"
                              "Programming"
                              "Mending"))

@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2023-12-30 11:48:11 jcgs>
+;;; Time-stamp: <2024-01-26 19:23:23 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -242,6 +242,7 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
 (jcgs/def-org-agenda-custom-command "maKespace" "K" 'tags-todo "@Makespace")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
+(jcgs/def-org-agenda-custom-command "Marmalade" "v" 'tags-todo "Marmalade")
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
