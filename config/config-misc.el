@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2022-03-19 17:55:49 jcgs>
+;;; Time-stamp: <2024-01-29 21:47:58 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -571,6 +571,18 @@ Done because on these high-resolution screens, Emacs comes up with something ver
   (when (and (or t (at-home-p))
              (file-exists-p fin-entry-file))
     (load-file fin-entry-file)))
+
+;;;; Enter a pound sign etc
+
+(defun insert-pound-sign ()
+  "Insert a pound sign."
+  (interactive)
+  (insert "£"))
+
+(defun insert-euro-sign ()
+  "Insert a euro sign."
+  (interactive)
+  (insert "€"))
 
 ;;; end of config-misc.el
 
