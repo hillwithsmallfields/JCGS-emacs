@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023, 2024, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -71,6 +71,8 @@
 				       "/noticeboard/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/coimealta"
 				       "/coimealta/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/dobishem"
+				       "/dobishem/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/textualosm"
 				       "/osm/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/boxes"
@@ -78,7 +80,9 @@
   (make-shell-for-directory-if-present "$MY_PROJECTS/land"
 				       "/land/")
   (make-shell-for-directory-if-present "$SYNCED/learning"
-				       "/learning/"))
+				       "/learning/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/lectionaries"
+				       "/lectionaries/"))
 
 (defun run-command-in-shell-buffer (command buffer)
   "Run COMMAND in BUFFER and return the result."

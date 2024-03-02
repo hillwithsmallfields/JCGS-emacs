@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2024-01-21 22:11:36 jcgs>
+;;; Time-stamp: <2024-01-29 21:47:58 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -579,5 +579,17 @@ Done because on these high-resolution screens, Emacs comes up with something ver
       (cons (cons (caar p) (cadr p))
 	    (plist-to-alist (cddr p)))
     nil))
+
+;;;; Enter a pound sign etc
+
+(defun insert-pound-sign ()
+  "Insert a pound sign."
+  (interactive)
+  (insert "£"))
+
+(defun insert-euro-sign ()
+  "Insert a euro sign."
+  (interactive)
+  (insert "€"))
 
 ;;; end of config-misc.el

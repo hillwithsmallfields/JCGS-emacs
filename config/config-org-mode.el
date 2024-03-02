@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2023-12-30 11:48:11 jcgs>
+;;; Time-stamp: <2024-03-02 20:54:34 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -242,6 +242,7 @@ The filenames to save in are added by this function"
 (jcgs/def-org-agenda-custom-command "Phone" "p" 'tags-todo "phone")
 (jcgs/def-org-agenda-custom-command "maKespace" "K" 'tags-todo "@Makespace")
 (jcgs/def-org-agenda-custom-command "Next" "x" 'tags-todo "next")
+(jcgs/def-org-agenda-custom-command "Marmalade" "v" 'tags-todo "Marmalade")
 
 (when (and (boundp 'work-agenda-file)
 	   (stringp work-agenda-file)
@@ -671,9 +672,9 @@ An argument can change the number of days ahead, 1 being tomorrow."
 (defun jcgs/org-ql-defview (name &rest definition)
   "Define a view called NAME with &DEFINITION."
   (map-put org-ql-views (if (symbolp name)
-                            (symbol-name name)
-                          name)
-           definition #'equal)
+                             (symbol-name name)
+                           name)
+            definition #'equal)
   (customize-set-variable 'org-ql-views org-ql-views)
   (customize-mark-to-save 'org-ql-views))
 
