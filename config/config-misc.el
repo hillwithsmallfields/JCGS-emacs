@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2022-03-19 17:55:49 jcgs>
+;;; Time-stamp: <2024-01-21 22:11:36 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -572,5 +572,12 @@ Done because on these high-resolution screens, Emacs comes up with something ver
              (file-exists-p fin-entry-file))
     (load-file fin-entry-file)))
 
-;;; end of config-misc.el
+;;;; used by old color-theme code
 
+(defun plist-to-alist (p)
+  (if p
+      (cons (cons (caar p) (cadr p))
+	    (plist-to-alist (cddr p)))
+    nil))
+
+;;; end of config-misc.el
