@@ -25,33 +25,26 @@
 		      "$SYNCED/research/bds/grevo/ephemerals/"
 		      )))
 
-(make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
-				     "/muesli/"
-				     ;; "make clean; ./configure; make\n"
-				     )
-
-(make-shell-for-directory-if-present "$SYNCED/music/"
-				     "/music/"
-				     ;; "make clean; ./configure; make\n"
-				     )
-
 (make-shell-for-directory-if-present "$MY_ELISP"
 				     "/gnuemacs/")
 
-(make-shell-for-directory-if-present "$MY_PROJECTS/makers/"
-                                     "/makers/")
-
-(make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-                                     "/server/")
-
-(make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-                                     "/client/")
-(make-shell-for-directory-if-present "$MY_PROJECTS/dobishem"
-                                     "/dobishem/")
-(make-shell-for-directory-if-present "$MY_PROJECTS/expressionive"
-                                     "/expressionive/")
-
 (unless (at-work-p)
+  (make-shell-for-directory-if-present "$MY_PROJECTS/expressionive"
+                                       "/expressionive/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
+                                       "/server/")
+
+  (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
+                                       "/client/")
+  (make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
+				       "/muesli/"
+				       ;; "make clean; ./configure; make\n"
+				       )
+
+  (make-shell-for-directory-if-present "$SYNCED/music/"
+				       "/music/"
+				       ;; "make clean; ./configure; make\n"
+                                       )
   (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"
 				       "/gos/"
 				       ;; "make clean; ./configure; make\n"
@@ -60,11 +53,6 @@
 				       "/mulvoc/"
 				       ;; "make clean; ./configure; make\n"
 				       )
-  (when t
-    (make-shell-for-directory-if-present "$WRITING/fiction/last-khan/"
-					 "/khanate/"
-					 ;; "latex last-khan.tex\n"
-					 ))
   (make-shell-for-directory-if-present "$MY_PROJECTS/qs"
 				       "/qs/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/noticeboard"
