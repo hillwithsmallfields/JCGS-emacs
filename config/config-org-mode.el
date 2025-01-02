@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2023-12-30 11:48:11 jcgs>
+;;; Time-stamp: <2025-01-02 19:19:18 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -60,6 +60,7 @@ Done when I gave up on the Emacs package manager for now.")
       '((sequence "SOMETIME(s)" "TODO(t)" "BLOCKED(b)" "CURRENT(c)" "OPEN(o)"
 		  "|"
 		  "DONE(d)" "CANCELLED(x)"))
+      org-adapt-indentation t
       org-clock-in-switch-to-state "CURRENT"
       org-use-fast-todo-selection nil
       org-id-method 'org
