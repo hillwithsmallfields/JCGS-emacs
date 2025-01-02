@@ -1,5 +1,5 @@
 ;;;; Configuration for project-specific things
-;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -60,11 +60,8 @@
 				       "/mulvoc/"
 				       ;; "make clean; ./configure; make\n"
 				       )
-  (when t
-    (make-shell-for-directory-if-present "$WRITING/fiction/last-khan/"
-					 "/khanate/"
-					 ;; "latex last-khan.tex\n"
-					 ))
+  (make-shell-for-directory-if-present "$MY_PROJECTS/lectionaries"
+                                       "/lectionaries/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/qs"
 				       "/qs/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/noticeboard"
