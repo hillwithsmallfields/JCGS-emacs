@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2024-03-02 20:54:34 jcgs>
+;;; Time-stamp: <2025-01-10 08:36:16 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -63,6 +63,7 @@ Done when I gave up on the Emacs package manager for now.")
       org-clock-in-switch-to-state "CURRENT"
       org-use-fast-todo-selection nil
       org-id-method 'org
+      org-adapt-indentation t
       org-id-track-globally t
       org-id-locations-file (substitute-in-file-name "$ORG/org-id-locations")
       org-id-locations-file-relative t
