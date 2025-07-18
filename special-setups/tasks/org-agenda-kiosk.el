@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2022-07-24 18:58:33 jcgs>
+;;; Time-stamp: <2025-07-18 15:33:36 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -16,15 +16,23 @@
 ;; Using a keypad to navigate my agenda tree ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun org-agenda-kiosk-next ()
-  "Move to the next entry."
-  (interactive)
-  (outline-next-visible-heading 1))
+(defun org-agenda-kiosk-next (n)
+  "Move to the next entry.
+Argument N says how many entries to move.
+If not on an entry header, move to the next line."
+  (interactive "p")
+  (if (outline-on-heading-p)
+      (outline-next-visible-heading n)
+    (next-line n)))
 
-(defun org-agenda-kiosk-previous ()
-  "Move to the previous entry."
-  (interactive)
-  (outline-previous-visible-heading 1))
+(defun org-agenda-kiosk-previous (n)
+  "Move to the previous entry.
+Argument N says how many entries to move.
+If not on an entry header, move to the previous line."
+  (interactive "p")
+  (if (outline-on-heading-p)
+      (outline-previous-visible-heading n)
+    (previous-line n)))
 
 (defun org-agenda-kiosk-up-level ()
   "Move up a level."
