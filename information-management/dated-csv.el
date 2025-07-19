@@ -85,6 +85,7 @@ on `before-change-functions'."
 (define-derived-mode dated-csv-mode csv-mode "Dated CSV"
   "CSV mode with ISO dates in the first column.
 Incomplete dates are filled in, and the entries sorted, when the file is saved."
+  (make-local-variable 'write-file-functions)
   (add-hook 'write-file-functions 'dated-csv-normalize)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
@@ -93,6 +94,7 @@ Incomplete dates are filled in, and the entries sorted, when the file is saved."
   "CSV mode with ISO dates in the first column.
 When you start typing in the last row, today's date is inserted
 at the start of the row if it is not already there."
+  (make-local-variable 'before-change-functions)
   (add-hook 'before-change-functions 'force-row-datestamp nil t)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
@@ -105,6 +107,7 @@ at the start of the row if it is not already there."
   "CSV mode with ISO timedates in the first column.
 When you start typing in the last row, this minute's timedate is
 inserted at the start of the row if it is not already there."
+  (make-local-variable 'before-change-functions)
   (add-hook 'before-change-functions 'force-row-timestamp nil t)
   ;; (add-hook 'before-change-functions 'set-overwrite-column nil t)
   (make-local-variable 'require-final-newline)
@@ -134,6 +137,7 @@ inserted at the start of the row if it is not already there."
 When you start typing in the last row, this minute's timedate is
 inserted at the start of the row if it is not already there.
 When you save the file, durations are filled in in the second column."
+  (make-local-variable 'write-file-functions)
   (add-hook 'write-file-functions 'time-tracking-csv-mode-fill-in-durations))
 
 (provide 'dated-csv)
