@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2025-07-18 15:12:22 jcgs>
+;;; Time-stamp: <2025-07-19 08:15:06 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -126,7 +126,7 @@ Done when I gave up on the Emacs package manager for now.")
     - [ ] strength exercises
     - [ ] Albanian learning
     - [ ] reading\n")
-      )
+      ))
 
 (defvar jcgs/org-ssid-tag-alist
   '(("BTHomeHub2-8GHW" . "@home")
