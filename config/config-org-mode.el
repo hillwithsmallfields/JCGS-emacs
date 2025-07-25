@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2025-07-22 10:41:54 jcgs>
+;;; Time-stamp: <2025-07-25 12:17:13 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -43,12 +43,12 @@ Done when I gave up on the Emacs package manager for now.")
 
 (add-to-list 'org-modules 'org-ql)
 
-(let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
-  (when (file-directory-p omd)
-    (add-to-list 'org-modules 'org-mobile)
-    (setq
-     org-mobile-directory omd
-     org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory))))
+;; (let ((omd (substitute-in-file-name "$EHOME/Dropbox/MobileOrg")))
+;;   (when (file-directory-p omd)
+;;     (add-to-list 'org-modules 'org-mobile)
+;;     (setq
+;;      org-mobile-directory omd
+;;      org-mobile-inbox-for-pull (expand-file-name "inbox.org" org-mobile-directory))))
 (message "About to load org modules, load-path is %s" load-path)
 (org-load-modules-maybe t)
 (message "Loaded org modules")
@@ -63,7 +63,7 @@ Done when I gave up on the Emacs package manager for now.")
       org-clock-in-switch-to-state "CURRENT"
       org-use-fast-todo-selection nil
       org-id-method 'org
-      oorg-adapt-indentation t
+      org-adapt-indentation t
       org-id-track-globally t
       org-id-locations-file (substitute-in-file-name "$ORG/org-id-locations")
       org-id-locations-file-relative t
@@ -83,7 +83,6 @@ Done when I gave up on the Emacs package manager for now.")
       org-special-ctrl-k t
       org-yank-adjusted-subtrees t
       org-directory (substitute-in-file-name "$ORG/")
-      foo (message "org dir is %s" org-directory)
       org-default-notes-file (expand-file-name "new.org" org-directory)
       org-archive-location (substitute-in-file-name "$ORG/archive/%s::")
       org-agenda-files (append (mapcar (function
@@ -100,7 +99,6 @@ Done when I gave up on the Emacs package manager for now.")
 					 "improvement"
 					 "goals"))
 			       (list (substitute-in-file-name "$VEHICLES/Marmalade/Marmalade-work.org")))
-      bar (message "agenda files %s" org-agenda-files)
       org-capture-templates '(("p" "Personal todo" entry
 			       (file+headline
 				(substitute-in-file-name "$ORG/general.org")
@@ -119,16 +117,9 @@ Done when I gave up on the Emacs package manager for now.")
       org-agenda-dim-blocked-tasks t
       org-enforce-todo-checkbox-dependencies t
       org-todo-state-tags-triggers '((done ("soon" . nil) ("urgent" . nil) ("today" . nil)))
-      org-M-RET-may-split-line nil
-      jcgs/org-journal-day-boilerplate '(("incoming.journal" . " [/]
+      org-M-RET-may-split-line nil)
 
-    - [ ] prayertime
-    - [ ] strength exercises
-    - [ ] Albanian learning
-    - [ ] good calorie control
-    - [ ] record all eating
-    - [ ] reading\n")
-      ))
+(message "After big setq in config-org-mode, org-adapt-indentation is %s" org-adapt-indentation)
 
 (defvar jcgs/org-ssid-tag-alist
   '(("BTHomeHub2-8GHW" . "@home")
