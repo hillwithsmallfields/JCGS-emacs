@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2021-12-22 15:25:58 jcgs>
+;;; Time-stamp: <2022-12-03 20:17:29 jcgs>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -230,7 +230,7 @@ This should be a list of three parts:
 		      "use-emms"
 		      "use-flashcard"
 		      "use-generic-text"
-		      "use-html-helper-mode"
+		      ;; "use-html-helper-mode"
 		      "use-http-get"
 		      "use-icicles"
 		      "use-journal"

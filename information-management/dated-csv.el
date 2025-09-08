@@ -1,6 +1,6 @@
 ;;; dated-csv.el --- functions for CSV files with dates in the first column  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020, 2021  John Sturdy
+;; Copyright (C) 2020, 2021, 2025  John Sturdy
 
 ;; Author: John Sturdy <jsturdy@ccsl.com>
 ;; Keywords: convenience, data
@@ -55,10 +55,46 @@ on `before-change-functions'."
 (def-row-timestamper force-row-timestamp "%FT%R,,"
   "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9],,")
 
+(defun dated-csv-normalize ()
+  "Normalize the data in a dated CSV file."
+  (interactive)
+  (let* ((now (decode-time))
+         (now-day (nth 3 now))
+         (now-month (nth 4 now))
+         (now-year (nth 5 now)))
+    (save-excursion
+      (goto-char (point-min))
+      (beginning-of-line 2)
+      (while (re-search-forward "^\\(\\([0-9][0-9]\\)-\\)?\\([0-9][0-9]\\)," (point-max) t)
+        (let* ((line-day (string-to-number (match-string-no-properties 3)))
+               (line-month (match-string-no-properties 2))
+               (month-number (if line-month
+                                 (string-to-number line-month)
+                               (+ now-month (if (>= line-day now-day) 0 1))))
+               (year-number (+ now-year (if (>= month-number now-month) 0 1))))
+          (beginning-of-line 1)
+          (unless line-month
+            (insert (format "%02d-" month-number)))
+          (beginning-of-line 1)
+          (insert (format "%4d-" year-number))))
+      (goto-char (point-min))
+      (beginning-of-line 2)
+      (sort-lines nil (point) (point-max))))
+  nil)
+
 (define-derived-mode dated-csv-mode csv-mode "Dated CSV"
+  "CSV mode with ISO dates in the first column.
+Incomplete dates are filled in, and the entries sorted, when the file is saved."
+  (make-local-variable 'write-file-functions)
+  (add-hook 'write-file-functions 'dated-csv-normalize)
+  (make-local-variable 'require-final-newline)
+  (setq require-final-newline t))
+  
+(define-derived-mode datestamped-csv-mode csv-mode "Datestamped CSV"
   "CSV mode with ISO dates in the first column.
 When you start typing in the last row, today's date is inserted
 at the start of the row if it is not already there."
+  (make-local-variable 'before-change-functions)
   (add-hook 'before-change-functions 'force-row-datestamp nil t)
   (make-local-variable 'require-final-newline)
   (setq require-final-newline t))
@@ -67,10 +103,11 @@ at the start of the row if it is not already there."
   "If in the first 16 columns, overwrite instead of inserting."
   (overwrite-mode (> (current-column) 16)))
 
-(define-derived-mode timed-csv-mode csv-mode "Timed CSV"
+(define-derived-mode timestamped-csv-mode csv-mode "Timestamped CSV"
   "CSV mode with ISO timedates in the first column.
 When you start typing in the last row, this minute's timedate is
 inserted at the start of the row if it is not already there."
+  (make-local-variable 'before-change-functions)
   (add-hook 'before-change-functions 'force-row-timestamp nil t)
   ;; (add-hook 'before-change-functions 'set-overwrite-column nil t)
   (make-local-variable 'require-final-newline)
@@ -95,11 +132,12 @@ inserted at the start of the row if it is not already there."
   nil                                   ; say we haven't written it
   )
 
-(define-derived-mode time-tracking-csv-mode timed-csv-mode "Time-tracking CSV"
+(define-derived-mode time-tracking-csv-mode timestamped-csv-mode "Time-tracking CSV"
   "CSV mode with ISO timedates in the first column.
 When you start typing in the last row, this minute's timedate is
 inserted at the start of the row if it is not already there.
 When you save the file, durations are filled in in the second column."
+  (make-local-variable 'write-file-functions)
   (add-hook 'write-file-functions 'time-tracking-csv-mode-fill-in-durations))
 
 (provide 'dated-csv)
