@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2024-01-29 21:47:58 jcgs>
+;;; Time-stamp: <2025-10-27 14:37:03 jcgs>
 
 (add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
 
@@ -592,4 +592,8 @@ Done because on these high-resolution screens, Emacs comes up with something ver
   (interactive)
   (insert "€"))
 
+;;;; text handling
+
+(add-to-list 'load-path
+	     (expand-file-name "text-handling" user-emacs-directory))
 ;;; end of config-misc.el
