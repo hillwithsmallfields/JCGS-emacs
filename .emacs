@@ -1,7 +1,7 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2022-12-03 20:17:29 jcgs>
+;;; Time-stamp: <2025-11-13 10:08:08 jcgs>
 
-;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -202,7 +202,8 @@ This should be a list of three parts:
 (if t
     (load-directory (expand-file-name "config" user-emacs-directory) t)
   (let ((config-dir (expand-file-name "config" user-emacs-directory)))
-    (dolist (elfile '("config-calendar-diary"
+    (dolist (elfile '("config-ai"
+                      "config-calendar-diary"
 		      "config-distribution"
 		      "config-elisp-devel"
 		      "config-from-emacswiki"
@@ -216,6 +217,7 @@ This should be a list of three parts:
 		      "config-projects"
 		      "config-ps-print"
 		      "config-ratpoison"
+                      "config-shells"
 		      "config-slime"
 		      "config-windows"
 		      "jcgs-bindings"
