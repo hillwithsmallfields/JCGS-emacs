@@ -28,12 +28,12 @@
   "Interpolate evaluation results between BEGIN and END."
   (interactive "r")
   (setq end (copy-marker end))
+  (goto-char begin)
   (while (re-search-forward ",(" end  t)
-    (let ((start (match-beginning 0)))
-      (forward-sexp 1)
-      (let ((result (eval (read (buffer-substring-no-properties (1+ start) (point))))))
-        (delete-region start (point))
-        (insert result)))))
+    (backward-char 1)
+    (let ((result (eval (read (current-buffer)))))
+      (delete-region (match-beginning 0) (point))
+      (insert result)))))
        
 (provide 'interpolate-expressions)
 ;;; interpolate-expressions.el ends here
