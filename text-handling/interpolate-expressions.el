@@ -33,7 +33,7 @@
     (backward-char 1)
     (let ((result (eval (read (current-buffer)))))
       (delete-region (match-beginning 0) (point))
-      (insert result)))))
+      (insert result))))
        
 (provide 'interpolate-expressions)
 ;;; interpolate-expressions.el ends here
