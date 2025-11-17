@@ -1,5 +1,5 @@
 ;;;; misc-elisp-tools.el -- assorted elisp-related tools
-;;; Time-stamp: <2006-01-24 12:30:47 jcgs>
+;;; Time-stamp: <2025-11-17 19:24:01 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
 ;;  under the terms of the GNU General Public License as published by the
@@ -30,13 +30,6 @@
   (setq stack-trace-on-error (not stack-trace-on-error))
   (message "Stack traces on error %sabled"
            (if stack-trace-on-error "en" "dis")))
-
-(defun re-load (file)
-  "Byte-compile FILE from .el to .elc form, and load the .elc form."
-  (interactive "fFile to recompile: ")
-  (save-some-buffers)
-  (byte-compile-file file)
-  (load (file-base-name file)))
 
 (defun current-defun-name ()
   "Return the name of the current defun"
