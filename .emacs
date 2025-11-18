@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2025-11-13 10:08:08 jcgs>
+;;; Time-stamp: <2025-11-18 13:46:12 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
@@ -45,9 +45,9 @@
 	      (expand-file-name "basics" user-emacs-directory)))
   (setq user-emacs-directory
 	(catch 'found
-	  (dolist (raw-dir '("$MY_ELISP"
-			     "$EHOME/JCGS-emacs"
-			     "$HOME/JCGS-emacs"
+	  (dolist (raw-dir '("$MY_ELISP/"
+			     "$EHOME/JCGS-emacs/"
+			     "$HOME/JCGS-emacs/"
 			     ;; strange site-specific directories used
 			     ;; as honorary home in strange sites may
 			     ;; go here
