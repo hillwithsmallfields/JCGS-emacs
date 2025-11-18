@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2025-11-18 13:46:12 jcgs>
+;;; Time-stamp: <2025-11-18 15:19:49 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
@@ -59,7 +59,8 @@
 			  (expand-file-name "basics" dir)))
 		(throw 'found dir)))))))
 
-(add-to-list 'load-path user-emacs-directory)
+;; This caused a warning:
+;; (add-to-list 'load-path user-emacs-directory)
 
 (message "user-emacs-directory is %S" user-emacs-directory)
 
