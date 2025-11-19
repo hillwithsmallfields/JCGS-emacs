@@ -1,5 +1,5 @@
 ;;;; find, load and configure versor
-;;; Time-stamp: <2021-12-03 21:14:52 jcgs>
+;;; Time-stamp: <2025-11-19 17:27:41 jcgs>
 
 (require 'jcgs-use-package)
 
@@ -48,8 +48,7 @@
 	     (global-set-key [ C-y ] 'versor-yank)
 
 	     (when (pedals-p)
-	       (add-to-list 'load-path (substitute-in-file-name
-					"$MY_PROJECTS/emacs-pedals"))
+	       (add-lispdir "$MY_PROJECTS/emacs-pedals")
 	       (setq pedal:versor-change-dimension-ctrl t
 		     pedals-hosts-preferring-num-lock '("hosea"))
 	       (message "setting up keypad")
@@ -63,9 +62,7 @@
 			 (string= (downcase (system-name)) "glg.csisdmz.ul.ie"))
 		 ;; only joel/glg has such a key
 		 (message "adding voice-assist-key")
-		 (add-to-list 'load-path
-			      (expand-file-name "my-extensions-to-packages/voice"
-						user-emacs-directory))
+		 (add-lispdir "$MY_ELISP/my-extensions-to-packages/voice")
 		 ;; re-assigns one of the pedals, so do after versor etc
 		 (require 'voice-assist-key))))
 

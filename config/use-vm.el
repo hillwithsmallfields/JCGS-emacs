@@ -1,9 +1,9 @@
 ;;;; find, load and configure vm
-;;; Time-stamp: <2022-03-15 10:44:51 jcgs>
+;;; Time-stamp: <2025-11-19 17:29:00 jcgs>
 
 (require 'jcgs-use-package)
 
-(add-to-list 'load-path (expand-file-name "email" user-emacs-directory))
+(add-lispdir "$MY_ELISP/email")
 
 (when (file-directory-p "$GATHERED/emacs/vm/vm-8.1.1")
 (jcgs/use-package vm

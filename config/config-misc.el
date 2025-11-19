@@ -1,20 +1,12 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2025-10-27 14:37:03 jcgs>
+;;; Time-stamp: <2025-11-19 17:17:08 jcgs>
 
-(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/"))
+(add-lispdir "$GATHERED/emacs/")
 
 (defun use-utf-8 ()
   "Set the coding system of the current buffer to UTF-8."
   (interactive)
   (set-buffer-file-coding-system 'utf-8))
-
-(add-to-list 'load-path
-	     (expand-file-name "elisp-dev-tools" user-emacs-directory))
-(require 'misc-elisp-tools)
-
-(add-to-list 'load-path
-	     (expand-file-name "editing" user-emacs-directory))
-(require 'skip-initial-comments)
 
 (defun kill-matching-buffers-no-ask (regexp &optional internal-too)
   "Kill buffers whose name matches the specified REGEXP.
@@ -38,40 +30,6 @@ FWrite region to file: ")
 	(write-region start end file)
 	(find-file file))))
 
-;;;; Genetic Programming setup
-
-(add-to-list 'load-path
-	     (substitute-in-file-name "$OPEN_PROJECTS/libRTL/src/"))
-
-(autoload 'rtl-mode "rtl-mode"
-  "Major mode for editing RTL files."
-  t)
-
-(add-to-list 'auto-mode-alist
-	     (cons "\\.rtl$" 'rtl-mode))
-
-(add-to-list 'load-path
-	     (substitute-in-file-name "$OPEN_PROJECTS/GrEvo/trunk/utilsrc/"))
-
-(autoload 'grevo-trace-mode "grevo-trace-mode"
-    "Mode for looking at GrEvo traces."
-    t)
-
-(add-to-list 'auto-mode-alist
-	     (cons "\\.trace$" 'grevo-trace-mode))
-
-(add-to-list 'auto-mode-alist
-	     (cons "\\.result$" 'grevo-trace-mode))
-
-(defun jcgs-grevo-trace-mode-setup ()
-  "Set up grevo mode for me."
-  (define-key
-    grevo-mode-parent-number-keymap
-    [ Trigger-up ]
-    'grevo-jump-individual))
-
-(add-hook 'grevo-trace-mode-hook 'jcgs-grevo-trace-mode-setup)
-
 ;; temporary for renaming things
 
 (defun rename-throughout (here)
@@ -85,8 +43,7 @@ FWrite region to file: ")
 
 ;;;; Screen appearance
 
-(add-to-list 'load-path
-	     (expand-file-name "appearance" user-emacs-directory))
+(add-lispdir "$MY_ELISP/appearance")
 
 (require 'screen-setups)
 
@@ -99,33 +56,6 @@ FWrite region to file: ")
 (add-hook 'lua-mode-hook 'turn-on-font-lock)
 
 (add-hook 'lua-mode-hook 'hs-minor-mode)
-
-;;;; haskell-mode
-
-(add-to-list 'load-path
-	     (substitute-in-file-name "$GATHERED/emacs/haskell/haskell-mode-2.1"))
-
-(autoload 'haskell-mode "haskell-mode" "Haskell editing mode." t)
-
-(add-to-list 'auto-mode-alist
-	     (cons "\\.hs" 'haskell-mode))
-
-;;;; source code annotation
-
-(message "about to load annotation")
-
-(add-to-list 'load-path
-	     (expand-file-name "information-management" user-emacs-directory))
-
-(autoload 'annotation-open "annotation"
-  "Open an annotation for PROJECT FILE DEFUN."
-  t)
-
-(autoload 'annotation-decorate-file "annotation"
-  "Find the annotations for the current file, and display them."
-  t)
-
-(message "loaded annotation")
 
 ;; (add-hook 'c-mode-hook 'annotation-decorate-file)
 ;; (add-hook 'emacs-lisp-mode-hook 'annotation-decorate-file)
@@ -155,7 +85,7 @@ FWrite region to file: ")
   (require 'ratpoison-cmd)
   (delete-other-windows)
   (jcgs/frame-setup)
-  (add-to-list 'load-path (expand-file-name "appearance" user-emacs-directory))
+  (add-lispdir "$MY_ELISP/appearance")
   (require 'split-window-multi)
   (split-to-80-columns)
   (when (> (length (split-string (shell-command-to-string "ratpoison -c sdump") ",")) 1)
@@ -221,16 +151,6 @@ FWrite region to file: ")
 
 (message "loaded ratpoison")
 
-;;;; compile with snapshotting
-
-;; (add-to-list 'load-path (expand-file-name "external-programs" user-emacs-directory))
-;; (require 'tracked-compile)
-;; (require 'laptop-tests)
-
-;; (message "loaded tracked-compile")
-
-(setq pxe-handle "jcgs")
-
 ;;;; grep my buffers
 
 (defun grep-buffers (search-pattern files-pattern)
@@ -272,7 +192,7 @@ sGrep in files matching: ")
 
 ;;;; web search without a browser
 
-(add-to-list 'load-path (expand-file-name "webstuff/" user-emacs-directory))
+(add-lispdir "$MY_ELISP/webstuff")
 
 (autoload 'gnugol "gnugol"
   "Search the web via gnugol, bring up results in org buffer."
@@ -280,7 +200,7 @@ sGrep in files matching: ")
 
 ;;;; re-read buffer that have been changed externally, e.g. by copying in from another machine
 
-(add-to-list 'load-path (expand-file-name "file-handling" user-emacs-directory))
+(add-lispdir "$MY_ELISP/file-handling")
 
 (autoload 'up-to-date-file "buffer-file-sync"
   "Make sure that BUFFER has the same timestamp its file on disk.
@@ -347,7 +267,7 @@ Optional argument NO-ASK says not to ask, but revert anyway." t)
 
 ;;;; find the buffer visiting the nearest file of a given name
 
-(add-to-list 'load-path (substitute-in-file-name "$MY_ELISP/convenience"))
+(add-lispdir "$MY_ELISP/convenience")
 
 (autoload 'switch-to-nearest-file-buffer "nearest-file"
   "Switch to the buffer visiting the nearest file called NAME.
@@ -357,7 +277,7 @@ the directory tree." t)
 
 ;;;; openscad setup
 
-(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/openscad/"))
+(add-lispdir "$GATHERED/emacs/openscad/")
 (add-to-list 'auto-mode-alist '("\\.scad$" . scad-mode))
 (autoload 'scad-mode "scad-mode"   "Major mode for editing OpenSCAD code.
 
@@ -469,7 +389,7 @@ Argument DAYS is the number of days to fast for."
 
 (let ((ledger-emacs-directory (substitute-in-file-name "$OPEN_PROJECTS/ledger-mode")))
   (when (file-directory-p ledger-emacs-directory)
-    (add-to-list 'load-path ledger-emacs-directory)
+    (add-lispdir ledger-emacs-directory)
     (autoload 'ledger-mode "ledger-mode"
       "A mode for editing ledger data files."
       t)))
@@ -594,6 +514,6 @@ Done because on these high-resolution screens, Emacs comes up with something ver
 
 ;;;; text handling
 
-(add-to-list 'load-path
-	     (expand-file-name "text-handling" user-emacs-directory))
+(add-lispdir "$MY_ELISP/text-handling")
+
 ;;; end of config-misc.el

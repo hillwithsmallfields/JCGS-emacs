@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2021-12-21 12:02:59 jcgs>
+;;; Time-stamp: <2025-11-19 17:01:56 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -12,7 +12,7 @@
 
 ;;;; General bits and pieces
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp")
+(add-lispdir "/usr/share/emacs/site-lisp")
 
 (defun string-to-int (str)
   "Convert STR to an integer.
@@ -302,7 +302,7 @@ COUNT can be passed in to make it negative."
     (cond
      ((>= (frame-width) 240)
       (delete-other-windows)
-      (add-to-list 'load-path (expand-file-name "appearance" user-emacs-directory))
+      (add-lispdir "$MY_ELISP/appearance")
       (require 'split-window-multi)
       (split-to-80-columns)))
 
@@ -526,7 +526,7 @@ read-only (although I don't think I'd changed anything related)
         (insert (match-string 0))
       (error "Could not find anything that looked like a JIRA ticket"))))
 
-(add-to-list 'load-path (substitute-in-file-name "$MY_PROJECTS/JCGS-org-mode/lisp/"))
+(add-lispdir "$MY_PROJECTS/JCGS-org-mode/lisp/")
 (require 'org-shell-command-records)
 
 (defun jcgs/shell-mode-setup ()
@@ -654,7 +654,7 @@ and moves the prompt overlay."
 ;;;; my own colour themes
 
 (when window-system
-  (setq custom-theme-directory (expand-file-name "themes" user-emacs-directory))
+  (setq custom-theme-directory (substitute-in-file-name "$MY_ELISP/themes"))
 
   (defun color-theme-vellum ()
     "Brightly illuminated vellum manuscript theme.

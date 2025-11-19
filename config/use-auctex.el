@@ -1,7 +1,8 @@
 ;;;; find, load and configure auctex
-;;; Time-stamp: <2022-03-15 10:29:12 jcgs>
+;;; Time-stamp: <2025-11-19 17:24:20 jcgs>
 
-(let ((jcgs-auctex-dir "$GATHERED/emacs/auctex/installed/"))
+(let ((jcgs-auctex-dir "$GATHERED/emacs/auctex/installed/" ; TODO: put this into straight.el using the real URL
+                       ))
   (when (file-directory-p jcgs-auctex-dir)
 
     (require 'jcgs-use-package)
@@ -9,7 +10,7 @@
     (fset 'tex-mode nil)
     (fset 'latex-mode nil)
 
-    (add-to-list 'load-path (substitute-in-file-name jcgs-auctex-dir))
+    (add-lispdir jcgs-auctex-dir)
     (load-file "$GATHERED/emacs/auctex/installed/tex-site.el")
 
     (jcgs/use-package tex-site

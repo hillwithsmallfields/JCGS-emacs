@@ -1,7 +1,7 @@
 ;;;; Configuration for international things
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2025-11-19 17:01:56 jcgs>
 
-;; Copyright (C) 2008, 2009, 2010, John C. G. Sturdy
+;; Copyright (C) 2008, 2009, 2010, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -12,7 +12,7 @@
 
 ;;;; Input methods
 
-(add-to-list 'load-path (expand-file-name "natural-language" user-emacs-directory))
+(add-lispdir "natural-language")
 
 (load-library "mongolian")
 (load-library "extra-input-methods")

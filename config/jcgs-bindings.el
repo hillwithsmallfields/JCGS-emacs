@@ -1,9 +1,9 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
 
-;;; Time-stamp: <2023-03-20 21:04:26 jcgs>
+;;; Time-stamp: <2025-11-19 17:21:55 jcgs>
 
 
-(add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
+(add-lispdir "$MY_ELISP/convenience")
 
 (autoload 'smart-repeat-complex-command "smart-repeat"
   "Like repeat-complex-command, but may skip the first one if it would do nothing."
@@ -12,7 +12,7 @@
 (autoload 'other-window-or-buffer "other" nil t)
 (autoload 'other-window-backwards "other" nil t)
 
-(add-to-list 'load-path (expand-file-name "file-handling" user-emacs-directory))
+(add-lispdir "$MY_ELISP/file-handling")
 
 (autoload 'other-window-file-name "file-name-insertions"
     "Insert at point the name of the file in the next window.
@@ -213,7 +213,7 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-task-tracking-map "?" 'jcgs/org-show-last-creative-task)
   )
 
-(add-to-list 'load-path (expand-file-name "startup" user-emacs-directory))
+(add-lispdir "$MY_ELISP/startup")
 
 (autoload 'bring-up-buffers-matching-file "buffers"
   "Bring up buffers whose names match REGEXP.

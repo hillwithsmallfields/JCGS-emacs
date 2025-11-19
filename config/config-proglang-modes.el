@@ -1,7 +1,7 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2022-01-18 15:07:47 jcgs>
+;;; Time-stamp: <2025-11-19 17:35:45 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -13,6 +13,9 @@
 ;;;;;;;;;;;;;
 ;; General ;;
 ;;;;;;;;;;;;;
+
+(add-lispdir "$MY_ELISP/editing")
+(require 'skip-initial-comments)
 
 (defvar jcgs/leave-multiple-blank-lines nil
   "Suppress my usual tidying of multiple blank lines.")
@@ -193,6 +196,7 @@
 
 (when (catch 'found-go
 	(dolist (dir (list "/usr/local/go/misc/emacs/"
+                           ;; TODO: use straight.el
 			   (substitute-in-file-name "$GATHERED/emacs/go-mode")))
 	  (when (file-directory-p dir)
 	    (add-to-list 'load-path dir)
@@ -217,6 +221,7 @@
 
 (let ((dir (substitute-in-file-name "$OPEN_PROJECTS/arduino-mode")))
   (when (file-directory-p dir)
+    ;; TODO: use straight.el
     (add-to-list 'load-path dir)
     (autoload 'arduino-mode "arduino-mode"
         "Major mode for editing Arduino code."
@@ -248,7 +253,7 @@
 ;; scala-mode ;;
 ;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/scala-mode2"))
+(add-lispdir "$OPEN_PROJECTS/scala-mode2") ; TODO: use straight.el
 
 (autoload 'scala-mode "scala-mode2"
     "Major mode for editing scala code.
@@ -264,7 +269,7 @@ When started, runs `scala-mode-hook'." t)
 ;; fetch from https://github.com/clojure-emacs/clojure-mode.git and put in $GATHERED/clojure-mode
 
 (let* ((open-projects-clojure-mode-directory ; from https://github.com/clojure-emacs/clojure-mode.git
-	(substitute-in-file-name "$OPEN_PROJECTS/clojure-mode"))
+	(substitute-in-file-name "$OPEN_PROJECTS/clojure-mode")) ; TODO: use straight.el
        (clojure-mode-directory (if (file-directory-p open-projects-clojure-mode-directory)
 				   open-projects-clojure-mode-directory
 				 (substitute-in-file-name "$GATHERED/emacs/clojure-mode"))))
@@ -293,7 +298,7 @@ When started, runs `scala-mode-hook'." t)
 
 (let ((scad-dir (substitute-in-file-name "$GATHERED/emacs/openscad")))
   (when (file-directory-p scad-dir)
-    (add-to-list 'load-path scad-dir)
+    (add-to-list 'load-path scad-dir)   ; TODO: use straight.el
     (autoload 'scad-mode "scad-mode" "Major mode for editing scad files." t)
     (add-to-list 'auto-mode-alist (cons "\\.scad\\'" 'scad-mode))))
 
@@ -313,11 +318,34 @@ When started, runs `scala-mode-hook'." t)
 
 (add-hook 'haskell-mode-hook 'jcgs/haskell-mode-setup)
 
+(add-lispdir (substitute-in-file-name "$GATHERED/emacs/haskell/haskell-mode-2.1"))
+
+(autoload 'haskell-mode "haskell-mode" "Haskell editing mode." t)
+
+(add-to-list 'auto-mode-alist
+	     (cons "\\.hs" 'haskell-mode))
+
+;;;; source code annotation
+
+(message "about to load annotation")
+
+(add-lispdir "$MY_ELISP/information-management")
+
+(autoload 'annotation-open "annotation"
+  "Open an annotation for PROJECT FILE DEFUN."
+  t)
+
+(autoload 'annotation-decorate-file "annotation"
+  "Find the annotations for the current file, and display them."
+  t)
+
+(message "loaded annotation")
+
 ;;;;;;;;;;
 ;; rust ;;
 ;;;;;;;;;;
 
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/rust-lang/rust-mode"))
+(add-lispdir "$OPEN_PROJECTS/github.com/rust-lang/rust-mode")
 
 (autoload 'rust-mode "rust-mode"
   "Major mode for Rust code.

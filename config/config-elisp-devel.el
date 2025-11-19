@@ -1,7 +1,7 @@
 ;;;; config-elisp-devel.el -- set up my emacs-lisp development
-;;; Time-stamp: <2021-11-14 18:31:04 jcgs>
+;;; Time-stamp: <2025-11-19 17:01:52 jcgs>
 
-;; Copyright (C) 2007, 2014, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2014, 2021, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -10,11 +10,14 @@
 
 ;; This file is NOT part of GNU Emacs.
 
-(setq downloaded-emacs-directory (substitute-in-file-name "~/downloaded/emacs/")
+(setq downloaded-emacs-directory (substitute-in-file-name "~/Downloads/emacs/")
       source-annotations-directory (file-truename
 				    (substitute-in-file-name "$SYNCED/www/computing/emacs")))
 
-(add-lispdir (expand-file-name "file-handling" user-emacs-directory))
+(add-lispdir  "$MY_ELISP/elisp-dev-tools")
+(require 'misc-elisp-tools)
+
+(add-lispdir (substitute-in-file-name "$MY_ELISP/file-handling"))
 
 (autoload 'annotation-mode "source-annotation"
     "Major mode for annotation of source code." t)
@@ -95,7 +98,7 @@ It is meant for use as a find-file-hook, but can also be used interactively." t)
 (add-hook 'emacs-lisp-mode-hook
 	  '(lambda () (checkdoc-minor-mode 1)))
 
-(add-lispdir (expand-file-name "elisp-dev-tools" user-emacs-directory))
+(add-lispdir "elisp-dev-tools")
 
 (require 'elisp-admin)
 (require 'auto-show-doc)
