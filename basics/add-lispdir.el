@@ -1,4 +1,4 @@
-;;; Time-stamp: <2014-07-07 11:16:40 johstu01>
+;;; Time-stamp: <2025-11-19 14:41:57 jcgs>
 ;; add a directory to the emacs load path
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -55,7 +55,8 @@ Optional argument UNPACKER is how to unpack it."
 (defun add-tree-to-load-path (dir)
   "Add DIR and any directories below it to `load-path'."
   (message "Recursively adding %S to load-path" dir)
-  (add-to-list 'load-path dir)
+  (unless (string= user-emacs-directory dir)
+    (add-to-list 'load-path dir))
   (dolist (file (directory-files dir))
     (when (and (file-directory-p file)
 	       (not (member file '("." ".." ".git"))))

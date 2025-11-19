@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2025-11-18 15:19:49 jcgs>
+;;; Time-stamp: <2025-11-19 14:09:54 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
@@ -9,19 +9,6 @@
 ;; Keywords: setup
 
 ;; This file is NOT part of GNU Emacs.
-
-;;; I decided it was time to re-organize, and perhaps strip down, my
-;;; .emacs, and to do so using a new principle, a package
-;;; configuration package that I'd started to write. My previous
-;;; re-organization was to use load-directory, and I'll still use
-;;; that.
-
-;;; The triple-hash cookies are processed by
-;;; `bundle-emacs-initialization' which packages up all your emacs
-;;; initialization into a single file, which uses use-package to load
-;;; things for which you've given use-package definitions.  This way,
-;;; you can carry around a single file which will haul the rest of
-;;; your setup over the net on demand.
 
 (message "Loading setup from %S" load-file-name)
 
@@ -63,6 +50,28 @@
 ;; (add-to-list 'load-path user-emacs-directory)
 
 (message "user-emacs-directory is %S" user-emacs-directory)
+
+;; Install and setup straight.el
+
+(setq straight-use-package-by-default t
+      straight-vc-git-default-protocol 'ssh
+      straight-base-dir (substitute-in-file-name "$OPEN_PROJECTS")
+      package-enable-at-startup nil)
+
+;; Modified from https://github.com/radian-software/straight.el#getting-started
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (substitute-in-file-name
+        "$OPEN_PROJECTS/github.com/radian-software/straight.el/bootstrap.el"))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 (random t)
 
@@ -201,7 +210,11 @@ This should be a list of three parts:
 ;;;###include config
 ;;;###if nil
 (if t
-    (load-directory (expand-file-name "config" user-emacs-directory) t)
+    (load-directory (expand-file-name "config" user-emacs-directory)
+                    t
+                    nil
+                    (lambda (fn) (when (member user-emacs-directory load-path)
+                                   (message "user-emacs-directory in load-path after loading %s" fn))))
   (let ((config-dir (expand-file-name "config" user-emacs-directory)))
     (dolist (elfile '("config-ai"
                       "config-calendar-diary"
