@@ -1,6 +1,6 @@
 ;;; config-diary-calendar.el --- configure the diary and calendar systems
 
-;; Copyright (C) 2013, 2018  John Sturdy
+;; Copyright (C) 2013, 2018, 2025  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@citrix.com>
 ;; Keywords: convenience, data
@@ -22,7 +22,14 @@
 
 (require 'parse-time)			; for parse-time-weekdays
 
-(dolist (day '(("domhnach" . 0)
+(dolist (day '(("e diel" . 0)
+               ("e hënë" . 1)
+               ("e martë" . 2)
+               ("e mërkurë" . 3)
+               ("e enjte" . 4)
+               ("e premte" . 5)
+               ("e shtunë" . 6)
+               ("domhnach" . 0)
 	       ("luan" . 1)
 	       ("mháirt" . 2)
 	       ("chéadaoin" . 3)
