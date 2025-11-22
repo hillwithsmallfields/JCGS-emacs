@@ -52,53 +52,58 @@ finding and viewing of a LilyPond source buffer or region." t)
 
 (add-to-list 'after-load-alist '(lilypond-mode jcgs/lilypond-mode-load-function))
 
-(jcgs/use-package emms
-	     "$GATHERED/emacs/emms/emms-3.0/"
-	     nil
-	     ((emms "emms-playlist-mode"
-		    "Switch to the current emms-playlist buffer, use
-emms-playlist-mode and query for a directory tree to add to the
-playlist."
-		    t)
-	      (require emms-setup
-		       emms-mark
-		       emms-mode-line
-		       emms-volume
-		       emms-lyrics
-		       ))
-	     ;; (emms-standard)
-	     (emms-all)
-	     (emms-default-players)
+;;   :config (progn
+;;             (emms "emms-playlist-mode"
+;; 		  "Switch to the current emms-playlist buffer, use
+;; emms-playlist-mode and query for a directory tree to add to the
+;; playlist."
+;; 		  t)
+;; 	    (require emms-setup
+;; 		     emms-mark
+;; 		     emms-mode-line
+;; 		     emms-volume
+;; 		     emms-lyrics
+;; 		     )
+;; 	    ;; (emms-standard)
+;; 	    (emms-all)
+;; 	    (emms-default-players)
 
-	     (setq emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find
-		   ;; emms-player-ogg123-parameters (if (file-exists-p "/dev/audio1")
-		   ;; 						     (list "-o" "dev:plughw:1,0")
-		   ;; 						   nil)
-		   ;; emms-track-description-function .....
-		   ;; emms-playlist-default-major-mode 'emms-mark-mode
-		   )
+;; 	    (setq emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find
+;; 		  ;; emms-player-ogg123-parameters (if (file-exists-p "/dev/audio1")
+;; 		  ;; 						     (list "-o" "dev:plughw:1,0")
+;; 		  ;; 						   nil)
+;; 		  ;; emms-track-description-function .....
+;; 		  ;; emms-playlist-default-major-mode 'emms-mark-mode
+;; 		  )
 
-	     (when (and (stringp emms-source-file-default-directory)
-			(file-directory-p emms-source-file-default-directory))
-	       (emms-add-directory-tree emms-source-file-default-directory))
-	     (cond
-	      ((file-directory-p "~/music")
-	       (emms-add-directory-tree "~/music"))
-	      ((file-directory-p "/work/johstu01/music")
-	       (emms-add-directory-tree "/work/johstu01/music")))
-	     (cond
-	      ((file-directory-p "~/language-audio/")
-	       (emms-add-directory-tree "~/language-audio/"))
-	      ((file-directory-p "/work/johstu01/language-audio/")
-	       (emms-add-directory-tree "/work/johstu01/language-audio/")))
-	     (emms-mode-line 1)
-	     (emms-lyrics 1)
-	     (setq emms-lyrics-display-on-minibuffer t
-		   emms-lyrics-scroll-p nil)
-	     (global-set-key (kbd "C-c +") 'emms-volume-mode-plus)
-	     (global-set-key (kbd "C-c -") 'emms-volume-mode-minus)
-	     (global-set-key [ M-f12 ] 'emms)
-	     )
+;; 	    (when (and (stringp emms-source-file-default-directory)
+;; 		       (file-directory-p emms-source-file-default-directory))
+;; 	      (emms-add-directory-tree emms-source-file-default-directory))
+;; 	    (cond
+;; 	     ((file-directory-p "~/music")
+;; 	      (emms-add-directory-tree "~/music"))
+;; 	     ((file-directory-p "/work/johstu01/music")
+;; 	      (emms-add-directory-tree "/work/johstu01/music")))
+;; 	    (cond
+;; 	     ((file-directory-p "~/language-audio/")
+;; 	      (emms-add-directory-tree "~/language-audio/"))
+;; 	     ((file-directory-p "/work/johstu01/language-audio/")
+;; 	      (emms-add-directory-tree "/work/johstu01/language-audio/")))
+;; 	    (emms-mode-line 1)
+;; 	    (emms-lyrics 1)
+;; 	    (setq emms-lyrics-display-on-minibuffer t
+;; 		  emms-lyrics-scroll-p nil)
+;; 	     (global-set-key (kbd "C-c +") 'emms-volume-mode-plus)
+;; 	     (global-set-key (kbd "C-c -") 'emms-volume-mode-minus)
+;; 	     (global-set-key [ M-f12 ] 'emms)
+;; 	     )
+
+(use-package emms
+  :straight '(emms :fetcher github :repo "git@github.com:emacsmirror/emms.git")
+  :config (progn
+            (emms-add-directory-tree "~/Music")
+            (require 'emms-player-simple)
+            (push emms-player-ogg123 emms-player-list)))
 
 ;;;; renaming tracks as I import CDs
 
@@ -111,8 +116,8 @@ sRename to: ")
     (setq new (replace-match "_" t t new)))
   (let* ((old-name (file-name-nondirectory old))
 	 (number (if (string-match "^[0-9]+-" old-name)
-		    (match-string-no-properties 0 old-name)
-		  "")))
+		     (match-string-no-properties 0 old-name)
+		   "")))
     (rename-file old (expand-file-name
 		      (concat
 		       number
