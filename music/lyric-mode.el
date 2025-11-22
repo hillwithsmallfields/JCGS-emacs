@@ -262,19 +262,22 @@ If FROM is given, start there, otherwise from the beginning."
   "Resume playing of the associated music file."
   (interactive)
   (lyric-mode-stop-playing)		; stop any previous player
-  (let* ((player-args (lyric-mode-make-player-args
-		       lyric-mode-player
-		       lyric-mode-music-file)))
-    (setq lyric-mode-player-process
-	  (apply 'start-process
-		 (format "*Player for %s*" lyric-mode-music-file)
-		 nil
-		 lyric-mode-player
-		 player-args)))
-  (set-process-filter lyric-mode-player-process
-		      (symbol-function 'lyric-mode-filter))
-  (set-process-sentinel lyric-mode-player-process
-			(symbol-function 'lyric-mode-sentinel)))
+  (setq lyric-mode-player-process
+	(make-process :name (format "*Player for %s*" lyric-mode-music-file)
+	              :command (cons lyric-mode-player (lyric-mode-make-player-args
+		                                        lyric-mode-player
+		                                        lyric-mode-music-file))
+                      :filter (symbol-function 'lyric-mode-filter)
+                      ;; Emacs' documention says that stdout and
+                      ;; stderr both go to the buffer and/or filter,
+                      ;; but that doesn't seem to be what's happening
+                      ;; here; if we want to capture stderr explicitly
+                      ;; (and that is where the timing information is
+                      ;; going) we need to make a pipe process to
+                      ;; connect to it, and take the stdout of that.
+                      :stderr (make-pipe-process :name "*stderr connector for ogg123*"
+                                                 :filter (symbol-function 'lyric-mode-filter))
+                      :sentinel (symbol-function 'lyric-mode-sentinel))))
 
 (defun lyric-mode-full-speed ()
   "Set the speed to full, and continue."
