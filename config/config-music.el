@@ -102,8 +102,19 @@ finding and viewing of a LilyPond source buffer or region." t)
   :straight '(emms :fetcher github :repo "git@github.com:emacsmirror/emms.git")
   :config (progn
             (emms-add-directory-tree "~/Music")
+            ;; (require 'emms-setup)
+            ;; (emms-default-players)
             (require 'emms-player-simple)
-            (push emms-player-ogg123 emms-player-list)))
+            (push emms-player-ogg123 emms-player-list)
+            (require 'emms-mode-line)
+            (require 'emms-volume)
+            (require 'emms-lyrics)
+            (setq emms-lyrics-display-on-minibuffer t
+ 		  emms-lyrics-scroll-p nil)
+            (emms-lyrics 1)
+	    (global-set-key (kbd "C-c +") 'emms-volume-mode-plus)
+	    (global-set-key (kbd "C-c -") 'emms-volume-mode-minus)
+	    (global-set-key [ M-f12 ] 'emms)))
 
 ;;;; renaming tracks as I import CDs
 
