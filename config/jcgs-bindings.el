@@ -1,6 +1,6 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
 
-;;; Time-stamp: <2025-11-19 17:21:55 jcgs>
+;;; Time-stamp: <2025-11-21 14:22:05 jcgs>
 
 
 (add-lispdir "$MY_ELISP/convenience")
@@ -212,8 +212,6 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-task-tracking-map "z" 'org-clock-out)
   (define-key jcgs-task-tracking-map "?" 'jcgs/org-show-last-creative-task)
   )
-
-(add-lispdir "$MY_ELISP/startup")
 
 (autoload 'bring-up-buffers-matching-file "buffers"
   "Bring up buffers whose names match REGEXP.

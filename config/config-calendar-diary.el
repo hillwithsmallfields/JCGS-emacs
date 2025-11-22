@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2013, 2018, 2025  John Sturdy
 
-;; Author: John Sturdy <john.sturdy@citrix.com>
+;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: convenience, data
 
 ;;;; Diary and calendar

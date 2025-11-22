@@ -1,5 +1,5 @@
 ;;;; My .emacs file, started Sat Jun 23 12:11:53 2007
-;;; Time-stamp: <2025-11-19 14:09:54 jcgs>
+;;; Time-stamp: <2025-11-19 17:39:41 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
@@ -180,8 +180,8 @@ This should be a list of three parts:
 		      (message "after loading %s, load-path=%S and user-emacs-directory=%S" basic load-path user-emacs-directory)))
           '( ;; "version-patches.el"
 	    "host"
-	    "jcgs-common-setup"
             "add-lispdir"
+	    "jcgs-common-setup"
 	    "jcgs-use-package"
             ;; "modes"
             "load-directory"

@@ -1,5 +1,5 @@
 ;;;; config-misc.el -- small setup stuff
-;;; Time-stamp: <2025-11-19 17:17:08 jcgs>
+;;; Time-stamp: <2025-11-21 14:26:00 jcgs>
 
 (add-lispdir "$GATHERED/emacs/")
 
@@ -45,20 +45,7 @@ FWrite region to file: ")
 
 (add-lispdir "$MY_ELISP/appearance")
 
-(require 'screen-setups)
-
-;;;; lua-mode
-
-(add-to-list 'auto-mode-alist
-	     (cons "\\.lua$" 'lua-mode))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-
-(add-hook 'lua-mode-hook 'turn-on-font-lock)
-
-(add-hook 'lua-mode-hook 'hs-minor-mode)
-
-;; (add-hook 'c-mode-hook 'annotation-decorate-file)
-;; (add-hook 'emacs-lisp-mode-hook 'annotation-decorate-file)
+(require 'screen-setups)                ; ../appearance/screen-setups.el
 
 ;;;; ratpoison setup
 
@@ -82,11 +69,11 @@ FWrite region to file: ")
 (defun ratpoison-usual ()
   "Set up my usual ratpoison arrangement."
   (interactive)
-  (require 'ratpoison-cmd)
+  (require 'ratpoison)                  ; ../external-programs/ratpoison.el
   (delete-other-windows)
   (jcgs/frame-setup)
   (add-lispdir "$MY_ELISP/appearance")
-  (require 'split-window-multi)
+  (require 'split-window-multi)         ; ../appearance/split-window-multi.el
   (split-to-80-columns)
   (when (> (length (split-string (shell-command-to-string "ratpoison -c sdump") ",")) 1)
     (message "setting up ratpoison frames")
@@ -462,11 +449,6 @@ run in a buffer, or when called with a prefix argument."
 
 (add-hook 'csv-mode-hook 'jcgs/csv-mode-hook)
 
-;;;; daily standup, for work
-
-(when (at-work-p)
-  (require 'standup-report))
-
 ;;;; Compensate for small fonts
 
 (defun jcgs/set-default-font ()
@@ -515,5 +497,9 @@ Done because on these high-resolution screens, Emacs comes up with something ver
 ;;;; text handling
 
 (add-lispdir "$MY_ELISP/text-handling")
+
+;; patch some things?
+
+(add-lispdir "$MY_ELISP/my-extensions-to-packages")
 
 ;;; end of config-misc.el

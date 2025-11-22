@@ -1,5 +1,5 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2025-11-19 17:35:45 jcgs>
+;;; Time-stamp: <2025-11-21 13:45:44 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
 
@@ -353,5 +353,18 @@ When started, runs `scala-mode-hook'." t)
 \\{rust-mode-map}" t)
 
 (add-to-list 'auto-mode-alist (cons "\\.rs\\'" 'rust-mode))
+
+;;;; lua-mode
+
+(add-to-list 'auto-mode-alist
+	     (cons "\\.lua$" 'lua-mode))
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+
+(add-hook 'lua-mode-hook 'turn-on-font-lock)
+
+(add-hook 'lua-mode-hook 'hs-minor-mode)
+
+;; (add-hook 'c-mode-hook 'annotation-decorate-file)
+;; (add-hook 'emacs-lisp-mode-hook 'annotation-decorate-file)
 
 ;;;; config-proglang-modes.el ends here

@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2025-11-19 17:07:50 jcgs>
+;;; Time-stamp: <2025-11-21 14:29:33 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -23,7 +23,6 @@ Done when I gave up on the Emacs package manager for now.")
 (require 'org)
 
 (add-lispdir "$GATHERED/emacs")
-(add-lispdir "$GATHERED/emacs/information-management")
 (add-lispdir "$ORGLISP")
 (let ((dir "/usr/share/emacs/site-lisp/emacs-goodies-el")) ;for htmlize
   (when (file-directory-p dir)
@@ -669,7 +668,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (defun jcgs/org-ql-defview (name &rest definition)
   "Define a view called NAME with &DEFINITION."
-  (map-put org-ql-views (if (symbolp name)
+  (map-put! org-ql-views (if (symbolp name)
                              (symbol-name name)
                            name)
             definition #'equal)
@@ -763,7 +762,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;; (defun jcgs/org-super-agenda-defgroup (name &rest definition)
 ;;   "Define a super-agenda group NAME with DEFINITION."
 ;;   (setq org-super-agenda-groups
-;;         (map-put org-super-agenda-groups
+;;         (map-put! org-super-agenda-groups
 ;;                  name
 ;;                  definition
 ;;                  (lambda (a b) (message "a %s b %s" a b) (eql a b)))))

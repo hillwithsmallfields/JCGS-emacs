@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2025-07-18 15:33:36 jcgs>
+;;; Time-stamp: <2025-11-21 14:38:18 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -70,7 +70,7 @@ If not on an entry header, move to the previous line."
 (define-minor-mode org-agenda-return-to-top-mode
   "Minor mode with means to get back to the top of the tree."
   " agenda return"
-  'org-agenda-return-to-top-mode-map)
+  :keymap org-agenda-return-to-top-mode-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode for use over org-mode ;;
@@ -138,10 +138,9 @@ If not on an entry header, move to the previous line."
 
 (define-minor-mode org-agenda-kiosk-mode
   "Minor mode to put kiosk keys onto org-mode."
-  nil
-  " agenda kiosk"
-  'org-agenda-kiosk-mode-map
-  (keypad-setup 'none))
+  :lighter " agenda kiosk"
+  :keymap 'org-agenda-kiosk-mode-map
+  :after-hook (keypad-setup 'none))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Log kiosk actions ;;

@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2024-04-03 06:42:48 jcgs>
+;;; Time-stamp: <2025-11-21 14:22:58 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -75,7 +75,7 @@ the recursive edit."
   (backward-sexp 1))
 
 (defconst paren-pairs
-  '((?( . ?))
+  '((?\( . ?\))
     (?\[ . ?\])
     (?{ . ?})
     (?< . ?>)))
@@ -131,7 +131,7 @@ the recursive edit."
 (defun insert-square-brackets (n)
   "Insert square brackets.  With argument, surround N sexps with square brackets."
   (interactive "P")
-  (insert-pair n ?[ ?]))
+  (insert-pair n ?\[ ?\]))
 
 (defun move-in-or-out-of-string ()
   "Move to before the most recent string quote."

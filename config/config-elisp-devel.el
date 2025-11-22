@@ -1,10 +1,10 @@
 ;;;; config-elisp-devel.el -- set up my emacs-lisp development
-;;; Time-stamp: <2025-11-19 17:01:52 jcgs>
+;;; Time-stamp: <2025-11-21 14:23:53 jcgs>
 
 ;; Copyright (C) 2007, 2014, 2021, 2025, John C. G. Sturdy
 
-;; Author: John C. G. Sturdy <john@cb1.com>
-;; Maintainer: John C. G. Sturdy <john@cb1.com>
+;; Author: John C. G. Sturdy <jcg.sturdy@gmail.com>
+;; Maintainer: John C. G. Sturdy <jcg.sturdy@gmail.com>
 ;; Created: 2007
 ;; Keywords: setup
 
@@ -18,6 +18,8 @@
 (require 'misc-elisp-tools)
 
 (add-lispdir (substitute-in-file-name "$MY_ELISP/file-handling"))
+
+;; making notes on files as I read them
 
 (autoload 'annotation-mode "source-annotation"
     "Major mode for annotation of source code." t)
@@ -78,7 +80,7 @@ It is meant for use as a find-file-hook, but can also be used interactively." t)
 
 (add-hook 'edebug-setup-hook 'jcgs-edebug-setup)
 
-;;;; lisp-mnt etc
+;;;; lisp-mnt etc (distribution code for lisp maintainers)
 
 (require 'lisp-mnt)
 (require 'copyright)
@@ -98,8 +100,6 @@ It is meant for use as a find-file-hook, but can also be used interactively." t)
 (add-hook 'emacs-lisp-mode-hook
 	  '(lambda () (checkdoc-minor-mode 1)))
 
-(add-lispdir "elisp-dev-tools")
-
 (require 'elisp-admin)
 (require 'auto-show-doc)
 (add-hook 'emacs-lisp-mode-hook
@@ -108,7 +108,7 @@ It is meant for use as a find-file-hook, but can also be used interactively." t)
 
 ;; (add-hook 'emacs-lisp-mode-hook 'jcgs-check-boilerplate)
 
-;;;; Literate Lisp Programming
+;;;; Literate Lisp Programming (from ../elisp-dev-tools/llp-extract.el)
 
 (autoload 'llp-extract "llp-extract"
   "Extract Lisp code from FILE." t)

@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(add-lispdir "$OPEN_PROJECTS/github.com/cpoile/claudemacs")
+(add-lispdir "$OPEN_PROJECTS/github.com/cpoile/claudemacs") ; TODO: use straight.el
 
 
 
