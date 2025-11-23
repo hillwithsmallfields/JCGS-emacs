@@ -421,7 +421,7 @@ If FROM is given, start there, otherwise from the beginning."
 (defvar lyric-mode-map
   (let ((map (make-sparse-keymap "Lyric mode")))
     (define-key map "\C-c\C-p" 'lyric-mode-start-playing)
-    (define-key map "\C-c\C-g" 'lyric-mode-go)
+    (define-key map "\C-c\C-h" 'lyric-mode-go)
     (define-key map "\C-c\C-r" 'lyric-mode-resume-playing)
     (define-key map "\C-c\C-s" 'lyric-mode-stop-playing)
     (define-key map "\C-c\C-c" 'lyric-mode-toggle-playing)
@@ -482,8 +482,8 @@ some extra commands:
     (setq major-mode 'lyric-mode
 	  mode-name "Lyric"
 	  font-lock-defaults lyric-mode-font-lock-defaults)
-    (unless (eq (car (cdr (cdr mode-line-modes)))
-		'lyric-mode-latest-time-string)
+    (unless (memq 'lyric-mode-latest-time-string
+		  mode-line-modes)
       (make-local-variable 'mode-line-modes)
       ;; todo: make this happen only once, and only in buffers where it applies
       (rplacd (cdr mode-line-modes)
