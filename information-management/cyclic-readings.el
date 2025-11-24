@@ -48,29 +48,43 @@ Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
               end (+ end (or (cdar gospels) 0))))
       nil)))
 
-(defun gospels-for-day (day-in-month)
-  "Return the gospels for DAY-IN-MONTH."
-  (let ((base (1+ (* (1- day-in-month) 3))))
-    (list (gospel-chapter base)
-          (gospel-chapter (1+ base))
-          (gospel-chapter (+ 2 base)))))
+(defun proverbs-for-day (day-of-cycle)
+  "Return the proverbs for DAY-OF-CYCLE."
+    (list (format "Proverbs %d" (% day-of-cycle 31))))
 
-(defun psalms-for-day (day-in-month)
-  "Return the psalms for DAY-IN-MONTH."
-  (let ((base (1+ (* (1- day-in-month) 5))))
-    (mapcar (lambda (n) (if (<= n 150)
-                            (format "Psalm %d" n)
-                          nil))
-            (number-sequence base (+ base 5)))))
+(defun gospels-for-day (day-of-cycle)
+  "Return the gospels for DAY-OF-CYCLE."
+    (list (gospel-chapter day-of-cycle)))
 
-(defun readings-for-day (day-in-month)
-  "Return the readings for DAY-IN-MONTH, as a list."
-  (delq nil (nconc (psalms-for-day day-in-month)
-                   (gospels-for-day day-in-month))))
+(defconst favourite_psalms
+  [1 4 8 9 11
+   14 15 16 17 19
+   20 21 23 25 27
+   29 30 31 32 33
+   34 139 40 41 42
+   43 45 46 47 48
+   49 51])
 
-(defun readings-for-day-string (day-in-month)
-  "Return the readings for DAY-IN-MONTH, as a string."
-  (mapconcat 'identity (readings-for-day day-in-month) ", "))
+(defun psalms-for-day (day-of-cycle)
+  "Return the psalms for DAY-OF-CYCLE."
+  (let ((double-day (* day-of-cycle 2)))
+    (if (<= double-day 150)
+        (list (format "Psalm %d" double-day)
+              (format "Psalm %d" (1+ double-day)))
+      (list (aref favourite_psalms (- double-day 151))
+            (aref favourite_psalms (- double-day 150))))))
+
+(defun readings-for-day (&optional day-of-cycle)
+  "Return the readings for DAY-OF-CYCLE, as a list."
+  (let* ((day-of-cycle (or day-of-cycle
+                           (1+ (% (1- (time-to-day-in-year (current-time))) 91)))))
+    (nconc (psalms-for-day day-of-cycle)
+           (proverbs-for-day day-of-cycle)
+           (gospels-for-day day-of-cycle))))
+
+(defun readings-for-day-string (&optional day-of-cycle)
+  "Return the readings for DAY-OF-CYCLE, as a string."
+  (mapconcat 'identity (readings-for-day day-of-cycle) ", "))
 
 (provide 'cyclic-readings)
 ;;; cyclic-readings.el ends here
