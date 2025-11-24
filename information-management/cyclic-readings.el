@@ -69,8 +69,8 @@ Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
   "Return the psalms for DAY-OF-CYCLE."
   (let ((double-day (* day-of-cycle 2)))
     (if (<= double-day 150)
-        (list (format "Psalm %d" double-day)
-              (format "Psalm %d" (1+ double-day)))
+        (list (format "Psalm %d" (1- double-day))
+              (format "Psalm %d" double-day))
       (list (aref favourite_psalms (- double-day 151))
             (aref favourite_psalms (- double-day 150))))))
 
