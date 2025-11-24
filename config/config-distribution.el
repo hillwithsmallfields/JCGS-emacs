@@ -1,7 +1,7 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2021-12-21 12:02:59 jcgs>
+;;; Time-stamp: <2025-11-24 15:29:23 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -12,7 +12,10 @@
 
 ;;;; General bits and pieces
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp")
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp")
+
+(setq read-quoted-char-radix 16
+      what-cursor-show-names t)
 
 (defun string-to-int (str)
   "Convert STR to an integer.
@@ -34,20 +37,27 @@ To stop things whinging as this has been withdrawn from Emacs itself."
 (setq display-time-and-date t)
 (display-time)
 
-(when (string-match "elijah\\|duralium" (system-name))
+(when (string-match "elijah\\|elijah" (system-name))
   (display-battery-mode))
 
 ;;;; Commands
 
-(setq disabled-command-function nil)
+(setq disabled-command-function nil
+      help-enable-symbol-autoload t)
 
-(let ((nc 0))
-  (mapatoms
-   (lambda (atom)
-     (if (commandp atom)
-	 (setq nc (1+ nc)))))
-  (message "%d commands defined" nc))
+(defun count-commands ()
+  "Count the defined commands."
+  (interactive)
+  (let ((nc 0))
+    (mapatoms
+     (lambda (atom)
+       (if (commandp atom)
+	   (setq nc (1+ nc)))))
+    (message "%d commands defined" nc)
+    nc))
 
+(count-commands)
+  
 ;;;; local variables
 
 (when (boundp 'safe-local-variable-values)
@@ -92,7 +102,9 @@ This command assumes point is not in a string or comment."
 ;;;; motion
 
 (setq line-move-visual nil
-      shift-select-mode nil)
+      shift-select-mode nil
+      goto-line-history-local t
+      track-eol t)
 
 ;;;; backup files
 
@@ -104,7 +116,11 @@ This command assumes point is not in a string or comment."
 
 ;;;; UI
 
-(setq enable-recursive-minibuffers t)
+(setq enable-recursive-minibuffers t
+      insert-default-directory nil
+      resize-mini-windows t
+      completion-styles (cl-concatenate 'list completion-styles '(flex initials))
+      )
 (when (fboundp 'minibuffer-indicate-depth-mode)
   (minibuffer-indicate-depth-mode 1))
 

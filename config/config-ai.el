@@ -26,17 +26,11 @@
 
 (add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/cpoile/claudemacs"))
 
+(setq claudemacs-prefer-projectile-root nil)
 
 
 ;;; Generated autoloads from ../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs.el
 
-(autoload 'claudemacs-setup-bell-handler "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Set up or re-setup the completion notification handler.
-Use this if system notifications aren't working after starting a session." t)
-(autoload 'claudemacs-send-yes "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Send yes (RET) to the active Claudemacs session." t)
-(autoload 'claudemacs-send-no "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Send no (ESC) to the active Claudemacs session." t)
 (autoload 'claudemacs-run "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
 Start Claude Code or switch to existing session.
 With prefix ARG, prompt for the project directory.
@@ -47,8 +41,7 @@ Start Claude Code with resume or switch to existing session.
 With prefix ARG, prompt for the project directory.
 
 (fn &optional ARG)" t)
-(autoload 'claudemacs-kill "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Kill Claudemacs process and close its window." t)
+
 (autoload 'claudemacs-fix-error-at-point "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
 Send a request to Claude to fix the error at point using flycheck." t)
 (autoload 'claudemacs-execute-request "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
@@ -59,26 +52,13 @@ Otherwise, use current line as context." t)
 Ask Claude a question without file or line context.
 Prompts for a question and sends it directly to Claude without any 
 file location or context information." t)
-(autoload 'claudemacs-add-file-reference "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Add a file reference to the Claude conversation.
-Prompts for a file and sends @rel/path/to/file without newline." t)
-(autoload 'claudemacs-add-current-file-reference "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Add current file reference to the Claude conversation.
-Sends @rel/path/to/current/file without newline." t)
-(autoload 'claudemacs-add-context "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Add file context with line number(s) to the Claude conversation.
-If a region is selected, uses line range (path:start-end).
-Otherwise, uses current line (path:line).
-Sends without newline so you can continue typing." t)
+
 (autoload 'claudemacs-implement-comment "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
 Send comment at point or region to Claude for implementation.
 If region is active, uses the exact region.
 If no region, finds the comment block at point.
 Extracts comment text and sends it to Claude with implementation instructions." t)
-(autoload 'claudemacs-toggle-buffer "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
-Toggle Claude buffer visibility.
-Hide if current, focus if visible elsewhere, show if hidden." t)
- (autoload 'claudemacs-transient-menu "claudemacs" nil t)
+
 (defvar claudemacs-mode-map (let ((map (make-sparse-keymap))) (define-key map (kbd "C-c C-e") #'claudemacs-transient-menu) map) "\
 Keymap for `claudemacs-mode'.")
 (autoload 'claudemacs-mode "../home/jcgs/open-projects/github.com/cpoile/claudemacs/claudemacs" "\
