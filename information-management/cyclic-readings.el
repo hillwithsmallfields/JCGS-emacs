@@ -74,10 +74,15 @@ Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
       (list (aref favourite_psalms (- double-day 151))
             (aref favourite_psalms (- double-day 150))))))
 
+(defun day-of-year-to-day-of-cycle (day-of-year)
+  "Convert a day of the year to a day of 91-day cycle."
+  (1+ (% (1- day-of-year) 91)))
+
 (defun readings-for-day (&optional day-of-cycle)
   "Return the readings for DAY-OF-CYCLE, as a list."
   (let* ((day-of-cycle (or day-of-cycle
-                           (1+ (% (1- (time-to-day-in-year (current-time))) 91)))))
+                           (day-of-year-to-day-of-cycle
+                            (time-to-day-in-year (current-time))))))
     (nconc (psalms-for-day day-of-cycle)
            (proverbs-for-day day-of-cycle)
            (gospels-for-day day-of-cycle))))
