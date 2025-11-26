@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2025-11-25 16:44:17 jcgs>
+;;; Time-stamp: <2025-11-26 11:46:17 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2025, John C. G. Sturdy
 
@@ -245,7 +245,7 @@ COUNT can be passed in to make it negative."
 ;; (global-set-key "\C-xo" 'other-window-or-frame)
 
 (setq set-mark-command-repeat-pop t
-      transient-mark-mode nil
+      transient-mark-mode t
       kill-do-not-save-duplicates t
       kill-ring-deindent-mode t)
 
