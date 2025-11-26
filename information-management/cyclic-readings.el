@@ -24,46 +24,57 @@
 
 ;;; Code:
 
+(defconst old-testament-lengths
+  '(("Ecclesiastes" . 12)
+    ("Song of Solomon" . 8)
+    ("Ecclesiastes" . 12)))
+
 (defconst gospel-lengths
   '(("Matthew" . 28)
     ("Mark" . 16)
     ("Luke" . 24)
     ("John" . 21)))
 
-(defun gospel-chapter (chapter-number)
-  "Return a gospel chapter by number.
+(defun book-sequence-chapter (book-lengths chapter-number)
+  "Return a book chapter by number in a sequence of books.
+BOOK-LENGTHS is a list of pairs of books and their numbers of chapters.
 Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
-  (let* ((gospels gospel-lengths)
+  (let* ((books book-lengths)
          (begin 1)
-         (end (cdar gospels)))
+         (end (cdar books)))
     (catch 'found
-      (while gospels
+      (while books
         (when (and (<= begin chapter-number)
                    (<= chapter-number end))
           (throw 'found (format "%s %d"
-                                (caar gospels)
+                                (caar books)
                                 (1+ (- chapter-number begin)))))
         (setq begin (1+ end)
-              gospels (cdr gospels)
-              end (+ end (or (cdar gospels) 0))))
+              books (cdr books)
+              end (+ end (or (cdar books) 0))))
       nil)))
+
+(defun old-testament-chapter (chapter-number)
+  "Return an Old Testament chapter by number."
+  (book-sequence-chapter old-testament-lengths chapter-number))
+
+(defun gospel-chapter (chapter-number)
+  "Return a gospel chapter by number.
+Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
+  (book-sequence-chapter gospel-lengths chapter-number))
 
 (defun proverbs-for-day (day-of-cycle)
   "Return the proverbs for DAY-OF-CYCLE."
-    (list (format "Proverbs %d" (% day-of-cycle 31))))
+  (list (cond
+         ((<= day-of-cycle 89) (format "Proverbs %d" (% day-of-cycle 31)))
+         ((= day-of-cycle 90) "Proverbs 28")
+         (t "Proverbs 30"))))
 
 (defun gospels-for-day (day-of-cycle)
   "Return the gospels for DAY-OF-CYCLE."
-    (list (gospel-chapter day-of-cycle)))
-
-(defconst favourite_psalms
-  [1 4 8 9 11
-   14 15 16 17 19
-   20 21 23 25 27
-   29 30 31 32 33
-   34 139 40 41 42
-   43 45 46 47 48
-   49 51])
+  (list (cond ((<= day-of-cycle 89) (gospel-chapter day-of-cycle))
+              ((= day-of-cycle 90) "Proverbs 29")
+              (t "Proverbs 31"))))
 
 (defun psalms-for-day (day-of-cycle)
   "Return the psalms for DAY-OF-CYCLE."
@@ -71,8 +82,8 @@ Argument CHAPTER-NUMBER is the number in the overall sequence of gospels."
     (if (<= double-day 150)
         (list (format "Psalm %d" (1- double-day))
               (format "Psalm %d" double-day))
-      (list (aref favourite_psalms (- double-day 151))
-            (aref favourite_psalms (- double-day 150))))))
+      (list (old-testament-chapter (- double-day 151))
+            (old-testament-chapter (- double-day 150))))))
 
 (defun day-of-year-to-day-of-cycle (day-of-year)
   "Convert a day of the year to a day of 91-day cycle."
