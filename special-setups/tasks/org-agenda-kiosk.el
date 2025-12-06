@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2025-11-21 14:38:18 jcgs>
+;;; Time-stamp: <2025-12-06 20:58:19 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -217,6 +217,17 @@ If not on an entry header, move to the previous line."
      (mapcar (lambda (name)
                (expand-file-name (concat name ".csv") org-health-directory))
              org-tracking-files))
+    (insert "* Journals\n")
+    (org-agenda-kiosk-insert-file-index
+     (list
+      (expand-file-name (format "%d.journal" (nth 5 (decode-time)))
+                        (substitute-in-file-name "$SYNCED/journal"))
+      (substitute-in-file-name "$SYNCED/journal/hacking.journal")))
+    (insert "* Data\n")
+    (org-agenda-kiosk-insert-file-index
+     (list (substitute-in-file-name "$ORG/perishables.csv")
+           (substitute-in-file-name "$SYNCED/ringing/towers.csv")
+           (substitute-in-file-name "$SYNCED/ringing/methods.csv")))
     (insert "* Reading\n")
     (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
