@@ -29,50 +29,10 @@
 				     "/gnuemacs/")
 
 (unless (at-work-p)
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/expressionive"
-  ;;                                      "/expressionive/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-  ;;                                      "/server/")
-
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/Simple_client_server/"
-  ;;                                      "/client/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/muesli/"
-  ;; 				       "/muesli/"
-  ;; 				       ;; "make clean; ./configure; make\n"
-  ;; 				       )
-
-  ;; (make-shell-for-directory-if-present "$SYNCED/music/"
-  ;; 				       "/music/"
-  ;; 				       ;; "make clean; ./configure; make\n"
-  ;;                                      )
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/gos/"
-  ;; 				       "/gos/"
-  ;; 				       ;; "make clean; ./configure; make\n"
-  ;; 				       )
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/mulvoc/mulvoc/"
-  ;; 				       "/mulvoc/"
-  ;; 				       ;; "make clean; ./configure; make\n"
-  ;; 				       )
-  (make-shell-for-directory-if-present "$MY_PROJECTS/lectionaries"
-                                       "/lectionaries/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/qs"
 				       "/qs/")
   (make-shell-for-directory-if-present "$MY_PROJECTS/noticeboard"
 				       "/noticeboard/")
-  (make-shell-for-directory-if-present "$MY_PROJECTS/coimealta"
-				       "/coimealta/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/dobishem"
-  ;; 				       "/dobishem/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/textualosm"
-  ;; 				       "/osm/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/boxes"
-  ;; 				       "/boxes/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/land"
-  ;; 				       "/land/")
-  (make-shell-for-directory-if-present "$SYNCED/learning"
-				       "/learning/")
-  ;; (make-shell-for-directory-if-present "$MY_PROJECTS/change-ringing"
-  ;;                                      "/ringing/")
   )
 
 (defun run-command-in-shell-buffer (command buffer)
