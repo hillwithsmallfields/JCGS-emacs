@@ -1,6 +1,6 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
 
-;;; Time-stamp: <2025-11-21 14:22:05 jcgs>
+;;; Time-stamp: <2026-02-24 10:26:12 jcgs>
 
 
 (add-lispdir "$MY_ELISP/convenience")
@@ -81,6 +81,14 @@ directory."
   "Set or multiply the prefix ARG by five."
   (interactive "P")
   (universal-argument-n arg 5))
+
+(defun my-projects-directory-name ()
+  "Empty the buffer and insert my projects directory name."
+  (interactive)
+  (erase-buffer)
+  (insert (getenv "MY_PROJECTS") "/"))
+
+;; (define-key minibuffer-local-filename-completion-map "\C-~" 'my-projects-directory-name)
 
 (defun toggle-narrow-to-defun (&optional include-comments)
   "Toggle whether we are narrowed to a defun."
