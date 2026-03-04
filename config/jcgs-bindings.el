@@ -1,9 +1,9 @@
 ;;;; jcgs-bindings.el -- set up JCGS' key bindings
 
-;;; Time-stamp: <2023-03-20 21:04:26 jcgs>
+;;; Time-stamp: <2026-02-24 10:26:12 jcgs>
 
 
-(add-to-list 'load-path (expand-file-name "convenience" user-emacs-directory))
+(add-lispdir "$MY_ELISP/convenience")
 
 (autoload 'smart-repeat-complex-command "smart-repeat"
   "Like repeat-complex-command, but may skip the first one if it would do nothing."
@@ -12,7 +12,7 @@
 (autoload 'other-window-or-buffer "other" nil t)
 (autoload 'other-window-backwards "other" nil t)
 
-(add-to-list 'load-path (expand-file-name "file-handling" user-emacs-directory))
+(add-lispdir "$MY_ELISP/file-handling")
 
 (autoload 'other-window-file-name "file-name-insertions"
     "Insert at point the name of the file in the next window.
@@ -81,6 +81,14 @@ directory."
   "Set or multiply the prefix ARG by five."
   (interactive "P")
   (universal-argument-n arg 5))
+
+(defun my-projects-directory-name ()
+  "Empty the buffer and insert my projects directory name."
+  (interactive)
+  (erase-buffer)
+  (insert (getenv "MY_PROJECTS") "/"))
+
+;; (define-key minibuffer-local-filename-completion-map "\C-~" 'my-projects-directory-name)
 
 (defun toggle-narrow-to-defun (&optional include-comments)
   "Toggle whether we are narrowed to a defun."
@@ -212,8 +220,6 @@ Argument COMMAND-ARGS are the args."
   (define-key jcgs-task-tracking-map "z" 'org-clock-out)
   (define-key jcgs-task-tracking-map "?" 'jcgs/org-show-last-creative-task)
   )
-
-(add-to-list 'load-path (expand-file-name "startup" user-emacs-directory))
 
 (autoload 'bring-up-buffers-matching-file "buffers"
   "Bring up buffers whose names match REGEXP.

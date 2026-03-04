@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2025-07-18 15:33:36 jcgs>
+;;; Time-stamp: <2026-03-04 10:48:32 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -70,7 +70,7 @@ If not on an entry header, move to the previous line."
 (define-minor-mode org-agenda-return-to-top-mode
   "Minor mode with means to get back to the top of the tree."
   " agenda return"
-  'org-agenda-return-to-top-mode-map)
+  :keymap org-agenda-return-to-top-mode-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode for use over org-mode ;;
@@ -138,10 +138,9 @@ If not on an entry header, move to the previous line."
 
 (define-minor-mode org-agenda-kiosk-mode
   "Minor mode to put kiosk keys onto org-mode."
-  nil
-  " agenda kiosk"
-  'org-agenda-kiosk-mode-map
-  (keypad-setup 'none))
+  :lighter " agenda kiosk"
+  :keymap 'org-agenda-kiosk-mode-map
+  :after-hook (keypad-setup 'none))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Log kiosk actions ;;
@@ -218,6 +217,17 @@ If not on an entry header, move to the previous line."
      (mapcar (lambda (name)
                (expand-file-name (concat name ".csv") org-health-directory))
              org-tracking-files))
+    (insert "* Journals\n")
+    (org-agenda-kiosk-insert-file-index
+     (list
+      (expand-file-name (format "%d.journal" (nth 5 (decode-time)))
+                        (substitute-in-file-name "$SYNCED/journal"))
+      (substitute-in-file-name "$SYNCED/journal/hacking.journal")))
+    (insert "* Data\n")
+    (org-agenda-kiosk-insert-file-index
+     (list (substitute-in-file-name "$ORG/perishables.csv")
+           (substitute-in-file-name "$SYNCED/ringing/towers.csv")
+           (substitute-in-file-name "$SYNCED/ringing/methods.csv")))
     (insert "* Reading\n")
     (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
@@ -328,12 +338,25 @@ If not on an entry header, move to the previous line."
 
 (defconst noticeboard-host-regexp  "^shtogu")
 
+(defun org-agenda-sigusr1 ()
+  "Function to run on getting SIGUSR1.
+The noticeboard software sends this when it has run its nightly chores."
+  (interactive)
+  (message "SIGUSR1 received")
+  (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
+  (jcgs/org-journal-open-date))
+
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
   (interactive)
   (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
   (setq org-startup-folded t)
+  (save-excursion
+    (find-file (expand-file-name "~/.agenda-kiosk-emacs"))
+    (erase-buffer)
+    (insert (format "%d\n" (emacs-pid)))
+    (save-buffer))
   (cond ((and (string-match noticeboard-host-regexp (system-name))
 	      (getenv "DISPLAY"))
 	 (setq server-name "noticeboard")
@@ -345,6 +368,7 @@ If not on an entry header, move to the previous line."
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (global-auto-revert-mode 1)
+  (keymap-set special-event-map "<sigusr1>" 'sigusr-handler)
   (let ((no-versor t))
     (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
   (if (not (file-directory-p org-directory))

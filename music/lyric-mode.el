@@ -262,19 +262,22 @@ If FROM is given, start there, otherwise from the beginning."
   "Resume playing of the associated music file."
   (interactive)
   (lyric-mode-stop-playing)		; stop any previous player
-  (let* ((player-args (lyric-mode-make-player-args
-		       lyric-mode-player
-		       lyric-mode-music-file)))
-    (setq lyric-mode-player-process
-	  (apply 'start-process
-		 (format "*Player for %s*" lyric-mode-music-file)
-		 nil
-		 lyric-mode-player
-		 player-args)))
-  (set-process-filter lyric-mode-player-process
-		      (symbol-function 'lyric-mode-filter))
-  (set-process-sentinel lyric-mode-player-process
-			(symbol-function 'lyric-mode-sentinel)))
+  (setq lyric-mode-player-process
+	(make-process :name (format "*Player for %s*" lyric-mode-music-file)
+	              :command (cons lyric-mode-player (lyric-mode-make-player-args
+		                                        lyric-mode-player
+		                                        lyric-mode-music-file))
+                      :filter (symbol-function 'lyric-mode-filter)
+                      ;; Emacs' documention says that stdout and
+                      ;; stderr both go to the buffer and/or filter,
+                      ;; but that doesn't seem to be what's happening
+                      ;; here; if we want to capture stderr explicitly
+                      ;; (and that is where the timing information is
+                      ;; going) we need to make a pipe process to
+                      ;; connect to it, and take the stdout of that.
+                      :stderr (make-pipe-process :name "*stderr connector for ogg123*"
+                                                 :filter (symbol-function 'lyric-mode-filter))
+                      :sentinel (symbol-function 'lyric-mode-sentinel))))
 
 (defun lyric-mode-full-speed ()
   "Set the speed to full, and continue."
@@ -418,7 +421,7 @@ If FROM is given, start there, otherwise from the beginning."
 (defvar lyric-mode-map
   (let ((map (make-sparse-keymap "Lyric mode")))
     (define-key map "\C-c\C-p" 'lyric-mode-start-playing)
-    (define-key map "\C-c\C-g" 'lyric-mode-go)
+    (define-key map "\C-c\C-h" 'lyric-mode-go)
     (define-key map "\C-c\C-r" 'lyric-mode-resume-playing)
     (define-key map "\C-c\C-s" 'lyric-mode-stop-playing)
     (define-key map "\C-c\C-c" 'lyric-mode-toggle-playing)
@@ -479,8 +482,8 @@ some extra commands:
     (setq major-mode 'lyric-mode
 	  mode-name "Lyric"
 	  font-lock-defaults lyric-mode-font-lock-defaults)
-    (unless (eq (car (cdr (cdr mode-line-modes)))
-		'lyric-mode-latest-time-string)
+    (unless (memq 'lyric-mode-latest-time-string
+		  mode-line-modes)
       (make-local-variable 'mode-line-modes)
       ;; todo: make this happen only once, and only in buffers where it applies
       (rplacd (cdr mode-line-modes)
