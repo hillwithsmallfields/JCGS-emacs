@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2025-11-26 11:46:17 jcgs>
+;;; Time-stamp: <2025-12-07 13:13:12 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2025, John C. G. Sturdy
 
@@ -56,7 +56,15 @@ To stop things whinging as this has been withdrawn from Emacs itself."
   (add-to-list 'safe-local-variable-values
 	       (cons 'TeX-Master t))
   (add-to-list 'safe-local-variable-values
-               (cons 'output-directory "../local-www")))
+               (cons 'output-directory "../local-www"))
+  (add-to-list 'safe-local-variable-values
+               (cons 'checkdoc-symbol-words '("byte-compile" "top-level")))
+  (add-to-list 'safe-local-variable-values
+               (cons 'checkdoc-verb-check-experimental-flag nil))
+  (add-to-list 'safe-local-variable-values
+               (cons 'indent-tabs-mode nil))
+  (add-to-list 'safe-local-variable-values
+               (cons compile-command "make lint test")))
 
 ;;;; editing
 
