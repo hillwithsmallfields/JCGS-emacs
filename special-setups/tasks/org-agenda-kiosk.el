@@ -4,11 +4,11 @@
 ;;; This lets you operate an agenda with very few buttons.
 
 ;;; This is for use on a small, always-on, home server (Raspberry Pi
-;;; or similar) in a case with some buttons on it, centrally in my
-;;; house, that I can use to find things to do and to tick them off as
-;;; I do them.  Some related software will look for incoming changes
-;;; to the agenda files, read the new versions, and produce a new
-;;; agenda.
+;;; or similar) in a case with some buttons on it (actually a
+;;; noticeboard), centrally in my house, that I can use to find things
+;;; to do and to tick them off as I do them.  Some related software
+;;; will look for incoming changes to the agenda files, read the new
+;;; versions, and produce a new agenda.
 
 (require 'org)
 
