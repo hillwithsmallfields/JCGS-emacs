@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-03-04 10:48:32 jcgs>
+;;; Time-stamp: <2026-03-04 13:52:07 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -9,6 +9,8 @@
 ;;; to do and to tick them off as I do them.  Some related software
 ;;; will look for incoming changes to the agenda files, read the new
 ;;; versions, and produce a new agenda.
+
+(load-file (substitute-in-file-name "$HOME/open-projects/github.com/hillwithsmallfields/JCGS-emacs/basics/add-lispdir.el"))
 
 (require 'org)
 
