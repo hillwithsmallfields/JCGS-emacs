@@ -1,6 +1,6 @@
 ;;; dashboard-emacs-query.el --- batch driver for dashboard queries  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021, 2023, 2024  John Sturdy
+;; Copyright (C) 2021, 2023, 2024, 2026  John Sturdy
 
 ;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: 
@@ -27,22 +27,24 @@
 
 (require 'cl)
 
-(dolist (repo '("$MY_PROJECTS/github.com/hillwithsmallfields/JCGS-org-mode/lisp"
-                "$HOME/open-projects/github.com/alphapapa/org-ql"
-                "$HOME/open-projects/github.com/alphapapa/ts.el"
-                "$HOME/open-projects/github.com/alphapapa/org-super-agenda"
-                "$HOME/open-projects/github.com/magnars/dash.el"
-                "$HOME/open-projects/github.com/magnars/s.el"
-                "$HOME/open-projects/github.com/emacsmirror/peg"
-                "$HOME/open-projects/github.com/Wilfred/ht.el"
-                "$HOME/open-projects/github.com/emacsorphanage/ov"
-                "$HOME/open-projects/github.com/magit/transient/lisp"
-                "$HOME/open-projects/github.com/emacs-compat/compat"
-                "$HOME/open-projects/github.com/rejeep/f.el"
-                ;; "$HOME/open-projects/github.com/"
-                ;; "$HOME/open-projects/github.com/"
-                ;; "$HOME/open-projects/github.com/"
-                "$MY_PROJECTS/JCGS-org-mode/lisp"
+(load-file  (substitute-in-file-name "$MY_PROJECTS/JCGS-emacs/basics/add-lispdir.el"))
+
+(dolist (repo '("$MY_PROJECTS/JCGS-org-mode/lisp"
+                "$OPEN_PROJECTS/github.com/alphapapa/org-ql"
+                "$OPEN_PROJECTS/github.com/alphapapa/ts.el"
+                "$OPEN_PROJECTS/github.com/alphapapa/org-super-agenda"
+                "$OPEN_PROJECTS/github.com/magnars/dash.el"
+                "$OPEN_PROJECTS/github.com/magnars/s.el"
+                "$OPEN_PROJECTS/github.com/emacsmirror/peg"
+                "$OPEN_PROJECTS/github.com/Wilfred/ht.el"
+                "$OPEN_PROJECTS/github.com/emacsorphanage/ov"
+                "$OPEN_PROJECTS/github.com/magit/transient/lisp"
+                "$OPEN_PROJECTS/github.com/emacs-compat/compat"
+                "$OPEN_PROJECTS/github.com/rejeep/f.el"
+                ;; "$OPEN_PROJECTS/github.com/"
+                ;; "$OPEN_PROJECTS/github.com/"
+                ;; "$OPEN_PROJECTS/github.com/"
+                
                 ))
         (add-to-list 'load-path (substitute-in-file-name repo)))
 

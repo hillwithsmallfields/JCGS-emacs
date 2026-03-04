@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2025-09-08 10:15:43 jcgs>
+;;; Time-stamp: <2026-01-14 20:59:45 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -18,27 +18,23 @@ Done when I gave up on the Emacs package manager for now.")
   (message "locating %s" lib-spec)
   (unless (locate-file (car lib-spec) load-path
                        '("" ".el" ".elc" ".el.gz"))
-    (add-to-list 'load-path
-                 (substitute-in-file-name
-                  (expand-file-name (cdr lib-spec)
-                                    "$EHOME/open-projects")))))
+    (add-lispdir (expand-file-name (cdr lib-spec) "$OPEN_PROJECTS"))))
 
 (require 'org)
 
-(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs"))
-(add-to-list 'load-path (substitute-in-file-name "$GATHERED/emacs/information-management"))
-(add-to-list 'load-path (substitute-in-file-name "$ORGLISP"))
+(add-lispdir "$GATHERED/emacs")
+(add-lispdir "$ORGLISP")
 (let ((dir "/usr/share/emacs/site-lisp/emacs-goodies-el")) ;for htmlize
   (when (file-directory-p dir)
-    (add-to-list 'load-path dir)))
-(add-to-list 'load-path (expand-file-name "information-management" user-emacs-directory))
+    (add-lispdir dir)))
+(add-lispdir "$MY_ELISP/information-management")
 
 (add-to-list 'org-modules 'org-agenda)
 (add-to-list 'org-modules 'org-timer)
 (add-to-list 'org-modules 'org-clock)
 (add-to-list 'org-modules 'org-habit)
 
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/alphapapa/org-ql"))
+(add-lispdir "$OPEN_PROJECTS/github.com/alphapapa/org-ql")
 ;; things needed by org-ql: (dash "2.18.1") (f "0.17.2") (map "2.1") (org "9.0") (org-super-agenda "1.2") (ov "1.0.6") (peg "1.0") (s "1.12.0") (transient "0.1") (ts "0.2-pre"))
 
 (add-to-list 'org-modules 'org-ql)
@@ -672,14 +668,24 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (defun jcgs/org-ql-defview (name &rest definition)
   "Define a view called NAME with &DEFINITION."
-  (map-put org-ql-views (if (symbolp name)
-                             (symbol-name name)
-                           name)
-            definition #'equal)
+  (message "Defining view %s" name)
+  ;; (map-put! org-ql-views (if (symbolp name)
+  ;;                            (symbol-name name)
+  ;;                          name)
+  ;;           definition #'equal)
+  (setq org-ql-views
+        (map-insert org-ql-views
+                    (if (symbolp name)
+                        (symbol-name name)
+                      name)
+                    definition
+                    ;; #'equal
+                    ))
   (customize-set-variable 'org-ql-views org-ql-views)
   (customize-mark-to-save 'org-ql-views))
 
 (when (boundp 'org-ql-views)
+  (message "Defining new views in %s" org-ql-views)
   (jcgs/org-ql-defview "Current"
                        :title "Current"
                        :sort 'todo
@@ -766,7 +772,7 @@ An argument can change the number of days ahead, 1 being tomorrow."
 ;; (defun jcgs/org-super-agenda-defgroup (name &rest definition)
 ;;   "Define a super-agenda group NAME with DEFINITION."
 ;;   (setq org-super-agenda-groups
-;;         (map-put org-super-agenda-groups
+;;         (map-put! org-super-agenda-groups
 ;;                  name
 ;;                  definition
 ;;                  (lambda (a b) (message "a %s b %s" a b) (eql a b)))))

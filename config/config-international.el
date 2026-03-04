@@ -1,7 +1,7 @@
 ;;;; Configuration for international things
-;;; Time-stamp: <2013-10-15 12:22:11 johnstu>
+;;; Time-stamp: <2025-11-21 14:25:29 jcgs>
 
-;; Copyright (C) 2008, 2009, 2010, John C. G. Sturdy
+;; Copyright (C) 2008, 2009, 2010, 2025, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -12,10 +12,14 @@
 
 ;;;; Input methods
 
-(add-to-list 'load-path (expand-file-name "natural-language" user-emacs-directory))
+(add-lispdir "$MY_ELISP/natural-language")
 
-(load-library "mongolian")
-(load-library "extra-input-methods")
+(load-library "mongolian")              ; ../natural-language/mongolian.el
+(load-library "extra-input-methods")    ; ../natural-language/extra-input-methods.el
+
+(autoload 'romanize-lookup "romanize")
+(autoload 'romanize-initialize "romanize" nil t)
+(autoload 'romanize-char-at-point "romanize" nil t)
 
 (defvar input-methods-wanting-diagrams
   '(("mongolian-cyrillic" . quail-show-keyboard-layout-compactly)

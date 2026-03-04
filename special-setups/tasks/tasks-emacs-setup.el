@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2026-02-19 22:45:17 jcgs>
+;;; Time-stamp: <2026-03-04 10:37:50 jcgs>
 
 (setq debug-on-error t)
 
@@ -134,6 +134,9 @@ With optional FORCE, do it even if it seems unnecessary." t)
   "Function to run soon before shutdown."
   (when (fboundp 'jcgs/org-revert-agenda-files)
     (jcgs/org-revert-agenda-files))
+  (let ((pid-file (expand-file-name "~/.agenda-kiosk-emacs")))
+    (when (file-exists-p pid-file)
+      (delete-file pid-file)))
   (save-all-buffers-no-ask)
   (org-mobile-push))
 

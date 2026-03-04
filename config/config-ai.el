@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(add-to-list 'load-path (substitute-in-file-name "$OPEN_PROJECTS/github.com/cpoile/claudemacs"))
+(add-lispdir "$OPEN_PROJECTS/github.com/cpoile/claudemacs") ; TODO: use straight.el
 
 (setq claudemacs-prefer-projectile-root nil)
 

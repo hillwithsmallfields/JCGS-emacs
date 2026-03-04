@@ -1,6 +1,6 @@
 ;;; config-debuggers.el --- setup up emacs debugging   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018  John Sturdy
+;; Copyright (C) 2017, 2018, 2025  John Sturdy
 
 ;; Author: John Sturdy <john.sturdy@grapeshot.com>
 ;; Keywords: tools, convenience
@@ -44,6 +44,14 @@ Gets all the C source files in the general vicinity."
 
       (add-hook 'realgud:gdb-track-mode-hook 'jcgs/preload-realgud-file-remap))
   ((error (message "Realgud not set up (is it installed?)"))))
+
+(setq gdb-many-windows t
+      gud-tooltip-mode t
+      gud-tooltip-echo-area t
+      gdb-use-separate-io-buffer t
+      gdb-show-changed-values t
+      gdb-use-colon-colon-notation t
+      gdb-speedbar-auto-raise t)
 
 (provide 'config-debuggers)
 ;;; config-debuggers.el ends here

@@ -1,9 +1,9 @@
 ;;;; Config for emacs-ringing
-;; Time-stamp: <2018-09-10 09:00:55 jcgs>
+;; Time-stamp: <2026-01-19 20:22:28 jcgs>
 
 ;; I'm resuming using this after a long gap, and have probably lost my old configuration for it
 
-(let ((ringing-lisp-dir (substitute-in-file-name "$OPEN_PROJECTS/emacs-ringing/lisp")))
+(let ((ringing-lisp-dir (substitute-in-file-name "$MY_PROJECTS/emacs-ringing/lisp")))
   (when (file-directory-p ringing-lisp-dir)
     (add-to-list 'load-path ringing-lisp-dir)
     (add-to-list 'safe-local-variable-values (cons 'ringing-suggested-layout "portrait"))
