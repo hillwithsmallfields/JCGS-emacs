@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2025-11-21 14:29:33 jcgs>
+;;; Time-stamp: <2026-01-14 20:59:45 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -668,14 +668,24 @@ An argument can change the number of days ahead, 1 being tomorrow."
 
 (defun jcgs/org-ql-defview (name &rest definition)
   "Define a view called NAME with &DEFINITION."
-  (map-put! org-ql-views (if (symbolp name)
-                             (symbol-name name)
-                           name)
-            definition #'equal)
+  (message "Defining view %s" name)
+  ;; (map-put! org-ql-views (if (symbolp name)
+  ;;                            (symbol-name name)
+  ;;                          name)
+  ;;           definition #'equal)
+  (setq org-ql-views
+        (map-insert org-ql-views
+                    (if (symbolp name)
+                        (symbol-name name)
+                      name)
+                    definition
+                    ;; #'equal
+                    ))
   (customize-set-variable 'org-ql-views org-ql-views)
   (customize-mark-to-save 'org-ql-views))
 
 (when (boundp 'org-ql-views)
+  (message "Defining new views in %s" org-ql-views)
   (jcgs/org-ql-defview "Current"
                        :title "Current"
                        :sort 'todo
