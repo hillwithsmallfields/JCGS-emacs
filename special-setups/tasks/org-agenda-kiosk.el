@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2025-12-06 20:58:19 jcgs>
+;;; Time-stamp: <2026-03-04 10:48:32 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -338,12 +338,25 @@ If not on an entry header, move to the previous line."
 
 (defconst noticeboard-host-regexp  "^shtogu")
 
+(defun org-agenda-sigusr1 ()
+  "Function to run on getting SIGUSR1.
+The noticeboard software sends this when it has run its nightly chores."
+  (interactive)
+  (message "SIGUSR1 received")
+  (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
+  (jcgs/org-journal-open-date))
+
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
   (interactive)
   (org-agenda-kiosk-log 1 "Started")
   (setq debug-on-error t)
   (setq org-startup-folded t)
+  (save-excursion
+    (find-file (expand-file-name "~/.agenda-kiosk-emacs"))
+    (erase-buffer)
+    (insert (format "%d\n" (emacs-pid)))
+    (save-buffer))
   (cond ((and (string-match noticeboard-host-regexp (system-name))
 	      (getenv "DISPLAY"))
 	 (setq server-name "noticeboard")
@@ -355,6 +368,7 @@ If not on an entry header, move to the previous line."
   ;; when being a kiosk, we put all org files into kiosk mode
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (global-auto-revert-mode 1)
+  (keymap-set special-event-map "<sigusr1>" 'sigusr-handler)
   (let ((no-versor t))
     (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
   (if (not (file-directory-p org-directory))
