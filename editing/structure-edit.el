@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*- /harlqn/usr/users/jcgs/emacs/handy-lisp.el
-;;; Time-stamp: <2025-11-21 14:22:58 jcgs>
+;;; Time-stamp: <2026-01-06 11:38:23 jcgs>
 ;;; T i m e stamp <89/06/24 13:51:19 jcgs>
 
 ;;  This program is free software; you can redistribute it and/or modify it
@@ -27,7 +27,7 @@
 
 (defun pick-up-sexp-at-point (count)
   "Copy COUNT sexps from point into the kill ring, and exit recursive edit.
-Use with wander-yank for copying (non-destructive-cut-and-paste)."
+Use with wander-yank for copying (non-destructive-copy-and-paste)."
   (interactive "p")
   (mark-sexp count)
   (copy-region-as-kill (point) (mark))
