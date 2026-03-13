@@ -123,7 +123,7 @@ This command assumes point is not in a string or comment."
 ;;;; UI
 
 (setq enable-recursive-minibuffers t
-      insert-default-directory nil
+      ;; insert-default-directory nil
       resize-mini-windows t
       completion-styles (cl-concatenate 'list completion-styles '(flex initials))
       )

@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2026-03-13 08:25:31 jcgs>
+;;; Time-stamp: <2026-03-13 08:27:17 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -128,6 +128,18 @@ Done when I gave up on the Emacs package manager for now.")
 (defvar weather-loadable nil
   ;; TODO: replace metoffice access with openweather
   "Whether we have a chance of getting the weather data.")
+    
+(defun org-count-headings ()
+  "Count the headings in this buffer."
+  (interactive)
+  (let ((count 0))
+    (save-excursion
+      (goto-char (point-min))
+      (while (not (eobp))
+        (outline-next-heading)
+        (incf count)))
+    (message "%d headings" count)
+    count))
 
 (require 'calendar)
 
