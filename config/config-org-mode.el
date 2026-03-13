@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2026-01-14 20:59:45 jcgs>
+;;; Time-stamp: <2026-03-13 08:25:31 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -486,9 +486,14 @@ This is John Sturdy's modified version."
 (defun jcgs/org-archive-done-tasks ()
   "Archive all DONE entries in variable `org-agenda-files'."
   (interactive)
-  (save-window-excursion
-    (mapcar 'jcgs/org-archive-done-tasks-file
-	    (org-agenda-files))))
+  (let ((original-buffer-list (buffer-list)))
+    (save-window-excursion
+      (mapcar 'jcgs/org-archive-done-tasks-file
+	      (org-agenda-files)))
+    (save-some-buffers t)
+    (dolist (buffer (buffer-list))
+      (unless (memq buffer original-buffer-list)
+	(kill-buffer buffer)))))
 
 ;;;; sort entries by stage
 
