@@ -1,5 +1,5 @@
 ;;;; Configuration for things included in the emacs distribution
-;;; Time-stamp: <2026-03-04 11:00:14 jcgs>
+;;; Time-stamp: <2026-03-17 11:19:04 jcgs>
 
 ;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2025, 2026, John C. G. Sturdy
 
@@ -42,16 +42,17 @@ To stop things whinging as this has been withdrawn from Emacs itself."
 (setq disabled-command-function nil
       help-enable-symbol-autoload t)
 
-(defun count-commands ()
-  "Count the defined commands."
+(defun count-commands (&optional format)
+  "Return the number of commands in Emacs.
+Optionally, a FORMAT for outputting the result can be given."
   (interactive)
-  (let ((nc 0))
-    (mapatoms
-     (lambda (atom)
-       (if (commandp atom)
-	   (setq nc (1+ nc)))))
-    (message "%d commands defined" nc)
-    nc))
+  (let ((count 0))
+    (mapatoms (lambda (atom)
+		(when (commandp atom)
+		  (setq count (1+ count)))))
+    (when (or format (interactive-p))
+      (message (or format "%d commands") count))
+    count))
 
 (count-commands)
   
