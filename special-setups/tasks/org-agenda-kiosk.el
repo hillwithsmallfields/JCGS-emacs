@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-03-05 10:30:17 jcgs>
+;;; Time-stamp: <2026-03-17 07:45:11 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -71,7 +71,7 @@ If not on an entry header, move to the previous line."
 
 (define-minor-mode org-agenda-return-to-top-mode
   "Minor mode with means to get back to the top of the tree."
-  " agenda return"
+  :lighter " agenda return"
   :keymap org-agenda-return-to-top-mode-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,7 +345,8 @@ If not on an entry header, move to the previous line."
 The noticeboard software sends this when it is about to run its nightly chores."
   (interactive)
   (message "SIGUSR1 received")
-  (save-all-buffers-no-ask))
+  (save-all-buffers-no-ask)
+  (message "SIGUSR1 processing completed"))
 
 (defun org-agenda-sigusr2 ()
   "Function to run on getting SIGUSR2.
@@ -353,7 +354,8 @@ The noticeboard software sends this when it has run its nightly chores."
   (interactive)
   (message "SIGUSR2 received")
   (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
-  (jcgs/org-journal-open-date))
+  (jcgs/org-journal-open-date)
+  (message "SIGUSR2 processing completed"))
 
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
