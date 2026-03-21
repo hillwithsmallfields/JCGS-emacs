@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2026-03-13 08:27:17 jcgs>
+;;; Time-stamp: <2026-03-21 09:05:40 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -159,6 +159,11 @@ Done when I gave up on the Emacs package manager for now.")
 	  (when (stringp tag)
 	    (push `(tags-todo ,tag) result)))))
     result))
+
+(cl-pushnew (cons "OPEN" "orange") org-todo-keyword-faces)
+(cl-pushnew (cons "BASKET" "purple") org-todo-keyword-faces)
+(cl-pushnew (cons "ORDERED" "orange") org-todo-keyword-faces)
+(cl-pushnew (cons "DISPATCHED" "orange") org-todo-keyword-faces)
 
 (defun jcgs/org-agenda-make-late-extra-matcher (early-matches)
   "Make some extra matcher types for my custom agenda, to go late in the list.
