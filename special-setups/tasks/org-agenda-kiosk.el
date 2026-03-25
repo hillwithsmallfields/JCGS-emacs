@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-03-17 07:45:11 jcgs>
+;;; Time-stamp: <2026-03-25 07:07:18 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -380,6 +380,7 @@ The noticeboard software sends this when it has run its nightly chores."
   (add-hook 'org-mode-hook 'org-agenda-kiosk-on)
   (global-auto-revert-mode 1)
   (keymap-set special-event-map "<sigusr1>" 'org-agenda-sigusr1)
+  (setq debug-on-event nil)		; originally set to "sigusr2"
   (keymap-set special-event-map "<sigusr2>" 'org-agenda-sigusr2)
   (let ((no-versor t))
     (load-file "$MY_ELISP/special-setups/tasks/tasks-emacs-setup.el"))
