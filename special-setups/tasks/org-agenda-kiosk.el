@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-05-02 00:03:26 jcgs>
+;;; Time-stamp: <2026-05-06 23:05:34 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -355,6 +355,7 @@ The noticeboard software sends this when it has run its nightly chores."
   (message "SIGUSR2 received")
   (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
   (jcgs/org-journal-open-date)
+  (jcgs/org-archive-done-tasks)
   (save-all-buffers-no-ask)
   (message "SIGUSR2 processing completed"))
 
