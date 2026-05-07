@@ -1,5 +1,5 @@
 ;;; host.el --- host-specific setups
-;; Time-stamp: <2021-10-26 19:12:52 jcgs>
+;; Time-stamp: <2026-05-07 22:43:23 jcgs>
 ;; Author: John Sturdy <jcgs@cb1.com>
 
 ;; todo: move these to ../host-setup.el
@@ -78,7 +78,9 @@ machine is on some other network connection.")
       (string-match employer-laptop
 		    (system-name))))
 
-(defconst home-systems '("isaiah" "shtogu" "whinberry" "whortleberry" "fragaria" "elijah" "ezra")
+(defconst home-systems '("isaiah"
+			 "shtogu" "whinberry" "whortleberry" "dardhe"
+			 "elijah" "elisha")
   "System names of my home machines.")
 
 (defun at-home-p ()
