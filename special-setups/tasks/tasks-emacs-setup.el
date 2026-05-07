@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2026-03-04 10:37:50 jcgs>
+;;; Time-stamp: <2026-05-07 22:41:19 jcgs>
 
 (setq debug-on-error t)
 
@@ -47,13 +47,15 @@
   (require 'dated-csv)
   (let ((health-dir (substitute-in-file-name "$SYNCED/health")))
     (add-to-list 'auto-mode-alist (cons (concat health-dir ".+\\.csv") 'datestamped-csv-mode))
-    (dolist (file '("peak-flow.csv" "temperature.csv" "weight.csv" "isometric.csv"))
-      (find-file (expand-file-name file health-dir))
+    (dolist (file '("peak-flow" "temperature" "weight" "isometric"))
+      (find-file (expand-file-name (format "%s.csv" file) health-dir))
       (goto-char (point-max))
       (datestamped-csv-mode)))
   (add-to-list 'auto-mode-alist (cons "touchbook.csv" 'datestamped-csv-mode))
   (find-file (substitute-in-file-name "$SYNCED/ringing/touchbook.csv"))
-  (dolist (file '("wiring" "switchpanel" "Marmalade-work"))
+  (dolist (file '("contacts" "inventory" "storage" "perishables"))
+    (find-file (substitute-in-file-name (format "$ORG/%s.csv" file))))
+  (dolist (file '("wiring" "switchpanel"))
     (add-to-list 'org-agenda-files
 		 (substitute-in-file-name (format "$VEHICLES/Marmalade/%s.org"
 						  file))
