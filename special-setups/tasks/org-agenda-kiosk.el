@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-05-06 23:05:34 jcgs>
+;;; Time-stamp: <2026-05-08 22:57:49 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -229,7 +229,8 @@ If not on an entry header, move to the previous line."
     (org-agenda-kiosk-insert-file-index
      (list (substitute-in-file-name "$ORG/perishables.csv")
            (substitute-in-file-name "$SYNCED/ringing/towers.csv")
-           (substitute-in-file-name "$SYNCED/ringing/methods.csv")))
+           (substitute-in-file-name "$SYNCED/ringing/methods.csv")
+	   (substitute-in-file-name "$SYNCED/misc/history.csv")))
     (insert "* Reading\n")
     (org-agenda-kiosk-insert-file-index org-reading-files)
     (org-agenda-kiosk-files-mode))
@@ -354,6 +355,7 @@ The noticeboard software sends this when it has run its nightly chores."
   (interactive)
   (message "SIGUSR2 received")
   (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
+  ;; TODO: remove undone checkboxes --- perhaps propagate forward?
   (jcgs/org-journal-open-date)
   (jcgs/org-archive-done-tasks)
   (save-all-buffers-no-ask)
