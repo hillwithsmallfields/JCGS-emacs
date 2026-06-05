@@ -1,7 +1,7 @@
 ;;;; Configuration for programming language modes and related things
-;;; Time-stamp: <2025-11-21 13:45:44 jcgs>
+;;; Time-stamp: <2026-06-05 20:18:42 jcgs>
 
-;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, John C. G. Sturdy
+;; Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025, 2026, John C. G. Sturdy
 
 ;; Author: John C. G. Sturdy <john@cb1.com>
 ;; Maintainer: John C. G. Sturdy <john@cb1.com>
@@ -194,26 +194,10 @@
 
 (message "Setting up go-mode")
 
-(when (catch 'found-go
-	(dolist (dir (list "/usr/local/go/misc/emacs/"
-                           ;; TODO: use straight.el
-			   (substitute-in-file-name "$GATHERED/emacs/go-mode")))
-	  (when (file-directory-p dir)
-	    (add-to-list 'load-path dir)
-	    (throw 'found-go t)))
-	nil)
-  (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
-  (require 'go-mode))
-
-(defun jcgs/go-mode-hook-function ()
-  "My setup function for golang buffers."
-  (local-set-key "\M-." 'godef-jump)
-  (local-set-key "\C-c\C-c" 'compile)
-  (make-local-variable 'jcgs/leave-tabs-alone)
-  (setq jcgs/leave-tabs-alone t)
-  (add-hook 'before-save-hook 'jcgs/regularize-whitespace nil t))
-
-(add-hook 'go-mode-hook 'jcgs/go-mode-hook-function)
+(use-package go-mode
+  :straight '(go-mode :type git :fetcher github :host github :repo "dominikh/go-mode.el")
+  :config (progn
+))
 
 ;;;;;;;;;;;;;;;;;;
 ;; arduino-mode ;;
