@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-06-12 20:38:25 jcgs>
+;;; Time-stamp: <2026-10-06 13:56:31 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -346,6 +346,7 @@ If not on an entry header, move to the previous line."
 The noticeboard software sends this when it is about to run its nightly chores."
   (interactive)
   (message "SIGUSR1 received")
+  (jcgs/org/use-today-file)
   (save-all-buffers-no-ask)
   (message "SIGUSR1 processing completed"))
 
