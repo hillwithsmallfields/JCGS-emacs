@@ -1,6 +1,6 @@
 ;;; config-widescreen.el --- functions for widescreen use of emacs  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023  John Sturdy
+;; Copyright (C) 2023, 2026  John Sturdy
 
 ;; Author: John Sturdy <jcg.sturdy@gmail.com>
 ;; Keywords: convenience, frames
@@ -51,7 +51,7 @@ is selected."
        (nth (widescreen-index-for-position i n) buffers-in-order) nil)
       (other-window 1))
     (display-buffer-same-window
-     (nth (widescreen-index-for-position n n) buffers-in-order) nil))
+     (nth (widescreen-index-for-position (1- n) n) buffers-in-order) nil))
   (other-window (+ (/ n 2) (if (evenp n) 0 1))))
 
 (defun widescreen-nth-window (n)
