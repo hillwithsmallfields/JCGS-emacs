@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-10-06 13:56:31 jcgs>
+;;; Time-stamp: <2026-11-05 22:05:12 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -345,23 +345,23 @@ If not on an entry header, move to the previous line."
   "Function to run on getting SIGUSR1.
 The noticeboard software sends this when it is about to run its nightly chores."
   (interactive)
-  (message "SIGUSR1 received")
+  (message "SIGUSR1 received at %s" (current-time-string))
   (jcgs/org/use-today-file)
   (save-all-buffers-no-ask)
-  (message "SIGUSR1 processing completed"))
+  (message "SIGUSR1 processing completed at %s" (current-time-string)))
 
 (defun org-agenda-sigusr2 ()
   "Function to run on getting SIGUSR2.
 The noticeboard software sends this when it has run its nightly chores."
   (interactive)
-  (message "SIGUSR2 received")
+  (message "SIGUSR2 received at %s" (current-time-string))
   (find-file (substitute-in-file-name (format-time-string "$SYNCED/journal/%Y.journal")))
   (let ((not-done (jcgs/org-journal-tidy-old-checkboxes)))
     (jcgs/org-journal-open-date)
     (jcgs/org-re-add-not-done-tasks not-done))
   (jcgs/org-archive-done-tasks)
   (save-all-buffers-no-ask)
-  (message "SIGUSR2 processing completed"))
+  (message "SIGUSR2 processing completed at %s" (current-time-string)))
 
 (defun org-agenda-kiosk ()
   "Start running the agenda kiosk."
