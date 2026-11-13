@@ -1,5 +1,5 @@
 ;;;; Emacs setup for task management and noticeboard only
-;;; Time-stamp: <2026-05-08 22:58:57 jcgs>
+;;; Time-stamp: <2026-11-13 10:16:36 jcgs>
 
 (setq debug-on-error t)
 
@@ -54,6 +54,7 @@
   (add-to-list 'auto-mode-alist (cons "touchbook.csv" 'datestamped-csv-mode))
   (find-file (substitute-in-file-name "$SYNCED/ringing/touchbook.csv"))
   (find-file (substitute-in-file-name "$SYNCED/misc/history.csv"))
+  (add-to-list 'auto-mode-alist (cons "perishables.csv" 'dated-csv-mode))
   (dolist (file '("contacts" "inventory" "storage" "perishables"))
     (find-file (substitute-in-file-name (format "$ORG/%s.csv" file))))
   (dolist (file '("wiring" "switchpanel"))
