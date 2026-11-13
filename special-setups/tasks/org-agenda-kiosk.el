@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-11-13 10:19:47 jcgs>
+;;; Time-stamp: <2026-11-13 10:20:37 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -230,6 +230,7 @@ If not on an entry header, move to the previous line."
      (list (substitute-in-file-name "$ORG/perishables.csv")
            (substitute-in-file-name "$SYNCED/ringing/towers.csv")
            (substitute-in-file-name "$SYNCED/ringing/methods.csv")
+           (substitute-in-file-name "$SYNCED/ringing/touchbook.csv")
 	   (substitute-in-file-name "$SYNCED/misc/history.csv")))
     (insert "* Reading\n")
     (org-agenda-kiosk-insert-file-index org-reading-files)
