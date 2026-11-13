@@ -1,5 +1,5 @@
 ;;;; Kiosk-style operation of my agenda
-;;; Time-stamp: <2026-11-05 22:05:12 jcgs>
+;;; Time-stamp: <2026-11-13 10:19:47 jcgs>
 
 ;;; This lets you operate an agenda with very few buttons.
 
@@ -196,7 +196,7 @@ If not on an entry header, move to the previous line."
   (expand-file-name "health" (getenv "SYNCED")))
 
 (defvar org-tracking-files
-  '("weight" "peak-flow" "temperature"))
+  '("weight" "peak-flow" "temperature", "isometric"))
 
 (defun org-agenda-kiosk-files-list (&optional initial-file)
   "Display the agenda files list, with FILE as current."
