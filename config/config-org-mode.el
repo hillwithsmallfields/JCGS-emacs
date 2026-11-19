@@ -1,5 +1,5 @@
 ;;; config-org-mode.el --- set up JCGS' org mode
-;;; Time-stamp: <2026-04-29 08:34:07 jcgs>
+;;; Time-stamp: <2026-11-19 09:54:49 jcgs>
 
 (defconst jcgs-org-supporting-libraries
   '(("org-ql" . "github.com/alphapapa/org-ql")
@@ -340,6 +340,7 @@ The filenames to save in are added by this function"
 
 (define-key org-mode-map "\C-z" 'org-todo)
 (define-key org-mode-map "\C-cw" 'org-agenda-list)
+(define-key org-mode-map "\C-cu" 'jcgs/org-set-shopping-url)
 (define-key org-mode-map "\C-c\M-l" 'org-toggle-link-display)
 (global-set-key "\C-ca" 'org-agenda)
 (define-key org-agenda-mode-map "\C-z" 'org-agenda-todo)
